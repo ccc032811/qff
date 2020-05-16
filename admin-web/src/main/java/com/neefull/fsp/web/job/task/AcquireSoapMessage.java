@@ -1,20 +1,20 @@
 package com.neefull.fsp.web.job.task;
 
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.neefull.fsp.web.common.controller.BaseController;
 import com.neefull.fsp.web.qff.config.SendMailProperties;
 import com.neefull.fsp.web.qff.config.SoapUrlProperties;
+import com.neefull.fsp.web.qff.entity.Attachment;
 import com.neefull.fsp.web.qff.entity.Commodity;
-import com.neefull.fsp.web.qff.entity.Recent;
-import com.neefull.fsp.web.qff.entity.Refund;
+import com.neefull.fsp.web.qff.service.IAttachmentService;
 import com.neefull.fsp.web.qff.service.ICommodityService;
 import com.neefull.fsp.web.qff.service.IProcessService;
-import com.neefull.fsp.web.qff.service.IRefundService;
-import com.neefull.fsp.web.qff.utils.MailUtils;
+import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.qff.utils.SapWsUtils;
 import com.neefull.fsp.web.qff.utils.XmlUtils;
-import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.dom4j.DocumentException;
@@ -23,10 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Author: chengchengchu
@@ -42,13 +39,10 @@ public class AcquireSoapMessage extends BaseController {
     @Autowired
     private ICommodityService commodityService;
     @Autowired
-    private IRefundService refundService;
+    private IAttachmentService attachmentService;
     @Autowired
     private IProcessService processService;
-    @Autowired
-    private SendMailProperties mailProperties;
-    @Autowired
-    private IUserService userService;
+
 
     @Transactional
     public void getMessage(){
@@ -56,17 +50,64 @@ public class AcquireSoapMessage extends BaseController {
         log.info("*****************Execute query from SAP server.******************");
         long startTime = System.currentTimeMillis();
         //获取更新时间
-        String fromDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE,-1);
-        Date time = c.getTime();
-        String toDate = DateFormatUtils.format(time, "yyyy-MM-dd");
 
-//        String fromDate = "2019-05-01";
-//        String toDate = "2019-05-31";
+//        String fromDate = commodityService.selectLastTime();
+//        String toDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
+//        String soapMessage = SapWsUtils.getSoapMessage(fromDate, toDate);
 
-        //构建请求报文
-        String soapMessage = SapWsUtils.getSoapMessage(fromDate, toDate);
+
+
+        StringBuffer message = new StringBuffer("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:soap=\"http://www.shaphar.com/SoapService\">\n" +
+                "   <soapenv:Header/>\n" +
+                "   <soapenv:Body>\n" +
+                "      <soap:REQUEST_DATA>\n" +
+                "         <soap:commonHeader>\n" +
+                "            <soap:BIZTRANSACTIONID>1</soap:BIZTRANSACTIONID>\n" +
+                "            <soap:COUNT>1</soap:COUNT>\n" +
+                "            <soap:CONSUMER>1</soap:CONSUMER>\n" +
+                "            <soap:SRVLEVEL>1</soap:SRVLEVEL>\n" +
+                "            <soap:ACCOUNT>1</soap:ACCOUNT>\n" +
+                "            <soap:PASSWORD>1</soap:PASSWORD>\n" +
+                "            <soap:COMMENTS>1</soap:COMMENTS>\n" +
+                "         </soap:commonHeader>\n" +
+                "         <soap:LIST><![CDATA[<urn:ZCHN_FM_QFF xmlns:urn=\"urn:sap-com:document:sap:rfc:functions:ZCHN_FM_QFF_BS\"><ET_QFF>\n" +
+                "            <item>\n" +
+                "               <QMNUM></QMNUM>\n" +
+                "               <HERKUNFT></HERKUNFT>\n" +
+                "               <MAWERK></MAWERK>\n" +
+                "               <MATNR></MATNR>\n" +
+                "               <MSTAE></MSTAE>\n" +
+                "               <CHARG></CHARG>\n" +
+                "               <IDNLF></IDNLF>\n" +
+                "               <BISMT></BISMT>\n" +
+                "               <LICHN></LICHN>\n" +
+                "               <HSDAT></HSDAT>\n" +
+                "               <VFDAT></VFDAT>\n" +
+                "               <MGEIG></MGEIG>\n" +
+                "               <QMTXT></QMTXT>\n" +
+                "               <ZPROCLAS></ZPROCLAS>\n" +
+                "               <REGNO></REGNO>\n" +
+                "               <AWBNO></AWBNO>\n" +
+                "               <ERDAT></ERDAT>\n" +
+                "            </item>\n" +
+                "         </ET_QFF>\n" +
+                "         <ET_QFF_ATT>\n" +
+                "            <item>\n" +
+                "               <QMNUM></QMNUM>\n" +
+                "               <ATTACHNAME></ATTACHNAME>\n" +
+                "               <ATTACH></ATTACH>\n" +
+                "            </item>\n" +
+                "         </ET_QFF_ATT>\n" +
+                "         <IV_DATE_FROM>2020-01-24</IV_DATE_FROM>\n" +
+                "         <IV_DATE_TO>2020-05-31</IV_DATE_TO> \n" +
+                "       </urn:ZCHN_FM_QFF>]]></soap:LIST>\n" +
+                "      </soap:REQUEST_DATA>\n" +
+                "   </soapenv:Body>\n" +
+                "</soapenv:Envelope>");
+
+        String soapMessage = message.toString();
+
+
         log.info("请求报文为："+soapMessage);
         //进行请求 获取soap返回结果
         StringBuffer messageBuffer = null;
@@ -83,112 +124,27 @@ public class AcquireSoapMessage extends BaseController {
         //对返回数据结果进行截取
 
         try {
-            List<Refund> refundList = new ArrayList<>();
-            List<Commodity> commodityList = new ArrayList<>();
+//            List<Refund> refundList = new ArrayList<>();
+
             String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
 
-            String message = XmlUtils.getTagContent(messageBuffer.toString(), "<ET_QFF>", "</ET_QFF>");
-            String[] split = message.split("<item>");
-            List<String> list = new ArrayList<>();
-            for (String s : split) {
+            String qffMessage = XmlUtils.getTagContent(messageBuffer.toString(), "<ET_QFF>", "</ET_QFF>");
+            String[] qffString = qffMessage.split("<item>");
+            List<String> qffList = new ArrayList<>();
+            for (String s : qffString) {
                 if(StringUtils.isNotEmpty(s)){
                     String dom = s.split("</item>")[0];
-                    list.add(dom);
+                    qffList.add(dom);
                 }
             }
+            //将所有QFF封装到集合中
+            List<Commodity> commodityList = new ArrayList<>();
 
-            //将数据转换成对象存入数据库中
-            for (String s : list) {
-                String stage = XmlUtils.getTagContent(s, "<HERKUNFT>", "</HERKUNFT>");
-                if(stage.equals("05")){
-                    Refund refund = new Refund();
-                    refund.setNumber(XmlUtils.getTagContent(s,"<QMNUM>","</QMNUM>"));
-                    refund.setPlant(XmlUtils.getTagContent(s,"<MAWERK>","</MAWERK>"));
-                    refund.setkMater(XmlUtils.getTagContent(s,"<MATNR>","</MATNR>"));
-                    refund.setkBatch(XmlUtils.getTagContent(s,"<CHARG>","</CHARG>"));
-                    refund.setrMater(XmlUtils.getTagContent(s,"<IDNLF>","</IDNLF>"));
-                    refund.setrBatch(XmlUtils.getTagContent(s,"<LICHN>","</LICHN>"));
-                    refund.setManuDate(XmlUtils.getTagContent(s,"<HSDAT>","</HSDAT>"));
-                    refund.setExpiryDate(XmlUtils.getTagContent(s,"<VFDAT>","</VFDAT>"));
-                    refund.setQuarantine(XmlUtils.getTagContent(s,"<MGEIG>","</MGEIG>"));
-                    refund.setGetRemark(XmlUtils.getTagContent(s,"<QMTXT>","</QMTXT>"));
-                    refund.setInitDate(XmlUtils.getTagContent(s,"<ERDAT>","</ERDAT>"));
-                    refund.setClassify(XmlUtils.getTagContent(s,"<ZPROCLAS>","</ZPROCLAS>"));
-                    refund.setRegister(XmlUtils.getTagContent(s,"<REGNO>","</REGNO>"));
-                    refund.setType(stage);
+            if(CollectionUtils.isNotEmpty(qffList)){
+                //将数据转换成对象存入数据库中
+                for (String s : qffList) {
+                    String stage = XmlUtils.getTagContent(s, "<HERKUNFT>", "</HERKUNFT>");
 
-                    //查询数据库是否有该条数据
-                    Refund isRefund = refundService.queryRefundByNumber(refund.getNumber());
-                    if(isRefund == null){
-                        refundService.addRefund(refund);
-                        processService.commitProcess(refund,getCurrentUser());
-                    }else {
-                        //对变化的字段进行记录
-                        Boolean rstart = false;
-                        StringBuilder alteration = new StringBuilder();
-
-                        if(!refund.getPlant().equals(isRefund.getPlant())){
-                            alteration.append("Plant工厂: " +date+ "   由"+isRefund.getPlant()+"变更为"+refund.getPlant()+" 。  ");
-                            rstart = true;
-                        }
-                        if(!refund.getkMater().equals(isRefund.getkMater())){
-                            alteration.append("KDLMaterial物料: " +date+ "   由"+isRefund.getkMater()+"变更为"+refund.getkMater()+" 。  ");
-                            rstart = true;
-                        }
-                        if(!refund.getkBatch().equals(isRefund.getkBatch())){
-                            alteration.append("康德乐SAP批次: " +date+ "   由"+isRefund.getkBatch()+"变更为"+refund.getkBatch()+" 。  ");
-                            rstart = true;
-                        }
-                        if(!refund.getrMater().equals(isRefund.getrMater())){
-                            alteration.append("罗氏物料号: " +date+ "   由"+isRefund.getrMater()+"变更为"+refund.getrMater()+" 。  ");
-                            rstart = true;
-                        }
-                        if(!refund.getrBatch().equals(isRefund.getrBatch())){
-                            alteration.append("罗氏批号: " +date+ "   由"+isRefund.getrBatch()+"变更为"+refund.getrBatch()+" 。  ");
-                            rstart = true;
-                        }
-                        if(!refund.getManuDate().equals(isRefund.getManuDate())){
-                            alteration.append("生产日期: " +date+ "   由"+isRefund.getManuDate()+"变更为"+refund.getManuDate()+" 。  ");
-                            rstart = true;
-                        }
-                        if(!refund.getExpiryDate().equals(isRefund.getExpiryDate())){
-                            alteration.append("有效期: " +date+ "   由"+isRefund.getExpiryDate()+"变更为"+refund.getExpiryDate()+" 。  ");
-                            rstart = true;
-                        }
-                        if(!refund.getQuarantine().equals(isRefund.getQuarantine())){
-                            alteration.append("异常总数: " +date+ "   由"+isRefund.getQuarantine()+"变更为"+refund.getQuarantine()+" 。  ");
-                            rstart = true;
-                        }
-                        if(!refund.getGetRemark().equals(isRefund.getGetRemark())){
-                            alteration.append("Remark箱号: " +date+ "   由"+isRefund.getGetRemark()+"变更为"+refund.getGetRemark()+" 。  ");
-                            rstart = true;
-                        }
-                        if(!refund.getClassify().equals(isRefund.getClassify())){
-                            alteration.append("产品分类: " +date+ "   由"+isRefund.getClassify()+"变更为"+refund.getClassify()+" 。  ");
-                            rstart = true;
-                        }
-                        if(!refund.getRegister().equals(isRefund.getRegister())){
-                            alteration.append("注册证号: " +date+ "   由"+isRefund.getRegister()+"变更为"+refund.getRegister()+" 。  ");
-                            rstart = true;
-                        }
-                        if(rstart == true){
-                            //重新发起流程
-                            //查询流程是否存在
-                            Boolean isExist = processService.queryProcessByKey(isRefund);
-                            if(isExist){
-                                processService.deleteInstance(isRefund);
-                            }
-                            refund.setId(isRefund.getId());
-                            refund.setAlteration(alteration.toString());
-                            refundService.editRefund(refund);
-
-                            processService.commitProcess(refund,getCurrentUser());
-                        }
-
-                    }
-
-                    refundList.add(refund);
-                }else {
                     Commodity commodity = new Commodity();
                     commodity.setNumber(XmlUtils.getTagContent(s,"<QMNUM>","</QMNUM>"));
                     commodity.setPlant(XmlUtils.getTagContent(s,"<MAWERK>","</MAWERK>"));
@@ -207,24 +163,34 @@ public class AcquireSoapMessage extends BaseController {
                     commodity.setRegister(XmlUtils.getTagContent(s,"<REGNO>","</REGNO>"));
                     commodity.setTransport(XmlUtils.getTagContent(s,"<AWBNO>","</AWBNO>"));
                     commodity.setType(stage);
-    //                    commodity.setStage(XmlUtils.getTagContent(s,"<HERKUNFT>","</HERKUNFT>"));
+//                    commodity.setStage(XmlUtils.getTagContent(s,"<HERKUNFT>","</HERKUNFT>"));
                     if(stage.equals("01")){
                         commodity.setStage("到货");
                     }else if(stage.equals("09")){
                         commodity.setStage("养护");
                     }else if(stage.equals("10")||stage.equals("11")){
                         commodity.setStage("出库");
-                    }else {
+                    }else if(stage.equals("05")){
+                        commodity.setStage("退货");
+                    } else {
                         commodity.setStage("其他");
                     }
+                    commodity.setStatus(ProcessConstant.NEW_BUILD);
+                    commodity.setAtt(0);
 
+
+
+                    //判断该条数据是否记录
                     Commodity isCommodity = commodityService.queryCommodityByNumber(commodity.getNumber());
                     if(isCommodity ==null){
-                        commodityService.addCommodity(commodity);
-                        processService.commitProcess(commodity,getCurrentUser());
+                        //没有改记录就直接添加
+                        commodityList.add(commodity);
+//                        commodityService.addCommodity(commodity);
+//                        processService.commitProcess(commodity,getCurrentUser());
                     }else {
                         //对变化的字段进行记录
-                        Boolean rstart = false;
+                        boolean rstart = false;
+
                         StringBuilder alteration = new StringBuilder();
 
                         if(!commodity.getPlant().equals(isCommodity.getPlant())){
@@ -271,66 +237,70 @@ public class AcquireSoapMessage extends BaseController {
                             alteration.append("注册证号: " +date+ "   由"+isCommodity.getRegister()+"变更为"+commodity.getRegister()+" 。  ");
                             rstart = true;
                         }
-                        if(rstart == true){
-                            //重新发起流程
-                            //查询流程是否存在
+                        if(rstart){
+
+                            commodityService.deleteCommoddityById(isCommodity.getId());
                             Boolean isExist = processService.queryProcessByKey(isCommodity);
                             if(isExist){
                                 processService.deleteInstance(isCommodity);
                             }
-                            commodity.setId(isCommodity.getId());
-                            commodity.setAlteration(alteration.toString());
-                            commodityService.editCommodity(commodity);
 
-                            processService.commitProcess(commodity,getCurrentUser());
+                            commodity.setAlteration(alteration.toString());
+                            commodityList.add(commodity);
+
+//                            commodityService.editCommodity(commodity);
+//                            processService.commitProcess(commodity,getCurrentUser());
                         }
                     }
-                    commodityList.add(commodity);
                 }
             }
 
-
             //对返回的数据附件进行存储
-
-
-            //发送邮件
-            //拼接文件内容
-            StringBuilder content=new StringBuilder("<html><head></head><body><h3>您好。当前从SAP系统获取数据如下：</h3>");
-            content.append("<tr><h3>具体详情如下表所示:</h3></tr>");
-            content.append("<table border='5' style='border:solid 1px #000;font-size=10px;'>");
-            content.append("<tr style='background-color: #00A1DD'><td>运输单号</td>" +
-                    "<td>QFF编号</td><td>Plant工厂</td><td>KDL Material物料</td>" +
-                    "<td>康德乐SAP 批次</td><td>罗氏物料号</td><td>药厂物料号</td><td>罗氏批号</td><td>生产日期</td>" +
-                    "<td>有效期</td><td>异常总数</td><td>Remark箱号/备注</td></tr>");
-            for (Refund refund : refundList) {
-
-                content.append("<tr><td>"+refund.getTransport()+"</td><td>"+refund.getNumber()+"</td>" +
-                        "<td>"+refund.getPlant()+"</td><td>"+refund.getkMater()+"</td>" +
-                        "<td>"+refund.getkBatch()+"</td><td>"+refund.getrMater()+"</td>" +
-                        "<td>"+" "+"</td><td>"+refund.getrBatch()+"</td><td>"+refund.getManuDate()+"</td>" +
-                        "<td>"+refund.getExpiryDate()+"</td><td>"+refund.getQuarantine()+"</td><td>"+refund.getRemark()+"</td></tr>");
+            String attMessage = XmlUtils.getTagContent(messageBuffer.toString(), "<ET_QFF_ATT>", "</ET_QFF_ATT>");
+            String[] attString = attMessage.split("<item>");
+            List<String> attList = new ArrayList<>();
+            for (String s : attString) {
+                if(StringUtils.isNotEmpty(s)){
+                    String dom = s.split("</item>")[0];
+                    attList.add(dom);
+                }
             }
+
+            Map<String,Attachment> attachmentMap = new HashMap<>();
+
+            if(CollectionUtils.isNotEmpty(attList)){
+                for (String s : attList) {
+                    String number = XmlUtils.getTagContent(s, "<QMNUM>", "</QMNUM>");
+                    String attName = XmlUtils.getTagContent(s, "<ATTACHNAME>", "</ATTACHNAME>");
+                    String[] split = attName.split("\\.");
+                    if(StringUtils.isNotBlank(number)&&StringUtils.isNotBlank(attName)){
+                        if(CollectionUtils.isNotEmpty(commodityList)){
+                            for (Commodity commodity : commodityList) {
+                                if(commodity.getNumber().equals(number)){
+                                    Attachment attachment = new Attachment();
+                                    attachment.setQffId(commodity.getNumber());
+                                    attachment.setQffType(commodity.getStage());
+                                    attachment.setAttachType(split[1]);
+                                    attachment.setRemark(split[0]);
+                                    attachment.setSource(1);
+                                    attachment.setEnable(0);
+                                    attachmentMap.put(attachment.getRemark(),attachment);
+                                    commodity.setAtt(1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             for (Commodity commodity : commodityList) {
-                content.append("<tr><td>"+commodity.getTransport()+"</td><td>"+commodity.getNumber()+"</td>" +
-                        "<td>"+commodity.getPlant()+"</td><td>"+commodity.getkMater()+"</td>" +
-                        "<td>"+commodity.getkBatch()+"</td><td>"+commodity.getrMater()+"</td>" +
-                        "<td>"+commodity.getpMater()+"</td><td>"+commodity.getrBatch()+"</td><td>"+commodity.getManuDate()+"</td>" +
-                        "<td>"+commodity.getExpiryDate()+"</td><td>"+commodity.getQuarantine()+"</td><td>"+commodity.getRemark()+"</td></tr>");
+                commodityService.addCommodity(commodity);
             }
-            content.append("</table>");
-            content.append("</body></html>");
-
-            String text = content.toString();
-            //查询收件人
-            List<User> userList = userService.findUserByRoleId(86);
-            List<String> userMails = new ArrayList<>();
-            for (User user : userList) {
-                userMails.add(user.getEmail());
+            Set<String> strings = attachmentMap.keySet();
+            for (String string : strings) {
+                Attachment attachment = attachmentMap.get(string);
+                attachmentService.addAttachment(attachment);
             }
-            String[] mails = userMails.toArray(new String[0]);
-
-            //发送邮件
-            MailUtils.sendMail(text,mailProperties,mails);
 
         } catch (DocumentException e) {
             e.printStackTrace();

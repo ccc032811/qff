@@ -1,45 +1,49 @@
 <style>
-    /*#app-foot,#app-foot{
-        line-height: 45px;
-        height: 45px
+    #ToolBar {
+        position:absolute;
+        bottom:0;
+        width:100%;
+        height:36px;
+        text-align:center;
+        background:#00A1DD;;
+        z-index:9999;
+        overflow:hidden;
     }
-    #app-foot {
-        left: 220px;
-        transition: all 0.5s cubic-bezier(0.86, 0, 0.07, 1)
-    }*/
-    #app-foot {
-        border-bottom: 1px solid #f1f1f1;
-        position: fixed;
-        top: 900px;
-        left: 0;
-        width: 100%;
-        height: 45px
-    }
-
 </style>
+
 <div class="layui-layout layui-layout-admin" id="febs-layout">
-    <div class="layui-header layui-anim febs-anim-down" id="app-header" style="background-color: #00A1DD;">
+    <div class="layui-header layui-anim febs-anim-down" id="app-header" >
+        <div class="head-box">
+            <div class="head-body left-flow">
+                <img data-th-src="@{febs/images/cardinal_logo_small.jpg}" class="head-body" >
+            </div>
+            <div class="head-body left-flow">
+                <div class="head-div">
+                    <span class="head-zi">质量反馈系统</span>
+                </div>
+            </div>
+        </div>
         <script type="text/html"
                 template
                 lay-done="layui.element.render('nav','febs-header')">
-            <ul class="layui-nav layui-layout-left" lay-filter="febs-header">
-                <li class="layui-nav-item" lay-unselect>
-                    <a febs-event="flexible" title="侧边伸缩">
-                        <i class="layui-icon layui-icon-shrink-right"></i>
-                    </a>
-                </li>
-                <span class="febs-breadcrumb"></span>
-            </ul>
+            <!--<ul class="layui-nav layui-layout-left" lay-filter="febs-header">-->
+            <!--<li class="layui-nav-item" lay-unselect>-->
+            <!--<a febs-event="flexible" title="侧边伸缩">-->
+            <!--<i class="layui-icon layui-icon-shrink-right"></i>-->
+            <!--</a>-->
+            <!--</li>-->
+            <!--<span class="febs-breadcrumb"></span>-->
+            <!--</ul>-->
             <ul class="layui-nav layui-layout-right" lay-filter="febs-header">
                 <li class="layui-nav-item layui-user" lay-unselect>
                     <a>
                         <img style="width: 1.9rem;margin-right:.5rem;border-radius: 50%"
-                             src="{{= ctx + 'febs/images/avatar/' + currentUser.avatar }}" title="头像">
-                        <span style="color: #fff">{{ currentUser.username }}</span>
+                             src="{{= ctx + 'febs/images/avatar/' + currentUser.avatar }}" title="头像" >
+                        {{ currentUser.username }}
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a class="layui-nav-child-href" id="user-profile">个人中心</a></dd>
-                        <dd><a class="layui-nav-child-href" id="password-update">密码修改</a></dd>
+                        <!--<dd><a class="layui-nav-child-href" id="password-update">密码修改</a></dd>-->
                         <hr/>
                         <dd><a class="layui-nav-child-href" data-th-href="@{logout}">退出登录</a></dd>
                     </dl>
@@ -51,7 +55,7 @@
     <div class="febs-tabs-hidden">
         <script type="text/html" id="TPL-app-tabsmenu" template>
             {{# if(layui.conf.viewTabs){ }}
-            <div class="febs-tabs-wrap" style="height: 40px">
+            <div class="febs-tabs-wrap">
           <span class="febs-tabs-btn febs-tabs-action febs-tabs-prev" data-type="prev">
               <i class="layui-icon layui-icon-left"></i>
           </span>
@@ -77,15 +81,15 @@
     <!-- 侧边菜单 -->
     <div class="layui-side febs-theme-white" id="app-sidebar">
         <div class="layui-side-scroll">
-            <div id="logo-img" style="cursor: pointer;text-align:center">
-                <img data-th-src="@{febs/images/cardinal_logo_small.png}" width="245px" height="50px">
-            </div>
+            <!--<div id="logo-img" style="cursor: pointer;text-align:center">-->
+            <!--<img data-th-src="@{febs/images/cardinal_logo_small.png}" width="245px" height="50px">-->
+            <!--</div>-->
             <script
                     type="text/html"
                     template
                     lay-api="getMenus"
                     lay-done="layui.element.render('nav','febs-sidebar');layui.febs.sidebarFocus()">
-                <img data-th-src="@{febs/images/navi_qff.png}" width="125px" height="125px" style="padding-left: 50px;margin-top: 30px">
+                <!--<img data-th-src="@{febs/images/unify_auth_image.png}" width="125px" height="125px" style="padding-left: 50px;margin-top: 30px">-->
                 <ul class="layui-nav layui-nav-tree" lay-filter="febs-sidebar" lay-shrink="all" style="margin-top: 20px">
                     {{#
                     function __createSlidebar(data,index){
@@ -95,8 +99,8 @@
                         layui.each(data,function(i,child){
                         var left = index == 0 ? 50 : 50 + index * 20;
                         html += '
-                        <dd><a style="padding-left:' + left + 'px;" target="'+(child.target||'')+'"
-                               lay-href="'+ (child.href||'') +'">' + child.title + '</a>';
+                        <dd><a style="padding-left:' + left + 'px" target="'+(child.target||'')+'"
+                               lay-href="'+ (child.href||'') +'" >' + child.title + '</a>';
                             if(child.childs) html += __createSlidebar(child.childs,index+1);
                             html += '
                         </dd>
@@ -110,9 +114,9 @@
                     layui.each(d.childs, function(i,child){
                     }}
                     <li class="layui-nav-item">
-                        <a lay-href="{{child.href||''}}" target="{{child.target||''}}" title="{{child.title}}" ><i
+                        <a lay-href="{{child.href||''}}" target="{{child.target||''}}" title="{{child.title}}"><i
                                 class="layui-icon {{child.icon}}"></i>{{child.title}} {{# if(child.notice){ }}<span
-                                class="layui-badge" >{{ child.notice }}</span>{{# } }}</a>
+                                class="layui-badge">{{ child.notice }}</span>{{# } }}</a>
                         {{ __createSlidebar(child.childs,0) }}
                     </li>
                     {{# }) }}
@@ -121,18 +125,14 @@
         </div>
     </div>
     <!-- 主体内容 -->
-    <div class="layui-body" id="febs-body" style="padding-top:95px"></div>
+    <div class="layui-body" id="febs-body"></div>
     <!-- 脚-->
-    <div class="layui-header layui-anim febs-anim-down " id="app-foot"  style="background-color: #00A1DD;" >
-        <div id = "title" style="margin-top: 13px;margin-left: 44%;" >
+    <div  id="ToolBar" >
+        <div id = "title" style="margin-top: 10px;margin-left: 12%;" >
             <div style="margin-right: 5%">
-                <div style="border: 5px;border-left: 1px solid #000;border-right:1px solid #000;float: right;width: 80px"><div style="margin-left: 14px">隐私保护</div></div>
-                <div style="border-left: 1px solid #000;float: right;width: 80px"><div style="margin-left: 14px">法律声明</div></div>
+                <div style="border: 5px;border-left: 1px solid #000;border-right:1px solid #000;float: right;width: 80px"><div style="margin-left: 5px">隐私保护</div></div>
+                <div style="border-left: 1px solid #000;float: right;width: 80px"><div style="margin-left: 5px">法律声明</div></div>
             </div>
-
-        </div>
-        <div style="margin-left: 80%;float: right">
-
         </div>
     </div>
 </div>

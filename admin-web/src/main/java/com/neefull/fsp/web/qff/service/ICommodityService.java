@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.neefull.fsp.web.qff.entity.Commodity;
 import com.neefull.fsp.web.system.entity.User;
 
+import java.util.List;
+
 
 /**
  * @Author: chengchengchu
@@ -50,5 +52,21 @@ public interface ICommodityService extends IService<Commodity> {
      * @return
      */
     Commodity queryCommodityByNumber(String number);
+
+    /**根据id删除
+     * @param id
+     */
+    void deleteCommoddityById(Integer id);
+
+    /**获取所有新建的
+     * @return
+     */
+    List<Commodity> selectAllCommodity();
+
+
+    /**查询最后的时间
+     * @return
+     */
+    String selectLastTime();
 
 }

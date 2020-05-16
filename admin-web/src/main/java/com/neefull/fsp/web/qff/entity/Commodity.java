@@ -206,6 +206,11 @@ public class Commodity implements Serializable {
     @TableField("status")
     private Integer status;
     /**
+     * 是否有附件   0 无   1 有
+     */
+    @TableField("att")
+    private Integer att;
+    /**
      *  创建日期
      */
     @TableField("create_time")
@@ -246,6 +251,8 @@ public class Commodity implements Serializable {
      */
     @TableField(exist = false)
     private Integer isAllow;
+
+
 
     public Integer getId() {
         return id;
@@ -485,6 +492,14 @@ public class Commodity implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getAtt() {
+        return att;
+    }
+
+    public void setAtt(Integer att) {
+        this.att = att;
     }
 
     public Date getCreateTime() {

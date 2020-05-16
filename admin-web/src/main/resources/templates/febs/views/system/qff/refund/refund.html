@@ -49,10 +49,10 @@
                                     <div id="refund-check" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%">
                                         <!--<div id="refund-check" class="layui-form-item" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;">-->
                                             <div class="layui-btn layui-btn-normal layui-btn-sm" id="refund-query" >
-                                                <i class="layui-icon">&#xe848;</i> 查询
+                                                <i class="layui-icon">&#xe848;</i>
                                             </div>
                                             <div class="layui-btn layui-btn-danger layui-btn-sm" id="refund-reset" >
-                                                <i class="layui-icon">&#xe79b;</i> 清空
+                                                <i class="layui-icon">&#xe79b;</i>
                                             </div>
                                         <!--</div>-->
                                     </div>
@@ -175,10 +175,10 @@
                                     <div class="layui-form-item ">
                                         <div style="float: right;margin-right: 3%" >
                                             <div class="layui-btn layui-btn-normal layui-btn-sm" id="refund-queryBtn" >
-                                                <i class="layui-icon">&#xe848;</i> 查询
+                                                <i class="layui-icon">&#xe848;</i>
                                             </div>
                                             <div class="layui-btn layui-btn-danger layui-btn-sm" id="refund-cleanBtn" >
-                                                <i class="layui-icon">&#xe79b;</i> 清空
+                                                <i class="layui-icon">&#xe79b;</i>
                                             </div>
                                         </div>
                                     </div>
@@ -202,7 +202,7 @@
     <span class="layui-badge febs-tag-blue">{{ d.status }}</span>
     {{# } else if(d.status == '3'){d.status = '完结'}}
     <span class="layui-badge febs-tag-green">{{ d.status }}</span>
-    {{# } else if(d.status == '4'){d.status = '异常'}}
+    {{# } else if(d.status == '4'){d.status = '删除'}}
     <span class="layui-badge febs-tag-orange">{{ d.status }}</span>
     {{# } }}
 </script>
@@ -238,6 +238,7 @@
             $cleanBtn = $view.find('#refund-cleanBtn'),
             $searchForm = $view.find('form'),
             tableIns;
+        var stage = '退货';
 
         //初始化表单
         form.render();
@@ -285,13 +286,15 @@
 
         });
 
-        //加载表格数据
+
+        // //加载表格数据
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
                 height: 650,
                 id: 'refundTable',          //表单id
-                url: ctx + 'refund/list',   //url
+                url: ctx + 'commodity/list',   //url
+                where:{stage:stage},
                 toolbar: '#toolbarCheck',     //开启头部工具栏
                 defaultToolbar: ['filter','print'],     //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
                 cols: [[
@@ -335,7 +338,7 @@
                 var params = getQueryParams();
                 params.pageSize = $view.find(".layui-laypage-limits option:selected").val();
                 params.pageNum = $view.find(".layui-laypage-em").next().html();
-                febs.download(ctx + 'refund/excel',params, '退货QFF.xlsx');
+                febs.download(ctx + 'commodity/excel',params, '退货QFF.xlsx');
             }
         });
 
@@ -344,13 +347,13 @@
             var data = obj.data,
                 layEvent = obj.event;
             if (layEvent === 'refund-detail') {
-                febs.modal.view('具体信息', 'system/qff/refund/refundShow/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '80%']
+                febs.modal.open('具体信息', 'system/qff/refund/refundShow/' + data.id, {
+                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
                 });
             }
             if (layEvent === 'refund-edit') {
-                febs.modal.view('审核', 'system/qff/refund/refundAudit/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '90%']
+                febs.modal.open('审核', 'system/qff/refund/refundAudit/' + data.id, {
+                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
                 });
             }
             if (layEvent === 'refund-del') {
@@ -360,9 +363,8 @@
             }
         });
 
-        function delRefund(id)
-        {
-            febs.get(ctx + 'refund/deleteRefund/' + id, null, function () {
+        function delRefund(id) {
+            febs.get(ctx + 'commodity/deleteRefund/' + id, null, function () {
                 febs.alert.success('操作成功');
                 $query.click();
             });
@@ -407,6 +409,7 @@
                 getRemark: $searchForm.find("input[name='getRemark']").val().trim(),
                 rConf: $searchForm.find("input[name='rConf']").val().trim(),
                 status: $searchForm.find("select[name='status']").val(),
+                stage: stage,
                 invalidate_ie_cache: new Date()
             };
         }

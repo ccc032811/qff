@@ -26,8 +26,8 @@ public class ViewController extends BaseController {
     private ICommodityService conserveService;
     @Autowired
     private IRecentService recentService;
-    @Autowired
-    private IRefundService refundService;
+//    @Autowired
+//    private IRefundService refundService;
     @Autowired
     private IRocheService rocheService;
     @Autowired
@@ -172,18 +172,18 @@ public class ViewController extends BaseController {
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/refund/refundShow/{id}")
     @RequiresPermissions("refund:view")
     public String getRefundShow(@PathVariable Integer id, Model model) {
-        Refund refund = refundService.queryRefundById(id);
-        model.addAttribute("refund", refund);
+        Commodity commodity = conserveService.queryCommodityById(id);
+        model.addAttribute("commodity", commodity);
         return FebsUtil.view("system/qff/refund/refundShow");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/refund/refundAudit/{id}")
     @RequiresPermissions("refund:view")
     public String getRefundAudit(@PathVariable Integer id, Model model) {
-        Refund refund = refundService.queryRefundById(id);
-        model.addAttribute("refund", refund);
+        Commodity commodity = conserveService.queryCommodityById(id);
+        model.addAttribute("commodity", commodity);
         return FebsUtil.view("system/qff/refund/refundAudit");
-    }
+}
 
     //***********************************************罗氏内部发起***********************************************************
 

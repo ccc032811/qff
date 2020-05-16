@@ -27,7 +27,7 @@ spring:
     port: 465   #   25      smtp的端口号  ×××@163.com 非 SSL 连接的端口一般默认为 25, 可以不添加, 如果开启了 SSL 连接, 需要改为对应邮箱的 SMTP 服务器的端口
     ssl: true   #是否为ssl连接
     host: smtp.163.com   #smtp服务器地址
-    timeout: 1000   #连接超时
+    timeout: 25000   #连接超时
     username: ccc032811@163.com    #  sph-kdl-qff@shaphar.com
     password: ccc032811            #  spQff123+
   mvc:
@@ -61,7 +61,7 @@ qff:
     recentProcess: 近效期QFF
     refundProcess: 退货QFF
     rocheProcess: 罗氏内部发起QFF
-    imagePath:  /usr/local/share/qff/nginx-1.10.1/html    #D:\JavaSoft\nginx-1.12.2\html\  /usr/local/share/qff/nginx-1.10.1/html  图片存储的地址
-    imageUrl:  http://106.14.99.137:10086/         #http://127.0.0.1:10086/    http://106.14.99.137:10086/     图片展示路径
+    imagePath:  D:\JavaSoft\nginx-1.12.2\html\    #D:\JavaSoft\nginx-1.12.2\html\  /usr/local/share/qff/nginx-1.10.1/html  图片存储的地址
+    imageUrl:  http://127.0.0.1:10086/         #http://127.0.0.1:10086/    http://106.14.99.137:10086/     图片展示路径
   soap:
-    soapUrl: http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl    #QFF 请求地址
+    soapUrl: http://10.1.225.155:80/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS   #http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl    #QFF 请求地址

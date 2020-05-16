@@ -1,7 +1,10 @@
 package com.neefull.fsp.web.qff.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.client.HttpClient;
+import org.springframework.http.RequestEntity;
 import sun.misc.BASE64Encoder;
+
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -42,14 +45,16 @@ public abstract class SapWsUtils {
 
             // 设置HTTP请求相关信息
             httpConn.setRequestProperty("Content-Length", String.valueOf(soapMsg.getBytes().length));
-            httpConn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
+            httpConn.setRequestProperty("Content-Type","text/xml; charset=utf-8");
             httpConn.setRequestMethod("POST");
             httpConn.setDoOutput(true);
             httpConn.setDoInput(true);
+            httpConn.setConnectTimeout(500000);
+            httpConn.setReadTimeout(500000);
 
             // 进行HTTP请求
             outObject = httpConn.getOutputStream();
-            outObject.write(soapMsg.getBytes());
+            outObject.write(soapMsg.getBytes("utf-8"));
 //            System.out.println(httpConn.getResponseMessage());
             log.info(httpConn.getResponseMessage());
             // 获取HTTP响应数据
@@ -62,7 +67,9 @@ public abstract class SapWsUtils {
                 result.append(inputLine);
             }
         } catch (IOException e) {
-            throw e;
+            e.printStackTrace();
+
+//            log.error("连接esp服务器失败，失败原因为:{}",e.getMessage());
         } finally {
             // 关闭输入流
             if (inReader != null) {
@@ -99,10 +106,40 @@ public abstract class SapWsUtils {
                 "            <soap:PASSWORD>1</soap:PASSWORD>\n" +
                 "            <soap:COMMENTS>1</soap:COMMENTS>\n" +
                 "         </soap:commonHeader>\n" +
-                "         <soap:LIST><![CDATA[<urn:ZCHN_FM_QFF xmlns:urn=\"urn:sap-com:document:sap:rfc:functions:ZCHN_FM_QFF_BS\"><urn:IV_DATE_FROM>"+fromDate+"</urn:IV_DATE_FROM><urn:IV_DATE_TO>"+toDate+"</urn:IV_DATE_TO><urn:ET_QFF><urn:item><urn:QMNUM></urn:QMNUM><urn:HERKUNFT></urn:HERKUNFT><urn:MAWERK></urn:MAWERK><urn:MATNR></urn:MATNR><urn:MSTAE></urn:MSTAE><urn:CHARG></urn:CHARG><urn:IDNLF></urn:IDNLF><urn:BISMT></urn:BISMT><urn:LICHN></urn:LICHN><urn:HSDAT></urn:HSDAT><urn:VFDAT></urn:VFDAT><urn:MGEIG></urn:MGEIG><urn:QMTXT></urn:QMTXT><urn:ZPROCLAS></urn:ZPROCLAS><urn:REGNO></urn:REGNO><urn:AWBNO></urn:AWBNO><urn:ERDAT></urn:ERDAT></urn:item></urn:ET_QFF><urn:ET_QFF_ATT><urn:item><urn:QMNUM></urn:QMNUM><urn:ATTACHNAME></urn:ATTACHNAME><urn:ATTACH></urn:ATTACH></urn:item></urn:ET_QFF_ATT></urn:ZCHN_FM_QFF>]]></soap:LIST>\n" +
+                "         <soap:LIST><![CDATA[<urn:ZCHN_FM_QFF xmlns:urn=\"urn:sap-com:document:sap:rfc:functions:ZCHN_FM_QFF_BS\"><ET_QFF>\n" +
+                "            <item>\n" +
+                "               <QMNUM></QMNUM>\n" +
+                "               <HERKUNFT></HERKUNFT>\n" +
+                "               <MAWERK></MAWERK>\n" +
+                "               <MATNR></MATNR>\n" +
+                "               <MSTAE></MSTAE>\n" +
+                "               <CHARG></CHARG>\n" +
+                "               <IDNLF></IDNLF>\n" +
+                "               <BISMT></BISMT>\n" +
+                "               <LICHN></LICHN>\n" +
+                "               <HSDAT></HSDAT>\n" +
+                "               <VFDAT></VFDAT>\n" +
+                "               <MGEIG></MGEIG>\n" +
+                "               <QMTXT></QMTXT>\n" +
+                "               <ZPROCLAS></ZPROCLAS>\n" +
+                "               <REGNO></REGNO>\n" +
+                "               <AWBNO></AWBNO>\n" +
+                "               <ERDAT></ERDAT>\n" +
+                "            </item>\n" +
+                "         </ET_QFF>\n" +
+                "         <ET_QFF_ATT>\n" +
+                "            <item>\n" +
+                "               <QMNUM></QMNUM>\n" +
+                "               <ATTACHNAME></ATTACHNAME>\n" +
+                "               <ATTACH></ATTACH>\n" +
+                "            </item>\n" +
+                "         </ET_QFF_ATT>\n" +
+                "         <IV_DATE_FROM>"+fromDate+"</IV_DATE_FROM>\n" +
+                "         <IV_DATE_TO>"+toDate+"</IV_DATE_TO> \n" +
+                "       </urn:ZCHN_FM_QFF>]]></soap:LIST>\n" +
                 "      </soap:REQUEST_DATA>\n" +
                 "   </soapenv:Body>\n" +
-                "</soapenv:Envelope>\n");
+                "</soapenv:Envelope>");
 
         return message.toString();
     }
@@ -145,4 +182,5 @@ public abstract class SapWsUtils {
         }
         return sendMsg;
     }
+
 }

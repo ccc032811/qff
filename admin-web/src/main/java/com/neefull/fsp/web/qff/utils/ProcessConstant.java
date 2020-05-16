@@ -9,7 +9,7 @@ public class ProcessConstant {
     /**
      *  新建
      */
-    public static final Integer NEW_BUILD = 1;
+    public static final Integer  NEW_BUILD = 1;
     /**
      *  审核中
      */

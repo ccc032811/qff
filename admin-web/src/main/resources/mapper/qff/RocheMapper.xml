@@ -55,9 +55,15 @@
         <if test="roche.startTime!=null and roche.startTime!='' and roche.endTime!=null and roche.endTime!=''">
             and req_date between  #{roche.startTime} and #{roche.endTime}
         </if>
-        <if test="roche.status!=null and roche.status!=''">
-            and status = #{roche.status}
-        </if>
+        <choose>
+            <when test="roche.status!=null and roche.status!=''">
+                and status = #{roche.status}
+            </when>
+            <otherwise>
+                and status !=4
+            </otherwise>
+        </choose>
+
     order by req_date desc
     </select>
 </mapper>

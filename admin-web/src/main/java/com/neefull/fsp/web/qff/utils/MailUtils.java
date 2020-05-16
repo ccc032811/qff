@@ -2,14 +2,21 @@ package com.neefull.fsp.web.qff.utils;
 
 import com.neefull.fsp.web.qff.config.SendMailProperties;
 import com.sun.mail.util.MailSSLSocketFactory;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * @Author: chengchengchu
@@ -18,7 +25,7 @@ import java.util.Properties;
 public class MailUtils {
 
 
-    public static void sendMail(String text, SendMailProperties mailProperties, String[] mails ) {
+    public static void sendMail(String text, SendMailProperties mailProperties, String[] mails, Map<String,String> files ) {
 
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(mailProperties.getHost());
@@ -30,7 +37,7 @@ public class MailUtils {
 
         Properties prop = new Properties();
         prop.setProperty("mail.smtp.auth", mailProperties.getAuth());
-//        prop.setProperty("mail.smtp.timeout", mailProperties.getTimeout());
+        prop.setProperty("mail.smtp.timeout", mailProperties.getTimeout());
         try {
             MailSSLSocketFactory sf = new MailSSLSocketFactory();
             sf.setTrustAllHosts(true);
@@ -46,12 +53,19 @@ public class MailUtils {
         try {
             mimeMessageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);
             mimeMessageHelper.setFrom(mailProperties.getUsername());//发送的邮箱地址
-            mimeMessageHelper.setTo(mails);//接收的邮箱地址
+            mimeMessageHelper.setTo("ccc032811@163.com");//接收的邮箱地址
 //            mimeMessageHelper.setTo("wangpei_it@163.com");//接收的邮箱地址
 //            mimeMessageHelper.setCc("");//抄送者的邮箱地址
             mimeMessageHelper.setSubject("您当前需要处理来自SAP的数据");//邮件名称
             mimeMessageHelper.setText(text,true);//邮箱文字内容
-
+            if(files!=null){
+                Set<String> strings = files.keySet();
+                for (String string : strings) {
+                    FileSystemResource resource = new FileSystemResource(new File(files.get(string)));
+                    mimeMessageHelper.addAttachment(string , resource);
+                }
+            }
+//            mimeMessageHelper.addAttachment();
         } catch (
                 MessagingException e) {
             e.printStackTrace();

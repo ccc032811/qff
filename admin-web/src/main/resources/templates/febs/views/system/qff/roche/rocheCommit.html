@@ -250,7 +250,7 @@
 
         upload.render({
             elem: '#chose'  //绑定
-            ,url: ctx+ 'file/uploadImage'  //上传url
+            ,url: ctx+ 'file/uploadImage/'+ "罗氏"  //上传url
             ,accept: "images"     //设置文件的类型
             // ,number: 2         //设置上传文件数量
             ,multiple: true       //设置多文件上传
@@ -259,7 +259,7 @@
             ,done: function(res){
                 if(res.code === 200){
                     $('#uploader-list').append('<div class="image-container" id="container'+res.data.index+'"><div class="delete-css"><button id="upload_img_'+res.data.index+'" class="layui-btn layui-btn-danger layui-btn-xs">删除</button></div>\n' +
-                        '<img  class="layui-upload-img" id="showImg'+res.data.index+'" style="width: 120px; height:100px;margin:10px;cursor:pointer;" src="'+ 'http://106.14.99.137:10086/'+ res.data.value +'" name = "'+ res.data.value+'" ></div>');
+                        '<img  class="layui-upload-img" id="showImg'+res.data.index+'" style="width: 120px; height:100px;margin:10px;cursor:pointer;" src="'+ 'http://127.0.0.1:10086/'+ res.data.value +'" name = "'+ res.data.value+'" ></div>');
                     $("#upload_img_" + res.data.index).bind('click', function () {
                         delete files[res.data.index];
                         $("#container"+res.data.index).remove();

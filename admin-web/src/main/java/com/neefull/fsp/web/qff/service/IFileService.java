@@ -16,7 +16,7 @@ public interface IFileService {
      * @param file
      * @return
      */
-    Map<String, String> uploadImage(MultipartFile file);
+    Map<String, String> uploadImage(MultipartFile file,String number);
 
 
     /**解析excel

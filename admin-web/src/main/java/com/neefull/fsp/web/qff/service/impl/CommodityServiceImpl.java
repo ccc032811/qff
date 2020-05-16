@@ -10,11 +10,13 @@ import com.neefull.fsp.web.qff.service.ICommodityService;
 import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -76,8 +78,28 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     public Commodity queryCommodityByNumber(String number) {
         QueryWrapper<Commodity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("number", number);
+//        return commodityMapper.selectCount(queryWrapper);
         return  commodityMapper.selectOne(queryWrapper);
 
+    }
+
+    @Override
+    public void deleteCommoddityById(Integer id) {
+        this.baseMapper.deleteById(id);
+    }
+
+    @Override
+    public List<Commodity> selectAllCommodity() {
+        QueryWrapper<Commodity> wrapper = new QueryWrapper<>();
+        wrapper.eq("status",1);
+        return commodityMapper.selectList(wrapper);
+
+    }
+
+    @Override
+    public String selectLastTime() {
+        Date date = commodityMapper.selectLastTime();
+        return DateFormatUtils.format(date,"yyyy-MM-dd");
     }
 
 

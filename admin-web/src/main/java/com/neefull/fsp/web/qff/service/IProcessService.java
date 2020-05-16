@@ -58,7 +58,7 @@ public interface IProcessService  {
 
     List<Recent> queryRecentTaskByName(List<Recent> records, User user);
 
-    List<Refund> queryRefundTaskByName(List<Refund> records, User user);
+//    List<Refund> queryRefundTaskByName(List<Refund> records, User user);
 
     List<Roche> queryRocheTaskByName(List<Roche> records, User user);
 }

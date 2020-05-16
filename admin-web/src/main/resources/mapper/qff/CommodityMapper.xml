@@ -77,9 +77,18 @@
             <if test="commodity.startTime!=null and commodity.startTime!='' and commodity.endTime!=null and commodity.endTime!=''">
                 and create_time between  #{commodity.startTime} and #{commodity.endTime}
             </if>
-            <if test="commodity.status!=null and commodity.status!=''">
-                and status = #{commodity.status}
-            </if>
+            <choose>
+                <when test="commodity.status!=null and commodity.status!=''">
+                    and status = #{commodity.status}
+                </when>
+                <otherwise>
+                    and status != 4
+                </otherwise>
+            </choose>
+
         order by create_time desc
+    </select>
+    <select id="selectLastTime" resultType="java.util.Date">
+        select c.create_time from qff_commodity c order by c.create_time desc limit 1
     </select>
 </mapper>

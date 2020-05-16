@@ -7,6 +7,8 @@ import com.neefull.fsp.web.qff.entity.Commodity;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 /**
  * @Author: chengchengchu
  * @Date: 2019/12/6  18:55
@@ -27,4 +29,7 @@ public interface CommodityMapper extends BaseMapper<Commodity> {
      * @return
      */
     Integer updateConserveStatus(@Param("id") Integer id , @Param("status") Integer status);
+
+    Date selectLastTime();
+
 }

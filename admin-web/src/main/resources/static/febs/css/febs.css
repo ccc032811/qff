@@ -37,6 +37,8 @@ a:hover {
 }
 
 #app-sidebar {
+    height: 820px;
+    margin-top: 80px;
     top: 0;
     z-index: 1001;
     overflow: hidden
@@ -238,12 +240,15 @@ body, html, #app-header .layui-nav .layui-nav-item a:not(.layui-nav-child-href),
 }
 
 #app-header {
-    border-bottom: 1px solid #f1f1f1;
+    z-index:9999;
+    background-color: white;
+    height: 70px;
+    border-bottom: #40AFFE  5px solid;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 50px
+    box-shadow: 1px -1px 5px 0px black;
 }
 
 #app-header .layui-nav {
@@ -287,9 +292,10 @@ body, html, #app-header .layui-nav .layui-nav-item a:not(.layui-nav-child-href),
 }
 
 .febs-tabs-wrap {
+    margin-top: 35px;
     z-index: 999;
     position: fixed;
-    top: 50px;
+    top: 41px;
     white-space: nowrap;
     padding: 0 80px 0 30px;
     box-sizing: border-box;
@@ -3788,6 +3794,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 }
 
 .febs-container {
+    margin-top: 30px;
     padding: 6px
 }
 
@@ -3986,4 +3993,105 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 .febs-anim-up {
     -webkit-animation-name: febs-anim-up;
     animation-name: febs-anim-up
+}
+
+#app-foot {
+    border-bottom: 1px solid #f1f1f1;
+    position: fixed;
+    top: 902px;
+    left: 0;
+    width: 100%;
+    height: 45px
+}
+.head-box{
+    height: 71px;
+    width: 1000px;
+}
+.left-flow{
+    float: left;
+}
+.head-body{
+    width: 330px;
+    height: 68px;
+}
+.head-zi{
+    margin-top: 100px;
+    color: #105b95;
+    margin-left: 15px;
+    font-size: 30px;
+}
+.head-div{
+    margin-top: 13px;
+    border-left: #CDCDCD 2px solid;
+}
+.layui-nav{
+    margin-top: 15px;
+}
+.right-side-flow{
+    width: 130px;
+    height: 500px;
+    left: 93%;
+    top:30%;
+    z-index: 999999;
+    position: fixed;
+    background-color: red;
+}
+.input-select-div{
+    width: 300px;
+    margin-top: 88px;
+    position:absolute;
+    z-index: 999999
+}
+
+
+
+.timeline-main-line{
+    width: 90%;
+    height: 50px;
+    margin-left: 5%
+}
+.timeline-item-start{
+    width: 25%;
+    height: 50px;
+    float:left;
+}
+
+.timeline-item{
+    width: 25%;
+    height: 50px;
+    float:left;
+    border-bottom: 3px solid #CBCBCB;
+}
+.timeline-item-start{
+    width: 25%;
+    height: 50px;
+    float:left;
+}
+
+.timeline-item-cricle{
+    width: 25px;
+    height: 20px;
+    border-radius: 80%;
+    background-color: #CBCBCB;
+    position: relative;
+    top: 22px;
+    left: 95%;
+    text-align: center;
+    color: #fff;
+}
+.timeline-item-timestamp{
+    width: 70%;
+    height: 20px;
+    color: #000;
+    position: relative;
+    top: 10px;
+    left:  95%;
+}
+.timeline-item-name{
+    width: 70%;
+    height: 20px;
+    color: #000;
+    position: relative;
+    top: 40px;
+    left:  95%;
 }

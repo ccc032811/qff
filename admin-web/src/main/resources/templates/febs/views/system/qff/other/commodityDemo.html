@@ -259,7 +259,7 @@
         });
 
         form.on('submit(rollback-form-submit)', function (data) {
-            febs.post(ctx + 'refund/commit', data.field , function (data) {
+            febs.post(ctx + 'commodity/commit', data.field , function (data) {
                 if(data.code ===200) {
                     layer.closeAll();
                     febs.alert.success('提交申请成功');

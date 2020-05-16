@@ -29,14 +29,20 @@
                 </div>
                 <div style="height: 100px;width: 215px;float: left">
                     <div style="text-align: center;margin-top: 33px;" class="site-demo-button" >
-                        <button id="btn"  onclick="btnOn()" style="border: none;background-color:transparent;"><span style="color: #00A1DD"><h2>发起QFF</h2></span></button>
+                        <button  onclick="btnOn()" style="border: none;background-color:transparent;"><span style="color: #00A1DD"><h2>发起QFF</h2></span></button>
                     </div>
                 </div>
             </div>
             <div style="height: 100px; width: 280px;box-shadow: 0px 1px 6px 0px #827a7a;;margin-left: 15px ; float:left" >
-                <div style="text-align: center;margin-top: 33px;" class="site-demo-button" >
-                    <button type="button" class="layui-btn layui-btn-warm" onclick="textDemo()">创建测试使用</button>
+                <div style="height: 100px;width: 60px;float: left; margin-left: 5px">
+                    <img data-th-src="@{febs/images/start.png}" width="60px" height="60px" style="margin-top: 20px;margin-left: 5px">
                 </div>
+                <div style="height: 100px;width: 215px;float: left">
+                    <div style="text-align: center;margin-top: 33px;" class="site-demo-button" >
+                        <button  onclick="addQff()" style="border: none;background-color:transparent;"><span style="color: #00A1DD"><h2>新增QFF</h2></span></button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -66,7 +72,7 @@
             });
         };
 
-        window.textDemo = function () {
+        window.addQff = function () {
             febs.modal.open('测试', 'system/qff/commodity/textDemo',{
                 area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '50%']
             });

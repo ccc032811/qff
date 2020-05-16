@@ -47,9 +47,14 @@
         <if test="recent.startTime!=null and recent.startTime!='' and recent.endTime!=null and recent.endTime!=''">
             and create_time between  #{recent.startTime} and #{recent.endTime}
         </if>
-        <if test="recent.status!=null and recent.status!=''">
-            and status = #{recent.status}
-        </if>
+        <choose>
+            <when test="recent.status!=null and recent.status!=''">
+                and status = #{recent.status}
+            </when>
+            <otherwise>
+                and status != 4
+            </otherwise>
+        </choose>
     order by create_time desc
     </select>
 </mapper>

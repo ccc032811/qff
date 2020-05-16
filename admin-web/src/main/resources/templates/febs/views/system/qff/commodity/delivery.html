@@ -49,10 +49,10 @@
                                     <div id="delivery-check"  style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%">
                                         <!--<div class="layui-form-item" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;">-->
                                             <div class="layui-btn layui-btn-normal layui-btn-sm" id="delivery-query" >
-                                                <i class="layui-icon">&#xe848;</i> 查询
+                                                <i class="layui-icon">&#xe848;</i>
                                             </div>
                                             <div class="layui-btn layui-btn-danger layui-btn-sm" id="delivery-reset" >
-                                                <i class="layui-icon">&#xe79b;</i> 清空
+                                                <i class="layui-icon">&#xe79b;</i>
                                             </div>
                                         <!--</div>-->
                                     </div>
@@ -188,10 +188,10 @@
                                     <div class="layui-form-item ">
                                         <div style="float: right;margin-right: 3%" >
                                             <div class="layui-btn layui-btn-normal layui-btn-sm" id="delivery-queryBtn" >
-                                                <i class="layui-icon">&#xe848;</i> 查询
+                                                <i class="layui-icon">&#xe848;</i>
                                             </div>
                                             <div class="layui-btn layui-btn-danger layui-btn-sm" id="delivery-cleanBtn" >
-                                                <i class="layui-icon">&#xe79b;</i> 清空
+                                                <i class="layui-icon">&#xe79b;</i>
                                             </div>
                                         </div>
                                     </div>
@@ -215,7 +215,7 @@
     <span class="layui-badge febs-tag-blue">{{ d.status }}</span>
     {{# } else if(d.status == '3'){d.status = '完结'}}
     <span class="layui-badge febs-tag-green">{{ d.status }}</span>
-    {{# } else if(d.status == '4'){d.status = '异常'}}
+    {{# } else if(d.status == '4'){d.status = '删除'}}
     <span class="layui-badge febs-tag-orange">{{ d.status }}</span>
     {{# } }}
 </script>
@@ -360,13 +360,13 @@
             var data = obj.data,
                 layEvent = obj.event;
             if (layEvent === 'delivery-detail') {
-                febs.modal.view('具体信息', 'system/qff/commodity/deliveryShow/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '85%']
+                febs.modal.open('具体信息', 'system/qff/commodity/deliveryShow/' + data.id, {
+                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
                 });
             }
             if (layEvent === 'delivery-edit') {
-                febs.modal.view('审核', 'system/qff/commodity/deliveryAudit/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '90%']
+                febs.modal.open('审核', 'system/qff/commodity/deliveryAudit/' + data.id, {
+                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
                 });
             }
             if (layEvent === 'delivery-del') {

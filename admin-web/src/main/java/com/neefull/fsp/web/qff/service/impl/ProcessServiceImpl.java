@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.sql.Ref;
 import java.util.*;
 
@@ -35,13 +36,11 @@ public class ProcessServiceImpl implements IProcessService {
     @Autowired
     private ICommodityService commodityService;
     @Autowired
-    private IRefundService refundService;
+    private IAttachmentService attachmentService;
     @Autowired
     private IRecentService recentService;
     @Autowired
     private IRocheService rocheService;
-    @Autowired
-    private IDateImageService dateImageService;
     @Autowired
     private RuntimeService runtimeService;
     @Autowired
@@ -68,17 +67,17 @@ public class ProcessServiceImpl implements IProcessService {
             agreeCurrentProcess(commodity,user);
             //更改状态审核中
             commodityService.updateCommodityStatus(commodity.getId(), ProcessConstant.UNDER_REVIEW);
-        }else if(object instanceof Refund){
-            Refund refund = (Refund) object;
-            if(refund.getId()==null){
-                refundService.addRefund(refund);
-            }else {
-                editRefund(refund);
-            }
-            String businessKey = Refund.class.getSimpleName()+":"+refund.getId();
-            startProcess(properties.getRefundProcess(),businessKey,user);
-            agreeCurrentProcess(refund,user);
-            refundService.updateRefundStatus(refund.getId(), ProcessConstant.UNDER_REVIEW);
+//        }else if(object instanceof Refund){
+//            Refund refund = (Refund) object;
+//            if(refund.getId()==null){
+//                refundService.addRefund(refund);
+//            }else {
+//                editRefund(refund);
+//            }
+//            String businessKey = Refund.class.getSimpleName()+":"+refund.getId();
+//            startProcess(properties.getRefundProcess(),businessKey,user);
+//            agreeCurrentProcess(refund,user);
+//            refundService.updateRefundStatus(refund.getId(), ProcessConstant.UNDER_REVIEW);
         }else if(object instanceof Recent){
             Recent recent = (Recent) object;
             if(recent.getId()==null){
@@ -145,7 +144,7 @@ public class ProcessServiceImpl implements IProcessService {
                 commodityService.updateCommodityStatus(commodity.getId(),ProcessConstant.HAS_FINISHED);
             }
             if(StringUtils.isNotEmpty(commodity.getImages())){
-                addOrEditImages(commodity,user);
+                addOrEditFiles(commodity,user);
             }
         }else if(object instanceof Recent){
             Recent recent = (Recent) object;
@@ -157,20 +156,20 @@ public class ProcessServiceImpl implements IProcessService {
                 recentService.updateRecentStatus(recent.getId(),ProcessConstant.HAS_FINISHED);
             }
             if(StringUtils.isNotEmpty(recent.getImages())){
-                addOrEditImages(recent,user);
+                addOrEditFiles(recent,user);
             }
-        }else if(object instanceof Refund){
-            Refund refund = (Refund) object;
-            editRefund(refund);
-
-            String businessKey = Refund.class.getSimpleName()+":"+refund.getId();
-            ProcessInstance processInstance = getNewProcessInstance(businessKey, properties.getRefundProcess(), user);
-            if(processInstance==null){
-                refundService.updateRefundStatus(refund.getId(),ProcessConstant.HAS_FINISHED);
-            }
-            if(StringUtils.isNotEmpty(refund.getImages())){
-                addOrEditImages(refund,user);
-            }
+//        }else if(object instanceof Refund){
+//            Refund refund = (Refund) object;
+//            editRefund(refund);
+//
+//            String businessKey = Refund.class.getSimpleName()+":"+refund.getId();
+//            ProcessInstance processInstance = getNewProcessInstance(businessKey, properties.getRefundProcess(), user);
+//            if(processInstance==null){
+//                refundService.updateRefundStatus(refund.getId(),ProcessConstant.HAS_FINISHED);
+//            }
+//            if(StringUtils.isNotEmpty(refund.getImages())){
+//                addOrEditImages(refund,user);
+//            }
         }else if(object instanceof Roche){
             Roche roche = (Roche) object;
             rocheService.editRoche(roche);
@@ -181,7 +180,7 @@ public class ProcessServiceImpl implements IProcessService {
                 rocheService.updateRocheStatus(roche.getId(),ProcessConstant.HAS_FINISHED);
             }
             if(StringUtils.isNotEmpty(roche.getImages())){
-                addOrEditImages(roche,user);
+                addOrEditFiles(roche,user);
             }
         }
     }
@@ -208,10 +207,10 @@ public class ProcessServiceImpl implements IProcessService {
             for (HistoricTaskInstance taskInstance : taskInstances) {
                 ProcessHistory processHistory = new ProcessHistory();
                 processHistory.setName(taskInstance.getName());
-                if(taskInstance.getEndTime() ==null){
-                    processHistory.setDate("");
+                if(taskInstance.getEndTime() == null){
+                    processHistory.setDate(null);
                 }else {
-                    processHistory.setDate(DateFormatUtils.format(taskInstance.getEndTime(),"yyyy-MM-dd"));
+                    processHistory.setDate(DateFormatUtils.format(taskInstance.getEndTime(),"yyyy-MM-dd HH:mm:ss"));
                 }
                 list.add(processHistory);
             }
@@ -254,9 +253,9 @@ public class ProcessServiceImpl implements IProcessService {
         }else if(object instanceof Recent){
             Recent recent = (Recent) object;
             businessKey = Recent.class.getSimpleName()+":"+recent.getId();
-        }else if(object instanceof Refund) {
-            Refund refund = (Refund) object;
-            businessKey = Refund.class.getSimpleName()+":"+refund.getId();
+//        }else if(object instanceof Refund) {
+//            Refund refund = (Refund) object;
+//            businessKey = Refund.class.getSimpleName()+":"+refund.getId();
         }else if(object instanceof Roche) {
             Roche roche = (Roche) object;
             businessKey = Roche.class.getSimpleName() + ":" + roche.getId();
@@ -271,9 +270,9 @@ public class ProcessServiceImpl implements IProcessService {
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
             businessKey = Commodity.class.getSimpleName()+":"+commodity.getId();
-        }else if(object instanceof Refund) {
-            Refund refund = (Refund) object;
-            businessKey = Refund.class.getSimpleName()+":"+refund.getId();
+//        }else if(object instanceof Refund) {
+//            Refund refund = (Refund) object;
+//            businessKey = Refund.class.getSimpleName()+":"+refund.getId();
         }
         if(StringUtils.isNotEmpty(businessKey)){
             processInstance = queryProcessInstance(businessKey);
@@ -336,23 +335,23 @@ public class ProcessServiceImpl implements IProcessService {
         return recentList;
     }
 
-    @Override
-    public List<Refund> queryRefundTaskByName(List<Refund> refundList, User user) {
-        List<Task> tasks = queryTaskByUserName(user.getUsername());
-        for (Task task : tasks) {
-            ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-            String businessKey = processInstance.getBusinessKey();
-            String id = splitKey(businessKey, Refund.class.getSimpleName());
-            if(StringUtils.isNotEmpty(id)&&!id.equals("null")){
-                for (Refund refund : refundList) {
-                    if(refund.getId()==Integer.parseInt(id)){
-                        refund.setIsAllow(1);
-                    }
-                }
-            }
-        }
-        return refundList;
-    }
+//    @Override
+//    public List<Refund> queryRefundTaskByName(List<Refund> refundList, User user) {
+//        List<Task> tasks = queryTaskByUserName(user.getUsername());
+//        for (Task task : tasks) {
+//            ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+//            String businessKey = processInstance.getBusinessKey();
+//            String id = splitKey(businessKey, Refund.class.getSimpleName());
+//            if(StringUtils.isNotEmpty(id)&&!id.equals("null")){
+//                for (Refund refund : refundList) {
+//                    if(refund.getId()==Integer.parseInt(id)){
+//                        refund.setIsAllow(1);
+//                    }
+//                }
+//            }
+//        }
+//        return refundList;
+//    }
 
     @Override
     public List<Roche> queryRocheTaskByName(List<Roche> rocheList, User user) {
@@ -386,45 +385,90 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
     @Transactional
-    public void addOrEditImages(Object object ,User user) {
+    public void addOrEditFiles (Object object ,User user) {
         String image = "";
-
         if (object instanceof Commodity) {
             Commodity commodity = (Commodity) object;
-            DateImage dateImage = dateImageService.queryImage(commodity.getId(), user.getDeptName(), ProcessConstant.COMMODITY_FORM);
-            if (dateImage==null) {
-                dateImageService.insertDateImage(commodity.getId(), user.getDeptName(), ProcessConstant.COMMODITY_FORM, commodity.getImages());
-            } else {
-                image = image + commodity.getImages();
-                dateImageService.updateDateImage(commodity.getId(), user.getDeptName(), ProcessConstant.COMMODITY_FORM, image);
+            Attachment attachment = new Attachment();
+            attachment.setQffId(commodity.getNumber());
+            attachment.setQffType(commodity.getStage());
+            attachment.setSource(2);
+            attachment.setEnable(1);
+            attachment.setVest(user.getDeptName());
+            String images = commodity.getImages();
+            String[] split = images.split(",");
+            for (String file : split) {
+                if(StringUtils.isNotEmpty(file)){
+                    attachment.setAttachType(file.split("\\.")[1]);
+                    attachment.setRemark(file.split("\\.")[0]);
+                    File filePath = new File(properties.getImagePath() + file);
+                    attachment.setAttachSize(filePath.length());
+                    attachmentService.addAttachment(attachment);
+                }
             }
         } else if (object instanceof Recent) {
             Recent recent = (Recent) object;
-            DateImage dateImage = dateImageService.queryImage(recent.getId(), user.getDeptName(), ProcessConstant.RECENT_FORM);
-            if (dateImage==null) {
-                dateImageService.insertDateImage(recent.getId(), user.getDeptName(), ProcessConstant.RECENT_FORM, recent.getImages());
-            } else {
-                image = image + recent.getImages();
-                dateImageService.updateDateImage(recent.getId(), user.getDeptName(), ProcessConstant.RECENT_FORM, image);
+            Attachment attachment = new Attachment();
+            attachment.setQffId(String.valueOf(recent.getId()));
+            attachment.setQffType("近效期");
+            attachment.setSource(2);
+            attachment.setEnable(1);
+            attachment.setVest(user.getDeptName());
+            String images = recent.getImages();
+            String[] split = images.split(",");
+            for (String file : split) {
+                if(StringUtils.isNotEmpty(file)){
+                    attachment.setAttachType(file.split("\\.")[1]);
+                    attachment.setRemark(file.split("\\.")[0]);
+                    File filePath = new File(properties.getImagePath() + file);
+                    attachment.setAttachSize(filePath.length());
+                    attachmentService.addAttachment(attachment);
+                }
             }
-        } else if (object instanceof Refund) {
-            Refund refund = (Refund) object;
-            DateImage dateImage = dateImageService.queryImage(refund.getId(), user.getDeptName(), ProcessConstant.REFUND_FORM);
-            if (dateImage == null) {
-                dateImageService.insertDateImage(refund.getId(), user.getDeptName(), ProcessConstant.REFUND_FORM, refund.getImages());
-            } else {
-                image = image + refund.getImages();
-                dateImageService.updateDateImage(refund.getId(), user.getDeptName(), ProcessConstant.REFUND_FORM, image);
-            }
+
+//            DateImage dateImage = dateImageService.queryImage(recent.getId(), user.getDeptName(), ProcessConstant.RECENT_FORM);
+//            if (dateImage==null) {
+//                dateImageService.insertDateImage(recent.getId(), user.getDeptName(), ProcessConstant.RECENT_FORM, recent.getImages());
+//            } else {
+//                image = image + recent.getImages();
+//                dateImageService.updateDateImage(recent.getId(), user.getDeptName(), ProcessConstant.RECENT_FORM, image);
+//            }
+//        } else if (object instanceof Refund) {
+//            Refund refund = (Refund) object;
+//            DateImage dateImage = dateImageService.queryImage(refund.getId(), user.getDeptName(), ProcessConstant.REFUND_FORM);
+//            if (dateImage == null) {
+//                dateImageService.insertDateImage(refund.getId(), user.getDeptName(), ProcessConstant.REFUND_FORM, refund.getImages());
+//            } else {
+//                image = image + refund.getImages();
+//                dateImageService.updateDateImage(refund.getId(), user.getDeptName(), ProcessConstant.REFUND_FORM, image);
+//            }
         } else if (object instanceof Roche) {
             Roche roche = (Roche) object;
-            DateImage dateImage = dateImageService.queryImage(roche.getId(), user.getDeptName(), ProcessConstant.ROCHE_FORM);
-            if (dateImage==null) {
-                dateImageService.insertDateImage(roche.getId(), user.getDeptName(), ProcessConstant.ROCHE_FORM, roche.getImages());
-            } else {
-                image = image + roche.getImages();
-                dateImageService.updateDateImage(roche.getId(), user.getDeptName(), ProcessConstant.ROCHE_FORM, image);
+            Attachment attachment = new Attachment();
+            attachment.setQffId(String.valueOf(roche.getId()));
+            attachment.setQffType("罗氏发起");
+            attachment.setSource(2);
+            attachment.setEnable(1);
+            attachment.setVest(user.getDeptName());
+            String images = roche.getImages();
+            String[] split = images.split(",");
+            for (String file : split) {
+                if(StringUtils.isNotEmpty(file)){
+                    attachment.setAttachType(file.split("\\.")[1]);
+                    attachment.setRemark(file.split("\\.")[0]);
+                    File filePath = new File(properties.getImagePath() + file);
+                    attachment.setAttachSize(filePath.length());
+                    attachmentService.addAttachment(attachment);
+                }
             }
+
+//            DateImage dateImage = dateImageService.queryImage(roche.getId(), user.getDeptName(), ProcessConstant.ROCHE_FORM);
+//            if (dateImage==null) {
+//                dateImageService.insertDateImage(roche.getId(), user.getDeptName(), ProcessConstant.ROCHE_FORM, roche.getImages());
+//            } else {
+//                image = image + roche.getImages();
+//                dateImageService.updateDateImage(roche.getId(), user.getDeptName(), ProcessConstant.ROCHE_FORM, image);
+//            }
         }
     }
 
@@ -435,12 +479,12 @@ public class ProcessServiceImpl implements IProcessService {
         commodityService.editCommodity(commodity);
     }
 
-    @Transactional
-    protected void editRefund(Refund refund){
-        String format = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
-        refund.setRepTime(format);
-        refundService.editRefund(refund);
-    }
+//    @Transactional
+//    protected void editRefund(Refund refund){
+//        String format = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
+//        refund.setRepTime(format);
+//        refundService.editRefund(refund);
+//    }
 
 
 }

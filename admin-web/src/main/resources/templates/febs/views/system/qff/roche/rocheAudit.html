@@ -17,48 +17,8 @@
         height: 50px;
         float:left;
     }
-    .timeline-item-success{
-        width: 25%;
-        height: 50px;
-        float:left;
-        border-bottom: 3px solid #3DCCA6;
-    }
-    .timeline-item-fail{
-        width: 25%;
-        height: 50px;
-        float:left;
-        border-bottom: 3px solid #CBCBCB;
-    }
-    .timeline-item-no-start{
-        width: 25%;
-        height: 50px;
-        float:left;
-    }
-
-    .timeline-item-cricle-success{
-        width: 25px;
-        height: 20px;
-        border-radius: 80%;
-        background-color: #3DCCA6;
-        position: relative;
-        top: 22px;
-        left: 95%;
-        text-align: center;
-        color: #fff;
-    }
-    .timeline-item-cricle-fail{
-        width: 25px;
-        height: 20px;
-        border-radius: 80%;
-        background-color: #CBCBCB;
-        position: relative;
-        top: 42px;
-        left:  95%;
-        text-align: center;
-        color: #000;
-    }
     .timeline-item-timestamp{
-        width: 100px;
+        width: 70%;
         height: 20px;
         color: #000;
         position: relative;
@@ -66,19 +26,11 @@
         left:  95%;
     }
     .timeline-item-name{
-        width: 25%;
+        width: 70%;
         height: 20px;
         color: #000;
         position: relative;
         top: 40px;
-        left:  95%;
-    }
-    .timeline-item-name-fail{
-        width: 100px;
-        height: 20px;
-        color: #000;
-        position: relative;
-        top: 60px;
         left:  95%;
     }
 
@@ -264,7 +216,16 @@
         </div>
         <div class="layui-form-item" style="margin-top: 30px">
             <div class="timeline-main-line" id="process">
-
+                <div class="timeline-item-start">
+                    <div class="timeline-item-timestamp" id="time-first"></div>
+                    <div class="timeline-item-cricle" id="cricle-first">1</div>
+                    <div class="timeline-item-name" id="name-first">罗氏创建</div>
+                </div>
+                <div class="timeline-item" id="item-second">
+                    <div class="timeline-item-timestamp" id="time-second"></div>
+                    <div class="timeline-item-cricle" id="cricle-second">2</div>
+                    <div class="timeline-item-name" id="name-second">康德乐审批</div>
+                </div>
             </div>
         </div>
         <div class="layui-form-item febs-hide" >
@@ -281,10 +242,6 @@
         <div  style="margin-top: 75px;text-align: center;" shiro:hasPermission="roche:audit">
             <button class="layui-btn" id="roche-submit" >提交</button>
         </div>
-        <br>
-        <div style="float: right">
-            <input style="border:0;" name="id" type="hidden">
-        </div>
     </div>
 </div>
 <img alt="" style="display:none" id="displayImg" src="" />
@@ -300,7 +257,7 @@
             roche = [[${roche}]],
             $view = $('#roche-detail');
 
-        var relevance = "qff_roche";
+        var type = "罗氏发起";
 
         laydate.render({
             elem: '#audit-reqDate',
@@ -370,7 +327,7 @@
         }
 
 
-        $.get(ctx +"file/findImages/"+roche.id+"/"+relevance,function (res) {
+        $.get(ctx +"file/findImages/"+roche.id+"/"+type,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
                 $('#image_show').append('<a href="javascript:amplificationImg(\''+index+'\',\''+item+'\')"><img name=" '+index+'"src = " '+item+' "style="width:120px;height:100px;"></a>')
@@ -405,39 +362,21 @@
 
         $.get(ctx + "roche/queryHistory",roche ,function (res) {
             var data = res.data;
-            if(data[0]==null){
-                $("#process").append('<div class="timeline-item-no-start">\n' +
-                    '                    <div class="timeline-item-cricle-fail">'+1+'</div>\n' +
-                    '                    <div class="timeline-item-name-fail">xxx审核</div>\n' +
-                    '                </div>')
-            }else {
-
-                $("#process").append('<div class="timeline-item-start">\n' +
-                    '                    <div class="timeline-item-timestamp">'+data[0].date+'</div>\n' +
-                    '                    <div class="timeline-item-cricle-success">'+1+'</div>\n' +
-                    '                    <div class="timeline-item-name">'+data[0].name+'</div>\n' +
-                    '                </div>')
+            if(data[0]!=null&&data[0].date !=null){
+                $("#time-first").html(data[0].date);
+                $("#name-first").html(data[0].name);
+                $("#cricle-first").attr("style","background-color: #3DCCA6");
+                $("#item-second").attr("style","border-bottom: 3px solid #3DCCA6;");
             }
-            if(data[1]==null){
-                error(2)
-            }else {
-                success(data[1],2)
+            if(data[1]!=null&&data[1].date !=null){
+                $("#time-second").html(data[1].date);
+                $("#name-second").html(data[1].name);
+                $("#cricle-second").attr("style","background-color: #3DCCA6");
+                $("#item-three").attr("style","border-bottom: 3px solid #3DCCA6;");
             }
         });
 
-        function success(data,index){
-            $("#process").append('<div class="timeline-item-success">\n' +
-                '                    <div class="timeline-item-timestamp">'+data.date+'</div>\n' +
-                '                    <div class="timeline-item-cricle-success">'+index+'</div>\n' +
-                '                    <div class="timeline-item-name">'+data.name+'</div>\n' +
-                '                </div>')
-        }
-        function error(index){
-            $("#process").append('<div class="timeline-item-fail">\n' +
-                '                    <div class="timeline-item-cricle-fail">'+index+'</div>\n' +
-                '                    <div class="timeline-item-name-fail">xxx审核</div>\n' +
-                '                </div>')
-        }
+
 
 
         $view.on('click', '#roche-submit', function () {

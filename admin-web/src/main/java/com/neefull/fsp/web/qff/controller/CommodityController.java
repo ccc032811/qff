@@ -14,6 +14,7 @@ import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -65,7 +66,7 @@ public class CommodityController extends BaseController {
      */
     @Qff("更新QFF")
     @PostMapping("/edit")
-//    @RequiresPermissions("commodity:audit")
+    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","conserve:audit"},logical = Logical.OR)
     public FebsResponse editCommodity(Commodity commodity) throws FebsException {
         try {
             Integer count = commodityService.editCommodity(commodity);
@@ -82,7 +83,7 @@ public class CommodityController extends BaseController {
      * @return
      */
     @GetMapping("/list")
-//    @RequiresPermissions("commodity:view")
+    @RequiresPermissions(value = {"delivery:view","recent:view","refund:view","conserve:view","conserve:view"},logical = Logical.OR)
     public FebsResponse getCommodityPage(Commodity commodity) throws FebsException {
         try {
             IPage<Commodity> pageInfo = commodityService.getCommodityPage(commodity,getCurrentUser());
@@ -102,7 +103,7 @@ public class CommodityController extends BaseController {
      */
     @Qff("删除QFF")
     @GetMapping("/deleteCommodity/{id}")
-//    @RequiresPermissions("commodity:del")
+    @RequiresPermissions(value = {"delivery:del","recent:del","refund:del","conserve:del","conserve:del"},logical = Logical.OR)
     public FebsResponse updateCommodityStatus(@PathVariable Integer id) throws FebsException {
         try {
             Commodity commodity = new Commodity();
@@ -158,7 +159,7 @@ public class CommodityController extends BaseController {
      */
     @Qff("提交QFF流程")
     @PostMapping("/commit")
-//    @RequiresPermissions("commodity:audit")
+    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","conserve:audit"},logical = Logical.OR)
     public FebsResponse commitProcess(Commodity commodity) throws FebsException {
 
         try {
@@ -179,7 +180,7 @@ public class CommodityController extends BaseController {
      */
     @Qff("同意当前QFF任务")
     @PostMapping("/agree")
-//    @RequiresPermissions("commodity:audit")
+    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","conserve:audit"},logical = Logical.OR)
     public FebsResponse agreeCurrentProcess(Commodity commodity) throws FebsException {
         try {
             User user = getCurrentUser();
@@ -203,6 +204,7 @@ public class CommodityController extends BaseController {
      */
     @GetMapping("excel")
 //    @RequiresPermissions("commodity:down")
+    @RequiresPermissions(value = {"delivery:down","recent:down","refund:down","conserve:down","conserve:down"},logical = Logical.OR)
     public void download(Commodity commodity, HttpServletResponse response) throws FebsException {
         try {
             IPage<Commodity> commodityPage = commodityService.getCommodityPage(commodity,getCurrentUser());

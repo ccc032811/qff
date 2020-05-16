@@ -6,80 +6,6 @@
     #delivery-detail .layui-treeSelect .ztree li a, .ztree li span {
         margin: 0 0 2px 3px !important;
     }
-    .timeline-main-line{
-        width: 90%;
-        height: 50px;
-        margin-left: 5%
-    }
-    .timeline-item-start{
-        width: 25%;
-        height: 50px;
-        float:left;
-    }
-    .timeline-item-success{
-        width: 25%;
-        height: 50px;
-        float:left;
-        border-bottom: 3px solid #3DCCA6;
-    }
-    .timeline-item-fail{
-        width: 25%;
-        height: 50px;
-        float:left;
-        border-bottom: 3px solid #CBCBCB;
-    }
-    .timeline-item-no-start{
-        width: 25%;
-        height: 50px;
-        float:left;
-    }
-
-    .timeline-item-cricle-success{
-        width: 25px;
-        height: 20px;
-        border-radius: 80%;
-        background-color: #3DCCA6;
-        position: relative;
-        top: 22px;
-        left: 95%;
-        text-align: center;
-        color: #fff;
-    }
-    .timeline-item-cricle-fail{
-        width: 25px;
-        height: 20px;
-        border-radius: 80%;
-        background-color: #CBCBCB;
-        position: relative;
-        top: 42px;
-        left:  95%;
-        text-align: center;
-        color: #000;
-    }
-    .timeline-item-timestamp{
-        width: 100px;
-        height: 20px;
-        color: #000;
-        position: relative;
-        top: 10px;
-        left:  95%;
-    }
-    .timeline-item-name{
-        width: 25%;
-        height: 20px;
-        color: #000;
-        position: relative;
-        top: 40px;
-        left:  95%;
-    }
-    .timeline-item-name-fail{
-        width: 100px;
-        height: 20px;
-        color: #000;
-        position: relative;
-        top: 60px;
-        left:  95%;
-    }
 
     /* 覆盖样式 */
     .layui-form-item {
@@ -348,6 +274,21 @@
 
         <div class="layui-form-item" style="margin-top: 30px">
             <div class="timeline-main-line" id="delivery-process">
+                <div class="timeline-item-start">
+                    <div class="timeline-item-timestamp" id="time-first"></div>
+                    <div class="timeline-item-cricle" id="cricle-first">1</div>
+                    <div class="timeline-item-name" id="name-first">康德乐创建</div>
+                </div>
+                <div class="timeline-item" id="item-second">
+                    <div class="timeline-item-timestamp" id="time-second"></div>
+                    <div class="timeline-item-cricle" id="cricle-second">2</div>
+                    <div class="timeline-item-name" id="name-second">罗氏审批</div>
+                </div>
+                <div class="timeline-item" id="item-three">
+                    <div class="timeline-item-timestamp" id="time-three"></div>
+                    <div class="timeline-item-cricle" id="cricle-three">3</div>
+                    <div class="timeline-item-name" id="name-three">康德乐完成</div>
+                </div>
             </div>
         </div>
         <div class="layui-form-item febs-hide">
@@ -386,7 +327,7 @@
         var source = "采购来源";
         var rConf ="罗氏QA处理意见";
         var reason = "QFF原因";
-        var relevance = "qff_commodity";
+        var type = "到货";
 
         $(function () {
             if(commodity.isDanger === '01'){
@@ -465,7 +406,7 @@
 
         upload.render({
             elem: '#delivery-chose'  //绑定
-            ,url: ctx+ 'file/uploadImage'  //上传url
+            ,url: ctx+ 'file/uploadImage/'+commodity.number  //上传url
             ,accept: "images"     //设置文件的类型
             // ,number: 2         //设置上传文件数量
             ,multiple: true       //设置多文件上传
@@ -475,7 +416,7 @@
             ,done: function(res){
                 if(res.code === 200){
                     $('#delivery-uploader-list').append('<div class="image-container" id="container'+res.data.index+'"><div class="delete-css"><button id="upload_img_'+res.data.index+'" class="layui-btn layui-btn-danger layui-btn-xs">删除</button></div>\n' +
-                        '<img  class="layui-upload-img" id="showImg'+res.data.index+'" style="width: 120px;height:100px; margin:10px;cursor:pointer;" src="'+ 'http://106.14.99.137:10086/'+ res.data.value +'" name = "'+ res.data.value+'" ></div>')
+                        '<img  class="layui-upload-img" id="showImg'+res.data.index+'" style="width: 120px;height:100px; margin:10px;cursor:pointer;" src="'+ 'http://127.0.0.1:10086/'+ res.data.value +'" name = "'+ res.data.value+'" ></div>')
                     $("#upload_img_" + res.data.index).bind('click', function () {
                         delete files[res.data.index];
                         $("#container"+res.data.index).remove();
@@ -499,7 +440,7 @@
         }
 
 
-        $.get(ctx +"file/findImages/"+commodity.id+"/"+relevance,function (res) {
+        $.get(ctx +"file/findImages/"+commodity.number+"/"+type,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
                 $('#delivery-image-show').append('<a href="javascript:amplificationImg(\''+index+'\',\''+item+'\')"><img name=" '+index+'"src = " '+item+' "style="width:120px;height:100px;"></a>')
@@ -534,44 +475,25 @@
 
         $.get(ctx + "commodity/queryHistory",commodity,function (res) {
             var data = res.data;
-            if(data[0]==null){
-                $("#delivery-process").append('<div class="timeline-item-no-start">\n' +
-                    '                    <div class="timeline-item-cricle-fail">'+1+'</div>\n' +
-                    '                    <div class="timeline-item-name-fail">xxx审核</div>\n' +
-                    '                </div>')
-            }else {
-
-                $("#delivery-process").append('<div class="timeline-item-start">\n' +
-                    '                    <div class="timeline-item-timestamp">'+data[0].date+'</div>\n' +
-                    '                    <div class="timeline-item-cricle-success">'+1+'</div>\n' +
-                    '                    <div class="timeline-item-name">'+data[0].name+'</div>\n' +
-                    '                </div>')
+            if(data[0]!=null&&data[0].date !=null){
+                $("#time-first").html(data[0].date);
+                $("#name-first").html(data[0].name);
+                $("#cricle-first").attr("style","background-color: #3DCCA6");
+                $("#item-second").attr("style","border-bottom: 3px solid #3DCCA6;");
             }
-            if(data[1]==null){
-                error(2)
-            }else {
-                success(data[1],2)
+            if(data[1]!=null&&data[1].date !=null){
+                $("#time-second").html(data[1].date);
+                $("#name-second").html(data[1].name);
+                $("#cricle-second").attr("style","background-color: #3DCCA6");
+                $("#item-three").attr("style","border-bottom: 3px solid #3DCCA6;");
             }
-            if(data[2]==null){
-                error(3)
-            }else {
-                success(data[2],3)
+            if(data[2]!=null&&data[2].date !=null){
+                $("#time-three").html(data[2].date);
+                $("#name-three").html(data[2].name);
+                $("#cricle-three").attr("style","background-color: #3DCCA6");
             }
         });
 
-        function success(data,index){
-            $("#delivery-process").append('<div class="timeline-item-success">\n' +
-                '                    <div class="timeline-item-timestamp">'+data.date+'</div>\n' +
-                '                    <div class="timeline-item-cricle-success">'+index+'</div>\n' +
-                '                    <div class="timeline-item-name">'+data.name+'</div>\n' +
-                '                </div>')
-        }
-        function error(index){
-            $("#delivery-process").append('<div class="timeline-item-fail">\n' +
-                '                    <div class="timeline-item-cricle-fail">'+index+'</div>\n' +
-                '                    <div class="timeline-item-name-fail">xxx审核</div>\n' +
-                '                </div>')
-        }
 
         $view.on('click', '#delivery-submit-control', function () {
             $view.find('#delivery-submit').trigger('click');

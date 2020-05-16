@@ -7,80 +7,6 @@
         margin: 0 0 2px 3px !important;
     }
 
-    .timeline-main-line{
-        width: 90%;
-        height: 50px;
-        margin-left: 5%
-    }
-    .timeline-item-start{
-        width: 25%;
-        height: 50px;
-        float:left;
-    }
-    .timeline-item-success{
-        width: 25%;
-        height: 50px;
-        float:left;
-        border-bottom: 3px solid #3DCCA6;
-    }
-    .timeline-item-fail{
-        width: 25%;
-        height: 50px;
-        float:left;
-        border-bottom: 3px solid #CBCBCB;
-    }
-    .timeline-item-no-start{
-        width: 25%;
-        height: 50px;
-        float:left;
-    }
-
-    .timeline-item-cricle-success{
-        width: 25px;
-        height: 20px;
-        border-radius: 80%;
-        background-color: #3DCCA6;
-        position: relative;
-        top: 22px;
-        left: 95%;
-        text-align: center;
-        color: #fff;
-    }
-    .timeline-item-cricle-fail{
-        width: 25px;
-        height: 20px;
-        border-radius: 80%;
-        background-color: #CBCBCB;
-        position: relative;
-        top: 42px;
-        left:  95%;
-        text-align: center;
-        color: #000;
-    }
-    .timeline-item-timestamp{
-        width: 100px;
-        height: 20px;
-        color: #000;
-        position: relative;
-        top: 10px;
-        left:  95%;
-    }
-    .timeline-item-name{
-        width: 25%;
-        height: 20px;
-        color: #000;
-        position: relative;
-        top: 40px;
-        left:  95%;
-    }
-    .timeline-item-name-fail{
-        width: 100px;
-        height: 20px;
-        color: #000;
-        position: relative;
-        top: 60px;
-        left:  95%;
-    }
 
     /* 覆盖样式 */
     .layui-form-item {
@@ -119,6 +45,8 @@
     .layui-form-item .layui-inline {
         margin-bottom: 0px;
     }
+
+
 </style>
 <div class="layui-fluid" id="conserve-detail" lay-title = "养护QFF" style="margin-left: 18px">
     <form class="layui-form " action="" lay-filter="conserve-detail-form">
@@ -336,18 +264,40 @@
         <div class="layui-form-item"><div style="border-top: 1px solid #000;margin-top: 1px"></div></div>
 
         <div class="layui-form-item" style="border: 0;padding-top: 20px">
-            <div class="site-demo-flow" id="conserve-image-show" style="overflow: auto; display: flex">
-
-            </div>
-            <img data-th-src="@{febs/images/image_add.png}" width="100px" height="100px" id="conserve-chose">
-            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;width: 88%">
-                <div class="layui-upload-list uploader-list" style="overflow: auto; display: flex" id="conserve-uploader-list" >
-
+            <div class="layui-upload">
+                <div id="conserve-upload-image">
+                    <img data-th-src="@{febs/images/image_add.png}" width="100px" height="100px" id="conserve-chose">
                 </div>
-            </blockquote>
+                <div class="layui-upload-list">
+                    <table class="layui-table">
+                        <thead>
+                        <tr><th>文件名</th>
+                            <th>类型</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr></thead>
+                        <tbody id="conserve-List"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <div class="layui-form-item" style="margin-top: 30px">
             <div class="timeline-main-line" id="conserve-process">
+                <div class="timeline-item-start">
+                    <div class="timeline-item-timestamp" id="time-first"></div>
+                    <div class="timeline-item-cricle" id="cricle-first">1</div>
+                    <div class="timeline-item-name" id="name-first">康德乐创建</div>
+                </div>
+                <div class="timeline-item" id="item-second">
+                    <div class="timeline-item-timestamp" id="time-second"></div>
+                    <div class="timeline-item-cricle" id="cricle-second">2</div>
+                    <div class="timeline-item-name" id="name-second">罗氏审批</div>
+                </div>
+                <div class="timeline-item" id="item-three">
+                    <div class="timeline-item-timestamp" id="time-three"></div>
+                    <div class="timeline-item-cricle" id="cricle-three">3</div>
+                    <div class="timeline-item-name" id="name-three">康德乐完成</div>
+                </div>
             </div>
         </div>
         <div class="layui-form-item febs-hide">
@@ -378,15 +328,15 @@
             commodity = [[${commodity}]],
             $view = $('#conserve-detail');
 
-        var files ="";
-        var imageList = "";
+        var files = '';
+        var imageList = '';
         var images = [];
         var ba = "BA";
         var stage = "QFF上报阶段";
         var source = "采购来源";
         var rConf ="罗氏QA处理意见";
         var reason = "QFF原因";
-        var relevance = "qff_commodity";
+        var type = "养护";
 
 
         $(function () {
@@ -396,12 +346,12 @@
                     '                           class="layui-input " readonly="readonly">');
             }
             if(commodity.reason!==null&&commodity.reason!==""){
-                $('#conserve-reason').html('')
+                $('#conserve-reason').html('');
                 $('#conserve-reason').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
                     '                           class="layui-input " readonly="readonly">')
             }
             if(commodity.ba!==null&&commodity.ba!==""){
-                $('#conserve-ba').html('')
+                $('#conserve-ba').html('');
                 $('#conserve-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
                     '                           class="layui-input " readonly="readonly">')
             }
@@ -414,7 +364,7 @@
             if(commodity.compNumber!==null&&commodity.compNumber!==""){
                 $('#conserve-compNumber').attr("readonly","readonly");
             }
-        })
+        });
 
         $(function () {
             if(commodity.isDanger === '01'){
@@ -422,7 +372,7 @@
             }else{
                 $("#isDanger").attr("value","不危险");
             }
-        })
+        });
 
         //表单渲染
         form.render();
@@ -462,53 +412,93 @@
             });
         }
 
-
         upload.render({
-            elem: '#conserve-chose'  //绑定
-            ,url: ctx+ 'file/uploadImage'  //上传url
-            ,accept: "images"     //设置文件的类型
-            // ,accept: "file"     //设置文件的类型
-            // ,number: 2         //设置上传文件数量
-            ,multiple: true       //设置多文件上传
-            ,size:2048       //设置文件大小
-            ,auto:true            //是否自动上传
-            ,done: function(res){
-                if(res.code === 200){
-                    $('#conserve-uploader-list').append('<div class="image-container" id="container'+res.data.index+'"><div class="delete-css"><button id="upload_img_'+res.data.index+'" class="layui-btn layui-btn-danger layui-btn-xs">删除</button></div>\n' +
-                        '<img  class="layui-upload-img" id="showImg'+res.data.index+'" style="width: 120px;height:100px; margin:10px;cursor:pointer;" src="'+ 'http://106.14.99.137:10086/'+res.data.value +'" name = "'+ res.data.value+'" ></div>')
-                    $("#upload_img_" + res.data.index).bind('click', function () {
-                        delete files[res.data.index];
-                        $("#container"+res.data.index).remove();
-                        for (var i = 0; i<=images.length-1;i++){
-                            if(images[i]===res.data.value){
-                                delete images[i];
-                            }
+            elem: '#conserve-chose'
+            ,url: ctx+ 'file/uploadImage/'+commodity.number
+            ,accept: 'file'
+            ,multiple: true
+            ,auto: true
+            ,size: 2048
+            ,before: function(obj){
+                layer.load();
+            }
+            ,done: function(res,index){
+                layer.closeAll('loading');
+                if(res.code === 200){ //上传成功
+                    var type = res.data.value.split(".")[1];
+                    var show = false;
+                    for (var i =images.length-1 ; i>=0 ;i--){
+                        if(images[i]===res.data.value){
+                            show = true;
                         }
-                        deleteImage(res.data.value);
-                    });
-                    images.push(res.data.value);
-                    febs.alert.success('上传成功');
+                    }
+                    if(!show){
+                        if(type!=='jpg'&&type !=='png'&&type !=='gif') {
+                            var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + res.data.value.split(".")[0] + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
+                                  '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete">删除</button></td></tr>'].join(''));
+                            images.push(res.data.value);
+                            tr.find('.file-delete').on('click', function(){
+                                delete files[index];
+                                tr.remove();
+                                deleteImage(res.data.value);
+                                for (var i =images.length-1 ; i>=0 ;i--){
+                                    if(images[i]===res.data.value){
+                                        delete images[i];
+                                    }
+                                }
+                            });
+                        }else {
+                            var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 5px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
+                            '                    <img src="http://127.0.0.1:10086/'+res.data.value+'"  alt="'+res.data.value+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
 
-                    // images.push()
-                }else if(res.code === 500){
-                    febs.alert.error("上传失败，请重新上传！")
+                            images.push(res.data.value);
+                            input.find('.delsingle').on('click', function () {
+                                delete files[index];
+                                input.remove();
+                                deleteImage(res.data.value);
+                                for (var i =images.length-1 ; i>=0 ;i-- ){
+                                    if(images[i]===res.data.value){
+                                        delete images[i];
+                                    }
+                                }
+                            });
+                        }
+                        $("#conserve-upload-image").append(input);
+                        $('#conserve-List').append(tr);
+
+                    }
+                    febs.alert.success('上传成功');
                 }
             }
         });
 
 
         function deleteImage(url){
-            febs.get(ctx + "file/deleteImage/"+url, function (res) {
-                febs.alert.success('删除成功');
+            febs.get(ctx + "file/deleteImage/"+url , function (res) {
+                if(res.code === 200) {
+                    febs.alert.success('删除成功');
+                }
             })
         }
 
-        $.get(ctx +"file/findImages/"+commodity.id+"/"+relevance,function (res) {
+        $.get(ctx +"file/findImages/"+commodity.number +"/"+type,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
-                $('#conserve-image-show').append('<a href="javascript:amplificationImg(\''+index+'\',\''+item+'\')"><img name=" '+index+'"src = " '+item+' "style="width:120px;height:100px;"></a>')
+                var type = item.split(".")[1];
+                var url = 'http://127.0.0.1:10086/'+item;
+                if(type==='jpg'||type ==='png'||type ==='gif') {
+                    $("#conserve-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;left: 5px"> \n' +
+                        '                        <a href="javascript:amplificationImg('+index+',\''+url+'\')"><img name=" '+index+'"src = "'+url+' " style="width:100px;height:95px;"></a> </div>');
+                }else {
+                    $('#conserve-List').append('<tr id="upload-' + index + '"><td style="width: 70%">' + item.split(".")[0] + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
+                                          '<td style="width: 10%"><button class="layui-btn layui-btn-xs demo-reload" >下载</button></td></tr>');
+                    $view.find('#upload-'+index).on('click',function () {
+                        window.location.href=ctx +"file/uploadFile/"+item;
+                    })
+                }
             })
         });
+
         window.amplificationImg = function (name, url) {
             $("#conserve-displayImg").attr("src", url);
             var height =$("#conserve-displayImg").height();//拿的图片原来宽高，建议自定义宽高
@@ -524,58 +514,43 @@
                     width = winHeight  * (width / height);
                     height = winHeight  ;
                 }
+            }else {
+                height = winHeight -100
+                width = winWidth -520
             }
+
             layer.open({
                 type: 1,
                 title: false,
                 closeBtn: 0,
                 shadeClose: true,
                 area: [width + 'px', height + 'px'], //宽高
-                content: '<img name="'+name+'" alt=" '+name+'" src="' + url + '" />'
+                content: '<img name="'+name+'" alt=" '+name+'" src="' + url + '" style="height:'+height+'px ;width: '+width+'px"/>'
             });
         };
 
 
         $.get(ctx + "commodity/queryHistory", commodity ,function (res) {
             var data = res.data;
-            if(data[0]==null){
-                $("#conserve-process").append('<div class="timeline-item-no-start">\n' +
-                    '                    <div class="timeline-item-cricle-fail">'+1+'</div>\n' +
-                    '                    <div class="timeline-item-name-fail">xxx审核</div>\n' +
-                    '                </div>')
-            }else {
-
-                $("#conserve-process").append('<div class="timeline-item-start">\n' +
-                    '                    <div class="timeline-item-timestamp">'+data[0].date+'</div>\n' +
-                    '                    <div class="timeline-item-cricle-success">'+1+'</div>\n' +
-                    '                    <div class="timeline-item-name">'+data[0].name+'</div>\n' +
-                    '                </div>')
+            if(data[0]!=null&&data[0].date !=null){
+                $("#time-first").html(data[0].date);
+                $("#name-first").html(data[0].name);
+                $("#cricle-first").attr("style","background-color: #3DCCA6");
+                $("#item-second").attr("style","border-bottom: 3px solid #3DCCA6;");
             }
-            if(data[1]==null){
-                error(2)
-            }else {
-                success(data[1],2)
+            if(data[1]!=null&&data[1].date !=null){
+                $("#time-second").html(data[1].date);
+                $("#name-second").html(data[1].name);
+                $("#cricle-second").attr("style","background-color: #3DCCA6");
+                $("#item-three").attr("style","border-bottom: 3px solid #3DCCA6;");
             }
-            if(data[2]==null){
-                error(3)
-            }else {
-                success(data[2],3)
+            if(data[2]!=null&&data[2].date !=null){
+                $("#time-three").html(data[2].date);
+                $("#name-three").html(data[2].name);
+                $("#cricle-three").attr("style","background-color: #3DCCA6");
             }
         });
 
-         function success(data,index){
-             $("#conserve-process").append('<div class="timeline-item-success">\n' +
-                 '                    <div class="timeline-item-timestamp">'+data.date+'</div>\n' +
-                 '                    <div class="timeline-item-cricle-success">'+index+'</div>\n' +
-                 '                    <div class="timeline-item-name">'+data.name+'</div>\n' +
-                 '                </div>')
-         }
-         function error(index){
-             $("#conserve-process").append('<div class="timeline-item-fail">\n' +
-                 '                    <div class="timeline-item-cricle-fail">'+index+'</div>\n' +
-                 '                    <div class="timeline-item-name-fail">xxx审核</div>\n' +
-                 '                </div>')
-         }
 
         $view.on('click', '#conserve-submit-control', function () {
             $view.find('#conserve-submit').trigger('click');
@@ -590,6 +565,7 @@
                 febs.alert.warn('数据未作任何修改！');
                 return false;
             }
+
             for (var i = 0; i<=images.length-1;i++){
                 if(images[i]!== undefined)
                 imageList+=images[i]+",";

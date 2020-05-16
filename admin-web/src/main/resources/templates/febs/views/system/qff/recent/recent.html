@@ -49,10 +49,10 @@
                                     <div id="recent-check" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%">
                                         <!--<div id="recent-check" class="layui-form-item" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;">-->
                                             <div class="layui-btn layui-btn-normal layui-btn-sm"  id="recent-query" >
-                                                <i class="layui-icon">&#xe848;</i> 查询
+                                                <i class="layui-icon">&#xe848;</i>
                                             </div>
                                             <div class="layui-btn layui-btn-danger layui-btn-sm " id="recent-reset" >
-                                                <i class="layui-icon">&#xe79b;</i> 清空
+                                                <i class="layui-icon">&#xe79b;</i>
                                             </div>
                                         <!--</div>-->
                                     </div>
@@ -127,10 +127,10 @@
                                     <div class="layui-form-item ">
                                         <div style="float: right;margin-right: 3%" >
                                             <div class="layui-btn layui-btn-normal layui-btn-sm" id="recent-queryBtn" >
-                                                <i class="layui-icon">&#xe848;</i> 查询
+                                                <i class="layui-icon">&#xe848;</i>
                                             </div>
                                             <div class="layui-btn layui-btn-danger layui-btn-sm" id="recent-cleanBtn" >
-                                                <i class="layui-icon">&#xe79b;</i> 清空
+                                                <i class="layui-icon">&#xe79b;</i>
                                             </div>
                                         </div>
                                     </div>
@@ -154,7 +154,7 @@
     <span class="layui-badge febs-tag-blue">{{ d.status }}</span>
     {{# } else if(d.status == '3'){d.status = '完结'}}
     <span class="layui-badge febs-tag-green">{{ d.status }}</span>
-    {{# } else if(d.status == '4'){d.status = '异常'}}
+    {{# } else if(d.status == '4'){d.status = '删除'}}
     <span class="layui-badge febs-tag-orange">{{ d.status }}</span>
     {{# } }}
 </script>
@@ -170,7 +170,10 @@
 </script>
 <script type="text/html" id="toolbarCheck">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="recent-upload" id="recent-upload" shiro:hasPermission="recent:import">
+        <button class="layui-btn  layui-btn-sm layui-btn-success" lay-event="template-download"  shiro:hasPermission="recent:template" >
+            <i class="layui-icon">&#xe82a;</i> 模板下载
+        </button>
+        <button class="layui-btn layui-btn-sm " style="background-color: #87e8de" lay-event="recent-upload" id="recent-upload" shiro:hasPermission="recent:import">
             <i class="layui-icon">&#xe7aa;</i> 导入Excel
         </button>
         <button class="layui-btn layui-btn-sm" lay-event="recent-download" shiro:hasPermission="recent:down">
@@ -263,7 +266,7 @@
             ,exts: 'xlsx'
             ,multiple: false
             ,auto: true
-            ,size: 1024*2  //kb
+            ,size: 1024*5 //kb
             ,before: function(obj){
                 layer.open({
                     type:1
@@ -319,13 +322,8 @@
                 params.pageNum = $view.find(".layui-laypage-em").next().html();
                 febs.download(ctx + 'recent/excel',params, '近效期QFF.xlsx');
             }
-            if (layEvent === 'recent-upload'){
-                /*uploadInst.reload({
-                    accept: 'file' //只允许上传图片
-                    ,exts:'xlsx' //只筛选图片
-                    ,size: 1024*2 //限定大小
-                });*/
-                console.log("测试")
+            if (layEvent === 'template-download'){
+                febs.download(ctx + 'file/template', null, 'Excel导入模板.xlsx');
             }
         });
 
@@ -334,13 +332,13 @@
             var data = obj.data,
                 layEvent = obj.event;
             if (layEvent === 'recent-detail') {
-                febs.modal.view('具体信息', 'system/qff/recent/recentShow/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '52%']
+                febs.modal.open('具体信息', 'system/qff/recent/recentShow/' + data.id, {
+                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
                 });
             }
             if (layEvent === 'recent-edit') {
-                febs.modal.view('审核', 'system/qff/recent/recentAudit/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '70%']
+                febs.modal.open('审核', 'system/qff/recent/recentAudit/' + data.id, {
+                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
                 });
             }
             if (layEvent === 'recent-del') {

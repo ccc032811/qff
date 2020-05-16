@@ -6,13 +6,17 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.wuwenze.poi.annotation.Excel;
 import com.wuwenze.poi.annotation.ExcelField;
 
+import java.io.Serializable;
+
 /**
  * @Author: chengchengchu
  * @Date: 2020/2/24  16:45
  */
 @Excel("近效期QFF解析模板")
-public class RecentResolver {
+public class RecentResolver implements Serializable {
 
+
+    private static final long serialVersionUID = 5674029862950781367L;
     /**
      *  运输单号
      */

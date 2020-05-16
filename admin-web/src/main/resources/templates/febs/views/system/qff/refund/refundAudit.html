@@ -7,81 +7,6 @@
         margin: 0 0 2px 3px !important;
     }
 
-    .timeline-main-line{
-        width: 90%;
-        height: 50px;
-        margin-left: 5%
-    }
-    .timeline-item-start{
-        width: 25%;
-        height: 50px;
-        float:left;
-    }
-    .timeline-item-success{
-        width: 25%;
-        height: 50px;
-        float:left;
-        border-bottom: 3px solid #3DCCA6;
-    }
-    .timeline-item-fail{
-        width: 25%;
-        height: 50px;
-        float:left;
-        border-bottom: 3px solid #CBCBCB;
-    }
-    .timeline-item-no-start{
-        width: 25%;
-        height: 50px;
-        float:left;
-    }
-
-    .timeline-item-cricle-success{
-        width: 25px;
-        height: 20px;
-        border-radius: 80%;
-        background-color: #3DCCA6;
-        position: relative;
-        top: 22px;
-        left: 95%;
-        text-align: center;
-        color: #fff;
-    }
-    .timeline-item-cricle-fail{
-        width: 25px;
-        height: 20px;
-        border-radius: 80%;
-        background-color: #CBCBCB;
-        position: relative;
-        top: 42px;
-        left:  95%;
-        text-align: center;
-        color: #000;
-    }
-    .timeline-item-timestamp{
-        width: 100px;
-        height: 20px;
-        color: #000;
-        position: relative;
-        top: 10px;
-        left:  95%;
-    }
-    .timeline-item-name{
-        width: 25%;
-        height: 20px;
-        color: #000;
-        position: relative;
-        top: 40px;
-        left:  95%;
-    }
-    .timeline-item-name-fail{
-        width: 100px;
-        height: 20px;
-        color: #000;
-        position: relative;
-        top: 60px;
-        left:  95%;
-    }
-
     /* 覆盖样式 */
     .layui-form-item {
         margin-bottom: 0px;
@@ -324,6 +249,22 @@
         </div>
         <div class="layui-form-item" style="margin-top: 30px">
             <div class="timeline-main-line" id="process">
+                <div class="timeline-item-start">
+                    <div class="timeline-item-timestamp" id="time-first"></div>
+                    <div class="timeline-item-cricle" id="cricle-first">1</div>
+                    <div class="timeline-item-name" id="name-first">康德乐创建</div>
+                </div>
+                <div class="timeline-item" id="item-second">
+                    <div class="timeline-item-timestamp" id="time-second"></div>
+                    <div class="timeline-item-cricle" id="cricle-second">2</div>
+                    <div class="timeline-item-name" id="name-second">罗氏审批</div>
+                </div>
+                <div class="timeline-item" id="item-three">
+                    <div class="timeline-item-timestamp" id="time-three"></div>
+                    <div class="timeline-item-cricle" id="cricle-three">3</div>
+                    <div class="timeline-item-name" id="name-three">康德乐完成</div>
+                </div>
+
 
             </div>
         </div>
@@ -334,6 +275,9 @@
             <br>
             <div style="float: right">
                 <input style="border:0;" name="id" type="hidden">
+            </div>
+            <div style="float: right">
+                <input style="border:0;" name="stage" type="hidden">
             </div>
         </div>
     </form>
@@ -354,7 +298,7 @@
             layer = layui.layer,
             form = layui.form,
             upload = layui.upload,
-            refund = [[${refund}]],
+            commodity = [[${commodity}]],
             $view = $('#refund-detail');
 
         var files ="";
@@ -364,35 +308,35 @@
         var source = "采购来源";
         var rConf ="罗氏QA处理意见";
         var reason = "退货原因";
-        var relevance = "qff_refund";
+        var type = "退货";
 
 
         $(function () {
-            if(refund.rConf!==""&&refund.rConf!==null){
+            if(commodity.rConf!==""&&commodity.rConf!==null){
                 $('#refund-rConf').html('');
                 $('#refund-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
                     '                           class="layui-input " readonly="readonly">');
             }
-            if(refund.reason!==""&&refund.reason!==null){
+            if(commodity.reason!==""&&commodity.reason!==null){
                 $('#refund-reason').html('')
                 $('#refund-reason').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
                     '                           class="layui-input " readonly="readonly">')
             }
-            if(refund.ba!==""&&refund.ba!==null){
+            if(commodity.ba!==""&&commodity.ba!==null){
                 $('#refund-ba').html('')
                 $('#refund-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
                     '                           class="layui-input " readonly="readonly">')
             }
-            if(refund.checkResult!==""&&refund.checkResult!==null){
+            if(commodity.checkResult!==""&&commodity.checkResult!==null){
                 $('#refund-checkResult').attr("readonly","readonly");
             }
-            if(refund.remark!==""&&refund.remark!==null){
+            if(commodity.remark!==""&&commodity.remark!==null){
                 $('#refund-remark').attr("readonly","readonly");
             }
-            if(refund.compNumber!==""&&refund.compNumber!==null){
+            if(commodity.compNumber!==""&&commodity.compNumber!==null){
                 $('#refund-compNumber').attr("readonly","readonly");
             }
-        })
+        });
 
 
         //表单渲染
@@ -402,37 +346,38 @@
         //给表单赋值
         function initConserveValue() {
             form.val("refund-detail-form", {
-                "id":refund.id,
-                "transport": refund.transport,
-                "number": refund.number,
-                "plant": refund.plant,
-                "kMater": refund.kMater,
-                "kBatch": refund.kBatch,
-                "rMater": refund.rMater,
-                "rBatch": refund.rBatch,
-                "manuDate": refund.manuDate,
-                "expiryDate": refund.expiryDate,
-                "quarantine": refund.quarantine,
-                "getRemark": refund.getRemark,
-                "initDate": refund.initDate,
-                "rConf": refund.rConf,
-                "repTime": refund.repTime,
-                "checkResult": refund.checkResult,
-                "reason": refund.reason,
-                "compNumber": refund.compNumber,
-                "remark": refund.remark,
-                "ba": refund.ba,
-                "source": refund.source,
-                "register": refund.register,
-                "classify": refund.classify,
-                "images": refund.images,
-                "alteration":refund.alteration
+                "id":commodity.id,
+                "transport": commodity.transport,
+                "number": commodity.number,
+                "plant": commodity.plant,
+                "kMater": commodity.kMater,
+                "kBatch": commodity.kBatch,
+                "rMater": commodity.rMater,
+                "rBatch": commodity.rBatch,
+                "manuDate": commodity.manuDate,
+                "expiryDate": commodity.expiryDate,
+                "quarantine": commodity.quarantine,
+                "getRemark": commodity.getRemark,
+                "initDate": commodity.initDate,
+                "rConf": commodity.rConf,
+                "repTime": commodity.repTime,
+                "checkResult": commodity.checkResult,
+                "reason": commodity.reason,
+                "compNumber": commodity.compNumber,
+                "remark": commodity.remark,
+                "ba": commodity.ba,
+                "source": commodity.source,
+                "register": commodity.register,
+                "classify": commodity.classify,
+                "images": commodity.images,
+                "alteration":commodity.alteration,
+                "stage": commodity.stage
             });
         }
 
         upload.render({
             elem: '#chose'  //绑定
-            ,url: ctx+ 'file/uploadImage'  //上传url
+            ,url: ctx+ 'file/uploadImage/'+commodity.number  //上传url
             ,accept: "images"     //设置文件的类型
             // ,number: 2         //设置上传文件数量
             ,multiple: true       //设置多文件上传
@@ -442,7 +387,7 @@
             ,done: function(res){
                 if(res.code === 200){
                     $('#uploader-list').append('<div class="image-container" id="container'+res.data.index+'"><div class="delete-css"><button id="upload_img_'+res.data.index+'" class="layui-btn layui-btn-danger layui-btn-xs">删除</button></div>\n' +
-                        '<img  class="layui-upload-img" id="showImg'+res.data.index+'" style="width: 120px;height:100px; margin:10px;cursor:pointer;" src="'+ 'http://106.14.99.137:10086/'+ res.data.value +'" name = "'+ res.data.value+'" ></div>')
+                        '<img  class="layui-upload-img" id="showImg'+res.data.index+'" style="width: 120px;height:100px; margin:10px;cursor:pointer;" src="'+ 'http://127.0.0.1:10086/'+ res.data.value +'" name = "'+ res.data.value+'" ></div>')
                     $("#upload_img_" + res.data.index).bind('click', function () {
                         delete files[res.data.index];
                         $("#container"+res.data.index).remove();
@@ -468,7 +413,7 @@
         }
 
 
-        $.get(ctx +"file/findImages/"+refund.id+"/"+relevance,function (res) {
+        $.get(ctx +"file/findImages/"+commodity.number+"/"+type,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
                 $('#image_show').append('<a href="javascript:amplificationImg(\''+index+'\',\''+item+'\')"><img name=" '+index+'"src = " '+item+' "style="width:120px;height:100px;"></a>')
@@ -501,46 +446,26 @@
         };
 
 
-        $.get(ctx + "refund/queryHistory",refund,function (res) {
+        $.get(ctx + "commodity/queryHistory",commodity,function (res) {
             var data = res.data;
-            if(data[0]==null){
-                $("#process").append('<div class="timeline-item-no-start">\n' +
-                    '                    <div class="timeline-item-cricle-fail">'+1+'</div>\n' +
-                    '                    <div class="timeline-item-name-fail">xxx审核</div>\n' +
-                    '                </div>')
-            }else {
-
-                $("#process").append('<div class="timeline-item-start">\n' +
-                    '                    <div class="timeline-item-timestamp">'+data[0].date+'</div>\n' +
-                    '                    <div class="timeline-item-cricle-success">'+1+'</div>\n' +
-                    '                    <div class="timeline-item-name">'+data[0].name+'</div>\n' +
-                    '                </div>')
+            if(data[0]!=null&&data[0].date !=null){
+                $("#time-first").html(data[0].date);
+                $("#name-first").html(data[0].name);
+                $("#cricle-first").attr("style","background-color: #3DCCA6");
+                $("#item-second").attr("style","border-bottom: 3px solid #3DCCA6;");
             }
-            if(data[1]==null){
-                error(2)
-            }else {
-                success(data[1],2)
+            if(data[1]!=null&&data[1].date !=null){
+                $("#time-second").html(data[1].date);
+                $("#name-second").html(data[1].name);
+                $("#cricle-second").attr("style","background-color: #3DCCA6");
+                $("#item-three").attr("style","border-bottom: 3px solid #3DCCA6;");
             }
-            if(data[2]==null){
-                error(3)
-            }else {
-                success(data[2],3)
+            if(data[2]!=null&&data[2].date !=null){
+                $("#time-three").html(data[2].date);
+                $("#name-three").html(data[2].name);
+                $("#cricle-three").attr("style","background-color: #3DCCA6");
             }
         });
-
-        function success(data,index){
-            $("#process").append('<div class="timeline-item-success">\n' +
-                '                    <div class="timeline-item-timestamp">'+data.date+'</div>\n' +
-                '                    <div class="timeline-item-cricle-success">'+index+'</div>\n' +
-                '                    <div class="timeline-item-name">'+data.name+'</div>\n' +
-                '                </div>')
-        }
-        function error(index){
-            $("#process").append('<div class="timeline-item-fail">\n' +
-                '                    <div class="timeline-item-cricle-fail">'+index+'</div>\n' +
-                '                    <div class="timeline-item-name-fail">xxx审核</div>\n' +
-                '                </div>')
-        }
 
 
         $view.on('click', '#refund-submit', function () {
@@ -550,7 +475,7 @@
         //提交更新
         form.on('submit(refund-form-submit)', function (data) {
             $('#submit').attr("style","display:none;");
-            if (febs.nativeEqual(data.field, refund)) {
+            if (febs.nativeEqual(data.field, commodity)) {
                 febs.alert.warn('数据未作任何修改！');
                 return false;
             }
@@ -559,16 +484,15 @@
                     imageList+=images[i]+",";
             }
             data.field.images = imageList;
-            if(refund.status ===1){
-                febs.post(ctx + 'refund/commit', data.field, function (data) {
+            if(commodity.status ===1){
+                febs.post(ctx + 'commodity/commit', data.field, function (data) {
                     layer.closeAll();
                     febs.alert.success('数据修改成功');
                     $('#fbs-refund').find('#refund-query').click();
                 });
             }
-            if(refund.status ===2){
-
-                febs.post(ctx + 'refund/agree', data.field, function (data) {
+            if(commodity.status ===2){
+                febs.post(ctx + 'commodity/agree', data.field, function (data) {
                     layer.closeAll();
                     febs.alert.success('数据修改成功');
                     $('#fbs-refund').find('#refund-query').click();
@@ -584,7 +508,7 @@
             var dom=$("#refund_search_reason");
             var html='<option value=""></option>';
             $.each(data,function(index,item){
-                if(item.name === refund.reason){
+                if(item.name === commodity.reason){
                     html+='<option selected value="'+item.name+'">'+item.name+'</option>'
                 }else {
                     html+='<option value="'+item.name+'">'+item.name+'</option>'
@@ -606,7 +530,7 @@
             var dom=$("#refund_search_ba");
             var html='<option value=""></option>';
             $.each(data,function(index,item){
-                if(item.name === refund.ba){
+                if(item.name === commodity.ba){
                     html+='<option selected value="'+item.name+'">'+item.name+'</option>'
                 }else {
                     html+='<option value="'+item.name+'">'+item.name+'</option>'

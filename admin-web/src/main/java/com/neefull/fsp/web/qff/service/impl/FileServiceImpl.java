@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.neefull.fsp.web.common.exception.FebsException;
 import com.neefull.fsp.web.qff.config.ProcessInstanceProperties;
 import com.neefull.fsp.web.qff.config.SendMailProperties;
+import com.neefull.fsp.web.qff.entity.Attachment;
 import com.neefull.fsp.web.qff.entity.Recent;
 import com.neefull.fsp.web.qff.entity.RecentResolver;
+import com.neefull.fsp.web.qff.service.IAttachmentService;
 import com.neefull.fsp.web.qff.service.IFileService;
 import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.system.entity.User;
@@ -42,6 +44,7 @@ public class FileServiceImpl implements IFileService {
 
     private static final Integer SELECT_NUMBER =2;
 
+
     @Autowired
     private IProcessService processService;
     @Autowired
@@ -52,7 +55,26 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     @Transactional
-    public Map<String, String> uploadImage(MultipartFile file) {
+    public Map<String, String> uploadImage(MultipartFile file,String number) {
+
+        String originalFilename = file.getOriginalFilename();
+//        String extension = StringUtils.substringAfterLast(filename, StringPool.DOT);
+        String sf = UUID.randomUUID().toString();
+        String filename = number+"-"+originalFilename;
+
+        File filePath = new File(properties.getImagePath(), filename);
+
+        Map<String,String> map =new HashMap<>();
+        try {
+
+            file.transferTo(filePath);
+            map.put("index",sf.replaceAll(StringPool.DASH,StringPool.EMPTY));
+            map.put("value",filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+
 
 //        try {
 //            BufferedImage image = ImageIO.read(file.getInputStream());
@@ -63,9 +85,7 @@ public class FileServiceImpl implements IFileService {
 //            e.printStackTrace();
 //        }
 
-        String filename = file.getOriginalFilename();
-        String extension = StringUtils.substringAfterLast(filename, StringPool.DOT);
-        filename = UUID.randomUUID().toString() + StringPool.DOT + extension;
+
         //创建文件存储路径
 //        String[] paths = properties.getImagePath().split(StringPool.SLASH);
 //        String dir = paths[0];
@@ -82,16 +102,6 @@ public class FileServiceImpl implements IFileService {
 //            }
 //        }
 
-        File filePath = new File(properties.getImagePath(), filename);
-        Map<String,String> map =new HashMap<>();
-        try {
-            file.transferTo(filePath);
-            map.put("index",UUID.randomUUID().toString().replaceAll(StringPool.DASH,StringPool.EMPTY));
-            map.put("value",filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return map;
     }
 
     @Override
