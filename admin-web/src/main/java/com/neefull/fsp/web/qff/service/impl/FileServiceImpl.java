@@ -1,5 +1,6 @@
 package com.neefull.fsp.web.qff.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.neefull.fsp.web.common.exception.FebsException;
 import com.neefull.fsp.web.qff.config.ProcessInstanceProperties;
@@ -132,8 +133,6 @@ public class FileServiceImpl implements IFileService {
                         recent.setNumber(entity.getNumber());
                         recent.setrConf(entity.getrConf());
                         list.add(recent);
-//                        recentService.addRecent(recent);
-                        processService.commitProcess(recent,user);
                     }
                 }
                 @Override
@@ -145,13 +144,19 @@ public class FileServiceImpl implements IFileService {
             log.error("导入文件失败,原因为：{}",e.getMessage());
         }
 
-        if(errorList.size()>0){
-            String count = null;
+        if(CollectionUtils.isNotEmpty(list)){
+            for (Recent recent : list) {
+                processService.commitProcess(recent,user);
+            }
+        }
+
+        if(CollectionUtils.isNotEmpty(errorList)){
+            String count = "";
             for (int i=0;i<=errorList.size()-1;i++) {
                 if(i==errorList.size()-1){
                     count+=errorList.get(i)+"行";
                 }
-                count += errorList.get(i) +"行 ,";
+                count+=errorList.get(i) +"行 ,";
             }
             log.info("导入失败数据,失败行数"+count);
         }
@@ -163,12 +168,16 @@ public class FileServiceImpl implements IFileService {
         content.append("<tr style='background-color: #00A1DD'><td>康德乐物料号</td>" +
                 "<td>罗氏物料号</td><td>产品物料号</td><td>有效期</td>" +
                 "<td>批号</td><td>SAP批次</td><td>工厂</td><td>库位</td><td>数量</td></tr>");
-        for (Recent recent : list) {
-            content.append("<tr><td>"+recent.getkMater()+"</td><td>"+recent.getrMater()+"</td>" +
-                    "<td>"+recent.getName()+"</td><td>"+recent.getUseLife()+"</td>" +
-                    "<td>"+recent.getBatch()+"</td><td>"+recent.getSapBatch()+"</td>" +
-                    "<td>"+recent.getFactory()+"</td><td>"+recent.getWareHouse()+"</td><td>"+recent.getNumber()+"</td></tr>");
+        if(CollectionUtils.isNotEmpty(list)){
+            for (Recent recent : list) {
+                processService.commitProcess(recent,user);
+                content.append("<tr><td>"+recent.getkMater()+"</td><td>"+recent.getrMater()+"</td>" +
+                        "<td>"+recent.getName()+"</td><td>"+recent.getUseLife()+"</td>" +
+                        "<td>"+recent.getBatch()+"</td><td>"+recent.getSapBatch()+"</td>" +
+                        "<td>"+recent.getFactory()+"</td><td>"+recent.getWareHouse()+"</td><td>"+recent.getNumber()+"</td></tr>");
+            }
         }
+
         content.append("</table>");
         content.append("</body></html>");
 

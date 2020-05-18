@@ -46,6 +46,9 @@
     }
 </style>
 <div class="layui-fluid" id="delivery-detail-show" lay-title = "到货QFF" style="margin-left: 18px">
+    <div class="layui-form-item" id="delivery-title">
+
+    </div>
     <form class="layui-form " action="" lay-filter="delivery-detail-form-show">
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
@@ -254,8 +257,21 @@
         <div class="layui-form-item"><div style="border-top: 1px solid #000;margin-top: 1px"></div></div>
 
         <div class="layui-form-item" style="border: 0;padding-top: 20px">
-            <div class="site-demo-flow" id="delivery-image-show" style="overflow: auto; display: flex">
+            <div class="layui-upload">
+                <div id="delivery-upload-image-show">
 
+                </div>
+                <div class="layui-upload-list">
+                    <table class="layui-table">
+                        <thead>
+                        <tr><th>文件名</th>
+                            <th>类型</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr></thead>
+                        <tbody id="delivery-List-show"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="layui-form-item" style="margin-top: 30px">
@@ -329,10 +345,22 @@
         }
 
 
-        $.get(ctx +"file/findImages/"+commodity.number+"/"+type,function (res) {
+        $.get(ctx +"file/findImages/"+commodity.number +"/"+type,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
-                $('#delivery-image-show').append('<a href="javascript:amplificationImg(\''+index+'\',\''+item+'\')"><img name=" '+index+'"src = " '+item+' "style="width:120px;height:100px;"></a>')
+                var type =item.substring(item.lastIndexOf(".")+1,item.length);
+                var name =item.substring(0,item.lastIndexOf("."));
+                var url = 'http://106.14.99.137:10086/'+item;
+                if(type==='jpg'||type ==='png'||type ==='gif') {
+                    $("#delivery-upload-image-show").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;left: 5px"> \n' +
+                        '                        <a href="javascript:amplificationImg('+index+',\''+url+'\')"><img name=" '+index+'"src = "'+url+' " style="width:100px;height:95px;"></a> </div>');
+                }else {
+                    $('#delivery-List-show').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
+                                                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="delivery-upload-show-' + index + '">下载</button></td></tr>');
+                    $view.find('#delivery-upload-show-'+index ).on('click',function () {
+                        window.location.href=ctx +"file/uploadFile/"+item;
+                    })
+                }
             })
         });
         window.amplificationImg = function (name, url) {
@@ -350,14 +378,18 @@
                     width = winHeight  * (width / height);
                     height = winHeight  ;
                 }
+            }else {
+                height = winHeight -100;
+                width = winWidth -520;
             }
+
             layer.open({
                 type: 1,
                 title: false,
                 closeBtn: 0,
                 shadeClose: true,
                 area: [width + 'px', height + 'px'], //宽高
-                content: '<img name="'+name+'" alt=" '+name+'" src="' + url + '" />'
+                content: '<img name="'+name+'" alt=" '+name+'" src="' + url + '" style="height:'+height+'px ;width: '+width+'px"/>'
             });
         };
 
@@ -388,6 +420,11 @@
                 $("#isDanger").attr("value","危险");
             }else{
                 $("#isDanger").attr("value","不危险");
+            }
+            if(commodity.status ===1&&commodity.att ===1){
+                $('#delivery-title').append('<div  style="text-align: center;" >\n' +
+                    '            <h3   style="color: red" >附件获取中。。。</h3>\n' +
+                    '        </div>')
             }
         })
 

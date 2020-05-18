@@ -51,7 +51,7 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label " >运输单号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="transport" lay-verify="required" maxlength="50" autocomplete="off"
+                    <input type="text" name="transport" maxlength="50" autocomplete="off"
                            class="layui-input " >
                 </div>
             </div>
@@ -134,7 +134,7 @@
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label " >回复日期</label>
                 <div class="layui-input-block">
-                    <input type="text" name="repDate" id="recent-repDate" class="layui-input" placeholder="请选择时间">
+                    <input type="text" name="repDate" id="recent-repDated" class="layui-input" placeholder="请选择时间">
                 </div>
             </div>
         </div>
@@ -150,15 +150,22 @@
         <div class="layui-form-item"><div style="border-top: 1px solid #000;margin-top: 1px"></div></div>
 
         <div class="layui-form-item" style="border: 0;padding-top: 20px">
-            <div class="site-demo-flow" id="image_show" style="overflow: auto; display: flex">
-
-            </div>
-            <img data-th-src="@{febs/images/image_add.png}" width="100px" height="100px" id="chose">
-            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;width: 88%">
-                <div class="layui-upload-list uploader-list" style="overflow: auto; display: flex" id="uploader-list" >
-
+            <div class="layui-upload">
+                <div id="recent-upload-image">
+                    <img data-th-src="@{febs/images/image_add.png}" width="100px" height="100px" id="recent-chose">
                 </div>
-            </blockquote>
+                <div class="layui-upload-list">
+                    <table class="layui-table">
+                        <thead>
+                        <tr><th>文件名</th>
+                            <th>类型</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr></thead>
+                        <tbody id="recent-List"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <div class="layui-form-item" style="margin-top: 30px">
             <div class="timeline-main-line" id="process">
@@ -203,9 +210,10 @@
 </script>
 
 <script data-th-inline="javascript">
-    layui.use(['febs', 'form', 'laydate','upload','layer','laytpl'], function () {
+    layui.use(['febs', 'form', 'laydate','upload','layer','laytpl','element'], function () {
         var $ = layui.$,
             febs = layui.febs,
+            element = layui.element,
             laydate = layui.laydate,
             laytpl = layui.laytpl,
             layer = layui.layer,
@@ -221,7 +229,7 @@
         var type = "近效期";
 
         laydate.render({
-            elem: '#recent-repDate',
+            elem: '#recent-repDated',
             trigger: 'click'
             ,min:0
             ,btns: ['clear']
@@ -253,49 +261,91 @@
         }
 
         upload.render({
-            elem: '#chose'  //绑定
-            ,url: ctx+ 'file/uploadImage/'+recent.id  //上传url
-            ,accept: "images"     //设置文件的类型
-            // ,number: 2         //设置上传文件数量
-            ,multiple: true       //设置多文件上传
-            ,size:2048       //设置文件大小
-            ,auto:true            //是否自动上传
-            // ,data:{id:recent.id,type:currentUser.deptName,relevance:relevance}
-            ,done: function(res){
-                if(res.code === 200){
-                    $('#uploader-list').append('<div class="image-container" id="container'+res.data.index+'"><div class="delete-css"><button id="upload_img_'+res.data.index+'" class="layui-btn layui-btn-danger layui-btn-xs">删除</button></div>\n' +
-                        '<img  class="layui-upload-img" id="showImg'+res.data.index+'" style="width: 120px;height:100px; margin:10px;cursor:pointer;" src="'+ 'http://127.0.0.1:10086/'+ res.data.value +'" name = "'+ res.data.value+'" ></div>')
-                    $("#upload_img_" + res.data.index).bind('click', function () {
-                        delete files[res.data.index];
-                        $("#container"+res.data.index).remove();
-                        for (var i = 0; i<=images.length-1;i++){
-                            if(images[i]===res.data.value){
-                                delete images[i];
-                            }
+            elem: '#recent-chose'
+            ,url: ctx+ 'file/uploadImage/'+recent.id
+            ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
+            ,multiple: true
+            ,auto: true
+            ,size: 2048
+            ,before: function(obj){
+                layer.load();
+            }
+            ,done: function(res,index){
+                layer.closeAll('loading');
+                if(res.code === 200){ //上传成功
+                    var type = res.data.value.substring(res.data.value.lastIndexOf(".")+1,res.data.value.length);
+                    var name = res.data.value.substring(0,res.data.value.lastIndexOf("."));
+                    var show = false;
+                    for (var i =images.length-1 ; i>=0 ;i--){
+                        if(images[i]===res.data.value){
+                            show = true;
                         }
-                        deleteImage(res.data.value);
-                    });
-                    images.push(res.data.value);
+                    }
+                    if(!show){
+                        if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type!=='PNG') {
+                            var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
+                            '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
+                            images.push(res.data.value);
+                            tr.find('.file-delete').on('click', function(){
+                                delete files[index];
+                                tr.remove();
+                                deleteImage(res.data.value);
+                                for (var i =images.length-1 ; i>=0 ;i--){
+                                    if(images[i]===res.data.value){
+                                        delete images[i];
+                                    }
+                                }
+                            });
+                        }else {
+                            var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
+                            '                    <img src="http://106.14.99.137:10086/'+res.data.value+'"  alt="'+res.data.value+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
+
+                            images.push(res.data.value);
+                            input.find('.delsingle').on('click', function () {
+                                delete files[index];
+                                input.remove();
+                                deleteImage(res.data.value);
+                                for (var i =images.length-1 ; i>=0 ;i-- ){
+                                    if(images[i]===res.data.value){
+                                        delete images[i];
+                                    }
+                                }
+                            });
+                        }
+                        $("#recent-upload-image").append(input);
+                        $('#recent-List').append(tr);
+
+                    }
                     febs.alert.success('上传成功');
-                }else if(res.code ===500){
-                    febs.alert.error("上传失败，请重新上传！")
                 }
             }
         });
-
         function deleteImage(url){
             febs.get(ctx + "file/deleteImage/"+url, function (res) {
-
+                if(res.code === 200) {
+                    febs.alert.success('删除成功');
+                }
             })
         }
 
-
-        $.get(ctx +"file/findImages/"+recent.id+"/"+type,function (res) {
-            var data = res.data;
-            $.each(data,function (index, item) {
-                $('#image_show').append('<a href="javascript:amplificationImg(\''+index+'\',\''+item+'\')"><img name=" '+index+'"src = " '+item+' "style="width:120px;height:100px;"></a>')
-            })
-        });
+    $.get(ctx +"file/findImages/"+recent.id +"/"+type,function (res) {
+        var data = res.data;
+        $.each(data,function (index, item) {
+            var type =item.substring(item.lastIndexOf(".")+1,item.length);
+            var name =item.substring(0,item.lastIndexOf("."));
+            var url = 'http://106.14.99.137:10086/'+item;
+            if(type==='jpg'||type ==='png'||type ==='gif') {
+                $("#recent-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;"> \n' +
+                    '                        <a href="javascript:amplificationImg('+index+',\''+url+'\')"><img name=" '+index+'"src = "'+url+' " style="width:100px;height:95px;"></a> </div>');
+            }else {
+                $('#recent-List').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
+                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="recent-upload-' + index + '">下载</button></td></tr>');
+                $view.find('#recent-upload-'+index ).on('click',function () {
+                    window.location.href=ctx +"file/uploadFile/"+item;
+                })
+            }
+        })
+    });
         window.amplificationImg = function (name, url) {
             $("#displayImg").attr("src", url);
             var height =$("#displayImg").height();//拿的图片原来宽高，建议自定义宽高
@@ -311,14 +361,18 @@
                     width = winHeight  * (width / height);
                     height = winHeight  ;
                 }
+            }else {
+                height = winHeight -100;
+                width = winWidth -520;
             }
+
             layer.open({
                 type: 1,
                 title: false,
                 closeBtn: 0,
                 shadeClose: true,
                 area: [width + 'px', height + 'px'], //宽高
-                content: '<img name="'+name+'" alt=" '+name+'" src="' + url + '" />'
+                content: '<img name="'+name+'" alt=" '+name+'" src="' + url + '" style="height:'+height+'px ;width: '+width+'px"/>'
             });
         };
 

@@ -183,7 +183,7 @@ public class RocheController extends BaseController {
     public FebsResponse agreeCurrentProcess(Roche roche) throws FebsException {
         try {
             User user = getCurrentUser();
-            List<String> group = processService.getGroupId(roche,user);
+            List<String> group = processService.getGroupId(roche);
             if(group.contains(user.getUsername())){
                 processService.agreeCurrentProcess(roche,user);
             }else {

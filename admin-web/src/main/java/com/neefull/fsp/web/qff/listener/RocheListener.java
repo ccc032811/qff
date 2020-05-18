@@ -22,6 +22,5 @@ public class RocheListener implements TaskListener {
         for (User user : users) {
             delegateTask.addCandidateUser(user.getUsername());
         }
-
     }
 }

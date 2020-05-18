@@ -26,8 +26,6 @@ public class ViewController extends BaseController {
     private ICommodityService conserveService;
     @Autowired
     private IRecentService recentService;
-//    @Autowired
-//    private IRefundService refundService;
     @Autowired
     private IRocheService rocheService;
     @Autowired

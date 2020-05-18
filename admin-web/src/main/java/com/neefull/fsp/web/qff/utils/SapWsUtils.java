@@ -68,8 +68,7 @@ public abstract class SapWsUtils {
             }
         } catch (IOException e) {
             e.printStackTrace();
-
-//            log.error("连接esp服务器失败，失败原因为:{}",e.getMessage());
+            log.error("连接esp服务器失败，失败原因为:{}",e.getMessage());
         } finally {
             // 关闭输入流
             if (inReader != null) {

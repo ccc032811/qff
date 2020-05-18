@@ -184,7 +184,7 @@ public class CommodityController extends BaseController {
     public FebsResponse agreeCurrentProcess(Commodity commodity) throws FebsException {
         try {
             User user = getCurrentUser();
-            List<String> group = processService.getGroupId(commodity,user);
+            List<String> group = processService.getGroupId(commodity);
             if(group.contains(user.getUsername())){
                 processService.agreeCurrentProcess(commodity,user);
             }else {
@@ -203,7 +203,6 @@ public class CommodityController extends BaseController {
      * @param response
      */
     @GetMapping("excel")
-//    @RequiresPermissions("commodity:down")
     @RequiresPermissions(value = {"delivery:down","recent:down","refund:down","conserve:down","conserve:down"},logical = Logical.OR)
     public void download(Commodity commodity, HttpServletResponse response) throws FebsException {
         try {

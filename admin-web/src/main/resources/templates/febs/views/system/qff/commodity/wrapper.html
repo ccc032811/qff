@@ -288,12 +288,12 @@
         element.on('collapse(wrapper-navi)', function(data){
             if(data.show == true){
                 $('#wrapper-tag').html('');
-                $('#wrapper-tag').append('<i  class="layui-icon tag-title">&#xe619;</i>')
+                $('#wrapper-tag').append('<i  class="layui-icon tag-title">&#xe619;</i>');
                 $('#wrapper-check').attr("style","display:none;")
             }else if(data.show == false){
                 $('#wrapper-tag').html('');
-                $('#wrapper-tag').append('<i  class="layui-icon tag-title" >&#xe61a;</i>')
-                $('#wrapper-check').attr("style","border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%;display:inline")
+                $('#wrapper-tag').append('<i  class="layui-icon tag-title" >&#xe61a;</i>');
+                $('#wrapper-check').attr("style","border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%;display:inline");
             }
         });
 
@@ -313,11 +313,11 @@
                     {field: 'plant', title: '工厂',align:'center'},
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
                     {field: 'rMater', title: '罗氏物料号',align:'center'},
-                    {field: 'quarantine', title: '异常数',align:'center',width:90},
-                    {field: 'initDate', title: '发起日期',align:'center'},
-                    {field: 'repTime', title: '回复日期',align:'center'},
-                    {field: 'rConf', title: '罗氏QA处理意见',align:'center'},
-                    {field: 'reason', title: 'QFF原因',align:'center'},
+                    {field: 'quarantine', title: '异常数',align:'center',minWidth: 80},
+                    {field: 'initDate', title: '发起日期',align:'center',minWidth: 110},
+                    {field: 'repTime', title: '回复日期',align:'center',minWidth: 110},
+                    {field: 'rConf', title: '罗氏QA处理意见',align:'center',minWidth: 170},
+                    {field: 'reason', title: 'QFF原因',align:'center',minWidth: 170},
                     {title: '处理阶段', templet: '#wrapper-status',width: 90},
                     {title: '操作', toolbar: '#wrapper-option',align:'center',width: 162}
                 ]]

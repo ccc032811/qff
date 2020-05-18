@@ -23,13 +23,7 @@ public class ProcessConstant {
      */
     public static final Integer HAVE_ABNORMAL = 4;
 
-    public static final String COMMODITY_FORM = "qff_commodity";
 
-    public static final String REFUND_FORM = "qff_refund";
-
-    public static final String RECENT_FORM = "qff_recent";
-
-    public static final String ROCHE_FORM = "qff_roche";
 
 
 

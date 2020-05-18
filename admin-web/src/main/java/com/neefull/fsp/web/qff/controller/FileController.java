@@ -149,13 +149,17 @@ public class FileController extends BaseController {
      * @return
      */
     @GetMapping("/uploadFile/{url}")
-    public FebsResponse uploadFile(HttpServletRequest request, HttpServletResponse response,@PathVariable("url") String url){
+    public void uploadFiles(HttpServletRequest request, HttpServletResponse response,@PathVariable("url") String url)throws FebsException{
 
         OutputStream os=null;
+        BufferedInputStream bis=null;
         try {
             File file=new File(properties.getImagePath()+url);
+            if(!file.exists()){
+                String message = "当前文件不存在或已损坏";
+                throw new FebsException(message);
+            }
             String fileName=file.getName();
-            String ext=fileName.substring(fileName.lastIndexOf(".")+1);
             String agent=(String)request.getHeader("USER-AGENT");
             if(agent!=null && agent.indexOf("Fireforx")!=-1) {
                 fileName = new String(fileName.getBytes("UTF-8"), "iso-8859-1");
@@ -163,39 +167,40 @@ public class FileController extends BaseController {
             else {
                 fileName= URLEncoder.encode(fileName,"UTF-8");
             }
-            BufferedInputStream bis=null;
+
+            bis=new BufferedInputStream(new FileInputStream(file));
+            byte[] b=new byte[bis.available()];
+            bis.read(b);
+            bis.close();
+
             response.reset();
             response.setCharacterEncoding("utf-8");
-            response.setContentType("application/json");
-//            if(ext.equals("docx")) {
-//                response.setContentType("application/msword");
-//            }else if(ext.equals("pdf")) {
-//                response.setContentType("application/pdf");
-//            }
-            response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-            bis=new BufferedInputStream(new FileInputStream(file));
-            byte[] b=new byte[bis.available()+1000];
-            int i=0;
-            os = response.getOutputStream();
-            while((i=bis.read(b))!=-1) {
-                os.write(b, 0, i);
-            }
-            os.flush();
-            os.close();
+            response.setContentType("text/html; charset=UTF-8");
+            response.addHeader("Content-Disposition", "attachment; filename=" + new String(fileName.getBytes()));
+            response.addHeader("Content-Length",""+file.length());
+            os = new BufferedOutputStream(response.getOutputStream());
+            os.write(b);
+
         }catch (IOException e){
             e.printStackTrace();
         }finally {
             if(os!=null) {
                 try {
+                    os.flush();
                     os.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+            if(bis!=null){
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        return new FebsResponse().success();
     }
-
 
 
     /**解析exexl
@@ -241,8 +246,6 @@ public class FileController extends BaseController {
         }
 
     }
-
-
 
 
 

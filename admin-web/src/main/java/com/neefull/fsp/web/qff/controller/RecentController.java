@@ -183,7 +183,7 @@ public class RecentController extends BaseController {
     public FebsResponse agreeCurrentProcess(Recent recent) throws FebsException {
         try {
             User user = getCurrentUser();
-            List<String> group = processService.getGroupId(recent,user);
+            List<String> group = processService.getGroupId(recent);
             if(group.contains(user.getUsername())){
                 processService.agreeCurrentProcess(recent,user);
             }else {

@@ -49,6 +49,7 @@
 
 </style>
 <div class="layui-fluid" id="conserve-detail" lay-title = "养护QFF" style="margin-left: 18px">
+
     <form class="layui-form " action="" lay-filter="conserve-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
@@ -315,6 +316,7 @@
             <button class="layui-btn" id="conserve-submit-control" >提交</button>
         </div>
     </div>
+
 </div>
 <img alt="" style="display:none" id="conserve-displayImg" src=""/>
 
@@ -364,9 +366,6 @@
             if(commodity.compNumber!==null&&commodity.compNumber!==""){
                 $('#conserve-compNumber').attr("readonly","readonly");
             }
-        });
-
-        $(function () {
             if(commodity.isDanger === '01'){
                 $("#isDanger").attr("value","危险");
             }else{
@@ -408,14 +407,15 @@
                 "register": commodity.register,
                 "classify": commodity.classify,
                 "images": commodity.images,
-                "alteration":commodity.alteration
+                "alteration":commodity.alteration,
+                "att":commodity.att
             });
         }
 
         upload.render({
             elem: '#conserve-chose'
             ,url: ctx+ 'file/uploadImage/'+commodity.number
-            ,accept: 'file'
+            ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
             ,multiple: true
             ,auto: true
             ,size: 2048
@@ -425,7 +425,8 @@
             ,done: function(res,index){
                 layer.closeAll('loading');
                 if(res.code === 200){ //上传成功
-                    var type = res.data.value.split(".")[1];
+                    var type = res.data.value.substring(res.data.value.lastIndexOf(".")+1,res.data.value.length);
+                    var name = res.data.value.substring(0,res.data.value.lastIndexOf("."));
                     var show = false;
                     for (var i =images.length-1 ; i>=0 ;i--){
                         if(images[i]===res.data.value){
@@ -433,9 +434,9 @@
                         }
                     }
                     if(!show){
-                        if(type!=='jpg'&&type !=='png'&&type !=='gif') {
-                            var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + res.data.value.split(".")[0] + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
-                                  '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete">删除</button></td></tr>'].join(''));
+                        if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type !=='PNG') {
+                            var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
+                                  '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
                             images.push(res.data.value);
                             tr.find('.file-delete').on('click', function(){
                                 delete files[index];
@@ -448,8 +449,8 @@
                                 }
                             });
                         }else {
-                            var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 5px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
-                            '                    <img src="http://127.0.0.1:10086/'+res.data.value+'"  alt="'+res.data.value+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
+                            var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
+                            '                    <img src="http://106.14.99.137:10086/'+res.data.value+'"  alt="'+res.data.value+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
 
                             images.push(res.data.value);
                             input.find('.delsingle').on('click', function () {
@@ -484,15 +485,17 @@
         $.get(ctx +"file/findImages/"+commodity.number +"/"+type,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
-                var type = item.split(".")[1];
-                var url = 'http://127.0.0.1:10086/'+item;
-                if(type==='jpg'||type ==='png'||type ==='gif') {
-                    $("#conserve-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;left: 5px"> \n' +
+                var type =item.substring(item.lastIndexOf(".")+1,item.length);
+                var name =item.substring(0,item.lastIndexOf("."));
+                var url = 'http://106.14.99.137:10086/'+item;
+                if(type==='jpg'||type ==='png'||type ==='gif'||type ==='PNG') {
+                    $("#conserve-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px"> \n' +
                         '                        <a href="javascript:amplificationImg('+index+',\''+url+'\')"><img name=" '+index+'"src = "'+url+' " style="width:100px;height:95px;"></a> </div>');
                 }else {
-                    $('#conserve-List').append('<tr id="upload-' + index + '"><td style="width: 70%">' + item.split(".")[0] + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
-                                          '<td style="width: 10%"><button class="layui-btn layui-btn-xs demo-reload" >下载</button></td></tr>');
-                    $view.find('#upload-'+index).on('click',function () {
+                    $('#conserve-List').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
+                                          '<td style="width: 10%"><button class="layui-btn layui-btn-xs " type="button" id="conserve-upload-' + index + '" >下载</button></td></tr>');
+                    $view.find('#conserve-upload-'+index ).on('click',function () {
+                        // window.open(ctx +"file/uploadFile/"+item)
                         window.location.href=ctx +"file/uploadFile/"+item;
                     })
                 }
@@ -515,8 +518,8 @@
                     height = winHeight  ;
                 }
             }else {
-                height = winHeight -100
-                width = winWidth -520
+                height = winHeight -100;
+                width = winWidth -520;
             }
 
             layer.open({
@@ -555,7 +558,6 @@
         $view.on('click', '#conserve-submit-control', function () {
             $view.find('#conserve-submit').trigger('click');
         });
-
 
 
         //提交更新

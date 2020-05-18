@@ -19,10 +19,9 @@ public interface IProcessService  {
 
     /**找出能审核的人的集合
      * @param object
-     * @param user
      * @return
      */
-    List<String> getGroupId(Object object, User user);
+    List<String> getGroupId(Object object);
 
     /**同意当前任务
      * @param object

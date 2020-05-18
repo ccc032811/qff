@@ -276,12 +276,12 @@
         element.on('collapse(refund-navi)', function(data){
             if(data.show == true){
                 $('#refund-tag').html('');
-                $('#refund-tag').append('<i  class="layui-icon tag-title">&#xe619;</i>')
+                $('#refund-tag').append('<i  class="layui-icon tag-title">&#xe619;</i>');
                 $('#refund-check').attr("style","display:none")
             }else if(data.show == false){
                 $('#refund-tag').html('');
-                $('#refund-tag').append('<i  class="layui-icon tag-title" >&#xe61a;</i>')
-                $('#refund-check').attr("style","border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%;display:inline")
+                $('#refund-tag').append('<i  class="layui-icon tag-title" >&#xe61a;</i>');
+                $('#refund-check').attr("style","border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%;display:inline");
             }
 
         });
@@ -305,9 +305,9 @@
                     {field: 'rMater', title: '罗氏物料号',align:'center'},
                     {field: 'kBatch', title: '康德乐SAP批次',align:'center'},
                     {field: 'rBatch', title: '罗氏批号',align:'center'},
-                    {field: 'manuDate', title: '生产日期',align:'center'},
-                    {field: 'expiryDate', title: '有效期',align:'center'},
-                    {field: 'quarantine', title: '异常数',align:'center',width: 80},
+                    {field: 'manuDate', title: '生产日期',align:'center',minWidth: 110},
+                    {field: 'expiryDate', title: '有效期',align:'center',minWidth: 110},
+                    {field: 'quarantine', title: '异常数',align:'center',minWidth: 80},
                     {title: '处理阶段', templet: '#refund-status',width: 90},
                     {title: '操作', toolbar: '#refund-option',align:'center',width: 162}
                 ]]

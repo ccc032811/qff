@@ -78,7 +78,6 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     public Commodity queryCommodityByNumber(String number) {
         QueryWrapper<Commodity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("number", number);
-//        return commodityMapper.selectCount(queryWrapper);
         return  commodityMapper.selectOne(queryWrapper);
 
     }

@@ -182,10 +182,11 @@
     </div>
 </script>
 <script data-th-inline="none" type="text/javascript">
-    layui.use(['jquery', 'laydate', 'form', 'table', 'febs','upload','element'], function () {
+    layui.use(['jquery', 'laydate', 'form', 'table', 'febs','upload','element','layer'], function () {
         var $ = layui.jquery,
             element = layui.element,
             laydate = layui.laydate,
+            layer = layui.layer,
             upload = layui.upload,
             febs = layui.febs,
             form = layui.form,
@@ -224,12 +225,12 @@
         element.on('collapse(recent-navi)', function(data){
             if(data.show == true){
                 $('#recent-tag').html('');
-                $('#recent-tag').append('<i  class="layui-icon tag-title">&#xe619;</i>')
+                $('#recent-tag').append('<i  class="layui-icon tag-title">&#xe619;</i>');
                 $('#recent-check').attr("style","display:none;")
             }else if(data.show == false){
                 $('#recent-tag').html('');
-                $('#recent-tag').append('<i  class="layui-icon tag-title" >&#xe61a;</i>')
-                $('#recent-check').attr("style","border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%;display:inline")
+                $('#recent-tag').append('<i  class="layui-icon tag-title" >&#xe61a;</i>');
+                $('#recent-check').attr("style","border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%;display:inline");
             }
         });
 
@@ -248,10 +249,10 @@
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
                     {field: 'rMater', title: '罗氏物料号',align:'center'},
                     {field: 'name', title: '产品名称',align:'center'},
-                    {field: 'useLife', title: '有效期',align:'center'},
+                    {field: 'useLife', title: '有效期',align:'center',minWidth: 110},
                     {field: 'batch', title: '批号',align:'center'},
                     {field: 'sapBatch', title: 'SAP 批次',align:'center'},
-                    {field: 'factory', title: '工厂',align:'center'},
+                    {field: 'factory', title: '工厂',align:'center',minWidth: 80},
                     {title: '处理阶段', templet: '#recent-status',width: 90},
                     {title: '操作', toolbar: '#recent-option',align:'center',width: 162}
                 ]]
@@ -262,32 +263,22 @@
         upload.render({
             elem:'#recent-upload'
             ,url: ctx+'file/resolver'
-            ,accept: 'file'
-            ,exts: 'xlsx'
+            ,exts: 'xlsx|xls'
             ,multiple: false
             ,auto: true
             ,size: 1024*5 //kb
             ,before: function(obj){
-                layer.open({
-                    type:1
-                    ,title: false
-                    ,closeBtn:0
-                    ,area:['100px','100px']
-                    ,shadeClose:false
-                    ,content:'<image  src="http://106.14.99.137:10086/loadingup.gif" style="height: 100px;width: 100px;background-color: #C2BE9E></image>'
-                })
+                layer.load();
             }
             ,done:function (res) {
-                if(res.code ==200){
-                    layer.closeAll('page');
+                if(res.code ===200){
+                    layer.closeAll('loading');
                     febs.alert.success('操作成功');
-                    // tableIns.reload({where: getQueryParams(), page: {curr: 1}});
-                    location.reload()
-                }else if(res.code ==500){
+                    $query.click();
+                }else if(res.code ===500){
                     layer.closeAll('page');
                     febs.alert.success('解析失败');
                 }
-
             }
             ,error:function (res) {
                 febs.view.loadBar.error();
