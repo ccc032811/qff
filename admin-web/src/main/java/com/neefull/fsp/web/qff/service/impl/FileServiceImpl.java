@@ -56,25 +56,19 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     @Transactional
-    public Map<String, String> uploadImage(MultipartFile file,String number) {
+    public String uploadImage(MultipartFile file,String number) {
 
         String originalFilename = file.getOriginalFilename();
-//        String extension = StringUtils.substringAfterLast(filename, StringPool.DOT);
-        String sf = UUID.randomUUID().toString();
         String filename = number+"-"+originalFilename;
-
         File filePath = new File(properties.getImagePath(), filename);
 
-        Map<String,String> map =new HashMap<>();
         try {
 
             file.transferTo(filePath);
-            map.put("index",sf.replaceAll(StringPool.DASH,StringPool.EMPTY));
-            map.put("value",filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return map;
+        return properties.getImageUrl()+filename;
 
 
 //        try {

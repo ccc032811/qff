@@ -52,15 +52,15 @@
     </select>
     <select id="findUserPermissionList" resultType="com.neefull.fsp.web.system.entity.Menu">
         SELECT
-        m.perms
+            m.perms
         FROM
-            qff_role r
-        LEFT JOIN qff_user_role ur ON (r.role_id = ur.role_id)
-        LEFT JOIN qff_user u ON (u.user_id = ur.user_id)
-        LEFT JOIN qff_role_menu rm ON (rm.role_id = r.role_id)
-        LEFT JOIN qff_menu m ON (m.menu_id = rm.menu_id)
+            typt_role r
+                LEFT JOIN typt_user_role ur ON (r.role_id = ur.role_id)
+                LEFT JOIN typt_user u ON (u.user_id = ur.user_id)
+                LEFT JOIN typt_role_menu rm ON (rm.role_id = r.role_id)
+                LEFT JOIN typt_menu m ON (m.menu_id = rm.menu_id)
         WHERE
-            u.username = #{userName}
+            u.username = #{username}
           AND m.perms is not null
           AND m.perms &lt;&gt; ''
     </select>

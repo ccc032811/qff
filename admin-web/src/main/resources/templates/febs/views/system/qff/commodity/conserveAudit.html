@@ -425,11 +425,12 @@
             ,done: function(res,index){
                 layer.closeAll('loading');
                 if(res.code === 200){ //上传成功
-                    var type = res.data.value.substring(res.data.value.lastIndexOf(".")+1,res.data.value.length);
-                    var name = res.data.value.substring(0,res.data.value.lastIndexOf("."));
+                    var url = res.data.substring(res.data.lastIndexOf("/")+1);
+                    var type = url.substring(url.lastIndexOf(".")+1,url.length);
+                    var name = url.substring(0,url.lastIndexOf("."));
                     var show = false;
                     for (var i =images.length-1 ; i>=0 ;i--){
-                        if(images[i]===res.data.value){
+                        if(images[i]===url){
                             show = true;
                         }
                     }
@@ -437,33 +438,34 @@
                         if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type !=='PNG') {
                             var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
                                   '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
-                            images.push(res.data.value);
+                            images.push(url);
                             tr.find('.file-delete').on('click', function(){
                                 delete files[index];
                                 tr.remove();
-                                deleteImage(res.data.value);
+                                deleteImage(url);
                                 for (var i =images.length-1 ; i>=0 ;i--){
-                                    if(images[i]===res.data.value){
+                                    if(images[i]===url){
                                         delete images[i];
                                     }
                                 }
                             });
                         }else {
                             var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
-                            '                    <img src="http://106.14.99.137:10086/'+res.data.value+'"  alt="'+res.data.value+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
+                            '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
 
-                            images.push(res.data.value);
+                            images.push(url);
                             input.find('.delsingle').on('click', function () {
                                 delete files[index];
                                 input.remove();
-                                deleteImage(res.data.value);
+                                deleteImage(url);
                                 for (var i =images.length-1 ; i>=0 ;i-- ){
-                                    if(images[i]===res.data.value){
+                                    if(images[i]===url){
                                         delete images[i];
                                     }
                                 }
                             });
                         }
+
                         $("#conserve-upload-image").append(input);
                         $('#conserve-List').append(tr);
 
@@ -485,18 +487,19 @@
         $.get(ctx +"file/findImages/"+commodity.number +"/"+type,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
-                var type =item.substring(item.lastIndexOf(".")+1,item.length);
-                var name =item.substring(0,item.lastIndexOf("."));
-                var url = 'http://106.14.99.137:10086/'+item;
+                var url = item.substring(item.lastIndexOf("/")+1);
+                var type =url.substring(url.lastIndexOf(".")+1,url.length);
+                var name =url.substring(0,url.lastIndexOf("."));
+
                 if(type==='jpg'||type ==='png'||type ==='gif'||type ==='PNG') {
                     $("#conserve-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px"> \n' +
-                        '                        <a href="javascript:amplificationImg('+index+',\''+url+'\')"><img name=" '+index+'"src = "'+url+' " style="width:100px;height:95px;"></a> </div>');
+                        '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
                 }else {
                     $('#conserve-List').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
                                           '<td style="width: 10%"><button class="layui-btn layui-btn-xs " type="button" id="conserve-upload-' + index + '" >下载</button></td></tr>');
                     $view.find('#conserve-upload-'+index ).on('click',function () {
                         // window.open(ctx +"file/uploadFile/"+item)
-                        window.location.href=ctx +"file/uploadFile/"+item;
+                        window.location.href=ctx +"file/uploadFile/"+url;
                     })
                 }
             })

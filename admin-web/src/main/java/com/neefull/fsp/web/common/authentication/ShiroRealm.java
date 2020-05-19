@@ -57,17 +57,17 @@ public class ShiroRealm extends AuthorizingRealm {
 
         // 获取用户权限集
         List<Menu> permissionList = this.menuService.findUserPermissions(userName);
-//        List<Menu> list = this.menuService.findUserPermissionList(userName);
+        List<Menu> list = this.menuService.findUserPermissionList(userName);
 
         Set<String> permissionSet = permissionList.stream().map(Menu::getPerms).collect(Collectors.toSet());
-//        Set<String> permissions = list.stream().map(Menu::getPerms).collect(Collectors.toSet());
-//        Set<String> set = new HashSet<>();
-//        set.addAll(permissionSet);
-//        set.addAll(permissions);
-//        simpleAuthorizationInfo.setStringPermissions(set);
+        Set<String> permissions = list.stream().map(Menu::getPerms).collect(Collectors.toSet());
+        Set<String> set = new HashSet<>();
+        set.addAll(permissionSet);
+        set.addAll(permissions);
+        simpleAuthorizationInfo.setStringPermissions(set);
 
 
-        simpleAuthorizationInfo.setStringPermissions(permissionSet);
+//        simpleAuthorizationInfo.setStringPermissions(permissionSet);
         return simpleAuthorizationInfo;
     }
 

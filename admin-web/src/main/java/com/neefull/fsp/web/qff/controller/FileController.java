@@ -64,6 +64,7 @@ public class FileController extends BaseController {
     private IProcessService processService;
 
 
+
     /**查询需要完成任务
      * @return
      */
@@ -92,7 +93,7 @@ public class FileController extends BaseController {
             List<Attachment> attachments = attachmentService.selectAttsByQffId(number, type);
             if(CollectionUtils.isNotEmpty(attachments)){
                 for (Attachment attachment : attachments) {
-                    String fileName = attachment.getRemark() + StringPool.DOT + attachment.getAttachType();
+                    String fileName = properties.getImageUrl()+attachment.getRemark() + StringPool.DOT + attachment.getAttachType();
                     list.add(fileName);
                 }
             }
@@ -132,9 +133,10 @@ public class FileController extends BaseController {
      */
     @PostMapping("/uploadImage/{number}")
     public FebsResponse uploadImage(@RequestParam("file") MultipartFile file,@PathVariable(required = false) String number) throws FebsException {
+
         try {
-            Map<String,String> map = fileService.uploadImage(file,number);
-            return new FebsResponse().success().data(map);
+            String url  = fileService.uploadImage(file,number);
+            return new FebsResponse().success().data(url);
         } catch (Exception e) {
             String message = "上传文件失败";
             log.error(message,e);
