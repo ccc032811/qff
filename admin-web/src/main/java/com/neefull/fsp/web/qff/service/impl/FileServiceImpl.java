@@ -62,40 +62,27 @@ public class FileServiceImpl implements IFileService {
         String filename = number+"-"+originalFilename;
         File filePath = new File(properties.getImagePath(), filename);
 
-        try {
+        String[] paths = properties.getImagePath().split(StringPool.SLASH);
+        String dir = paths[0];
+        for (int i = 0; i < paths.length - 1; i++) {
+            try {
+                dir = dir + "/" + paths[i + 1];
+                File dirFile = new File(dir);
+                if (!dirFile.exists()) {
+                    dirFile.mkdir();
+                    System.out.println("创建目录为：" + dir);
+                }
+            } catch (Exception err) {
+                System.err.println("文件夹创建发生异常");
+            }
+        }
 
+        try {
             file.transferTo(filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return properties.getImageUrl()+filename;
-
-
-//        try {
-//            BufferedImage image = ImageIO.read(file.getInputStream());
-//            if (image == null) {
-//                throw new RuntimeException();
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-
-        //创建文件存储路径
-//        String[] paths = properties.getImagePath().split(StringPool.SLASH);
-//        String dir = paths[0];
-//        for (int i = 0; i < paths.length - 1; i++) {
-//            try {
-//                dir = dir + "/" + paths[i + 1];
-//                File dirFile = new File(dir);
-//                if (!dirFile.exists()) {
-//                    dirFile.mkdir();
-//                    System.out.println("创建目录为：" + dir);
-//                }
-//            } catch (Exception err) {
-//                System.err.println("文件夹创建发生异常");
-//            }
-//        }
 
     }
 
@@ -138,11 +125,11 @@ public class FileServiceImpl implements IFileService {
             log.error("导入文件失败,原因为：{}",e.getMessage());
         }
 
-        if(CollectionUtils.isNotEmpty(list)){
-            for (Recent recent : list) {
-                processService.commitProcess(recent,user);
-            }
-        }
+//        if(CollectionUtils.isNotEmpty(list)){
+//            for (Recent recent : list) {
+//                processService.commitProcess(recent,user);
+//            }
+//        }
 
         if(CollectionUtils.isNotEmpty(errorList)){
             String count = "";
@@ -156,7 +143,7 @@ public class FileServiceImpl implements IFileService {
         }
         //发送邮件
 
-        StringBuilder content=new StringBuilder("<html><head></head><body><h3>你好</h3>");
+        StringBuilder content=new StringBuilder("<html><head></head><body><h3>您好。当前从SAP系统获取数据如下：</h3>");
         content.append("<tr><h3>具体详情如下表所示:</h3></tr>");
         content.append("<table border='5' style='border:solid 1px #000;font-size=10px;'>");
         content.append("<tr style='background-color: #00A1DD'><td>康德乐物料号</td>" +

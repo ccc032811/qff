@@ -1,6 +1,7 @@
 package com.neefull.fsp.web.job.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.neefull.fsp.web.common.annotation.Log;
 import com.neefull.fsp.web.common.controller.BaseController;
 import com.neefull.fsp.web.common.entity.FebsResponse;
@@ -82,6 +83,26 @@ public class JobController extends BaseController {
     @Log("修改定时任务")
     @PostMapping("update")
     public FebsResponse updateJob(@Valid Job job) throws FebsException {
+        if(job.getBeanName().equals("acquireOneSoap")){
+            String toDate = job.getToDate();
+            String fromTime = job.getFromTime();
+            String toTime = job.getToTime();
+            String params = job.getParams();
+            String message = "";
+            if(StringUtils.isEmpty(toDate)||StringUtils.isEmpty(fromTime)||StringUtils.isEmpty(toTime)){
+                throw new FebsException("请输入日期，开始时间，结束时间");
+            }else {
+                Job byId = jobService.getById(job.getJobId());
+                if(byId.getParams().equals(job.getParams())){
+                    message = toDate+","+fromTime+","+toTime+",";
+                }else {
+                    message = toDate+","+fromTime+","+toTime+","+params;
+                }
+
+                job.setParams(message);
+            }
+        }
+
         try {
             this.jobService.updateJob(job);
             return new FebsResponse().success();

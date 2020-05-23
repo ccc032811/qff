@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.neefull.fsp.web.common.entity.QueryRequest;
 import com.neefull.fsp.web.system.entity.User;
 
+import java.net.UnknownServiceException;
 import java.util.List;
 import java.util.Map;
 
@@ -171,4 +172,6 @@ public interface IUserService extends IService<User> {
      * @param typtUser
      */
     void insertUser(User typtUser);
+
+    User findUserById(String userId);
 }

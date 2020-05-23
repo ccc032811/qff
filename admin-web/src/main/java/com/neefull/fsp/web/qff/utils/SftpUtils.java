@@ -108,6 +108,51 @@ public class SftpUtils {
 
 
     /**
+     * 批量下载文件
+     * @param localPath：本地保存目录(以路径符号结束,D:\Duansha\sftp\)
+     * @return
+     */
+    public List<String> batchDownLoadFile(String remotePath, String localPath) {
+        List<String> filenames = new ArrayList<String>();
+        try {
+            Vector v = listFiles(remotePath);
+            if (v.size() > 0) {
+                System.out.println("本次处理文件个数不为零,开始下载...fileSize=" + v.size());
+                Iterator it = v.iterator();
+                while (it.hasNext()) {
+                    LsEntry entry = (LsEntry) it.next();
+                    String filename = entry.getFilename();
+                    SftpATTRS attrs = entry.getAttrs();
+                    if (!attrs.isDir()) {
+                        boolean flag = false;
+                        flag = downloadFile(remotePath, filename,localPath, filename);
+                        if (flag) {
+                            filenames.add(filename);
+                        }
+                    }
+                }
+            }
+            if (log.isInfoEnabled()) {
+                log.info("download file is success:remotePath=" + remotePath
+                        + "and localPath=" + localPath + ",file size is"
+                        + v.size());
+            }
+        }
+        catch (SftpException e) {
+            e.printStackTrace();
+        } finally {
+            // this.disconnect();
+        }
+        return filenames;
+    }
+
+//    public void moveFile(String startPath,String fileName,String toPath){
+//        File file = new File("seegw-stg.shaphar.com"+startPath + fileName);
+//        File toFile = new File("seegw-stg.shaphar.com/to"+fileName);
+//
+//    }
+
+    /**
      * 下载单个文件
      * @param remotPath：远程下载目录(以路径符号结束)
      * @param remoteFileName：下载文件名
@@ -118,14 +163,14 @@ public class SftpUtils {
     public boolean downloadFile(String remotePath, String remoteFileName,String localPath, String localFileName) {
         FileOutputStream fieloutput = null;
         try {
-            // sftp.cd(remotePath);
             File file = new File(localPath + localFileName);
-            // mkdirs(localPath + localFileName);
             fieloutput = new FileOutputStream(file);
             sftp.get(remotePath + remoteFileName, fieloutput);
+
             if (log.isInfoEnabled()) {
                 log.info("===DownloadFile:" + remoteFileName + " success from sftp.");
             }
+
             return true;
         }
         catch (FileNotFoundException e) {
@@ -149,6 +194,23 @@ public class SftpUtils {
 
 
     /**
+     * 删除stfp文件
+     * @param directory：要删除文件所在目录
+     * @param deleteFile：要删除的文件
+     */
+    public void deleteSFTP(String directory, String deleteFile) {
+        try {
+            sftp.rm(directory + deleteFile);
+            if (log.isInfoEnabled()) {
+                log.info("delete file success from sftp.");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 删除本地文件
      * @param filePath
      * @return
@@ -163,7 +225,7 @@ public class SftpUtils {
         }
         boolean rs = file.delete();
         if (rs && log.isInfoEnabled()) {
-            log.info("delete file success from local.");
+            log.info("delete file success from local. ");
         }
         return rs;
     }
@@ -251,6 +313,7 @@ public class SftpUtils {
      */
     public Vector listFiles(String directory) throws SftpException {
         return sftp.ls(directory);
+
     }
 
     public String getHost() {

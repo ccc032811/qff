@@ -1,16 +1,22 @@
 package com.neefull.fsp.web.qff.listener;
 
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.neefull.fsp.web.common.controller.BaseController;
+import com.neefull.fsp.web.qff.config.ProcessInstanceProperties;
 import com.neefull.fsp.web.qff.config.SendMailProperties;
 import com.neefull.fsp.web.qff.config.TemplateProperties;
+import com.neefull.fsp.web.qff.entity.Attachment;
 import com.neefull.fsp.web.qff.entity.Commodity;
+import com.neefull.fsp.web.qff.service.IAttachmentService;
 import com.neefull.fsp.web.qff.service.ICommodityService;
 import com.neefull.fsp.web.qff.utils.FilePdfTemplate;
+import com.neefull.fsp.web.qff.utils.MailUtils;
 import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
 import com.sun.mail.util.MailSSLSocketFactory;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -44,14 +50,22 @@ public class CommodityListener extends BaseController implements JavaDelegate{
     private FilePdfTemplate template;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IAttachmentService attachmentService;
+    @Autowired
+    private ProcessInstanceProperties properties;
 
     @Override
     public void execute(DelegateExecution execution) {
 
+        String[] mails = null;
+
         if(execution.getCurrentActivityName().equals("罗氏")){
             //罗氏的邮箱
+            mails = getEmails(86);
         }else if(execution.getCurrentActivityName().equals("康德乐")){
             //康德的邮箱
+            mails = getEmails(87);
         }
 
         //获取流程的id
@@ -66,64 +80,49 @@ public class CommodityListener extends BaseController implements JavaDelegate{
         //查询
         Commodity commodity = conserveService.queryCommodityById(Integer.parseInt(starId));
 
-        Map<String,String> map = new HashMap<>();
-        //将值放入map中
+        List<Attachment> attachments = (List<Attachment>) execution.getVariable("list");
 
-        //pdf的地址
-        String url = templateProperties.getConserveDownLoadPath()+ commodity.getNumber()+".pdf";
+        Map<String,String> files = new HashMap<>();
+        if(CollectionUtils.isNotEmpty(attachments)){
+            for (Attachment attachment : attachments) {
+                files.put(attachment.getRemark(),properties.getImagePath()+attachment.getRemark()+ StringPool.DOT+attachment.getAttachType());
+            }
+        }
+
+//        Map<String,String> map = new HashMap<>();
+//        String url = templateProperties.getConserveDownLoadPath()+ commodity.getNumber()+".pdf";
 //        template.createPdf(map,templateProperties.getConserveTemplatePath(),templateProperties.getConserveDownLoadPath(),url);
-        //获取图片地址
 
-        List<User> userList = userService.findUserByRoleId(87);
+        StringBuilder content=new StringBuilder("<html><head></head><body><h3>您好。当前从SAP系统获取数据如下：</h3>");
+        content.append("<tr><h3>具体详情如下表所示:</h3></tr>");
+        content.append("<table border='5' style='border:solid 1px #000;font-size=10px;'>");
+        content.append("<tr style='background-color: #00A1DD'><td>运输单号</td>" +
+                "<td>QFF编号</td><td>Plant工厂</td><td>KDL Material物料</td>" +
+                "<td>康德乐SAP 批次</td><td>罗氏物料号</td><td>药厂物料号</td><td>罗氏批号</td><td>生产日期</td>" +
+                "<td>有效期</td><td>异常总数</td><td>Remark箱号/备注</td></tr>");
+        content.append("<tr><td>"+commodity.getTransport()+"</td><td>"+commodity.getNumber()+"</td>" +
+                "<td>"+commodity.getPlant()+"</td><td>"+commodity.getkMater()+"</td>" +
+                "<td>"+commodity.getkBatch()+"</td><td>"+commodity.getrMater()+"</td>" +
+                "<td>"+commodity.getpMater()+"</td><td>"+commodity.getrBatch()+"</td><td>"+commodity.getManuDate()+"</td>" +
+                "<td>"+commodity.getExpiryDate()+"</td><td>"+commodity.getQuarantine()+"</td><td>"+commodity.getRemark()+"</td></tr>");
+        content.append("</table>");
+        content.append("</body></html>");
+
+        String text = content.toString();
+
+        //发送带附件的邮件
+        MailUtils.sendMail(text,mailProperties,mails,files);
+
+    }
+
+    public String[] getEmails(Integer id){
+        List<User> userList = userService.findUserByRoleId(id);
         List<String> userMails = new ArrayList<>();
         for (User user : userList) {
             userMails.add(user.getEmail());
         }
-        String[] mails = userMails.toArray(new String[0]);
-
-        //发送带附件的邮件
-        sendMai(mails);
-
+        return userMails.toArray(new String[0]);
     }
 
-    @Async
-    public void sendMai(String[] mails ){
-        //配置
-        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost(mailProperties.getHost());
-        javaMailSender.setDefaultEncoding(mailProperties.getCharset());
-        javaMailSender.setProtocol(mailProperties.getProtocol());
-        javaMailSender.setPort(Integer.parseInt(mailProperties.getPort()));
-        javaMailSender.setUsername(mailProperties.getUsername());//发送者的邮箱
-        javaMailSender.setPassword(mailProperties.getPassword());//发送者的密码
 
-        Properties prop = new Properties();
-        prop.setProperty("mail.smtp.auth", mailProperties.getAuth());
-//        prop.setProperty("mail.smtp.timeout", mailProperties.getTimeout());
-        try {
-            MailSSLSocketFactory sf = new MailSSLSocketFactory();
-            sf.setTrustAllHosts(true);
-            prop.put("mail.smtp.ssl.enable", true);
-            prop.put("mail.smtp.ssl.socketFactory", sf);
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        }
-        javaMailSender.setJavaMailProperties(prop);
-
-        MimeMessageHelper mimeMessageHelper = null;
-        try {
-            mimeMessageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);
-            mimeMessageHelper.setFrom(mailProperties.getUsername());//发送的邮箱地址
-            mimeMessageHelper.setTo(mails);//接收的邮箱地址
-//            mimeMessageHelper.setTo("wangpei_it@163.com");//接收的邮箱地址
-//            mimeMessageHelper.setCc("");//抄送者的邮箱地址
-            mimeMessageHelper.setSubject("测试Springboot发送带附件的邮件,用来测试的");//邮件名称
-            mimeMessageHelper.setText("发送邮件...这是用来测试QFF流程的邮件测试，有很多附件。。。。。。。。。。。。。。。。?????????????????????????");//邮箱文字内容
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-
-        javaMailSender.send(mimeMessageHelper.getMimeMessage());
-    }
 }

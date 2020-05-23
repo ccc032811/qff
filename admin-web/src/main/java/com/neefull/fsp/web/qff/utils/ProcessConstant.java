@@ -23,7 +23,17 @@ public class ProcessConstant {
      */
     public static final Integer HAVE_ABNORMAL = 4;
 
+    public static final String THREE_STEP = "_3";
 
+    public static final String FOUR_STEP = "_4";
+
+    public static final String FIVE_STEP = "_5";
+
+    public static final String SIX_STEP = "_6";
+
+    public static final String ROCHE_NAME = "罗氏发起";
+
+    public static final String RECENT_NAME = "近效期";
 
 
 

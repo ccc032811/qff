@@ -52,12 +52,20 @@ public interface IProcessService  {
      */
     Boolean queryProcessByKey(Object object);
 
+    /**增加修改权限
+     * @param user
+     */
+    void addProcessCommit(User user);
 
     List<Commodity>  queryCommodityTaskByName(List<Commodity> records, User user);
 
     List<Recent> queryRecentTaskByName(List<Recent> records, User user);
 
-//    List<Refund> queryRefundTaskByName(List<Refund> records, User user);
-
     List<Roche> queryRocheTaskByName(List<Roche> records, User user);
+
+
+    /**删除用户
+     * @param userIds
+     */
+    void deleteProcessCommit(String[] userIds);
 }

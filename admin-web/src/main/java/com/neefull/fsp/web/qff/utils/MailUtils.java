@@ -54,25 +54,25 @@ public class MailUtils {
             mimeMessageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);
             mimeMessageHelper.setFrom(mailProperties.getUsername());//发送的邮箱地址
             mimeMessageHelper.setTo("ccc032811@163.com");//接收的邮箱地址
+
 //            mimeMessageHelper.setTo("wangpei_it@163.com");//接收的邮箱地址
 //            mimeMessageHelper.setCc("");//抄送者的邮箱地址
-            mimeMessageHelper.setSubject("您当前需要处理来自SAP的数据");//邮件名称
+            mimeMessageHelper.setSubject("您当前需要处理的文件");//邮件名称
             mimeMessageHelper.setText(text,true);//邮箱文字内容
-            if(files!=null){
+            if(!files.isEmpty()){
                 Set<String> strings = files.keySet();
                 for (String string : strings) {
                     FileSystemResource resource = new FileSystemResource(new File(files.get(string)));
                     mimeMessageHelper.addAttachment(string , resource);
                 }
             }
-//            mimeMessageHelper.addAttachment();
         } catch (
                 MessagingException e) {
             e.printStackTrace();
         }
-
         javaMailSender.send(mimeMessageHelper.getMimeMessage());
     }
+
 }
 
 

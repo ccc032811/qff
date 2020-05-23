@@ -418,6 +418,8 @@
         $(function () {
             if(commodity.isDanger === '01'){
                 $("#isDanger").attr("value","危险");
+            }else if(commodity.isDanger === ''){
+                $("#isDanger").attr("value","");
             }else{
                 $("#isDanger").attr("value","不危险");
             }

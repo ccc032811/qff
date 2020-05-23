@@ -165,10 +165,11 @@
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">BA</label>
-                <div class="layui-input-block" id = "delivery-ba">
-                    <select name="ba" id="delivery-search-ba" lay-verify="required">
-                        <option value="">请选择</option>
-                    </select>
+                <div class="layui-input-block" id = "delivery-ba" >
+                    <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="delivery-search-ba" class="layui-input" placeholder="请输入" >
+                    <div style="overflow: auto; height: 30px";>
+                        <datalist id="delivery-search-ba" style="display:none;"></datalist>
+                    </div>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
@@ -362,8 +363,18 @@
             if(commodity.compNumber!==""&&commodity.compNumber!==null){
                 $('#delivery-compNumber').attr("readonly","readonly");
             }
+            if(currentUser.roleId === "86"){
+                $('#delivery-stage').html('');
+                $('#delivery-stage').append(' <input type="text" name="stage"  maxlength="50" autocomplete="off"\n' +
+                    '                           class="layui-input " readonly="readonly">')
+                $('#delivery-source').html('');
+                $('#delivery-source').append('<input type="text" name="source"  maxlength="50" autocomplete="off"\n' +
+                    '                           class="layui-input " readonly="readonly">')
+            }
             if(commodity.isDanger === '01'){
                 $("#isDanger").attr("value","危险");
+            }else if(commodity.isDanger === ''){
+                $("#isDanger").attr("value"," ");
             }else{
                 $("#isDanger").attr("value","不危险");
             }
@@ -599,19 +610,12 @@
         });
 
         $.get(ctx +"opinion/getOpinion/"+ba,function(res){
-            var data=res.data;
-            var dom=$("#delivery-search-ba");
-            var html = '<option value=""></option>';
+            var data = res.data;
             $.each(data,function(index,item){
-                if(item.name === commodity.ba){
-                    html+='<option selected value="'+item.name+'">'+item.name+'</option>'
-                }else {
-                    html+='<option value="'+item.name+'">'+item.name+'</option>'
-                }
+                $("#delivery-search-ba").append('<option value="'+item.name+'"></option>')
             });
-            dom.html(html);
-            form.render("select");
         });
+
 
         $.get(ctx +"opinion/getOpinion/"+stage,function(res){
             var data=res.data;

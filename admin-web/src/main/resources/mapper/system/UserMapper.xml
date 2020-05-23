@@ -167,7 +167,28 @@
         select * from qff_user u LEFT JOIN qff_user_role ur on u.user_id = ur.user_id where ur.role_id = #{id}
     </select>
     <select id="getAllUser" resultType="com.neefull.fsp.web.system.entity.User">
-        select * from typt_user
+        SELECT
+            u.user_id userId,
+            u.username,
+            u.email,
+            u.mobile,
+            u.status,
+            u.create_time createTime,
+            u.ssex sex,
+            u.dept_id deptId,
+            u.last_login_time lastLoginTime,
+            u.modify_time modifyTime,
+            u.description,
+            u.avatar,
+            d.dept_name deptName,
+            u.user_type userType,
+            u.auth_status authStatus
+        FROM
+            typt_user u
+                LEFT JOIN typt_dept d ON (u.dept_id = d.dept_id)
+                LEFT JOIN typt_user_role ur ON (u.user_id = ur.user_id)
+                LEFT JOIN typt_role r ON r.role_id = ur.role_id
+        WHERE u.user_type = '2'
     </select>
     <select id="getUserByName" resultType="com.neefull.fsp.web.system.entity.User">
         select * from qff_user where username = #{username}

@@ -66,6 +66,13 @@ public class Job implements Serializable {
     @ExcelField(value = "方法名称")
     private String methodName;
 
+    @TableField(exist = false)
+    private String toDate;
+    @TableField(exist = false)
+    private String fromTime;
+    @TableField(exist = false)
+    private String toTime;
+
     @TableField("params")
     @Size(max = 50, message = "{noMoreThan}")
     @ExcelField(value = "方法参数")

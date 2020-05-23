@@ -78,7 +78,11 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     public Commodity queryCommodityByNumber(String number) {
         QueryWrapper<Commodity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("number", number);
-        return  commodityMapper.selectOne(queryWrapper);
+        Commodity commodity = commodityMapper.selectOne(queryWrapper);
+        if(commodity!=null){
+            return commodity;
+        }
+        return null;
 
     }
 
@@ -98,7 +102,7 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     @Override
     public String selectLastTime() {
         Date date = commodityMapper.selectLastTime();
-        return DateFormatUtils.format(date,"yyyy-MM-dd");
+        return DateFormatUtils.format(date,"yyyy-MM-dd HH:mm:ss");
     }
 
 

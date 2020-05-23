@@ -216,20 +216,5 @@ public class CommodityController extends BaseController {
         }
     }
 
-//    /**查询用户当前任务
-//     * @return
-//     * @throws FebsException
-//     */
-//    @GetMapping("/check")
-//    @RequiresPermissions("commodity:audit")
-//    public FebsResponse queryCurrentProcess() throws FebsException {
-//        User user = getCurrentUser();
-//        List<Commodity> list = commodityService.queryCurrentProcess(user);
-//        if(CollectionUtils.isEmpty(list)){
-//            throw new FebsException("没有任务");
-//        }
-//        return new FebsResponse().success().data(list);
-//    }
-
 
 }

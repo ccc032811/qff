@@ -14,10 +14,12 @@ import com.neefull.fsp.web.common.entity.FebsConstant;
 import com.neefull.fsp.web.common.entity.QueryRequest;
 import com.neefull.fsp.web.common.utils.FebsUtil;
 import com.neefull.fsp.web.common.utils.SortUtil;
+import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.system.entity.*;
 import com.neefull.fsp.web.system.mapper.UserMapper;
 import com.neefull.fsp.web.system.service.*;
 import org.apache.commons.lang3.StringUtils;
+import org.aspectj.lang.annotation.Around;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -37,6 +39,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private IUserRoleService userRoleService;
     @Autowired
     private ShiroRealm shiroRealm;
+    @Autowired
+    private IProcessService processService;
 
     @DS("typt")
     @Override
@@ -52,6 +56,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public void insertUser(User typtUser) {
         this.baseMapper.saveReturnPrimaryKey(typtUser);
+    }
+
+    @Override
+    public User findUserById(String userId) {
+        return  this.baseMapper.selectById(userId);
     }
 
     @Override
@@ -130,11 +139,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         this.removeByIds(list);
         // 删除关联角色
         this.userRoleService.deleteUserRolesByUserId(list);
+        processService.deleteProcessCommit(userIds);
     }
 
     @Override
     @Transactional
     public void updateUser(User user) {
+
+        processService.addProcessCommit(user);
         // 更新用户
         user.setPassword(null);
         user.setUsername(null);
@@ -149,6 +161,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (StringUtils.equalsIgnoreCase(currentUser.getUsername(), user.getUsername())) {
             shiroRealm.clearCache();
         }
+
+
     }
 
     @Override

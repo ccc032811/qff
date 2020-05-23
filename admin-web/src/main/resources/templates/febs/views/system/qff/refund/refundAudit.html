@@ -144,7 +144,7 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">回复日期</label>
                 <div class="layui-input-block">
-                    <input type="text" name="repTime" lay-verify="required" maxlength="50" autocomplete="off"
+                    <input type="text" name="repTime"  maxlength="50" autocomplete="off"
                            class="layui-input " readonly="readonly">
                 </div>
             </div>
@@ -167,10 +167,11 @@
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">BA</label>
-                <div class="layui-input-block" id="refund-ba">
-                    <select name="ba" id="refund_search_ba" lay-verify="required">
-                        <option value="">请选择</option>
-                    </select>
+                <div class="layui-input-block" id = "refund-ba" >
+                    <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="refund-search-ba" class="layui-input" placeholder="请输入" >
+                    <div style="overflow: auto; height: 30px";>
+                        <datalist id="refund-search-ba" style="display:none;"></datalist>
+                    </div>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
@@ -342,6 +343,11 @@
             }
             if(commodity.compNumber!==""&&commodity.compNumber!==null){
                 $('#refund-compNumber').attr("readonly","readonly");
+            }
+            if(currentUser.roleId === "86"){
+                $('#refund-source').html('');
+                $('#refund-source').append('<input type="text" name="source"  maxlength="50" autocomplete="off"\n' +
+                    '                           class="layui-input " readonly="readonly">')
             }
         });
 
@@ -580,19 +586,12 @@
         });
 
         $.get(ctx +"opinion/getOpinion/"+ba,function(res){
-            var data=res.data;
-            var dom=$("#refund_search_ba");
-            var html='<option value=""></option>';
+            var data = res.data;
             $.each(data,function(index,item){
-                if(item.name === commodity.ba){
-                    html+='<option selected value="'+item.name+'">'+item.name+'</option>'
-                }else {
-                    html+='<option value="'+item.name+'">'+item.name+'</option>'
-                }
+                $("#refund-search-ba").append('<option value="'+item.name+'"></option>')
             });
-            dom.html(html);
-            form.render("select");
         });
+
 
         $.get(ctx +"opinion/getOpinion/"+source,function(res){
             var data=res.data;

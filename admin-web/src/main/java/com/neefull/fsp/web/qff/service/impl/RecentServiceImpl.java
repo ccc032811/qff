@@ -74,8 +74,7 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
     @Override
     public IPage<RecentExcelImport> getRecentExcelImportPage(Recent recent) {
         Page<RecentExcelImport> page = new Page<>(recent.getPageNum(),recent.getPageSize());
-        IPage<RecentExcelImport> pageInfo = recentExcelImportMapper.getRecentExcelImportPage(page,recent);
-        return pageInfo;
+        return recentExcelImportMapper.getRecentExcelImportPage(page,recent);
     }
 
 }

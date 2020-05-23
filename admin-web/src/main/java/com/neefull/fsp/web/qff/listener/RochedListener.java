@@ -1,18 +1,25 @@
 package com.neefull.fsp.web.qff.listener;
 
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.neefull.fsp.web.qff.config.ProcessInstanceProperties;
 import com.neefull.fsp.web.qff.config.SendMailProperties;
 import com.neefull.fsp.web.qff.config.TemplateProperties;
+import com.neefull.fsp.web.qff.entity.Attachment;
 import com.neefull.fsp.web.qff.entity.Commodity;
 import com.neefull.fsp.web.qff.entity.Recent;
 import com.neefull.fsp.web.qff.entity.Roche;
+import com.neefull.fsp.web.qff.service.IAttachmentService;
 import com.neefull.fsp.web.qff.service.IRecentService;
 import com.neefull.fsp.web.qff.service.IRocheService;
 import com.neefull.fsp.web.qff.utils.FilePdfTemplate;
+import com.neefull.fsp.web.qff.utils.MailUtils;
+import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
 import com.sun.mail.util.MailSSLSocketFactory;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -41,18 +48,22 @@ public class RochedListener implements JavaDelegate {
     private FilePdfTemplate template;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IAttachmentService attachmentService;
+    @Autowired
+    private ProcessInstanceProperties properties;
 
 
     @Override
     public void execute(DelegateExecution execution) {
-       /* //获取流程中的对象  获取邮件地址跟密码
-        User user = (User) execution.getVariable("user");
-        String email = user.getEmail();*/
+        String[] mails = null;
 
         if(execution.getCurrentActivityName().equals("罗氏")){
-            //查询罗氏接受人的邮箱
+            //罗氏的邮箱
+            mails = getEmails(86);
         }else if(execution.getCurrentActivityName().equals("康德乐")){
-            //查询康德乐接受人的邮箱
+            //康德的邮箱
+            mails = getEmails(87);
         }
 
         //生成pdf和获取附件的地址
@@ -65,65 +76,48 @@ public class RochedListener implements JavaDelegate {
             }
         }
         Roche roche = rocheService.queryRocheById(Integer.parseInt(starId));
+        List<Attachment> attachments = (List<Attachment>) execution.getVariable("list");
 
-        Map<String,String> map = new HashMap<>();
-        //将值放入map中
+        Map<String,String> files = new HashMap<>();
+        if(CollectionUtils.isNotEmpty(attachments)){
+            for (Attachment attachment : attachments) {
+                files.put(attachment.getRemark(),properties.getImagePath()+attachment.getRemark()+ StringPool.DOT+attachment.getAttachType());
+            }
+        }
 
-        //pdf的地址
-        String url = templateProperties.getConserveDownLoadPath()+ roche.getNumber()+".pdf";
+//        Map<String,String> map = new HashMap<>();
+//        String url = templateProperties.getConserveDownLoadPath()+ roche.getNumber()+".pdf";
 //        template.createPdf(map,templateProperties.getConserveTemplatePath(),templateProperties.getConserveDownLoadPath(),url);
-        //获取图片地址
+
+        StringBuilder content=new StringBuilder("<html><head></head><body><h3>您好。当前从系统获取数据如下：</h3>");
+        content.append("<tr><h3>具体详情如下表所示:</h3></tr>");
+        content.append("<table border='5' style='border:solid 1px #000;font-size=10px;'>");
+        content.append("<tr style='background-color: #00A1DD'><td>运输单号</td>" +
+                "<td>NO编号</td><td>Initiator发起人</td><td>申请日期</td>" +
+                "<td>Reason原因</td><td>产品/物料名称</td><td>产品/物料编号</td><td>批号/序列号</td><td>受影响数量</td>" +
+                "<td>期望完成日期</td></tr>");
+        content.append("<tr><td>"+roche.getTransport()+"</td><td>"+roche.getNumber()+"</td>" +
+                "<td>"+roche.getSponsor()+"</td><td>"+roche.getReqDate()+"</td>" +
+                "<td>"+roche.getReason()+"</td><td>"+roche.getMaterName()+"</td>" +
+                "<td>"+roche.getMaterCode()+"</td><td>"+roche.getBatch()+"</td><td>"+roche.getQuantity()+"</td><td>"+roche.getExceptDate()+"</td></tr>");
+        content.append("</table>");
+        content.append("</body></html>");
+
+        String text = content.toString();
+
+        //发送带附件的邮件
+        MailUtils.sendMail(text,mailProperties,mails,files);
+
+    }
 
 
-        List<User> userList = userService.findUserByRoleId(87);
+    public String[] getEmails(Integer id){
+        List<User> userList = userService.findUserByRoleId(id);
         List<String> userMails = new ArrayList<>();
         for (User user : userList) {
             userMails.add(user.getEmail());
         }
-        String[] mails = userMails.toArray(new String[0]);
-
-        //发送带附件的邮件
-        sendMai(mails);
-
+        return userMails.toArray(new String[0]);
     }
 
-    @Async
-    public void sendMai(String[] mails ){
-        //配置
-        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost(mailProperties.getHost());
-        javaMailSender.setDefaultEncoding(mailProperties.getCharset());
-        javaMailSender.setProtocol(mailProperties.getProtocol());
-        javaMailSender.setPort(Integer.parseInt(mailProperties.getPort()));
-        javaMailSender.setUsername(mailProperties.getUsername());//发送者的邮箱
-        javaMailSender.setPassword(mailProperties.getPassword());//发送者的密码
-
-        Properties prop = new Properties();
-        prop.setProperty("mail.smtp.auth", mailProperties.getAuth());
-//        prop.setProperty("mail.smtp.timeout", mailProperties.getTimeout());
-        try {
-            MailSSLSocketFactory sf = new MailSSLSocketFactory();
-            sf.setTrustAllHosts(true);
-            prop.put("mail.smtp.ssl.enable", true);
-            prop.put("mail.smtp.ssl.socketFactory", sf);
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        }
-        javaMailSender.setJavaMailProperties(prop);
-
-        MimeMessageHelper mimeMessageHelper = null;
-        try {
-            mimeMessageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);
-            mimeMessageHelper.setFrom(mailProperties.getUsername());//发送的邮箱地址
-            mimeMessageHelper.setTo(mails);//接收的邮箱地址
-//            mimeMessageHelper.setTo("wangpei_it@163.com");//接收的邮箱地址
-//            mimeMessageHelper.setCc("");//抄送者的邮箱地址
-            mimeMessageHelper.setSubject("抢购抢购抢购抢购抢购抢购抢购抢购");//邮件名称
-            mimeMessageHelper.setText("抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购抢购");//邮箱文字内容
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-
-        javaMailSender.send(mimeMessageHelper.getMimeMessage());
-    }
 }

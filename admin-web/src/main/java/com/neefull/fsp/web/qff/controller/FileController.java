@@ -131,6 +131,7 @@ public class FileController extends BaseController {
      * @return
      * @throws FebsException
      */
+    @Qff("上传文件")
     @PostMapping("/uploadImage/{number}")
     public FebsResponse uploadImage(@RequestParam("file") MultipartFile file,@PathVariable(required = false) String number) throws FebsException {
 
@@ -150,6 +151,7 @@ public class FileController extends BaseController {
      * @param url
      * @return
      */
+    @Qff("下载文件")
     @GetMapping("/uploadFile/{url}")
     public void uploadFiles(HttpServletRequest request, HttpServletResponse response,@PathVariable("url") String url)throws FebsException{
 
@@ -248,7 +250,6 @@ public class FileController extends BaseController {
         }
 
     }
-
 
 
 }

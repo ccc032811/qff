@@ -15,13 +15,12 @@ public class ProcessInstanceProperties {
 
     private String recentProcess;
 
-    private String refundProcess;
-
     private String rocheProcess;
 
     private String imagePath;
 
     private String imageUrl;
+
 
     public String getCommodityProcess() {
         return commodityProcess;
@@ -37,14 +36,6 @@ public class ProcessInstanceProperties {
 
     public void setRecentProcess(String recentProcess) {
         this.recentProcess = recentProcess;
-    }
-
-    public String getRefundProcess() {
-        return refundProcess;
-    }
-
-    public void setRefundProcess(String refundProcess) {
-        this.refundProcess = refundProcess;
     }
 
     public String getRocheProcess() {
@@ -70,4 +61,5 @@ public class ProcessInstanceProperties {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
 }

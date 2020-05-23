@@ -104,6 +104,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
     @Override
     @Transactional
     public void updateJob(Job job) {
+
         ScheduleUtils.updateScheduleJob(scheduler, job);
         this.baseMapper.updateById(job);
     }

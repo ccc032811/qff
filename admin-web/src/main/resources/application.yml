@@ -2,15 +2,13 @@ server:
   port: 8083
   tomcat:
     uri-encoding: utf-8
-  connection-timeout: 60000
-
 
 spring:
   servlet:
     multipart:
       max-file-size: 2MB # 限制文件上传的大小
   profiles:
-    active: dev
+    active: prod
 
   thymeleaf:
     cache: false
@@ -48,6 +46,12 @@ mybatis-plus:
 
 
 qff:
+  sftps:
+    sftppath:  /UploadOutbound/   # sftp文件地址
+    localpath: D:\JavaSoft\nginx-1.12.2\html\    #文件下载到当前地址
+    host: seegw-stg.shaphar.com
+    username: QFFTest
+    password: 1qaz2wsx
   send:
     conserveTemplatePath:   #到货养护包装QFF pdf模板地址
     conserveDownLoadPath:   #到货养护包装QFF 生成的模板地址
@@ -60,9 +64,9 @@ qff:
   process:
     commodityProcess: 到货养护分包出库QFF
     recentProcess: 近效期QFF
-    refundProcess: 退货QFF
     rocheProcess: 罗氏内部发起QFF
-    imagePath: /usr/local/share/qff/nginx-1.10.1/html/    #D:\JavaSoft\nginx-1.12.2\html\  /usr/local/share/qff/nginx-1.10.1/html/  图片存储的地址
-    imageUrl:  http://106.14.99.137:10086/         #http://127.0.0.1:10086/    http://106.14.99.137:10086/     图片展示路径
+    imagePath: D:\JavaSoft\nginx-1.12.2\html\   #D:\JavaSoft\nginx-1.12.2\html\  /usr/local/share/qff/nginx-1.10.1/html/  图片存储的地址
+    imageUrl:  http://127.0.0.1:10086/         #http://127.0.0.1:10086/    http://106.14.99.137:10086/     图片展示路径
   soap:
-    soapUrl: http://10.1.225.155:80/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS   #http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl    #QFF 请求地址
+    soapUrl: http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl   #http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl   http://10.1.225.155:80/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS   #QFF 请求地址
+

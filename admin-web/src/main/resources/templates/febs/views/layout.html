@@ -56,15 +56,15 @@
         <script type="text/html" id="TPL-app-tabsmenu" template>
             {{# if(layui.conf.viewTabs){ }}
             <div class="febs-tabs-wrap">
-          <span class="febs-tabs-btn febs-tabs-action febs-tabs-prev" data-type="prev">
-              <i class="layui-icon layui-icon-left"></i>
-          </span>
+                <span class="febs-tabs-btn febs-tabs-action febs-tabs-prev" data-type="prev">
+                    <i class="layui-icon layui-icon-left"></i>
+                </span>
                 <span class="febs-tabs-btn febs-tabs-action febs-tabs-next" data-type="next">
-              <i class="layui-icon layui-icon-right"></i>
-          </span>
+                    <i class="layui-icon layui-icon-right"></i>
+                </span>
                 <span class="febs-tabs-btn febs-tabs-action febs-tabs-down" data-type="down">
-              <i class="layui-icon layui-icon-close"></i>
-          </span>
+                    <i class="layui-icon layui-icon-close"></i>
+                </span>
                 <ul class="febs-tabs-menu">
                     {{# layui.each(layui.view.tab.data,function(i, item){ }}
                     <li data-type="page" class="febs-tabs-btn" lay-url="{{item.fileurl}}">
@@ -90,7 +90,7 @@
                     lay-api="getMenus"
                     lay-done="layui.element.render('nav','febs-sidebar');layui.febs.sidebarFocus()">
                 <!--<img data-th-src="@{febs/images/unify_auth_image.png}" width="125px" height="125px" style="padding-left: 50px;margin-top: 30px">-->
-                <ul class="layui-nav layui-nav-tree" lay-filter="febs-sidebar" lay-shrink="all" style="margin-top: 20px">
+                <ul class="layui-nav layui-nav-tree" lay-filter="febs-sidebar" lay-shrink="all" >
                     {{#
                     function __createSlidebar(data,index){
                     if(!data || data.length == 0) return '';

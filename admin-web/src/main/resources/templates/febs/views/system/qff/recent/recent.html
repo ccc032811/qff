@@ -276,13 +276,9 @@
                     febs.alert.success('操作成功');
                     $query.click();
                 }else if(res.code ===500){
-                    layer.closeAll('page');
+                    layer.closeAll('loading');
                     febs.alert.success('解析失败');
                 }
-            }
-            ,error:function (res) {
-                febs.view.loadBar.error();
-                febs.alert.error(res.message);
             }
         });
 
