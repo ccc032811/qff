@@ -63,4 +63,13 @@ public class AttachmentServiceImpl  extends ServiceImpl<AttachmentMapper, Attach
         }
         return delete;
     }
+
+    @Override
+    @Transactional
+    public void deleteByNumber(String number,String typt) {
+        QueryWrapper<Attachment> delete = new QueryWrapper<>();
+        delete.eq("qff_id",number);
+        delete.eq("qff_type",typt);
+        attachmentMapper.delete(delete);
+    }
 }

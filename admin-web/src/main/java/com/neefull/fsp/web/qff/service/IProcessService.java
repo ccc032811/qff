@@ -2,6 +2,8 @@ package com.neefull.fsp.web.qff.service;
 
 import com.neefull.fsp.web.qff.entity.*;
 import com.neefull.fsp.web.system.entity.User;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 
 import java.util.List;
 
@@ -39,7 +41,7 @@ public interface IProcessService  {
      * @param name
      * @return
      */
-    Integer findTask(String name);
+    List<Task> findTask(String name);
 
     /**删除流程
      * @param object
@@ -68,4 +70,8 @@ public interface IProcessService  {
      * @param userIds
      */
     void deleteProcessCommit(String[] userIds);
+
+    List<String> findPrcessName(String username);
+
+    void alterCommodity(Commodity commodity, User currentUser);
 }

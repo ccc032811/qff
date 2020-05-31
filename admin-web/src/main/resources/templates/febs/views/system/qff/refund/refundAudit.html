@@ -156,9 +156,9 @@
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">采购来源</label>
+                <label class="layui-form-label " id="source-ba">采购来源</label>
                 <div class="layui-input-block" id="refund-source">
-                    <select name="ba" id="refund_search_source" >
+                    <select name="source" id="refund_search_source" >
                         <option value="">请选择</option>
                     </select>
                 </div>
@@ -166,23 +166,23 @@
         </div>
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">BA</label>
+                <label class="layui-form-label " id="ba-refund">BA</label>
                 <div class="layui-input-block" id = "refund-ba" >
-                    <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="refund-search-ba" class="layui-input" placeholder="请输入" >
+                    <input type="text" name="ba"  lay-verify="required" maxlength="50" autocomplete="off" list="refund-search-ba" class="layui-input" placeholder="请输入" >
                     <div style="overflow: auto; height: 30px";>
                         <datalist id="refund-search-ba" style="display:none;"></datalist>
                     </div>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">投诉编号</label>
+                <label class="layui-form-label " id="compNumber-refund">投诉编号</label>
                 <div class="layui-input-block" >
                     <input type="text" id="refund-compNumber" name="compNumber" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input" placeholder="请输入">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">退货原因</label>
+                <label class="layui-form-label " id="reason-refund">退货原因</label>
                 <div class="layui-input-block" id="refund-reason">
                     <select name="reason" id="refund_search_reason" lay-verify="required">
                         <option value="">请选择</option>
@@ -199,7 +199,7 @@
                 </div>
             </div>
             <div class="layui-inline layui-col-sm6">
-                <label class="layui-form-label ">罗氏处理意见</label>
+                <label class="layui-form-label " id="rConf-refund">罗氏意见</label>
                 <div class="layui-input-block" id="refund-rConf">
                     <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="refund_search_rConf" class="layui-input" placeholder="请输入" >
                     <div style="overflow: auto; height: 30px";>
@@ -210,10 +210,10 @@
         </div>
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm12">
-                <label class="layui-form-label" style="height: 80px;border-right: 1px solid #000;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
+                <label class="layui-form-label" id="checkResult-refund" style="height: 80px;border-right: 1px solid #000;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
                 <div class="layui-input-block">
                     <textarea id="refund-checkResult" name="checkResult"  placeholder="请输入"
-                              class="layui-textarea" lay-verify="required"></textarea>
+                              class="layui-textarea" ></textarea>
                 </div>
             </div>
         </div>
@@ -222,7 +222,7 @@
                 <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">备注</div></label>
                 <div class="layui-input-block" >
                     <textarea id="refund-remark" name="remark"  placeholder="请输入"
-                              class="layui-textarea" lay-verify="required"></textarea>
+                              class="layui-textarea" ></textarea>
                 </div>
             </div>
         </div>
@@ -240,7 +240,7 @@
         <div class="layui-form-item" style="border: 0;padding-top: 20px">
             <div class="layui-upload">
                 <div id="refund-upload-image">
-                    <img data-th-src="@{febs/images/image_add.png}" width="100px" height="100px" id="refund-chose">
+                    <img data-th-src="@{febs/images/image_add.png}" width="70px" height="70px" id="refund-chose">
                 </div>
                 <div class="layui-upload-list">
                     <table class="layui-table">
@@ -290,8 +290,9 @@
         </div>
     </form>
     <div class="layui-form-item">
-        <div style="margin-top: 75px;text-align: center;" shiro:hasPermission="refund:audit">
-            <button class="layui-btn" id="refund-submit" >提交</button>
+        <div style="margin-top: 75px;text-align: center;" >
+            <button class="layui-btn" id="refund-submit" shiro:hasPermission="refund:audit">提交</button>
+            <button class="layui-btn" id="refund-submit-alter" shiro:hasPermission="refund:alter">修改</button>
         </div>
     </div>
 </div>
@@ -306,6 +307,7 @@
             layer = layui.layer,
             form = layui.form,
             upload = layui.upload,
+            refundShow = [[${refundShow}]],
             commodity = [[${commodity}]],
             $view = $('#refund-detail');
 
@@ -319,35 +321,56 @@
         var type = "退货";
 
 
+
         $(function () {
-            if(commodity.rConf!==""&&commodity.rConf!==null){
-                $('#refund-rConf').html('');
-                $('#refund-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">');
+            if(commodity.rConf!==null&&commodity.rConf!==""){
+                if(refundShow==null||refundShow!=='1') {
+                    $('#refund-rConf').html('');
+                    $('#refund-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
+                        '                           class="layui-input " readonly="readonly">');
+                }
             }
-            if(commodity.reason!==""&&commodity.reason!==null){
-                $('#refund-reason').html('')
-                $('#refund-reason').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">')
+            if(commodity.reason!==null&&commodity.reason!=="") {
+                if (refundShow == null || refundShow !=='1') {
+                    $('#refund-reason').html('');
+                    $('#refund-reason').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
+                        '                           class="layui-input " readonly="readonly">')
+                }
             }
-            if(commodity.ba!==""&&commodity.ba!==null){
-                $('#refund-ba').html('')
-                $('#refund-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">')
+            if(commodity.ba!==null&&commodity.ba!==""){
+                if(refundShow==null||refundShow!=='1') {
+                    $('#refund-ba').html('');
+                    $('#refund-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
+                        '                           class="layui-input " readonly="readonly">')
+                }
             }
-            if(commodity.checkResult!==""&&commodity.checkResult!==null){
-                $('#refund-checkResult').attr("readonly","readonly");
+            if(commodity.checkResult!==null&&commodity.checkResult!==""){
+                if(refundShow==null||refundShow!=='1') {
+                    $('#refund-checkResult').attr("readonly", "readonly");
+                }
             }
-            if(commodity.remark!==""&&commodity.remark!==null){
+            if(commodity.compNumber!==null&&commodity.compNumber!==""){
+                if(refundShow==null||refundShow!=='1') {
+                    $('#refund-compNumber').attr("readonly", "readonly");
+                }
+            }
+            if(currentUser.roleId === "87"){
                 $('#refund-remark').attr("readonly","readonly");
-            }
-            if(commodity.compNumber!==""&&commodity.compNumber!==null){
-                $('#refund-compNumber').attr("readonly","readonly");
+                $('#source-refund').addClass("febs-form-item-require");
             }
             if(currentUser.roleId === "86"){
                 $('#refund-source').html('');
                 $('#refund-source').append('<input type="text" name="source"  maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">')
+                    '                           class="layui-input " readonly="readonly">');
+                $('#rConf-refund').addClass("febs-form-item-require");
+                $('#reason-refund').addClass("febs-form-item-require");
+                $('#ba-refund').addClass("febs-form-item-require");
+                $('#compNumber-refund').addClass("febs-form-item-require");
+            }
+            if(refundShow ==='1'){
+                $('#refund-submit').attr("style","display:none;")
+            }else {
+                $('#refund-submit-alter').attr("style","display:none;")
             }
         });
 
@@ -394,7 +417,7 @@
             ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
             ,multiple: true
             ,auto: true
-            ,size: 2048
+            ,size: 1024*10
             ,before: function(obj){
                 layer.load();
             }
@@ -411,7 +434,7 @@
                         }
                     }
                     if(!show){
-                        if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type!=='PNG') {
+                        // if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type!=='PNG') {
                             var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
                             '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
                             images.push(url);
@@ -425,23 +448,23 @@
                                     }
                                 }
                             });
-                        }else {
-                            var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
-                            '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
-
-                            images.push(url);
-                            input.find('.delsingle').on('click', function () {
-                                delete files[index];
-                                input.remove();
-                                deleteImage(url);
-                                for (var i =images.length-1 ; i>=0 ;i-- ){
-                                    if(images[i]===url){
-                                        delete images[i];
-                                    }
-                                }
-                            });
-                        }
-                        $("#refund-upload-image").append(input);
+                        // }else {
+                        //     var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
+                        //     '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
+                        //
+                        //     images.push(url);
+                        //     input.find('.delsingle').on('click', function () {
+                        //         delete files[index];
+                        //         input.remove();
+                        //         deleteImage(url);
+                        //         for (var i =images.length-1 ; i>=0 ;i-- ){
+                        //             if(images[i]===url){
+                        //                 delete images[i];
+                        //             }
+                        //         }
+                        //     });
+                        // }
+                        // $("#refund-upload-image").append(input);
                         $('#refund-List').append(tr);
 
                     }
@@ -463,16 +486,16 @@
                 var url = item.substring(item.lastIndexOf("/")+1);
                 var type =url.substring(url.lastIndexOf(".")+1,url.length);
                 var name =url.substring(0,url.lastIndexOf("."));
-                if(type==='jpg'||type ==='png'||type ==='gif') {
-                    $("#refund-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;"> \n' +
-                        '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
-                }else {
+                // if(type==='jpg'||type ==='png'||type ==='gif') {
+                //     $("#refund-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;"> \n' +
+                //         '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
+                // }else {
                     $('#refund-List').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
                         '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="refund-upload-' + index + '">下载</button></td></tr>');
                     $view.find('#refund-upload-'+index ).on('click',function () {
                         window.location.href=ctx +"file/uploadFile/"+url;
                     })
-                }
+                // }
             })
         });
         window.amplificationImg = function (name, url) {
@@ -532,9 +555,14 @@
             $view.find('#submit').trigger('click');
         });
 
+        $view.on('click', '#refund-submit-alter', function () {
+            $view.find('#submit').trigger('click');
+        });
+
+
         //提交更新
         form.on('submit(refund-form-submit)', function (data) {
-            $('#submit').attr("style","display:none;");
+
             if (febs.nativeEqual(data.field, commodity)) {
                 febs.alert.warn('数据未作任何修改！');
                 return false;
@@ -544,21 +572,30 @@
                     imageList+=images[i]+",";
             }
             data.field.images = imageList;
-            if(commodity.status ===1){
-                febs.post(ctx + 'commodity/commit', data.field, function (data) {
+            if(refundShow==='1'){
+                $('#refund-submit-alter').attr("style","display:none;");
+                febs.post(ctx + 'commodity/alter', data.field , function (data) {
                     layer.closeAll();
+                    $('#fbs-conserve').find('#conserve-query').click();
                     febs.alert.success('数据修改成功');
-                    $('#fbs-refund').find('#refund-query').click();
                 });
+            }else {
+                $('#refund-submit').attr("style","display:none;");
+                if(commodity.status ===1){
+                    febs.post(ctx + 'commodity/commit', data.field, function (data) {
+                        layer.closeAll();
+                        febs.alert.success('数据修改成功');
+                        $('#fbs-refund').find('#refund-query').click();
+                    });
+                }
+                if(commodity.status ===2){
+                    febs.post(ctx + 'commodity/agree', data.field, function (data) {
+                        layer.closeAll();
+                        febs.alert.success('数据修改成功');
+                        $('#fbs-refund').find('#refund-query').click();
+                    });
+                }
             }
-            if(commodity.status ===2){
-                febs.post(ctx + 'commodity/agree', data.field, function (data) {
-                    layer.closeAll();
-                    febs.alert.success('数据修改成功');
-                    $('#fbs-refund').find('#refund-query').click();
-                });
-            }
-
             return false;
         });
 

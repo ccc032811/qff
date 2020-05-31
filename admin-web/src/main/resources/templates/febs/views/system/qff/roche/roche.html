@@ -153,7 +153,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="roche-tag" class="layui-colla-title" style="background-color: white;height:0px;width: 0px" >
+                                <div id="roche-tag" class="layui-colla-title" style="background-color: white;height:0px;width: 0px;" >
                                     <i class="layui-icon tag-title" >&#xe61a;</i>
                                 </div>
                             </div>
@@ -178,16 +178,20 @@
 </script>
 <script type="text/html" id="roche-option">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
-    {{#  if(d.status == '4'){d.status = '异常'}}
-    {{#} else if(d.status != '3'){d.status = '完结'}}
-    {{#  if(d.isAllow == '1'){d.status = '可审核'}}
-    <a class="layui-btn layui-btn-xs" lay-event="roche-edit"  shiro:hasPermission="roche:audit">审核</a>
+    {{#  if(d.isAllow != '3'){d.status = '可审核'}}
+        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
+        <a class="layui-btn layui-btn-xs" lay-event="roche-edit"  shiro:hasPermission="roche:audit">审核</a>
+        {{#}}}
     {{#}}}
+    {{#  if(d.status != '4'){d.status = '异常'}}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-del" shiro:hasPermission="roche:del">删除</a>
     {{#}}}
 </script>
 <script type="text/html" id="toolbarCheck">
     <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm layui-btn-success" lay-event="roche-add" shiro:hasPermission="roche:add">
+            <i class="layui-icon">&#xe654;</i> 新增
+        </button>
         <button class="layui-btn layui-btn-sm" lay-event="download" shiro:hasPermission="roche:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
         </button>
@@ -270,7 +274,7 @@
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
-                height: 650,
+                height: 360,
                 id: 'rocheTable',          //表单id
                 url: ctx + 'roche/list',   //url
                 toolbar: '#toolbarCheck',     //开启头部工具栏
@@ -279,17 +283,20 @@
                     // {type: 'checkbox'},
                     {field: 'number', title: '编号',align:'center'},
                     {field: 'sponsor', title: '发起人',align:'center'},
-                    {field: 'reqDate', title: '申请日期',align:'center',minWidth: 110},
+                    {field: 'reqDate', title: '申请日期',align:'center'},
                     {field: 'materName', title: '物料名称',align:'center'},
                     {field: 'materCode', title: '物料编号',align:'center'},
                     {field: 'batch', title: '批号/序列号',align:'center'},
-                    {field: 'quantity', title: '受影响数量',align:'center',minWidth: 80},
+                    {field: 'quantity', title: '受影响数量',align:'center'},
                     {field: 'actions', title: '行动',align:'center'},
-                    {field: 'exceptDate', title: '期望完成日期',align:'center',minWidth: 110},
-                    // {field: 'completeDate', title: '实际完成日期',align:'center',width: 200},
-                    {title: '处理阶段', templet: '#roche-status',width: 90},
-                    {title: '操作', toolbar: '#roche-option',align:'center',width: 162}
-                ]]
+                    {field: 'exceptDate', title: '期望完成日期',align:'center'},
+                    {title: '处理阶段', templet: '#roche-status',align:'center'},
+                    {title: '操作', toolbar: '#roche-option',align:'center',width: 160}
+                ]],
+                done:function (res,curr,count) {
+                    $(".layui-table-header .layui-table thead tr th").css("border","1px solid white").css("background-color","#E8E8E8");
+                    $(".layui-table-body .layui-table-col-special .layui-table-cell .layui-btn").css("float","left").css("margin-top","4px");
+                }
             });
         }
 
@@ -318,6 +325,12 @@
                 params.pageSize = $view.find(".layui-laypage-limits option:selected").val();
                 params.pageNum = $view.find(".layui-laypage-em").next().html();
                 febs.download(ctx + 'roche/excel',params, '罗氏内部发起QFF.xlsx');
+
+            }
+            if (layEvent === 'roche-add') {
+                febs.modal.open('新增', 'system/qff/roche/add' , {
+                    area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '80%']
+                });
 
             }
         });

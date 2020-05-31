@@ -5,6 +5,7 @@ import com.neefull.fsp.web.common.entity.FebsConstant;
 import com.neefull.fsp.web.common.utils.FebsUtil;
 import com.neefull.fsp.web.qff.entity.*;
 import com.neefull.fsp.web.qff.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -63,6 +64,18 @@ public class ViewController extends BaseController {
         return FebsUtil.view("system/qff/commodity/deliveryAudit");
     }
 
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/deliveryAlter/{id}/{isShow}")
+    @RequiresPermissions("delivery:view")
+    public String getDeliveryAlter(@PathVariable Integer id,@PathVariable String isShow, Model model){
+        Commodity commodity = conserveService.queryCommodityById(id);
+        model.addAttribute("commodity", commodity);
+        if(StringUtils.isNotEmpty(isShow)){
+            model.addAttribute("deliveryShow", isShow);
+        }
+
+        return FebsUtil.view("system/qff/commodity/deliveryAudit");
+    }
+
     //***************************************************养护*****************************************************
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "conserve/view")
@@ -84,6 +97,17 @@ public class ViewController extends BaseController {
     public String getConserveAudit(@PathVariable Integer id, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
+        return FebsUtil.view("system/qff/commodity/conserveAudit");
+    }
+
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/conserveAlter/{id}/{isShow}")
+    @RequiresPermissions("conserve:view")
+    public String getConserveAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
+        Commodity commodity = conserveService.queryCommodityById(id);
+        model.addAttribute("commodity", commodity);
+        if(StringUtils.isNotEmpty(isShow)){
+            model.addAttribute("conserveShow", isShow);
+        }
         return FebsUtil.view("system/qff/commodity/conserveAudit");
     }
 
@@ -111,6 +135,17 @@ public class ViewController extends BaseController {
         return FebsUtil.view("system/qff/commodity/wrapperAudit");
     }
 
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/wrapperAlter/{id}/{isShow}")
+    @RequiresPermissions("wrapper:view")
+    public String getWrapperAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
+        Commodity commodity = conserveService.queryCommodityById(id);
+        model.addAttribute("commodity", commodity);
+        if(StringUtils.isNotEmpty(isShow)){
+            model.addAttribute("wrapperShow", isShow);
+        }
+        return FebsUtil.view("system/qff/commodity/wrapperAudit");
+    }
+
     //***************************************************出库*****************************************************
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "export/view")
@@ -132,6 +167,17 @@ public class ViewController extends BaseController {
     public String getExportAudit(@PathVariable Integer id, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
+        return FebsUtil.view("system/qff/commodity/exportAudit");
+    }
+
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/exportAlter/{id}/{isShow}")
+    @RequiresPermissions("export:view")
+    public String getExportAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
+        Commodity commodity = conserveService.queryCommodityById(id);
+        model.addAttribute("commodity", commodity);
+        if(StringUtils.isNotEmpty(isShow)){
+            model.addAttribute("exportShow", isShow);
+        }
         return FebsUtil.view("system/qff/commodity/exportAudit");
     }
 
@@ -181,7 +227,18 @@ public class ViewController extends BaseController {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
         return FebsUtil.view("system/qff/refund/refundAudit");
-}
+    }
+
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/refund/refundAlter/{id}/{isShow}")
+    @RequiresPermissions("refund:view")
+    public String getRefundAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
+        Commodity commodity = conserveService.queryCommodityById(id);
+        model.addAttribute("commodity", commodity);
+        if(StringUtils.isNotEmpty(isShow)){
+            model.addAttribute("refundShow", isShow);
+        }
+        return FebsUtil.view("system/qff/refund/refundAudit");
+    }
 
     //***********************************************罗氏内部发起***********************************************************
 

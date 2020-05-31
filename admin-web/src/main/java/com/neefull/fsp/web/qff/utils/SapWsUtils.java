@@ -55,7 +55,7 @@ public abstract class SapWsUtils {
             // 进行HTTP请求
             outObject = httpConn.getOutputStream();
             outObject.write(soapMsg.getBytes("utf-8"));
-//            System.out.println(httpConn.getResponseMessage());
+
             log.info(httpConn.getResponseMessage());
             // 获取HTTP响应数据
 

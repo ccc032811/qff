@@ -31,10 +31,19 @@ public class ProcessConstant {
 
     public static final String SIX_STEP = "_6";
 
-    public static final String ROCHE_NAME = "罗氏发起";
+    public static final String ROCHE_NAME = "罗氏内部发起";
 
     public static final String RECENT_NAME = "近效期";
 
+    public static final String DELIVERY_NAME = "到货";
+
+    public static final String CONSERVE_NAME = "养护";
+
+    public static final String EXPORT_NAME = "出库";
+
+    public static final String REFUND_NAME = "退货";
+
+    public static final String WRAPPER_NAME = "其他";
 
 
 }

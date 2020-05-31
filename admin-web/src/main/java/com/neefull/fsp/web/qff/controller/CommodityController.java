@@ -14,6 +14,7 @@ import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,17 @@ public class CommodityController extends BaseController {
             log.error(message,e);
             throw new FebsException(message);
         }
+    }
+
+    /**修改流程中的QFF
+     * @param commodity
+     * @return
+     */
+    @Qff("修改QFF")
+    @PostMapping("/alter")
+    public FebsResponse alterCommodity(Commodity commodity){
+        processService.alterCommodity(commodity,getCurrentUser());
+        return new FebsResponse().success();
     }
 
     /**查询QFF

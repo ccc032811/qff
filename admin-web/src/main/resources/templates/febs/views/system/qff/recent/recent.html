@@ -160,11 +160,12 @@
 </script>
 <script type="text/html" id="recent-option">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
-    {{#  if(d.status == '4'){d.status = '异常'}}
-    {{#} else if(d.status != '3'){d.status = '完结'}}
-    {{#  if(d.isAllow == '1'){d.status = '可审核'}}
+    {{#  if(d.isAllow != '3'){d.status = '可审核'}}
+        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
     <a class="layui-btn layui-btn-xs" lay-event="recent-edit"  shiro:hasPermission="recent:audit">审核</a>
+        {{#}}}
     {{#}}}
+    {{#  if(d.status != '4'){d.status = '异常'}}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-del" shiro:hasPermission="recent:del">删除</a>
     {{#}}}
 </script>
@@ -173,7 +174,7 @@
         <button class="layui-btn  layui-btn-sm layui-btn-success" lay-event="template-download"  shiro:hasPermission="recent:template" >
             <i class="layui-icon">&#xe82a;</i> 模板下载
         </button>
-        <button class="layui-btn layui-btn-sm " style="background-color: #87e8de" lay-event="recent-upload" id="recent-upload" shiro:hasPermission="recent:import">
+        <button class="layui-btn layui-btn-sm " style="background-color: #87e8de;"   lay-event="recent-upload" id="upload" shiro:hasPermission="recent:import">
             <i class="layui-icon">&#xe7aa;</i> 导入Excel
         </button>
         <button class="layui-btn layui-btn-sm" lay-event="recent-download" shiro:hasPermission="recent:down">
@@ -204,6 +205,36 @@
         element.render('collapse');
         //初始化表格
         initTable();
+
+        var uploadInst = upload.render({
+            elem:'#upload'
+            ,url: ctx+'file/resolver'
+            ,exts: 'xlsx|xls'
+            ,multiple: false
+            ,auto: true
+            ,size: 1024*5 //kb
+            ,before: function(obj){
+                layer.load();
+            }
+            ,done:function (res) {
+                if(res.code ===200){
+                    layer.closeAll('loading');
+                    febs.alert.success('操作成功');
+                    $query.click();
+                }else if(res.code ===500){
+                    layer.closeAll('loading');
+                    febs.alert.success('解析失败');
+                }
+            }
+        });
+
+        // $("body").on('click','.layui-btn',function () {
+        //     var type = $(this).data('type');
+        //     active[type] ? active[type].call(this):'';
+        // });
+
+
+
         //设置时间样式
         laydate.render({
             elem: '#recent-searchTime'
@@ -238,7 +269,7 @@
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
-                height: 650,
+                height: 360,
                 id: 'recentTable',          //表单id
                 url: ctx + 'recent/list',   //url
                 toolbar: '#toolbarCheck',     //开启头部工具栏
@@ -249,38 +280,20 @@
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
                     {field: 'rMater', title: '罗氏物料号',align:'center'},
                     {field: 'name', title: '产品名称',align:'center'},
-                    {field: 'useLife', title: '有效期',align:'center',minWidth: 110},
+                    {field: 'useLife', title: '有效期',align:'center'},
                     {field: 'batch', title: '批号',align:'center'},
                     {field: 'sapBatch', title: 'SAP 批次',align:'center'},
-                    {field: 'factory', title: '工厂',align:'center',minWidth: 80},
-                    {title: '处理阶段', templet: '#recent-status',width: 90},
-                    {title: '操作', toolbar: '#recent-option',align:'center',width: 162}
-                ]]
+                    {field: 'factory', title: '工厂',align:'center'},
+                    {title: '处理阶段', templet: '#recent-status',align:'center'},
+                    {title: '操作', toolbar: '#recent-option',align:'center',width: 160}
+                ]],
+                done:function (res,curr,count) {
+                    $(".layui-table-header .layui-table thead tr th").css("border","1px solid white").css("background-color","#E8E8E8");
+                    $(".layui-table-body .layui-table-col-special .layui-table-cell .layui-btn").css("float","left").css("margin-top","4px");
+                }
             });
         }
 
-
-        upload.render({
-            elem:'#recent-upload'
-            ,url: ctx+'file/resolver'
-            ,exts: 'xlsx|xls'
-            ,multiple: false
-            ,auto: true
-            ,size: 1024*5 //kb
-            ,before: function(obj){
-                layer.load();
-            }
-            ,done:function (res) {
-                if(res.code ===200){
-                    layer.closeAll('loading');
-                    febs.alert.success('操作成功');
-                    $query.click();
-                }else if(res.code ===500){
-                    layer.closeAll('loading');
-                    febs.alert.success('解析失败');
-                }
-            }
-        });
 
 
         //查询表单事件
@@ -311,6 +324,10 @@
             }
             if (layEvent === 'template-download'){
                 febs.download(ctx + 'file/template', null, 'Excel导入模板.xlsx');
+            }
+            if(layEvent === 'recent-upload'){
+                console.log(111111111111111)
+
             }
         });
 

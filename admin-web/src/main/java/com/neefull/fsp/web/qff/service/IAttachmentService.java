@@ -38,4 +38,5 @@ public interface IAttachmentService extends IService<Attachment> {
      */
     Boolean deleteImage(String url);
 
+    void deleteByNumber(String number,String typt);
 }

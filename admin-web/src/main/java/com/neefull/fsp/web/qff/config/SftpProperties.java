@@ -14,6 +14,8 @@ public class SftpProperties {
 
     private String sftpPath;
 
+    private String movepath;
+
     private String localPath;
 
     private String host;
@@ -28,6 +30,14 @@ public class SftpProperties {
 
     public void setSftpPath(String sftpPath) {
         this.sftpPath = sftpPath;
+    }
+
+    public String getMovepath() {
+        return movepath;
+    }
+
+    public void setMovepath(String movepath) {
+        this.movepath = movepath;
     }
 
     public String getLocalPath() {

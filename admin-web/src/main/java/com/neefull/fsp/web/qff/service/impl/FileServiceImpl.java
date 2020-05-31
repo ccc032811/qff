@@ -11,7 +11,9 @@ import com.neefull.fsp.web.qff.entity.RecentResolver;
 import com.neefull.fsp.web.qff.service.IAttachmentService;
 import com.neefull.fsp.web.qff.service.IFileService;
 import com.neefull.fsp.web.qff.service.IProcessService;
+import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
+import com.neefull.fsp.web.system.service.IUserService;
 import com.sun.mail.util.MailSSLSocketFactory;
 import com.wuwenze.poi.ExcelKit;
 import com.wuwenze.poi.handler.ExcelReadHandler;
@@ -25,6 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.imageio.ImageIO;
 import javax.mail.MessagingException;
@@ -52,6 +56,10 @@ public class FileServiceImpl implements IFileService {
     private ProcessInstanceProperties properties;
     @Autowired
     private SendMailProperties mailProperties;
+    @Autowired
+    private IUserService userService;
+    @Autowired
+    private TemplateEngine templateEngine;
 
 
     @Override
@@ -112,7 +120,6 @@ public class FileServiceImpl implements IFileService {
                         recent.setFactory(entity.getFactory());
                         recent.setWareHouse(entity.getWareHouse());
                         recent.setNumber(entity.getNumber());
-                        recent.setrConf(entity.getrConf());
                         list.add(recent);
                     }
                 }
@@ -125,11 +132,11 @@ public class FileServiceImpl implements IFileService {
             log.error("导入文件失败,原因为：{}",e.getMessage());
         }
 
-//        if(CollectionUtils.isNotEmpty(list)){
-//            for (Recent recent : list) {
-//                processService.commitProcess(recent,user);
-//            }
-//        }
+        if(CollectionUtils.isNotEmpty(list)){
+            for (Recent recent : list) {
+                processService.commitProcess(recent,user);
+            }
+        }
 
         if(CollectionUtils.isNotEmpty(errorList)){
             String count = "";
@@ -142,64 +149,48 @@ public class FileServiceImpl implements IFileService {
             log.info("导入失败数据,失败行数"+count);
         }
         //发送邮件
+        Context context = new Context();
+        context.setVariable("list",list);
+        String text = templateEngine.process("rocheRecent", context);
 
-        StringBuilder content=new StringBuilder("<html><head></head><body><h3>您好。当前从SAP系统获取数据如下：</h3>");
-        content.append("<tr><h3>具体详情如下表所示:</h3></tr>");
-        content.append("<table border='5' style='border:solid 1px #000;font-size=10px;'>");
-        content.append("<tr style='background-color: #00A1DD'><td>康德乐物料号</td>" +
-                "<td>罗氏物料号</td><td>产品物料号</td><td>有效期</td>" +
-                "<td>批号</td><td>SAP批次</td><td>工厂</td><td>库位</td><td>数量</td></tr>");
-        if(CollectionUtils.isNotEmpty(list)){
-            for (Recent recent : list) {
-                processService.commitProcess(recent,user);
-                content.append("<tr><td>"+recent.getkMater()+"</td><td>"+recent.getrMater()+"</td>" +
-                        "<td>"+recent.getName()+"</td><td>"+recent.getUseLife()+"</td>" +
-                        "<td>"+recent.getBatch()+"</td><td>"+recent.getSapBatch()+"</td>" +
-                        "<td>"+recent.getFactory()+"</td><td>"+recent.getWareHouse()+"</td><td>"+recent.getNumber()+"</td></tr>");
-            }
-        }
-
-        content.append("</table>");
-        content.append("</body></html>");
-
-        String text = content.toString();
-        sendMail(text);
+        String[] emails = getEmails(86);
+        sendMail(text,emails);
     }
 
 
     @Transactional
-    public  void sendMail(String text) {
+    public  void sendMail(String text,String[] emails) {
 
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(mailProperties.getHost());
         javaMailSender.setDefaultEncoding(mailProperties.getCharset());
         javaMailSender.setProtocol(mailProperties.getProtocol());
         javaMailSender.setPort(Integer.parseInt(mailProperties.getPort()));
-        javaMailSender.setUsername("ccc032811@163.com");//发送者的邮箱
-        javaMailSender.setPassword("ccc032811");//发送者的密码
+        javaMailSender.setUsername(mailProperties.getUsername());//发送者的邮箱
+        javaMailSender.setPassword(mailProperties.getPassword());//发送者的密码
 
         Properties prop = new Properties();
         prop.setProperty("mail.smtp.auth", mailProperties.getAuth());
 //        prop.setProperty("mail.smtp.timeout", mailProperties.getTimeout());
-        try {
-            MailSSLSocketFactory sf = new MailSSLSocketFactory();
-            sf.setTrustAllHosts(true);
-            prop.put("mail.smtp.ssl.enable", true);
-            prop.put("mail.smtp.ssl.socketFactory", sf);
-        } catch (
-                GeneralSecurityException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            MailSSLSocketFactory sf = new MailSSLSocketFactory();
+//            sf.setTrustAllHosts(true);
+//            prop.put("mail.smtp.ssl.enable", true);
+//            prop.put("mail.smtp.ssl.socketFactory", sf);
+//        } catch (
+//                GeneralSecurityException e) {
+//            e.printStackTrace();
+//        }
         javaMailSender.setJavaMailProperties(prop);
 
         MimeMessageHelper mimeMessageHelper = null;
         try {
             mimeMessageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);
-            mimeMessageHelper.setFrom("ccc032811@163.com");//发送的邮箱地址
-            mimeMessageHelper.setTo("ccc032811@163.com");//接收的邮箱地址
+            mimeMessageHelper.setFrom(mailProperties.getUsername());//发送的邮箱地址
+            mimeMessageHelper.setTo(emails);//接收的邮箱地址
 //            mimeMessageHelper.setTo("wangpei_it@163.com");//接收的邮箱地址
 //            mimeMessageHelper.setCc("");//抄送者的邮箱地址
-            mimeMessageHelper.setSubject("测试Springboot发送带附件的邮件,用来测试的");//邮件名称
+            mimeMessageHelper.setSubject("您当前需要处理的文件");//邮件名称
             mimeMessageHelper.setText(text,true);//邮箱文字内容
 
         } catch (
@@ -208,5 +199,15 @@ public class FileServiceImpl implements IFileService {
         }
 
         javaMailSender.send(mimeMessageHelper.getMimeMessage());
+    }
+
+
+    public String[] getEmails(Integer id){
+        List<User> userList = userService.findUserByRoleId(id);
+        List<String> userMails = new ArrayList<>();
+        for (User user : userList) {
+            userMails.add(user.getEmail());
+        }
+        return userMails.toArray(new String[0]);
     }
 }

@@ -35,6 +35,8 @@ public class StartSoap {
     private ICommodityService commodityService;
     @Autowired
     private IProcessService processService;
+    @Autowired
+    private IAttachmentService attachmentService;
 
 
     @Transactional
@@ -44,28 +46,6 @@ public class StartSoap {
         long startTime = System.currentTimeMillis();
 
         String soapMessage = SapWsUtils.getSoapMessage(seacheDate,fromTime,toTime,number);
-
-//
-//        StringBuffer message = new StringBuffer("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:soap=\"http://www.shaphar.com/SoapService\">\n" +
-//                "   <soapenv:Header/>\n" +
-//                "   <soapenv:Body>\n" +
-//                "      <soap:REQUEST_DATA>\n" +
-//                "         <soap:commonHeader>\n" +
-//                "            <soap:BIZTRANSACTIONID>1</soap:BIZTRANSACTIONID>\n" +
-//                "            <soap:COUNT>1</soap:COUNT>\n" +
-//                "            <soap:CONSUMER>1</soap:CONSUMER>\n" +
-//                "            <soap:SRVLEVEL>1</soap:SRVLEVEL>\n" +
-//                "            <soap:ACCOUNT>1</soap:ACCOUNT>\n" +
-//                "            <soap:PASSWORD>1</soap:PASSWORD>\n" +
-//                "            <soap:COMMENTS>1</soap:COMMENTS>\n" +
-//                "         </soap:commonHeader>\n" +
-//                "         <soap:LIST><![CDATA[<urn:ZCHN_FM_QFF xmlns:urn=\"urn:sap-com:document:sap:rfc:functions:ZCHN_FM_QFF_BS\"><urn:IV_QMNUM/><urn:IV_UDATE>2020-05-21</urn:IV_UDATE><urn:IV_UTIME_FROM>08:00:00</urn:IV_UTIME_FROM><urn:IV_UTIME_TO>23:00:00</urn:IV_UTIME_TO><urn:ET_QFF><urn:item><urn:QMNUM></urn:QMNUM><urn:HERKUNFT></urn:HERKUNFT><urn:MAWERK></urn:MAWERK><urn:MATNR></urn:MATNR><urn:MSTAE></urn:MSTAE><urn:CHARG></urn:CHARG><urn:IDNLF></urn:IDNLF><urn:BISMT></urn:BISMT><urn:LICHN></urn:LICHN><urn:HSDAT></urn:HSDAT><urn:VFDAT></urn:VFDAT><urn:MGEIG></urn:MGEIG><urn:QMTXT></urn:QMTXT><urn:ZPROCLAS></urn:ZPROCLAS><urn:REGNO></urn:REGNO><urn:AWBNO></urn:AWBNO><urn:ERDAT></urn:ERDAT></urn:item></urn:ET_QFF><urn:ET_QFF_ATT><urn:item><urn:QMNUM></urn:QMNUM><urn:ATTACHNAME></urn:ATTACHNAME><urn:ATTACH></urn:ATTACH></urn:item></urn:ET_QFF_ATT></urn:ZCHN_FM_QFF>]]></soap:LIST>\n" +
-//                "      </soap:REQUEST_DATA>\n" +
-//                "   </soapenv:Body>\n" +
-//                "</soapenv:Envelope>");
-//
-//        String soapMessage = message.toString();
-
 
         log.info("请求报文为："+soapMessage);
         //进行请求 获取soap返回结果
@@ -80,7 +60,6 @@ public class StartSoap {
         log.info("*****************Finish query from SAP server.******************");
 
         //对返回数据结果进行截取
-
         try {
 
             String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
@@ -122,15 +101,15 @@ public class StartSoap {
                     commodity.setType(stage);
 //                    commodity.setStage(XmlUtils.getTagContent(s,"<HERKUNFT>","</HERKUNFT>"));
                     if(stage.equals("01")){
-                        commodity.setStage("到货");
+                        commodity.setStage(ProcessConstant.DELIVERY_NAME);
                     }else if(stage.equals("09")){
-                        commodity.setStage("养护");
+                        commodity.setStage(ProcessConstant.CONSERVE_NAME);
                     }else if(stage.equals("10")||stage.equals("11")){
-                        commodity.setStage("出库");
+                        commodity.setStage(ProcessConstant.EXPORT_NAME);
                     }else if(stage.equals("05")){
-                        commodity.setStage("退货");
+                        commodity.setStage(ProcessConstant.REFUND_NAME);
                     } else {
-                        commodity.setStage("其他");
+                        commodity.setStage(ProcessConstant.WRAPPER_NAME);
                     }
                     commodity.setStatus(ProcessConstant.NEW_BUILD);
                     commodity.setAtt(0);
@@ -147,52 +126,56 @@ public class StartSoap {
                         StringBuilder alteration = new StringBuilder();
 
                         if(!commodity.getPlant().equals(isCommodity.getPlant())){
-                            alteration.append("Plant工厂: " +date+ "   由"+isCommodity.getPlant()+"变更为"+commodity.getPlant()+" 。  ");
+                            alteration.append("Plant工厂: " +date+ "。由"+isCommodity.getPlant()+"变更为"+commodity.getPlant()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getkMater().equals(isCommodity.getkMater())){
-                            alteration.append("KDLMaterial物料: " +date+ "   由"+isCommodity.getkMater()+"变更为"+commodity.getkMater()+" 。  ");
+                            alteration.append("KDLMaterial物料: " +date+ "。由"+isCommodity.getkMater()+"变更为"+commodity.getkMater()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getkBatch().equals(isCommodity.getkBatch())){
-                            alteration.append("康德乐SAP批次: " +date+ "   由"+isCommodity.getkBatch()+"变更为"+commodity.getkBatch()+" 。  ");
+                            alteration.append("康德乐SAP批次: " +date+ "。由"+isCommodity.getkBatch()+"变更为"+commodity.getkBatch()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getrMater().equals(isCommodity.getrMater())){
-                            alteration.append("罗氏物料号: " +date+ "   由"+isCommodity.getrMater()+"变更为"+commodity.getrMater()+" 。  ");
+                            alteration.append("罗氏物料号: " +date+ "。由"+isCommodity.getrMater()+"变更为"+commodity.getrMater()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getrBatch().equals(isCommodity.getrBatch())){
-                            alteration.append("罗氏批号: " +date+ "   由"+isCommodity.getrBatch()+"变更为"+commodity.getrBatch()+" 。  ");
+                            alteration.append("罗氏批号: " +date+ "。由"+isCommodity.getrBatch()+"变更为"+commodity.getrBatch()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getManuDate().equals(isCommodity.getManuDate())){
-                            alteration.append("生产日期: " +date+ "   由"+isCommodity.getManuDate()+"变更为"+commodity.getManuDate()+" 。  ");
+                            alteration.append("生产日期: " +date+ "。由"+isCommodity.getManuDate()+"变更为"+commodity.getManuDate()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getExpiryDate().equals(isCommodity.getExpiryDate())){
-                            alteration.append("有效期: " +date+ "   由"+isCommodity.getExpiryDate()+"变更为"+commodity.getExpiryDate()+" 。  ");
+                            alteration.append("有效期: " +date+ "。由"+isCommodity.getExpiryDate()+"变更为"+commodity.getExpiryDate()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getQuarantine().equals(isCommodity.getQuarantine())){
-                            alteration.append("异常总数: " +date+ "   由"+isCommodity.getQuarantine()+"变更为"+commodity.getQuarantine()+" 。  ");
+                            alteration.append("异常总数: " +date+ "。由"+isCommodity.getQuarantine()+"变更为"+commodity.getQuarantine()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getGetRemark().equals(isCommodity.getGetRemark())){
-                            alteration.append("Remark箱号: " +date+ "   由"+isCommodity.getGetRemark()+"变更为"+commodity.getGetRemark()+" 。  ");
+                            alteration.append("Remark箱号: " +date+ "。由"+isCommodity.getGetRemark()+"变更为"+commodity.getGetRemark()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getClassify().equals(isCommodity.getClassify())){
-                            alteration.append("产品分类: " +date+ "   由"+isCommodity.getClassify()+"变更为"+commodity.getClassify()+" 。  ");
+                            alteration.append("产品分类: " +date+ "。由"+isCommodity.getClassify()+"变更为"+commodity.getClassify()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getRegister().equals(isCommodity.getRegister())){
-                            alteration.append("注册证号: " +date+ "   由"+isCommodity.getRegister()+"变更为"+commodity.getRegister()+" 。  ");
+                            alteration.append("注册证号: " +date+ "。由"+isCommodity.getRegister()+"变更为"+commodity.getRegister()+" 。");
+                            rstart = true;
+                        }
+                        if(isCommodity.getStatus()==4){
                             rstart = true;
                         }
                         if(rstart){
 
                             commodityService.deleteCommoddityById(isCommodity.getId());
+                            attachmentService.deleteByNumber(isCommodity.getNumber(),isCommodity.getStage());
                             Boolean isExist = processService.queryProcessByKey(isCommodity);
                             if(isExist){
                                 processService.deleteInstance(isCommodity);

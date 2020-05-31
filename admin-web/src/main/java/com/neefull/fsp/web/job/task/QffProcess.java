@@ -17,11 +17,14 @@ import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.tomcat.jni.Proc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.io.File;
 import java.util.*;
@@ -47,6 +50,8 @@ public class QffProcess extends BaseController {
     private IUserService userService;
     @Autowired
     private SftpProperties properties;
+    @Autowired
+    private TemplateEngine templateEngine;
 
 
     @Transactional
@@ -99,21 +104,7 @@ public class QffProcess extends BaseController {
             }
         }
 
-        try {
-                sftp = new SftpUtils(properties.getHost(),properties.getUsername(),properties.getPassword());
-                sftp.connect();
-                if(!files.isEmpty()){
-                    Set<String> strings = files.keySet();
-                    for (String string : strings) {
-                        sftp.deleteSFTP(properties.getSftpPath(),string);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }finally {
-                sftp.disconnect();
-            }
-
+        List<Commodity> commodityList = new ArrayList<>();
 
         if(!commoditys.isEmpty()){
             Set<String> strings = commoditys.keySet();
@@ -121,30 +112,14 @@ public class QffProcess extends BaseController {
                 Commodity commodity = commoditys.get(string);
                 processService.commitProcess(commodity,new User());
                 commodityService.updateCommodityStatus(commodity.getId(), ProcessConstant.UNDER_REVIEW);
+                commodityList.add(commodity);
             }
 
             // 发送邮件
-            //拼接文件内容
-            StringBuilder content=new StringBuilder("<html><head></head><body><h3>您好。当前从系统获取数据如下：</h3>");
-            content.append("<tr><h3>具体详情如下表所示:</h3></tr>");
-            content.append("<table border='5' style='border:solid 1px #000;font-size=10px;'>");
-            content.append("<tr style='background-color: #00A1DD'><td>运输单号</td>" +
-                    "<td>QFF编号</td><td>Plant工厂</td><td>KDL Material物料</td>" +
-                    "<td>康德乐SAP 批次</td><td>罗氏物料号</td><td>药厂物料号</td><td>罗氏批号</td><td>生产日期</td>" +
-                    "<td>有效期</td><td>异常总数</td><td>Remark箱号/备注</td></tr>");
+            Context context = new Context();
+            context.setVariable("list",commodityList);
+            String text = templateEngine.process("rocheCommodity", context);
 
-            for (String string : strings) {
-                Commodity commodity = commoditys.get(string);
-                content.append("<tr><td>"+commodity.getTransport()+"</td><td>"+commodity.getNumber()+"</td>" +
-                        "<td>"+commodity.getPlant()+"</td><td>"+commodity.getkMater()+"</td>" +
-                        "<td>"+commodity.getkBatch()+"</td><td>"+commodity.getrMater()+"</td>" +
-                        "<td>"+commodity.getpMater()+"</td><td>"+commodity.getrBatch()+"</td><td>"+commodity.getManuDate()+"</td>" +
-                        "<td>"+commodity.getExpiryDate()+"</td><td>"+commodity.getQuarantine()+"</td><td>"+commodity.getRemark()+"</td></tr>");
-            }
-            content.append("</table>");
-            content.append("</body></html>");
-
-            String text = content.toString();
             //查询收件人
             List<User> userList = userService.findUserByRoleId(86);
             List<String> userMails = new ArrayList<>();
@@ -155,6 +130,28 @@ public class QffProcess extends BaseController {
 
             //发送邮件
             MailUtils.sendMail(text,mailProperties,mails,files);
+
+            try {
+                sftp = new SftpUtils(properties.getHost(),properties.getUsername(),properties.getPassword());
+                sftp.connect();
+                if(!files.isEmpty()){
+                    Set<String> fileList = files.keySet();
+                    for (String string : fileList) {
+                        String name = string.substring(0, string.lastIndexOf("."));
+                        String type = string.substring(string.lastIndexOf(".") + 1);
+
+                        String newName = name+ DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
+                        String newFile = newName+"."+type;
+                        sftp.remove(properties.getSftpPath()+string,properties.getMovepath()+newFile);
+//                        sftp.deleteSFTP(properties.getSftpPath(),string);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }finally {
+                sftp.disconnect();
+            }
+
 
         }
 

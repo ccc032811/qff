@@ -6,6 +6,7 @@
         background-color: white;
         position: fixed;
     }
+
 </style>
 <div class="layui-fluid layui-anim febs-anim" id="fbs-refund" lay-title="退货QFF">
     <div class="layui-row febs-container">
@@ -207,13 +208,19 @@
     {{# } }}
 </script>
 <script type="text/html" id="refund-option">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="refund-detail" shiro:hasPermission="refund:view">查看</a>
-    {{#  if(d.status == '4'){d.status = '异常'}}
-    {{#} else if(d.status != '3'){d.status = '完结'}}
-    {{#  if(d.isAllow == '1'){d.status = '可审核'}}
-    <a class="layui-btn layui-btn-xs" lay-event="refund-edit"  shiro:hasPermission="refund:audit">审核</a>
-    {{#}}}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-del" shiro:hasPermission="refund:del">删除</a>
+    {{#  if(d.status == '1'){d.status = '新建状态'}}
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="refund-detail" shiro:hasPermission="refund:view">查看</a>
+    {{# }else if(d.status == '3'){d.status = '审核完成'}}
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="refund-detail" shiro:hasPermission="refund:view">查看</a>
+    {{# }else if(d.status != '3'){d.status = '没审核完成'}}
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="refund-detail" shiro:hasPermission="refund:view">查看</a>
+        {{#  if(d.isAllow != '1'){d.status = '不可审核'}}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-alter"  shiro:hasPermission="refund:alter ">修改</a>
+        {{#}}}
+        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
+        <a class="layui-btn layui-btn-xs" lay-event="refund-edit"  shiro:hasPermission="refund:audit">审核</a>
+        {{#}}}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-del" shiro:hasPermission="refund:del">删除</a>
     {{#}}}
 </script>
 <script type="text/html" id="toolbarCheck">
@@ -291,7 +298,7 @@
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
-                height: 650,
+                height: 360,
                 id: 'refundTable',          //表单id
                 url: ctx + 'commodity/list',   //url
                 where:{stage:stage},
@@ -305,12 +312,16 @@
                     {field: 'rMater', title: '罗氏物料号',align:'center'},
                     {field: 'kBatch', title: '康德乐SAP批次',align:'center'},
                     {field: 'rBatch', title: '罗氏批号',align:'center'},
-                    {field: 'manuDate', title: '生产日期',align:'center',minWidth: 110},
-                    {field: 'expiryDate', title: '有效期',align:'center',minWidth: 110},
-                    {field: 'quarantine', title: '异常数',align:'center',minWidth: 80},
-                    {title: '处理阶段', templet: '#refund-status',width: 90},
-                    {title: '操作', toolbar: '#refund-option',align:'center',width: 162}
-                ]]
+                    {field: 'manuDate', title: '生产日期',align:'center'},
+                    {field: 'expiryDate', title: '有效期',align:'center'},
+                    {field: 'quarantine', title: '异常数',align:'center'},
+                    {title: '处理阶段', templet: '#refund-status',align:'center'},
+                    {title: '操作', toolbar: '#refund-option',align:'center',width: 160}
+                ]],
+                done:function (res,curr,count) {
+                    $(".layui-table-header .layui-table thead tr th").css("border","1px solid white").css("background-color","#E8E8E8");
+                    $(".layui-table-body .layui-table-col-special .layui-table-cell .layui-btn").css("float","left").css("margin-top","4px");
+                }
             });
         }
 
@@ -361,10 +372,15 @@
                     delRefund(data.id);
                 });
             }
+            if(layEvent ==='refund-alter'){
+                febs.modal.open('修改','system/qff/refund/refundAlter/'+data.id + '/'+'1',{
+                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
+                })
+            }
         });
 
         function delRefund(id) {
-            febs.get(ctx + 'commodity/deleteRefund/' + id, null, function () {
+            febs.get(ctx + 'commodity/deleteCommodity/' + id, null, function () {
                 febs.alert.success('操作成功');
                 $query.click();
             });

@@ -9,6 +9,7 @@ import com.neefull.fsp.web.others.entity.Eximport;
 import com.neefull.fsp.web.qff.aspect.Qff;
 import com.neefull.fsp.web.qff.config.ProcessInstanceProperties;
 import com.neefull.fsp.web.qff.config.SendMailProperties;
+import com.neefull.fsp.web.qff.config.SftpProperties;
 import com.neefull.fsp.web.qff.entity.Attachment;
 import com.neefull.fsp.web.qff.entity.Recent;
 import com.neefull.fsp.web.qff.entity.RecentResolver;
@@ -20,6 +21,7 @@ import com.wuwenze.poi.ExcelKit;
 import com.wuwenze.poi.handler.ExcelReadHandler;
 import com.wuwenze.poi.pojo.ExcelErrorField;
 import lombok.extern.slf4j.Slf4j;
+import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -62,6 +64,8 @@ public class FileController extends BaseController {
     private IFileService fileService;
     @Autowired
     private IProcessService processService;
+    @Autowired
+    private SftpProperties sftpProperties;
 
 
 
@@ -72,8 +76,8 @@ public class FileController extends BaseController {
     public FebsResponse findTask() throws FebsException {
         try {
             User user = getCurrentUser();
-            Integer count = processService.findTask(user.getUsername());
-            return new FebsResponse().success().data(count);
+            List<Task> list = processService.findTask(user.getUsername());
+            return new FebsResponse().success().data(list.size());
         } catch (Exception e) {
             String message = "查询需要完成的任务数失败";
             log.error(message,e);
@@ -158,7 +162,7 @@ public class FileController extends BaseController {
         OutputStream os=null;
         BufferedInputStream bis=null;
         try {
-            File file=new File(properties.getImagePath()+url);
+            File file=new File(sftpProperties.getLocalPath()+url);
             if(!file.exists()){
                 String message = "当前文件不存在或已损坏";
                 throw new FebsException(message);
@@ -206,7 +210,6 @@ public class FileController extends BaseController {
         }
     }
 
-
     /**解析exexl
      * @param file
      * @return
@@ -227,7 +230,6 @@ public class FileController extends BaseController {
         }
 
     }
-
 
     /**
      * 下载 Excel导入模板

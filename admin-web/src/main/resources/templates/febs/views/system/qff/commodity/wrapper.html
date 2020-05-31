@@ -219,14 +219,22 @@
     {{# } }}
 </script>
 <script type="text/html" id="wrapper-option">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="wrapper-detail" shiro:hasPermission="wrapper:view">查看</a>
-    {{#  if(d.status == '4'){d.status = '异常'}}
-    {{#} else if(d.status != '3'){d.status = '完结'}}
-    {{#  if(d.isAllow == '1'){d.status = '可审核'}}
-    <a class="layui-btn layui-btn-xs" lay-event="wrapper-edit"  shiro:hasPermission="wrapper:audit">审核</a>
+
+    {{#  if(d.status == '1'){d.status = '新建状态'}}
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="wrapper-detail" shiro:hasPermission="wrapper:view">查看</a>
+    {{# }else if(d.status == '3'){d.status = '审核完成'}}
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="wrapper-detail" shiro:hasPermission="wrapper:view">查看</a>
+    {{# }else if(d.status != '3'){d.status = '没审核完成'}}
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="wrapper-detail" shiro:hasPermission="wrapper:view">查看</a>
+        {{#  if(d.isAllow != '1'){d.status = '不可审核'}}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="wrapper-alter"  shiro:hasPermission="wrapper:alter ">修改</a>
+        {{#}}}
+        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
+        <a class="layui-btn layui-btn-xs" lay-event="wrapper-edit"  shiro:hasPermission="wrapper:audit">审核</a>
+        {{#}}}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="wrapper-del" shiro:hasPermission="wrapper:del">删除</a>
     {{#}}}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="wrapper-del" shiro:hasPermission="wrapper:del">删除</a>
-    {{#}}}
+
 </script>
 <script type="text/html" id="toolbarCheck">
     <div class="layui-btn-container">
@@ -301,7 +309,7 @@
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
-                height: 650,
+                height: 360,
                 id: 'wrapperTable',          //表单id
                 url: ctx + 'commodity/list',   //url
                 where:{stage:stage},
@@ -313,14 +321,18 @@
                     {field: 'plant', title: '工厂',align:'center'},
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
                     {field: 'rMater', title: '罗氏物料号',align:'center'},
-                    {field: 'quarantine', title: '异常数',align:'center',minWidth: 80},
-                    {field: 'initDate', title: '发起日期',align:'center',minWidth: 110},
-                    {field: 'repTime', title: '回复日期',align:'center',minWidth: 110},
-                    {field: 'rConf', title: '罗氏QA处理意见',align:'center',minWidth: 170},
-                    {field: 'reason', title: 'QFF原因',align:'center',minWidth: 170},
-                    {title: '处理阶段', templet: '#wrapper-status',width: 90},
-                    {title: '操作', toolbar: '#wrapper-option',align:'center',width: 162}
-                ]]
+                    {field: 'quarantine', title: '异常数',align:'center'},
+                    {field: 'initDate', title: '发起日期',align:'center'},
+                    {field: 'repTime', title: '回复日期',align:'center'},
+                    {field: 'rConf', title: '罗氏QA处理意见',align:'center'},
+                    {field: 'reason', title: 'QFF原因',align:'center'},
+                    {title: '处理阶段', templet: '#wrapper-status',align:'center'},
+                    {title: '操作', toolbar: '#wrapper-option',align:'center',width: 160}
+                ]],
+                done:function (res,curr,count) {
+                    $(".layui-table-header .layui-table thead tr th").css("border","1px solid white").css("background-color","#E8E8E8");
+                    $(".layui-table-body .layui-table-col-special .layui-table-cell .layui-btn").css("float","left").css("margin-top","4px");
+                }
             });
         }
 
@@ -369,6 +381,11 @@
                 febs.modal.confirm('删除该条数据','确定删除该条数据？', function () {
                     delCommodity(data.id);
                 });
+            }
+            if(layEvent ==='wrapper-alter'){
+                febs.modal.open('修改','system/qff/commodity/wrapperAlter/'+data.id + '/'+'1',{
+                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
+                })
             }
         });
 

@@ -25,6 +25,8 @@ import java.util.Date;
 @Excel("罗氏内部发起QFF")
 public class Roche implements Serializable {
     private static final long serialVersionUID = 4462069592504890849L;
+
+
     /**
      *  主键id
      */

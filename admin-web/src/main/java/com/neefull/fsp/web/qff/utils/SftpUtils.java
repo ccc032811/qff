@@ -30,7 +30,7 @@ public class SftpUtils {
     private String host;//服务器连接ip
     private String username;//用户名
     private String password;//密码
-    private int port = 3001;//端口号
+    private int port = 10022;//端口号
     private ChannelSftp sftp = null;
     private Session sshSession = null;
 
@@ -190,6 +190,14 @@ public class SftpUtils {
             }
         }
         return false;
+    }
+
+    public void remove(String oldPath,String newPath){
+        try {
+            sftp.rename(oldPath,newPath);
+        } catch (SftpException e) {
+            e.printStackTrace();
+        }
     }
 
 

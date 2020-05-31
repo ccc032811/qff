@@ -193,7 +193,7 @@
             <div class="layui-inline layui-col-sm12" >
                 <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">备注</div></label>
                 <div class="layui-input-block" >
-                    <textarea name="remark" lay-verify="required" placeholder="请输入" class="layui-textarea" ></textarea>
+                    <textarea name="remark"  placeholder="请输入" class="layui-textarea" ></textarea>
                 </div>
 
             </div>
@@ -406,15 +406,13 @@
         });
 
 
-
-
         $view.on('click', '#roche-submit', function () {
             $view.find('#submit').trigger('click');
         });
 
         //提交更新
         form.on('submit(roche-form-submit)', function (data) {
-            $('#submit').attr("style","display:none;");
+            $('#roche-submit').attr("style","display:none;");
             febs.post(ctx + 'roche/agree', data.field, function (data) {
                 layer.closeAll();
                 febs.alert.success('数据修改成功');

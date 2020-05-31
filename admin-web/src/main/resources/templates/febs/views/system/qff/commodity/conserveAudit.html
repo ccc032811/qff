@@ -159,7 +159,7 @@
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">QFF原因</label>
+                <label class="layui-form-label " id="reason-conserve">QFF原因</label>
                 <div class="layui-input-block" id="conserve-reason">
                     <input type="text" name="reason"  lay-verify="required" maxlength="50" autocomplete="off" list="conserve-search-reason" class="layui-input" placeholder="请输入">
                     <datalist id="conserve-search-reason" style="display:none;"></datalist>
@@ -167,15 +167,6 @@
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">BA</label>
-                <div class="layui-input-block" id = "conserve-ba" >
-                    <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="conserve-search-ba" class="layui-input" placeholder="请输入" >
-                    <div style="overflow: auto; height: 30px";>
-                        <datalist id="conserve-search-ba" style="display:none;"></datalist>
-                    </div>
-                </div>
-            </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">上报阶段</label>
                 <div class="layui-input-block" id="conserve-stage">
@@ -185,22 +176,24 @@
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">采购来源</label>
+                <label class="layui-form-label " id="source-conserve">采购来源</label>
                 <div class="layui-input-block" id = "conserve-source">
                     <select name="source" id="conserve-search-source" >
                         <option value="">请选择</option>
                     </select>
                 </div>
             </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">投诉编号</label>
-                <div class="layui-input-block">
-                    <input type="text" id="conserve-compNumber" name="compNumber" maxlength="50" autocomplete="off"
-                           class="layui-input " placeholder="请输入" lay-verify="required" >
+                <label class="layui-form-label " id="ba-conserve">BA</label>
+                <div class="layui-input-block" id = "conserve-ba" >
+                    <input type="text" name="ba"  lay-verify="required" maxlength="50" autocomplete="off" list="conserve-search-ba" class="layui-input" placeholder="请输入" >
+                    <div style="overflow: auto; height: 30px";>
+                        <datalist id="conserve-search-ba" style="display:none;"></datalist>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">注册证号</label>
                 <div class="layui-input-block">
@@ -216,6 +209,13 @@
 
                 </div>
             </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label " id="compNumber-conserve">投诉编号</label>
+                <div class="layui-input-block">
+                    <input type="text" id="conserve-compNumber" name="compNumber" maxlength="50" autocomplete="off"
+                           class="layui-input " placeholder="请输入" lay-verify="required" >
+                </div>
+            </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm6 ">
@@ -226,7 +226,7 @@
                 </div>
             </div>
             <div class="layui-inline layui-col-sm6">
-                <label class="layui-form-label ">罗氏处理意见</label>
+                <label class="layui-form-label " id="rConf-conserve">罗氏意见</label>
                 <div class="layui-input-block" id = "conserve-rConf" >
                     <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="conserve-search-rConf" class="layui-input" placeholder="请输入" >
                     <div style="overflow: auto; height: 30px";>
@@ -237,10 +237,10 @@
         </div>
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm12">
-                <label class="layui-form-label" style="height: 80px;border-right: 1px solid #000;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
+                <label class="layui-form-label" id="checkResult-conserve" style="height: 80px;border-right: 1px solid #000;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
                 <div class="layui-input-block">
                     <textarea id="conserve-checkResult" name="checkResult"  placeholder="请输入"
-                              class="layui-textarea" lay-verify="required"></textarea>
+                              class="layui-textarea" ></textarea>
                 </div>
             </div>
         </div>
@@ -249,7 +249,7 @@
                 <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">备注</div></label>
                 <div class="layui-input-block" >
                     <textarea id="conserve-remark" name="remark"  placeholder="请输入"
-                              class="layui-textarea" lay-verify="required"></textarea>
+                              class="layui-textarea" ></textarea>
                 </div>
 
             </div>
@@ -268,7 +268,7 @@
         <div class="layui-form-item" style="border: 0;padding-top: 20px">
             <div class="layui-upload">
                 <div id="conserve-upload-image">
-                    <img data-th-src="@{febs/images/image_add.png}" width="100px" height="100px" id="conserve-chose">
+                    <img data-th-src="@{febs/images/image_add.png}" width="70px" height="70px" id="conserve-chose">
                 </div>
                 <div class="layui-upload-list">
                     <table class="layui-table">
@@ -313,8 +313,9 @@
         </div>
     </form>
     <div class="layui-form-item">
-        <div  style="margin-top: 75px;text-align: center;" shiro:hasPermission="conserve:audit">
-            <button class="layui-btn" id="conserve-submit-control" >提交</button>
+        <div  style="margin-top: 75px;text-align: center;" >
+            <button class="layui-btn" id="conserve-submit-control" shiro:hasPermission="conserve:audit">提交</button>
+            <button class="layui-btn" id="conserve-submit-alter" shiro:hasPermission="conserve:alter">修改</button>
         </div>
     </div>
 
@@ -329,6 +330,7 @@
             form = layui.form,
             upload = layui.upload,
             commodity = [[${commodity}]],
+            conserveShow = [[${conserveShow}]],
             $view = $('#conserve-detail');
 
         var files = '';
@@ -344,43 +346,61 @@
 
         $(function () {
             if(commodity.rConf!==null&&commodity.rConf!==""){
-                $('#conserve-rConf').html('');
-                $('#conserve-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">');
+                if(conserveShow==null||conserveShow!=='1'){
+                    $('#conserve-rConf').html('');
+                    $('#conserve-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
+                        '                           class="layui-input " readonly="readonly">');
+                }
             }
-            if(commodity.reason!==null&&commodity.reason!==""){
-                $('#conserve-reason').html('');
-                $('#conserve-reason').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">')
+            if(commodity.reason!==null&&commodity.reason!=="") {
+                if(conserveShow==null||conserveShow!=='1') {
+                    $('#conserve-reason').html('');
+                    $('#conserve-reason').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
+                        '                           class="layui-input " readonly="readonly">');
+                }
             }
             if(commodity.ba!==null&&commodity.ba!==""){
-                $('#conserve-ba').html('');
-                $('#conserve-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">')
+                if(conserveShow==null||conserveShow!=='1') {
+                    $('#conserve-ba').html('');
+                    $('#conserve-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
+                        '                           class="layui-input " readonly="readonly">')
+                }
             }
             if(commodity.checkResult!==null&&commodity.checkResult!==""){
-                $('#conserve-checkResult').attr("readonly","readonly");
-            }
-            if(commodity.remark!==null&&commodity.remark!==""){
-                $('#conserve-remark').attr("readonly","readonly");
+                if(conserveShow==null||conserveShow!=='1') {
+                    $('#conserve-checkResult').attr("readonly", "readonly");
+                }
             }
             if(commodity.compNumber!==null&&commodity.compNumber!==""){
-                $('#conserve-compNumber').attr("readonly","readonly");
+                if(conserveShow==null||conserveShow!=='1') {
+                    $('#conserve-compNumber').attr("readonly", "readonly");
+                }
+            }
+            if(currentUser.roleId === "87"){
+                $('#conserve-remark').attr("readonly","readonly");
+                $('#source-conserve').addClass("febs-form-item-require");
             }
             if(currentUser.roleId === "86"){
                 $('#conserve-stage').html('');
                 $('#conserve-stage').append(' <input type="text" name="stage"  maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">')
+                    '                           class="layui-input " readonly="readonly">');
                 $('#conserve-source').html('');
                 $('#conserve-source').append('<input type="text" name="source"  maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">')
+                    '                           class="layui-input " readonly="readonly">');
+                $('#rConf-conserve').addClass("febs-form-item-require");
+                $('#reason-conserve').addClass("febs-form-item-require");
+                $('#ba-conserve').addClass("febs-form-item-require");
+                $('#compNumber-conserve').addClass("febs-form-item-require");
             }
             if(commodity.isDanger === '01'){
                 $("#isDanger").attr("value","危险");
-            }else if(commodity.isDanger === ''){
-                $("#isDanger").attr("value","");
             }else{
                 $("#isDanger").attr("value","不危险");
+            }
+            if(conserveShow === '1'){
+                $('#conserve-submit-control').attr("style","display:none;")
+            }else {
+                $('#conserve-submit-alter').attr("style","display:none;")
             }
 
         });
@@ -430,7 +450,7 @@
             ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
             ,multiple: true
             ,auto: true
-            ,size: 2048
+            ,size: 1020*10
             ,before: function(obj){
                 layer.load();
             }
@@ -447,7 +467,7 @@
                         }
                     }
                     if(!show){
-                        if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type !=='PNG') {
+                        // if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type !=='PNG') {
                             var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
                                   '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
                             images.push(url);
@@ -461,24 +481,23 @@
                                     }
                                 }
                             });
-                        }else {
-                            var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
-                            '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
-
-                            images.push(url);
-                            input.find('.delsingle').on('click', function () {
-                                delete files[index];
-                                input.remove();
-                                deleteImage(url);
-                                for (var i =images.length-1 ; i>=0 ;i-- ){
-                                    if(images[i]===url){
-                                        delete images[i];
-                                    }
-                                }
-                            });
-                        }
-
-                        $("#conserve-upload-image").append(input);
+                        // }else {
+                        //     var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
+                        //     '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
+                        //
+                        //     images.push(url);
+                        //     input.find('.delsingle').on('click', function () {
+                        //         delete files[index];
+                        //         input.remove();
+                        //         deleteImage(url);
+                        //         for (var i =images.length-1 ; i>=0 ;i-- ){
+                        //             if(images[i]===url){
+                        //                 delete images[i];
+                        //             }
+                        //         }
+                        //     });
+                        // }
+                        // $("#conserve-upload-image").append(input);
                         $('#conserve-List').append(tr);
 
                     }
@@ -489,7 +508,7 @@
 
 
         function deleteImage(url){
-            febs.get(ctx + "file/deleteImage/"+url , function (res) {
+            $.get(ctx + "file/deleteImage/"+url , function (res) {
                 if(res.code === 200) {
                     febs.alert.success('删除成功');
                 }
@@ -503,17 +522,17 @@
                 var type =url.substring(url.lastIndexOf(".")+1,url.length);
                 var name =url.substring(0,url.lastIndexOf("."));
 
-                if(type==='jpg'||type ==='png'||type ==='gif'||type ==='PNG') {
-                    $("#conserve-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px"> \n' +
-                        '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
-                }else {
+                // if(type==='jpg'||type ==='png'||type ==='gif'||type ==='PNG') {
+                //     $("#conserve-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px"> \n' +
+                //         '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
+                // }else {
                     $('#conserve-List').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
                                           '<td style="width: 10%"><button class="layui-btn layui-btn-xs " type="button" id="conserve-upload-' + index + '" >下载</button></td></tr>');
                     $view.find('#conserve-upload-'+index ).on('click',function () {
                         // window.open(ctx +"file/uploadFile/"+item)
                         window.location.href=ctx +"file/uploadFile/"+url;
                     })
-                }
+                // }
             })
         });
 
@@ -574,36 +593,64 @@
             $view.find('#conserve-submit').trigger('click');
         });
 
+        $view.on('click', '#conserve-submit-alter', function () {
+            $view.find('#conserve-submit').trigger('click');
+        });
+
+
 
         //提交更新
         form.on('submit(conserve-form-submit)', function (data) {
-            $('#conserve-submit').attr("style","display:none;");
             if (febs.nativeEqual(data.field, commodity)) {
                 febs.alert.warn('数据未作任何修改！');
                 return false;
             }
-
             for (var i = 0; i<=images.length-1;i++){
                 if(images[i]!== undefined)
                 imageList+=images[i]+",";
             }
             data.field.images = imageList;
-            if(commodity.status ===1){
-                febs.post(ctx + 'commodity/commit', data.field , function (data) {
+            if(conserveShow ==='1'){
+                $('#conserve-submit-alter').attr("style","display:none;");
+                febs.post(ctx + 'commodity/alter', data.field , function (data) {
                     layer.closeAll();
                     $('#fbs-conserve').find('#conserve-query').click();
                     febs.alert.success('数据修改成功');
                 });
-            }
-            if(commodity.status ===2){
-                febs.post(ctx + 'commodity/agree', data.field , function (data) {
-                    layer.closeAll();
-                    $('#fbs-conserve').find('#conserve-query').click();
-                    febs.alert.success('数据修改成功');
-                });
+            }else {
+                $('#conserve-submit-control').attr("style","display:none;");
+                if(commodity.status ===1){
+                    febs.post(ctx + 'commodity/commit', data.field , function (data) {
+                        layer.closeAll();
+                        $('#fbs-conserve').find('#conserve-query').click();
+                        febs.alert.success('数据修改成功');
+                    });
+                }
+                if(commodity.status ===2){
+                    febs.post(ctx + 'commodity/agree', data.field , function (data) {
+                        layer.closeAll();
+                        $('#fbs-conserve').find('#conserve-query').click();
+                        febs.alert.success('数据修改成功');
+                    });
+                }
             }
             return false;
         });
+
+
+        // form.on('submit(conserve-form-submit)', function (data) {
+        //
+        //     if (febs.nativeEqual(data.field, commodity)) {
+        //         febs.alert.warn('数据未作任何修改！');
+        //         return false;
+        //     }
+        //     for (var i = 0; i<=images.length-1;i++){
+        //         if(images[i]!== undefined)
+        //             imageList+=images[i]+",";
+        //     }
+        //     data.field.images = imageList;
+        //
+        // });
 
 
         $.get(ctx +"opinion/getOpinion/"+rConf,function(res){

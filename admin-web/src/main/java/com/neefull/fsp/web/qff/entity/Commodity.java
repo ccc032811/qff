@@ -28,6 +28,7 @@ public class Commodity implements Serializable {
 
 
     private static final long serialVersionUID = -3702719768627092566L;
+
     /**
      *  主键id
      */
@@ -247,7 +248,7 @@ public class Commodity implements Serializable {
     @TableField(exist = false)
     private Integer pageNum;
     /**
-     * 是否能审核
+     * 是否能审核  0 表示可以
      */
     @TableField(exist = false)
     private Integer isAllow;
@@ -557,4 +558,6 @@ public class Commodity implements Serializable {
     public void setIsAllow(Integer isAllow) {
         this.isAllow = isAllow;
     }
+
+
 }

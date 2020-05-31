@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>罗氏</title>
+</head>
+<body>
+    <span>Dear Partner，</span><br>
+    <br>
+    <spna>您有待处理QFF如下，请登录系统查看处理，谢谢。</spna><br>
+    <span>统一供应链门户：<a href="https://qff-stg.shaphar.com">https://qff-stg.shaphar.com</a> </span>
+    <table style='border:solid 1px #000;font-size: 20px;'>
+        <tr style='background-color: #00A1DD'>
+            <td>运输单号</td>
+            <td>QFF编号</td>
+            <td>Plant工厂</td>
+            <td>KDL Material物料</td>
+            <td>康德乐SAP 批次</td>
+            <td>罗氏物料号</td>
+            <td>药厂物料号</td>
+            <td>罗氏批号</td>
+            <td>生产日期</td>
+            <td>有效期</td>
+            <td>异常总数</td>
+            <td>Remark箱号/备注</td>
+        </tr>
+        <p th:each="commodity:${list}">
+            <tr>
+                <td th:text="${commodity.transport}"></td>
+                <td th:text="${commodity.number}"></td>
+                <td th:text="${commodity.plant}"></td>
+                <td th:text="${commodity.kMater}"></td>
+                <td th:text="${commodity.kBatch}"></td>
+                <td th:text="${commodity.rMater}"></td>
+                <td th:text="${commodity.pMater}"></td>
+                <td th:text="${commodity.rBatch}"></td>
+                <td th:text="${commodity.manuDate}"></td>
+                <td th:text="${commodity.expiryDate}"></td>
+                <td th:text="${commodity.quarantine}"></td>
+                <td th:text="${commodity.getRemark}"></td>
+            </tr>
+        </p>
+    </table>
+
+</body>
+<style>
+    td{
+        border:solid 1px #000;
+        text-align: center;
+    }
+    tr {
+        border:solid 1px #000;
+    }
+    span{
+        font-size: 20px;
+        font-family: "宋体";
+    }
+</style>
+</html>

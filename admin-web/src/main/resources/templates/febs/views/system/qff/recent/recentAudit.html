@@ -125,14 +125,14 @@
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">罗氏处理意见</label>
+                <label class="layui-form-label " id="rConf-recent">罗氏意见</label>
                 <div class="layui-input-block" id="rConf">
                     <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="search_rConf" class="layui-input" placeholder="请输入" >
                     <datalist id="search_rConf" style="display:none;"></datalist>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label " >回复日期</label>
+                <label class="layui-form-label " id="repDate-recent">回复日期</label>
                 <div class="layui-input-block">
                     <input type="text" name="repDate" id="recent-repDated" class="layui-input" placeholder="请选择时间">
                 </div>
@@ -235,6 +235,16 @@
             ,btns: ['clear']
         });
 
+        $(function () {
+            if(recent.rConf ===null||recent.rConf ===""){
+                $('#rConf-recent').addClass("febs-form-item-require")
+            }
+            if(recent.repDate ===null||recent.repDate ===""){
+                $('#repDate-recent').addClass("febs-form-item-require")
+            }
+
+        })
+
         //表单渲染
         form.render();
 
@@ -266,7 +276,7 @@
             ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
             ,multiple: true
             ,auto: true
-            ,size: 2048
+            ,size: 1024*10
             ,before: function(obj){
                 layer.load();
             }
@@ -413,7 +423,7 @@
 
         //提交更新
         form.on('submit(recent-form-submit)', function (data) {
-            $('#submit').attr("style","display:none;");
+            $('#recent-submit').attr("style","display:none;");
             if (febs.nativeEqual(data.field, recent)) {
                 febs.alert.warn('数据未作任何修改！');
                 return false;

@@ -155,7 +155,7 @@
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">QFF原因</label>
+                <label class="layui-form-label " id="reason-export">QFF原因</label>
                 <div class="layui-input-block" id="export-reason">
                     <input type="text" name="reason"  lay-verify="required" maxlength="50" autocomplete="off" list="export-search-reason" class="layui-input" placeholder="请输入">
                     <datalist id="export-search-reason" style="display:none;"></datalist>
@@ -163,15 +163,6 @@
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">BA</label>
-                <div class="layui-input-block" id = "export-ba" >
-                    <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="export-search-ba" class="layui-input" placeholder="请输入" >
-                    <div style="overflow: auto; height: 30px";>
-                        <datalist id="export-search-ba" style="display:none;"></datalist>
-                    </div>
-                </div>
-            </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">上报阶段</label>
                 <div class="layui-input-block" id="export-stage">
@@ -181,22 +172,24 @@
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">采购来源</label>
+                <label class="layui-form-label " id="source-export">采购来源</label>
                 <div class="layui-input-block" id = "export-source">
                     <select name="source" id="export-search-source" >
                         <option value="">请选择</option>
                     </select>
                 </div>
             </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">投诉编号</label>
-                <div class="layui-input-block">
-                    <input type="text" id="export-compNumber" name="compNumber" maxlength="50" autocomplete="off"
-                           class="layui-input " placeholder="请输入"  lay-verify="required">
+                <label class="layui-form-label " id="ba-export">BA</label>
+                <div class="layui-input-block" id = "export-ba" >
+                    <input type="text" name="ba"  lay-verify="required" maxlength="50" autocomplete="off" list="export-search-ba" class="layui-input" placeholder="请输入" >
+                    <div style="overflow: auto; height: 30px";>
+                        <datalist id="export-search-ba" style="display:none;"></datalist>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">注册证号</label>
                 <div class="layui-input-block">
@@ -212,6 +205,13 @@
 
                 </div>
             </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label " id="compNumber-export">投诉编号</label>
+                <div class="layui-input-block">
+                    <input type="text" id="export-compNumber" name="compNumber" maxlength="50" autocomplete="off"
+                           class="layui-input " placeholder="请输入"  lay-verify="required">
+                </div>
+            </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm6 ">
@@ -222,7 +222,7 @@
                 </div>
             </div>
             <div class="layui-inline layui-col-sm6">
-                <label class="layui-form-label ">罗氏处理意见</label>
+                <label class="layui-form-label " id="rConf-export">罗氏意见</label>
                 <div class="layui-input-block" id = "export-rConf" >
                     <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="export-search-rConf" class="layui-input" placeholder="请输入" >
                     <div style="overflow: auto; height: 30px";>
@@ -233,10 +233,10 @@
         </div>
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm12">
-                <label class="layui-form-label" style="height: 80px;border-right: 1px solid #000;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
+                <label class="layui-form-label" id="checkResult-export" style="height: 80px;border-right: 1px solid #000;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
                 <div class="layui-input-block">
                     <textarea id="export-checkResult" name="checkResult"  placeholder="请输入"
-                              class="layui-textarea" lay-verify="required"></textarea>
+                              class="layui-textarea" ></textarea>
                 </div>
             </div>
         </div>
@@ -245,7 +245,7 @@
                 <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">备注</div></label>
                 <div class="layui-input-block" >
                     <textarea id="export-remark" name="remark"  placeholder="请输入"
-                              class="layui-textarea" lay-verify="required"></textarea>
+                              class="layui-textarea"></textarea>
                 </div>
 
             </div>
@@ -264,7 +264,7 @@
         <div class="layui-form-item" style="border: 0;padding-top: 20px">
             <div class="layui-upload">
                 <div id="export-upload-image">
-                    <img data-th-src="@{febs/images/image_add.png}" width="100px" height="100px" id="export-chose">
+                    <img data-th-src="@{febs/images/image_add.png}" width="70px" height="70px" id="export-chose">
                 </div>
                 <div class="layui-upload-list">
                     <table class="layui-table">
@@ -310,8 +310,9 @@
         </div>
     </form>
     <div class="layui-form-item">
-        <div  style="margin-top: 75px;text-align: center;" shiro:hasPermission="export:audit">
-            <button class="layui-btn" id="export-submit-control" >提交</button>
+        <div  style="margin-top: 75px;text-align: center;" >
+            <button class="layui-btn" id="export-submit-control" shiro:hasPermission="export:audit">提交</button>
+            <button class="layui-btn" id="export-submit-alter" shiro:hasPermission="export:alter">修改</button>
         </div>
     </div>
 </div>
@@ -326,6 +327,7 @@
             form = layui.form,
             upload = layui.upload,
             commodity = [[${commodity}]],
+            exportShow = [[${exportShow}]],
             $view = $('#export-detail');
 
         var files ="";
@@ -340,29 +342,40 @@
 
 
         $(function () {
-            if(commodity.rConf!==""&&commodity.rConf!==null){
-                $("#export-rConf").html('');
-                $('#export-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">');
+            if(commodity.rConf!==null&&commodity.rConf!==""){
+                if(exportShow==null||exportShow!=='1') {
+                    $('#export-rConf').html('');
+                    $('#export-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
+                        '                           class="layui-input " readonly="readonly">');
+                }
             }
-            if(commodity.reason!==""&&commodity.reason!==null){
-                $('#export-reason').html('');
-                $('#export-reason').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">')
+            if(commodity.reason!==null&&commodity.reason!==""){
+                if(exportShow==null||exportShow!=='1') {
+                    $('#export-reason').html('');
+                    $('#export-reason').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
+                        '                           class="layui-input " readonly="readonly">')
+                }
             }
-            if(commodity.ba!==""&&commodity.ba!==null){
-                $('#export-ba').html('');
-                $('#export-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">')
+            if(commodity.ba!==null&&commodity.ba!==""){
+                if(exportShow==null||exportShow!=='1') {
+                    $('#export-ba').html('');
+                    $('#export-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
+                        '                           class="layui-input " readonly="readonly">')
+                }
             }
-            if(commodity.checkResult!==""&&commodity.checkResult!==null){
-                $('#export-checkResult').attr("readonly","readonly");
+            if(commodity.checkResult!==null&&commodity.checkResult!==""){
+                if(exportShow==null||exportShow!=='1') {
+                    $('#export-checkResult').attr("readonly", "readonly");
+                }
             }
-            if(commodity.remark!==""&&commodity.remark!==null){
+            if(commodity.compNumber!==null&&commodity.compNumber!==""){
+                if(exportShow==null||exportShow!=='1') {
+                    $('#export-compNumber').attr("readonly", "readonly");
+                }
+            }
+            if(currentUser.roleId === "87"){
                 $('#export-remark').attr("readonly","readonly");
-            }
-            if(commodity.compNumber!==""&&commodity.compNumber!==null){
-                $('#export-compNumber').attr("readonly","readonly");
+                $('#source-export').addClass("febs-form-item-require")
             }
             if(currentUser.roleId === "86"){
                 $('#export-stage').html('');
@@ -370,14 +383,21 @@
                     '                           class="layui-input " readonly="readonly">');
                 $('#export-source').html('');
                 $('#export-source').append('<input type="text" name="source"  maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">')
+                    '                           class="layui-input " readonly="readonly">');
+                $('#rConf-export').addClass("febs-form-item-require");
+                $('#reason-export').addClass("febs-form-item-require");
+                $('#ba-export').addClass("febs-form-item-require");
+                $('#compNumber-export').addClass("febs-form-item-require");
             }
             if(commodity.isDanger === '01'){
                 $("#isDanger").attr("value","危险");
-            }else if(commodity.isDanger === ''){
-                $("#isDanger").attr("value","");
             }else{
                 $("#isDanger").attr("value","不危险");
+            }
+            if(exportShow ==='1'){
+                $('#export-submit-control').attr("style","display:none;")
+            }else {
+                $('#export-submit-alter').attr("style","display:none;")
             }
         });
 
@@ -426,7 +446,7 @@
             ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
             ,multiple: true
             ,auto: true
-            ,size: 2048
+            ,size: 1024*10
             ,before: function(obj){
                 layer.load();
             }
@@ -443,7 +463,7 @@
                         }
                     }
                     if(!show){
-                        if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type!=="PNG") {
+                        // if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type!=="PNG") {
                             var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
                             '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
                             images.push(url);
@@ -457,23 +477,23 @@
                                     }
                                 }
                             });
-                        }else {
-                            var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
-                            '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
-
-                            images.push(url);
-                            input.find('.delsingle').on('click', function () {
-                                delete files[index];
-                                input.remove();
-                                deleteImage(url);
-                                for (var i =images.length-1 ; i>=0 ;i-- ){
-                                    if(images[i]===url){
-                                        delete images[i];
-                                    }
-                                }
-                            });
-                        }
-                        $("#export-upload-image").append(input);
+                        // }else {
+                        //     var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
+                        //     '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
+                        //
+                        //     images.push(url);
+                        //     input.find('.delsingle').on('click', function () {
+                        //         delete files[index];
+                        //         input.remove();
+                        //         deleteImage(url);
+                        //         for (var i =images.length-1 ; i>=0 ;i-- ){
+                        //             if(images[i]===url){
+                        //                 delete images[i];
+                        //             }
+                        //         }
+                        //     });
+                        // }
+                        // $("#export-upload-image").append(input);
                         $('#export-List').append(tr);
 
                     }
@@ -497,16 +517,16 @@
                 var type =url.substring(url.lastIndexOf(".")+1,url.length);
                 var name =url.substring(0,url.lastIndexOf("."));
 
-                if(type==='jpg'||type ==='png'||type ==='gif') {
-                    $("#export-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;"> \n' +
-                        '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
-                }else {
+                // if(type==='jpg'||type ==='png'||type ==='gif') {
+                //     $("#export-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;"> \n' +
+                //         '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
+                // }else {
                     $('#export-List').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
                                              '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="export-upload-' + index + '">下载</button></td></tr>');
                     $view.find('#export-upload-'+index ).on('click',function () {
                         window.location.href=ctx +"file/uploadFile/"+url;
                     })
-                }
+                // }
             })
         });
         window.amplificationImg = function (name, url) {
@@ -565,9 +585,14 @@
             $view.find('#export-submit').trigger('click');
         });
 
+        $view.on('click', '#export-submit-alter', function () {
+            $view.find('#export-submit').trigger('click');
+        });
+
+
         //提交更新
         form.on('submit(export-form-submit)', function (data) {
-            $('#export-submit').attr("style","display:none;");
+
             if (febs.nativeEqual(data.field, commodity)) {
                 febs.alert.warn('数据未作任何修改！');
                 return false;
@@ -577,20 +602,32 @@
                     imageList+=images[i]+",";
             }
             data.field.images = imageList;
-            if(commodity.status ===1){
-                febs.post(ctx + 'commodity/commit', data.field , function (data) {
+
+            if(exportShow==='1'){
+                $('#export-submit-alter').attr("style","display:none;");
+                febs.post(ctx + 'commodity/alter', data.field , function (data) {
                     layer.closeAll();
-                    $('#fbs-export').find('#export-query').click();
+                    $('#fbs-conserve').find('#conserve-query').click();
                     febs.alert.success('数据修改成功');
                 });
+            }else {
+                $('#export-submit-control').attr("style","display:none;");
+                if(commodity.status ===1){
+                    febs.post(ctx + 'commodity/commit', data.field , function (data) {
+                        layer.closeAll();
+                        $('#fbs-export').find('#export-query').click();
+                        febs.alert.success('数据修改成功');
+                    });
+                }
+                if(commodity.status ===2){
+                    febs.post(ctx + 'commodity/agree', data.field , function (data) {
+                        layer.closeAll();
+                        $('#fbs-export').find('#export-query').click();
+                        febs.alert.success('数据修改成功');
+                    });
+                }
             }
-            if(commodity.status ===2){
-                febs.post(ctx + 'commodity/agree', data.field , function (data) {
-                    layer.closeAll();
-                    $('#fbs-export').find('#export-query').click();
-                    febs.alert.success('数据修改成功');
-                });
-            }
+
             return false;
         });
 

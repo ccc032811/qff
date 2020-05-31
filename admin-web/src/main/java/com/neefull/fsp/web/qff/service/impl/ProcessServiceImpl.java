@@ -1,8 +1,10 @@
 package com.neefull.fsp.web.qff.service.impl;
 
 import com.neefull.fsp.web.qff.config.ProcessInstanceProperties;
+import com.neefull.fsp.web.qff.config.SendMailProperties;
 import com.neefull.fsp.web.qff.entity.*;
 import com.neefull.fsp.web.qff.service.*;
+import com.neefull.fsp.web.qff.utils.MailUtils;
 import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
@@ -17,10 +19,13 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.validation.constraints.NotBlank;
 import java.io.File;
@@ -55,6 +60,10 @@ public class ProcessServiceImpl implements IProcessService {
     private ProcessInstanceProperties properties;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private SendMailProperties mailProperties;
+    @Autowired
+    private TemplateEngine templateEngine;
 
     @Override
     @Transactional
@@ -221,9 +230,9 @@ public class ProcessServiceImpl implements IProcessService {
 
 
     @Override
-    public Integer findTask(String name) {
-        List<Task> list = queryTaskByUserName(name);
-        return list.size();
+    public List<Task> findTask(String name) {
+        return queryTaskByUserName(name);
+
     }
 
     private List<Task> queryTaskByUserName(String name){
@@ -344,7 +353,8 @@ public class ProcessServiceImpl implements IProcessService {
         return commodityList;
     }
 
-    private ProcessInstance getProcessInstanceById(String processInstanceId){
+
+    public ProcessInstance getProcessInstanceById(String processInstanceId){
         return  runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
     }
 
@@ -403,6 +413,85 @@ public class ProcessServiceImpl implements IProcessService {
                 deleteProcessUser(user);
             }
         }
+    }
+
+    @Override
+    public List<String> findPrcessName(String username) {
+        List<Task> list = findTask(username);
+        Set<String> names = new HashSet<>();
+        if(com.baomidou.mybatisplus.core.toolkit.CollectionUtils.isNotEmpty(list)){
+            for (Task task : list) {
+                ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+                if(processInstance.getBusinessKey().startsWith("Recent")){
+                    names.add(ProcessConstant.RECENT_NAME);
+                }else if(processInstance.getBusinessKey().startsWith("Roche")) {
+                    names.add(ProcessConstant.ROCHE_NAME);
+                }else {
+                    String id = processInstance.getBusinessKey().split("\\:")[1];
+                    Commodity commodity = commodityService.queryCommodityById(Integer.parseInt(id));
+                    if(commodity!=null){
+                        if(commodity.getStage().equals(ProcessConstant.DELIVERY_NAME)){
+                            names.add(ProcessConstant.DELIVERY_NAME);
+                        }else if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
+                            names.add(ProcessConstant.CONSERVE_NAME);
+                        }else if(commodity.getStage().equals(ProcessConstant.EXPORT_NAME)){
+                            names.add(ProcessConstant.EXPORT_NAME);
+                        }else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
+                            names.add(ProcessConstant.WRAPPER_NAME);
+                        }else if(commodity.getStage().equals(ProcessConstant.REFUND_NAME)){
+                            names.add(ProcessConstant.REFUND_NAME);
+                        }
+                    }
+                }
+            }
+        }
+        return new ArrayList<>(names);
+    }
+
+    @Override
+    @Transactional
+    public void alterCommodity(Commodity commodity, User currentUser) {
+        StringBuffer alteration = new StringBuffer();
+        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd");
+        Commodity oldCommodity = commodityService.queryCommodityById(commodity.getId());
+        if(!commodity.getBa().equals(oldCommodity.getBa())){
+            alteration.append("BA: " +date+ ".由"+oldCommodity.getBa()+"修改为"+commodity.getBa()+"。 ");
+        }
+        if(!commodity.getReason().equals(oldCommodity.getReason())){
+            alteration.append("QFF原因: " +date+ ".由"+oldCommodity.getReason()+"修改为"+commodity.getReason()+"。 ");
+        }
+        if(!commodity.getCompNumber().equals(oldCommodity.getCompNumber())){
+            alteration.append("投诉编号: " +date+ ".由"+oldCommodity.getCompNumber()+"修改为"+commodity.getCompNumber()+"。 ");
+        }
+        if(!commodity.getrConf().equals(oldCommodity.getrConf())){
+            alteration.append("罗氏处理意见: " +date+ ".由"+oldCommodity.getrConf()+"修改为"+commodity.getrConf()+"。 ");
+        }
+        if(!commodity.getCheckResult().equals(oldCommodity.getCheckResult())){
+            alteration.append("仪器工程师检查结果: " +date+ ".由"+oldCommodity.getCheckResult()+"修改为"+commodity.getCheckResult()+"。 ");
+        }
+        if(!commodity.getRemark().equals(oldCommodity.getRemark())){
+            alteration.append("备注: " +date+ ".由"+oldCommodity.getRemark()+"修改为"+commodity.getRemark()+"。 ");
+        }
+        commodity.setAlteration(oldCommodity.getAlteration()+"  "+alteration.toString());
+        commodityService.editCommodity(commodity);
+        if(StringUtils.isNotEmpty(commodity.getImages())){
+            addOrEditFiles(commodity,currentUser);
+        }
+        //TODO  发邮件
+        String[] mails = getEmails(87);
+
+
+        List<Commodity> list =new ArrayList<>();
+        commodity.setAlteration(alteration.toString());
+        list.add(commodity);
+        Map<String,String> files = new HashMap<>();
+
+        Context context = new Context();
+        context.setVariable("list",list);
+        String text = templateEngine.process("kdlCommodity", context);
+
+        //发送带附件的邮件
+        MailUtils.sendMail(text,mailProperties,mails,files);
     }
 
 
@@ -465,6 +554,15 @@ public class ProcessServiceImpl implements IProcessService {
         String format = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
         commodity.setRepTime(format);
         commodityService.editCommodity(commodity);
+    }
+
+    public String[] getEmails(Integer id){
+        List<User> userList = userService.findUserByRoleId(id);
+        List<String> userMails = new ArrayList<>();
+        for (User user : userList) {
+            userMails.add(user.getEmail());
+        }
+        return userMails.toArray(new String[0]);
     }
 
 

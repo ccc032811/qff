@@ -261,7 +261,7 @@
             ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
             ,multiple: true
             ,auto: true
-            ,size: 2048
+            ,size: 1024*10
             ,before: function(obj){
                 layer.load();
             }
@@ -338,7 +338,7 @@
 
         //提交更新
         form.on('submit(roche-form-audit)', function (data) {
-            $('#audit').attr("style","display:none;");
+            $('#roche-audit').attr("style","display:none;");
             for (var i = 0; i<=images.length-1;i++){
                 if(images[i]!== undefined)
                     imageList+=images[i]+",";

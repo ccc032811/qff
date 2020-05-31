@@ -25,6 +25,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import java.security.GeneralSecurityException;
@@ -52,6 +54,8 @@ public class RecentListener implements JavaDelegate {
     private IAttachmentService attachmentService;
     @Autowired
     private ProcessInstanceProperties properties;
+    @Autowired
+    private TemplateEngine templateEngine;
 
     @Override
     public void execute(DelegateExecution execution) {
@@ -75,32 +79,25 @@ public class RecentListener implements JavaDelegate {
             }
         }
         Recent recent = recentService.queryRecentById(Integer.parseInt(starId));
-        List<Attachment> attachments = (List<Attachment>) execution.getVariable("list");
+//        List<Attachment> attachments = (List<Attachment>) execution.getVariable("list");
 
         Map<String,String> files = new HashMap<>();
-        if(CollectionUtils.isNotEmpty(attachments)){
-            for (Attachment attachment : attachments) {
-                files.put(attachment.getRemark(),properties.getImagePath()+attachment.getRemark()+ StringPool.DOT+attachment.getAttachType());
-            }
-        }
+//        if(CollectionUtils.isNotEmpty(attachments)){
+//            for (Attachment attachment : attachments) {
+//                files.put(attachment.getRemark(),properties.getImagePath()+attachment.getRemark()+ StringPool.DOT+attachment.getAttachType());
+//            }
+//        }
 //        Map<String,String> map = new HashMap<>();
 //        String url = templateProperties.getConserveDownLoadPath()+ recent.getNumber()+".pdf";
 //        template.createPdf(map,templateProperties.getConserveTemplatePath(),templateProperties.getConserveDownLoadPath(),url);
 
-        StringBuilder content=new StringBuilder("<html><head></head><body><h3>您好。当前从系统获取数据如下：</h3>");
-        content.append("<tr><h3>具体详情如下表所示:</h3></tr>");
-        content.append("<table border='5' style='border:solid 1px #000;font-size=10px;'>");
-        content.append("<tr style='background-color: #00A1DD'><td>康德乐物料号</td>" +
-                "<td>罗氏物料号</td><td>产品物料号</td><td>有效期</td>" +
-                "<td>批号</td><td>SAP批次</td><td>工厂</td><td>库位</td><td>数量</td></tr>");
-        content.append("<tr><td>"+recent.getkMater()+"</td><td>"+recent.getrMater()+"</td>" +
-                "<td>"+recent.getName()+"</td><td>"+recent.getUseLife()+"</td>" +
-                "<td>"+recent.getBatch()+"</td><td>"+recent.getSapBatch()+"</td>" +
-                "<td>"+recent.getFactory()+"</td><td>"+recent.getWareHouse()+"</td><td>"+recent.getNumber()+"</td></tr>");
-        content.append("</table>");
-        content.append("</body></html>");
 
-        String text = content.toString();
+        List<Recent> list = new ArrayList<>();
+        list.add(recent);
+
+        Context context = new Context();
+        context.setVariable("list",list);
+        String text = templateEngine.process("kdlRecent", context);
 
         //发送带附件的邮件
         MailUtils.sendMail(text,mailProperties,mails,files);

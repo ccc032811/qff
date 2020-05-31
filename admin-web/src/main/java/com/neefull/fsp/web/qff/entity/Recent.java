@@ -27,6 +27,8 @@ import java.util.Date;
 @Excel("近效期QFF")
 public class Recent implements Serializable {
     private static final long serialVersionUID = -6883719899970874252L;
+
+
     /**
      *  主键id
      */

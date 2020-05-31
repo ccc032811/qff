@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>康德乐</title>
+</head>
+<body>
+    <span>Dear KDL colleague，</span><br>
+    <br>
+    <span>您有待处理罗氏QFF如下，谢谢。</span><br>
+    <table style='border:solid 1px #000;font-size: 20px;'>
+        <tr style='background-color: #00A1DD'>
+            <td>康德乐物料号</td>
+            <td>罗氏物料号</td>
+            <td>产品物料号</td>
+            <td>有效期</td>
+            <td>批号</td>
+            <td>SAP批次</td>
+            <td>工厂</td>
+            <td>库位</td>
+            <td>数量</td>
+            <td>罗氏处理意见</td>
+            <td>变更记录</td>
+        </tr>
+        <p th:each="recent:${list}">
+            <tr>
+                <td th:text="${recent.kMater}"></td>
+                <td th:text="${recent.rMater}"></td>
+                <td th:text="${recent.name}"></td>
+                <td th:text="${recent.useLife}"></td>
+                <td th:text="${recent.batch}"></td>
+                <td th:text="${recent.sapBatch}"></td>
+                <td th:text="${recent.factory}"></td>
+                <td th:text="${recent.wareHouse}"></td>
+                <td th:text="${recent.number}"></td>
+                <td th:text="${recent.rConf}"></td>
+                <td th:text="${commodity.alteration}"></td>
+            </tr>
+        </p>
+    </table>
+    <br>
+    <span>更多详细信息可登录系统查看，统一供应链门户：<a href="https://qff-stg.shaphar.com">https://qff-stg.shaphar.com</a> </span>
+</body>
+<style>
+    td{
+        border:solid 1px #000;
+        text-align: center;
+    }
+    tr {
+        border:solid 1px #000;
+    }
+    span{
+        font-size: 20px;
+        font-family: "宋体";
+    }
+
+</style>
+</html>
