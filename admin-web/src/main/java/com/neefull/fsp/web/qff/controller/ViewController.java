@@ -205,6 +205,17 @@ public class ViewController extends BaseController {
         return FebsUtil.view("system/qff/recent/recentAudit");
     }
 
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/recent/recentAudit/{id}/{isShow}")
+    @RequiresPermissions("recent:view")
+    public String getRecentAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
+        Recent recent = recentService.queryRecentById(id);
+        model.addAttribute("recent", recent);
+        if(StringUtils.isNotEmpty(isShow)){
+            model.addAttribute("recentShow", isShow);
+        }
+        return FebsUtil.view("system/qff/recent/recentAudit");
+    }
+
     //***********************************************退货***********************************************************
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "/refund/view")

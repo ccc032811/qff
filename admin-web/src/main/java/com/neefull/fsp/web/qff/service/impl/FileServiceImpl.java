@@ -110,7 +110,6 @@ public class FileServiceImpl implements IFileService {
                 public void onSuccess(int sheetIndex, int rowIndex, RecentResolver entity) {
                     if(rowIndex > SELECT_NUMBER){
                         Recent recent = new Recent();
-                        recent.setTransport(entity.getTransport());
                         recent.setkMater(entity.getkMater());
                         recent.setrMater(entity.getrMater());
                         recent.setName(entity.getName());

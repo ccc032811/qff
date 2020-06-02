@@ -171,7 +171,7 @@
         <div class="layui-form-item" style="border: 0;padding-top: 20px">
             <div class="layui-upload">
                 <div id="roche-upload-image-com">
-                    <img data-th-src="@{febs/images/image_add.png}" width="100px" height="100px" id="roche-chose-com">
+                    <img data-th-src="@{febs/images/image_add.png}" width="70px" height="70px" id="roche-chose-com">
                 </div>
                 <div class="layui-upload-list">
                     <table class="layui-table">
@@ -278,7 +278,7 @@
                         }
                     }
                     if(!show){
-                        if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type!=='type') {
+                        // if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type!=='type') {
                             var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
                             '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
                             images.push(url);
@@ -292,23 +292,23 @@
                                     }
                                 }
                             });
-                        }else {
-                            var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 5px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
-                            '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
-
-                            images.push(url);
-                            input.find('.delsingle').on('click', function () {
-                                delete files[index];
-                                input.remove();
-                                deleteImage(url);
-                                for (var i =images.length-1 ; i>=0 ;i-- ){
-                                    if(images[i]===url){
-                                        delete images[i];
-                                    }
-                                }
-                            });
-                        }
-                        $("#roche-upload-image-com").append(input);
+                        // }else {
+                        //     var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 5px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
+                        //     '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
+                        //
+                        //     images.push(url);
+                        //     input.find('.delsingle').on('click', function () {
+                        //         delete files[index];
+                        //         input.remove();
+                        //         deleteImage(url);
+                        //         for (var i =images.length-1 ; i>=0 ;i-- ){
+                        //             if(images[i]===url){
+                        //                 delete images[i];
+                        //             }
+                        //         }
+                        //     });
+                        // }
+                        // $("#roche-upload-image-com").append(input);
                         $('#roche-List-com').append(tr);
 
                     }

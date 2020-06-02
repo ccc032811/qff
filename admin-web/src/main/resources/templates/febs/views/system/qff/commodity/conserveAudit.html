@@ -508,7 +508,7 @@
 
 
         function deleteImage(url){
-            $.get(ctx + "file/deleteImage/"+url , function (res) {
+            febs.get(ctx + "file/deleteImage/"+url , function (res) {
                 if(res.code === 200) {
                     febs.alert.success('删除成功');
                 }

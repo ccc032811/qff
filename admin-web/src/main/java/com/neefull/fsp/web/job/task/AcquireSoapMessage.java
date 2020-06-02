@@ -43,13 +43,21 @@ public class AcquireSoapMessage extends BaseController {
     public void startSapMessage() {
         //获取更新时间
         String seacheDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
-        String lastDate = commodityService.selectLastTime();
+        String lastDate = null;
         String fromTime = "";
-        if (StringUtils.isNotEmpty(lastDate)&&lastDate.startsWith(seacheDate)) {
-            fromTime = lastDate.split(" ")[1];
-        } else {
+        try {
+            lastDate = commodityService.selectLastTime();
+        } catch (Exception e) {
             fromTime = "00:00:00";
         }
+        if(StringUtils.isNotEmpty(lastDate)){
+            if (StringUtils.isNotEmpty(lastDate)&&lastDate.startsWith(seacheDate)) {
+                fromTime = lastDate.split(" ")[1];
+            } else {
+                fromTime = "00:00:00";
+            }
+        }
+
         String toTime = DateFormatUtils.format(new Date(), "HH:mm:ss");
         startSoap.getMessage(seacheDate,fromTime,toTime,"");
     }

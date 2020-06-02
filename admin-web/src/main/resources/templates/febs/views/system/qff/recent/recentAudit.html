@@ -48,29 +48,20 @@
 <div class="layui-fluid" id="recent-detail" lay-title = "近效期QFF" style="margin-left: 18px">
     <form class="layui-form " action="" lay-filter="recent-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label " >运输单号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="transport" maxlength="50" autocomplete="off"
-                           class="layui-input " >
-                </div>
-            </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">康德乐物料号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="kMater" lay-verify="required" maxlength="50" autocomplete="off"
+                    <input type="text" name="kMater"  maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">罗氏物料号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="rMater" lay-verify="required" maxlength="50" autocomplete="off"
+                    <input type="text" name="rMater"  maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">产品名称</label>
                 <div class="layui-input-block">
@@ -78,63 +69,66 @@
                            class="layui-input " readonly="readonly">
                 </div>
             </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">有效期</label>
                 <div class="layui-input-block">
-                    <input type="text" name="useLife" lay-verify="required" maxlength="50" autocomplete="off"
+                    <input type="text" name="useLife"  maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">批号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="batch" lay-verify="required" maxlength="50" autocomplete="off"
+                    <input type="text" name="batch"  maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">SAP 批次</label>
+                <div class="layui-input-block">
+                    <input type="text" name="sapBatch" maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
                 </div>
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">SAP 批次</label>
-                <div class="layui-input-block">
-                    <input type="text" name="sapBatch" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input " readonly="readonly">
-                </div>
-            </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">工厂</label>
                 <div class="layui-input-block">
-                    <input type="text" name="factory" lay-verify="required" maxlength="50" autocomplete="off"
+                    <input type="text" name="factory"  maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">库位</label>
                 <div class="layui-input-block">
-                    <input type="text" name="wareHouse" lay-verify="required" maxlength="50" autocomplete="off"
+                    <input type="text" name="wareHouse" maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label " >数量</label>
+                <div class="layui-input-block">
+                    <input type="text" name="number" maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
                 </div>
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth" >
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label " >数量</label>
-                <div class="layui-input-block">
-                    <input type="text" name="number" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input " readonly="readonly">
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4">
+
+            <div class="layui-inline layui-col-sm6">
                 <label class="layui-form-label " id="rConf-recent">罗氏意见</label>
                 <div class="layui-input-block" id="rConf">
                     <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="search_rConf" class="layui-input" placeholder="请输入" >
                     <datalist id="search_rConf" style="display:none;"></datalist>
                 </div>
             </div>
-            <div class="layui-inline layui-col-sm4">
+            <div class="layui-inline layui-col-sm6">
                 <label class="layui-form-label " id="repDate-recent">回复日期</label>
                 <div class="layui-input-block">
-                    <input type="text" name="repDate" id="recent-repDated" class="layui-input" placeholder="请选择时间">
+                    <input type="text" name="repDate" id="recent-repDated" class="layui-input"  lay-verify="required" placeholder="请选择时间">
                 </div>
             </div>
         </div>
@@ -152,7 +146,7 @@
         <div class="layui-form-item" style="border: 0;padding-top: 20px">
             <div class="layui-upload">
                 <div id="recent-upload-image">
-                    <img data-th-src="@{febs/images/image_add.png}" width="100px" height="100px" id="recent-chose">
+                    <img data-th-src="@{febs/images/image_add.png}" width="70px" height="70px" id="recent-chose">
                 </div>
                 <div class="layui-upload-list">
                     <table class="layui-table">
@@ -200,6 +194,7 @@
     <div class="layui-form-item">
         <div  style="margin-top: 75px;text-align: center;" shiro:hasPermission="recent:audit">
             <button class="layui-btn"  id="recent-submit" >提交</button>
+            <!--<button class="layui-btn"  id="recent-alter" >修改</button>-->
         </div>
     </div>
 </div>
@@ -220,6 +215,7 @@
             form = layui.form,
             upload = layui.upload,
             recent = [[${recent}]],
+            recentShow = [[${recentShow}]],
             $view = $('#recent-detail');
 
         var files ="";
@@ -236,14 +232,23 @@
         });
 
         $(function () {
-            if(recent.rConf ===null||recent.rConf ===""){
-                $('#rConf-recent').addClass("febs-form-item-require")
+            if(currentUser.roleId === "86"){
+                $('#rConf-recent').addClass("febs-form-item-require");
+                $('#repDate-recent').addClass("febs-form-item-require");
             }
-            if(recent.repDate ===null||recent.repDate ===""){
-                $('#repDate-recent').addClass("febs-form-item-require")
+            // if(recent.rConf ===null||recent.rConf ===""){
+            //     $('#rConf-recent').addClass("febs-form-item-require");
+            // }
+            // if(recent.repDate ===null||recent.repDate ===""){
+            //     $('#repDate-recent').addClass("febs-form-item-require")
+            // }
+            if(recentShow==='1'){
+                $('#recent-submit').attr("style","display:none;")
+            }else {
+                $('#recent-alter').attr("style","display:none;")
             }
 
-        })
+        });
 
         //表单渲染
         form.render();
@@ -254,7 +259,6 @@
         function initRecentValue() {
             form.val("recent-detail-form", {
                 "id":recent.id,
-                "transport": recent.transport,
                 "kMater": recent.kMater,
                 "rMater": recent.rMater,
                 "name": recent.name,
@@ -293,7 +297,7 @@
                         }
                     }
                     if(!show){
-                        if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type!=='PNG') {
+                        // if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type!=='PNG') {
                             var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
                             '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
                             images.push(url);
@@ -307,23 +311,23 @@
                                     }
                                 }
                             });
-                        }else {
-                            var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
-                            '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
-
-                            images.push(url);
-                            input.find('.delsingle').on('click', function () {
-                                delete files[index];
-                                input.remove();
-                                deleteImage(url);
-                                for (var i =images.length-1 ; i>=0 ;i-- ){
-                                    if(images[i]===url){
-                                        delete images[i];
-                                    }
-                                }
-                            });
-                        }
-                        $("#recent-upload-image").append(input);
+                        // }else {
+                        //     var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
+                        //     '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
+                        //
+                        //     images.push(url);
+                        //     input.find('.delsingle').on('click', function () {
+                        //         delete files[index];
+                        //         input.remove();
+                        //         deleteImage(url);
+                        //         for (var i =images.length-1 ; i>=0 ;i-- ){
+                        //             if(images[i]===url){
+                        //                 delete images[i];
+                        //             }
+                        //         }
+                        //     });
+                        // }
+                        // $("#recent-upload-image").append(input);
                         $('#recent-List').append(tr);
 
                     }
@@ -332,7 +336,7 @@
             }
         });
         function deleteImage(url){
-            febs.get(ctx + "file/deleteImage/"+url, function (res) {
+            $.get(ctx + "file/deleteImage/"+url, function (res) {
                 if(res.code === 200) {
                     febs.alert.success('删除成功');
                 }
@@ -345,16 +349,16 @@
             var url = item.substring(item.lastIndexOf("/")+1);
             var type =url.substring(url.lastIndexOf(".")+1,url.length);
             var name =url.substring(0,url.lastIndexOf("."));
-            if(type==='jpg'||type ==='png'||type ==='gif') {
-                $("#recent-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;"> \n' +
-                    '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
-            }else {
+            // if(type==='jpg'||type ==='png'||type ==='gif') {
+            //     $("#recent-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;"> \n' +
+            //         '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
+            // }else {
                 $('#recent-List').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
                     '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="recent-upload-' + index + '">下载</button></td></tr>');
                 $view.find('#recent-upload-'+index ).on('click',function () {
                     window.location.href=ctx +"file/uploadFile/"+url;
                 })
-            }
+            // }
         })
     });
         window.amplificationImg = function (name, url) {
@@ -421,9 +425,12 @@
             $view.find('#submit').trigger('click');
         });
 
+        $view.on('click', '#recent-alter', function () {
+            $view.find('#submit').trigger('click');
+        });
+
         //提交更新
         form.on('submit(recent-form-submit)', function (data) {
-            $('#recent-submit').attr("style","display:none;");
             if (febs.nativeEqual(data.field, recent)) {
                 febs.alert.warn('数据未作任何修改！');
                 return false;
@@ -433,20 +440,30 @@
                     imageList+=images[i]+",";
             }
             data.field.images = imageList;
-            if(recent.status ===1){
-                febs.post(ctx + 'recent/commit', data.field, function (data) {
-                    layer.closeAll();
-                    febs.alert.success('数据修改成功');
-                    $('#fbs-recent').find('#recent-query').click();
-                });
-            }
-            if(recent.status ===2){
-                febs.post(ctx + 'recent/agree', data.field, function (data) {
-                    layer.closeAll();
-                    febs.alert.success('数据修改成功');
-                    $('#fbs-recent').find('#recent-query').click();
-                });
-            }
+            // if(recentShow ==='1'){
+            //     febs.post(ctx + 'recent/alter', data.field, function (data) {
+            //         layer.closeAll();
+            //         febs.alert.success('数据修改成功');
+            //         $('#fbs-recent').find('#recent-query').click();
+            //     });
+            // }else {
+                $('#recent-submit').attr("style","display:none;");
+                if(recent.status ===1){
+                    febs.post(ctx + 'recent/commit', data.field, function (data) {
+                        layer.closeAll();
+                        febs.alert.success('数据修改成功');
+                        $('#fbs-recent').find('#recent-query').click();
+                    });
+                }
+                if(recent.status ===2){
+                    febs.post(ctx + 'recent/agree', data.field, function (data) {
+                        layer.closeAll();
+                        febs.alert.success('数据修改成功');
+                        $('#fbs-recent').find('#recent-query').click();
+                    });
+                }
+            // }
+
             return false;
         });
 

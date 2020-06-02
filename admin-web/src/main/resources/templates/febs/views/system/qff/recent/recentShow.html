@@ -48,13 +48,6 @@
 <div class="layui-fluid" id="recent-detail-show" lay-title = "近效期QFF" style="margin-left: 18px">
     <form class="layui-form " action="" lay-filter="recent-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label " >运输单号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="transport" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input " readonly="readonly">
-                </div>
-            </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">康德乐物料号</label>
                 <div class="layui-input-block">
@@ -69,8 +62,6 @@
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">产品名称</label>
                 <div class="layui-input-block">
@@ -78,6 +69,9 @@
                            class="layui-input " readonly="readonly">
                 </div>
             </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">有效期</label>
                 <div class="layui-input-block">
@@ -92,8 +86,6 @@
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">SAP 批次</label>
                 <div class="layui-input-block">
@@ -101,6 +93,9 @@
                            class="layui-input " readonly="readonly">
                 </div>
             </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">工厂</label>
                 <div class="layui-input-block">
@@ -115,8 +110,6 @@
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth" >
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label " >数量</label>
                 <div class="layui-input-block">
@@ -124,14 +117,16 @@
                            class="layui-input " readonly="readonly">
                 </div>
             </div>
-            <div class="layui-inline layui-col-sm4">
+        </div>
+        <div class="layui-form-item layui-form-item-rigth" >
+            <div class="layui-inline layui-col-sm6">
                 <label class="layui-form-label ">罗氏意见</label>
                 <div class="layui-input-block">
                     <input type="text" name="rConf" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
-            <div class="layui-inline layui-col-sm4">
+            <div class="layui-inline layui-col-sm6">
                 <label class="layui-form-label " >回复日期</label>
                 <div class="layui-input-block">
                     <input type="text" name="repDate" lay-verify="required" maxlength="50" autocomplete="off"
@@ -210,7 +205,6 @@
         function initRecentValue() {
             form.val("recent-detail-form", {
                 "id":recent.id,
-                "transport": recent.transport,
                 "kMater": recent.kMater,
                 "rMater": recent.rMater,
                 "name": recent.name,
@@ -232,17 +226,17 @@
                 var url = item.substring(item.lastIndexOf("/")+1);
                 var type =url.substring(url.lastIndexOf(".")+1,url.length);
                 var name =url.substring(0,url.lastIndexOf("."));
-                if(type==='jpg'||type ==='png'||type ==='gif') {
-                    $("#recent-upload-image-show").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;left: 5px"> \n' +
-                        '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
-                }else {
+                // if(type==='jpg'||type ==='png'||type ==='gif') {
+                //     $("#recent-upload-image-show").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;left: 5px"> \n' +
+                //         '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
+                // }else {
                     $('#recent-List-show').append('<tr ><td style="width: 70%">' + name
                         + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
                         '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="recent-upload-show-' + index + '">下载</button></td></tr>');
                     $view.find('#recent-upload-show-'+index ).on('click',function () {
                         window.location.href=ctx +"file/uploadFile/"+url;
                     })
-                }
+                // }
             })
         });
         window.amplificationImg = function (name, url) {

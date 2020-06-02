@@ -177,15 +177,16 @@
     {{# } }}
 </script>
 <script type="text/html" id="roche-option">
+    {{#  if(d.status == '1'){d.status = '新建状态'}}
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
-    {{#  if(d.isAllow != '3'){d.status = '可审核'}}
-        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
-        <a class="layui-btn layui-btn-xs" lay-event="roche-edit"  shiro:hasPermission="roche:audit">审核</a>
-        {{#}}}
-    {{#}}}
-    {{#  if(d.status != '4'){d.status = '异常'}}
+    {{# }else if(d.status == '3'){d.status = '审核完成'}}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
+    {{# }else if(d.status != '3'){d.status = '没审核完成'}}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="roche-edit"  shiro:hasPermission="roche:audit">审核</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-del" shiro:hasPermission="roche:del">删除</a>
     {{#}}}
+
 </script>
 <script type="text/html" id="toolbarCheck">
     <div class="layui-btn-container">
@@ -223,8 +224,6 @@
         laydate.render({
             elem: '#searchTime'
             ,range: true
-            ,trigger: 'click'
-            ,btns: ['clear']
         });
         laydate.render({
             elem: '#reqDate'

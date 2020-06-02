@@ -64,12 +64,6 @@
                                 <div class="layui-colla-content" style="border:0px solid white">
                                     <div class="layui-form-item">
                                         <div class="layui-inline">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">运输单号</label>
-                                            <div class="layui-input-inline">
-                                                <input type="text" name="transport" maxlength="50" autocomplete="off" class="layui-input "  placeholder="请输入运输单号" >
-                                            </div>
-                                        </div>
-                                        <div class="layui-inline">
                                             <label class="layui-form-label" style="border-right: 1px solid white;">罗氏物料号</label>
                                             <div class="layui-input-inline">
                                                 <input type="text" name="rMater"  maxlength="50" autocomplete="off" class="layui-input"  placeholder="请输入罗氏物料号" >
@@ -159,22 +153,23 @@
     {{# } }}
 </script>
 <script type="text/html" id="recent-option">
+    {{#  if(d.status == '1'){d.status = '新建状态'}}
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
-    {{#  if(d.isAllow != '3'){d.status = '可审核'}}
-        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
+    {{# }else if(d.status == '3'){d.status = '审核完成'}}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
+    {{# }else if(d.status != '3'){d.status = '没审核完成'}}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="recent-edit"  shiro:hasPermission="recent:audit">审核</a>
-        {{#}}}
-    {{#}}}
-    {{#  if(d.status != '4'){d.status = '异常'}}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-del" shiro:hasPermission="recent:del">删除</a>
     {{#}}}
+
 </script>
 <script type="text/html" id="toolbarCheck">
     <div class="layui-btn-container">
         <button class="layui-btn  layui-btn-sm layui-btn-success" lay-event="template-download"  shiro:hasPermission="recent:template" >
             <i class="layui-icon">&#xe82a;</i> 模板下载
         </button>
-        <button class="layui-btn layui-btn-sm " style="background-color: #87e8de;"   lay-event="recent-upload" id="upload" shiro:hasPermission="recent:import">
+        <button class="layui-btn layui-btn-sm " style="background-color: #87e8de;"   lay-event="recent-upload" id="recent-upload" shiro:hasPermission="recent:import">
             <i class="layui-icon">&#xe7aa;</i> 导入Excel
         </button>
         <button class="layui-btn layui-btn-sm" lay-event="recent-download" shiro:hasPermission="recent:down">
@@ -206,41 +201,10 @@
         //初始化表格
         initTable();
 
-        var uploadInst = upload.render({
-            elem:'#upload'
-            ,url: ctx+'file/resolver'
-            ,exts: 'xlsx|xls'
-            ,multiple: false
-            ,auto: true
-            ,size: 1024*5 //kb
-            ,before: function(obj){
-                layer.load();
-            }
-            ,done:function (res) {
-                if(res.code ===200){
-                    layer.closeAll('loading');
-                    febs.alert.success('操作成功');
-                    $query.click();
-                }else if(res.code ===500){
-                    layer.closeAll('loading');
-                    febs.alert.success('解析失败');
-                }
-            }
-        });
-
-        // $("body").on('click','.layui-btn',function () {
-        //     var type = $(this).data('type');
-        //     active[type] ? active[type].call(this):'';
-        // });
-
-
-
         //设置时间样式
         laydate.render({
             elem: '#recent-searchTime'
             ,range: true
-            ,trigger: 'click'
-            ,btns: ['clear']
         });
         laydate.render({
             elem: '#recent-useLife'
@@ -275,8 +239,6 @@
                 toolbar: '#toolbarCheck',     //开启头部工具栏
                 defaultToolbar: ['filter','print'],    //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
                 cols: [[
-                    // {type: 'checkbox'},
-                    {field: 'transport', title: '运输单号',align:'center'},
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
                     {field: 'rMater', title: '罗氏物料号',align:'center'},
                     {field: 'name', title: '产品名称',align:'center'},
@@ -284,6 +246,7 @@
                     {field: 'batch', title: '批号',align:'center'},
                     {field: 'sapBatch', title: 'SAP 批次',align:'center'},
                     {field: 'factory', title: '工厂',align:'center'},
+                    {field: 'wareHouse', title: '库位',align:'center'},
                     {title: '处理阶段', templet: '#recent-status',align:'center'},
                     {title: '操作', toolbar: '#recent-option',align:'center',width: 160}
                 ]],
@@ -294,6 +257,28 @@
             });
         }
 
+        upload.render({
+            elem:'#recent-upload'
+            ,url: ctx+'file/resolver'
+            ,exts: 'xlsx|xls'
+            ,multiple: false
+            ,auto: true
+            ,size: 1024*5 //kb
+            ,before: function(obj){
+                layer.load();
+            }
+            ,done:function (res) {
+                if(res.code ===200){
+                    layer.closeAll('loading');
+                    febs.alert.success('操作成功');
+
+                }else if(res.code ===500){
+                    layer.closeAll('loading');
+                    febs.alert.success('解析失败');
+                }
+                $query.click();
+            }
+        });
 
 
         //查询表单事件
@@ -325,10 +310,7 @@
             if (layEvent === 'template-download'){
                 febs.download(ctx + 'file/template', null, 'Excel导入模板.xlsx');
             }
-            if(layEvent === 'recent-upload'){
-                console.log(111111111111111)
 
-            }
         });
 
 
@@ -350,14 +332,20 @@
                     delRecent(data.id);
                 });
             }
+            if (layEvent === 'recent-alter') {
+                febs.modal.open('审核', 'system/qff/recent/recentAlter/' + data.id+"/"+"1", {
+                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
+                });
+            }
+
         });
 
-        function delRecent(id)
-        {
-            febs.get(ctx + 'recent/deleteRecent/' + id, null, function () {
+        function delRecent(id) {
+            $.get(ctx + 'recent/deleteRecent/' + id, null, function () {
                 febs.alert.success('操作成功');
-                $query.click();
+
             });
+            $query.click();
         }
 
         table.on('sort(recentTable)', function (obj) {
@@ -380,7 +368,6 @@
                 endTime: createTimeTo,
                 kMater: $searchForm.find('input[name="kMater"]').val().trim(),
                 batch: $searchForm.find('input[name="batch"]').val().trim(),
-                transport: $searchForm.find('input[name="transport"]').val().trim(),
                 rMater: $searchForm.find('input[name="rMater"]').val().trim(),
                 name: $searchForm.find('input[name="name"]').val().trim(),
                 useLife: $searchForm.find('input[name="useLife"]').val().trim(),

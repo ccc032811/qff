@@ -269,8 +269,6 @@
         laydate.render({
             elem: '#wrapper-searchTime'
             ,range: true
-            ,trigger: 'click'
-            ,btns: ['clear']
         });
         laydate.render({
             elem: '#wrapper-manuDate'
@@ -359,7 +357,7 @@
                 var params = $.extend(getQueryParams(),{stage:stage});
                 params.pageSize = $view.find(".layui-laypage-limits option:selected").val();
                 params.pageNum = $view.find(".layui-laypage-em").next().html();
-                febs.download(ctx + 'commodity/excel',params, '分包QFF.xlsx');
+                febs.download(ctx + 'commodity/excel',params, '其他QFF.xlsx');
 
             }
         });
