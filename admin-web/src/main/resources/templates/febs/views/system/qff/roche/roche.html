@@ -178,17 +178,23 @@
 </script>
 <script type="text/html" id="roche-option">
     {{#  if(d.status == '1'){d.status = '新建状态'}}
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-del" shiro:hasPermission="roche:del">删除</a>
     {{# }else if(d.status == '3'){d.status = '审核完成'}}
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
     {{# }else if(d.status != '3'){d.status = '没审核完成'}}
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
-    <a class="layui-btn layui-btn-xs" lay-event="roche-edit"  shiro:hasPermission="roche:audit">审核</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-del" shiro:hasPermission="roche:del">删除</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
+        {{#  if(d.isAllow != '1'){}}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-alter"  shiro:hasPermission="roche:alter" >修改</a>
+        {{#}}}
+        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
+        <a class="layui-btn layui-btn-xs" lay-event="roche-edit"  shiro:hasPermission="roche:audit">审核</a>
+        {{#}}}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-del" shiro:hasPermission="roche:del">删除</a>
     {{#}}}
 
 </script>
-<script type="text/html" id="toolbarCheck">
+<script type="text/html" id="roche-toolbarCheck">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm layui-btn-success" lay-event="roche-add" shiro:hasPermission="roche:add">
             <i class="layui-icon">&#xe654;</i> 新增
@@ -276,7 +282,7 @@
                 height: 360,
                 id: 'rocheTable',          //表单id
                 url: ctx + 'roche/list',   //url
-                toolbar: '#toolbarCheck',     //开启头部工具栏
+                toolbar: '#roche-toolbarCheck',     //开启头部工具栏
                 defaultToolbar: ['filter','print'],    //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
                 cols: [[
                     // {type: 'checkbox'},
@@ -330,7 +336,6 @@
                 febs.modal.open('新增', 'system/qff/roche/add' , {
                     area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '80%']
                 });
-
             }
         });
 
@@ -351,6 +356,11 @@
             if (layEvent === 'roche-del') {
                 febs.modal.confirm('删除该条数据', '确定删除该条数据？', function () {
                     delRoche(data.id);
+                });
+            }
+            if(layEvent === 'roche-alter'){
+                febs.modal.open('修改', 'system/qff/roche/rocheAlter/' + data.id +"/"+ '1', {
+                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
                 });
             }
         });

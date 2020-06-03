@@ -125,9 +125,11 @@
                                             </div>
                                         </div>
                                         <div class="layui-inline ">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">QFF原因</label>
+                                            <label class="layui-form-label" style="border-right: 1px solid white;">退货原因</label>
                                             <div class="layui-input-inline">
-                                                <input type="text" name="reason"  maxlength="50" autocomplete="off" class="layui-input " placeholder="请输入QFF原因" >
+                                                <select name="reason" id="refund_reason" lay-verify="required">
+                                                    <option value="">请选择</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="layui-inline ">
@@ -210,6 +212,7 @@
 <script type="text/html" id="refund-option">
     {{#  if(d.status == '1'){d.status = '新建状态'}}
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="refund-detail" shiro:hasPermission="refund:view">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-del" shiro:hasPermission="refund:del">删除</a>
     {{# }else if(d.status == '3'){d.status = '审核完成'}}
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="refund-detail" shiro:hasPermission="refund:view">查看</a>
     {{# }else if(d.status != '3'){d.status = '没审核完成'}}
@@ -223,7 +226,7 @@
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-del" shiro:hasPermission="refund:del">删除</a>
     {{#}}}
 </script>
-<script type="text/html" id="toolbarCheck">
+<script type="text/html" id="refund-toolbarCheck">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="refund-download" shiro:hasPermission="refund:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
@@ -246,6 +249,7 @@
             $searchForm = $view.find('form'),
             tableIns;
         var stage = '退货';
+        var reason = "退货原因";
 
         //初始化表单
         form.render();
@@ -300,7 +304,7 @@
                 id: 'refundTable',          //表单id
                 url: ctx + 'commodity/list',   //url
                 where:{stage:stage},
-                toolbar: '#toolbarCheck',     //开启头部工具栏
+                toolbar: '#refund-toolbarCheck',     //开启头部工具栏
                 defaultToolbar: ['filter','print'],     //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
                 cols: [[
                     // {type: 'checkbox'},
@@ -390,6 +394,19 @@
             });
         });
 
+        $.get(ctx +"opinion/getOpinion/"+reason,function(res){
+            var data = res.data;
+            var dom=$("#refund_reason");
+            var html='<option value=""></option>';
+            $.each(data,function(index,item){
+
+                    html+='<option value="'+item.name+'">'+item.name+'</option>'
+
+            });
+            dom.html(html);
+            form.render("select");
+        });
+
         //获取查询参数
         function getQueryParams() {
             var createTimeFrom,
@@ -414,7 +431,7 @@
                 quarantine: $searchForm.find('input[name="quarantine"]').val().trim(),
                 initDate: $searchForm.find('input[name="initDate"]').val().trim(),
                 repTime: $searchForm.find('input[name="repTime"]').val().trim(),
-                reason: $searchForm.find('input[name="reason"]').val().trim(),
+                reason: $searchForm.find('select[name="reason"]').val(),
                 ba: $searchForm.find("input[name='ba']").val().trim(),
                 source: $searchForm.find("input[name='source']").val().trim(),
                 compNumber: $searchForm.find("input[name='compNumber']").val().trim(),

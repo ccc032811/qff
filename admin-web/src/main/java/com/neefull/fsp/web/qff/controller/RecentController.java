@@ -77,6 +77,13 @@ public class RecentController extends BaseController {
         }
     }
 
+    @Qff("修改近效期QFF")
+    @PostMapping("/alter")
+    public FebsResponse alterRecent(Recent recent){
+        processService.alterRecent(recent,getCurrentUser());
+        return new FebsResponse().success();
+    }
+
     /**查询近效期QFF
      * @param recent
      * @return

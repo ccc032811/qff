@@ -65,7 +65,7 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">产品名称</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" lay-verify="required" maxlength="50" autocomplete="off"
+                    <input type="text" name="name" maxlength="50" autocomplete="off"
                            class="layui-input " readonly="readonly">
                 </div>
             </div>
@@ -120,14 +120,14 @@
 
             <div class="layui-inline layui-col-sm6">
                 <label class="layui-form-label " id="rConf-recent">罗氏意见</label>
-                <div class="layui-input-block" id="rConf">
-                    <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="search_rConf" class="layui-input" placeholder="请输入" >
+                <div class="layui-input-block" id="recent-rConf">
+                    <input type="text" name="rConf"   lay-verify="required" maxlength="50" autocomplete="off" list="search_rConf" class="layui-input" placeholder="请输入" >
                     <datalist id="search_rConf" style="display:none;"></datalist>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm6">
                 <label class="layui-form-label " id="repDate-recent">回复日期</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block" id="repDate-show">
                     <input type="text" name="repDate" id="recent-repDated" class="layui-input"  lay-verify="required" placeholder="请选择时间">
                 </div>
             </div>
@@ -192,9 +192,9 @@
         </div>
     </form>
     <div class="layui-form-item">
-        <div  style="margin-top: 75px;text-align: center;" shiro:hasPermission="recent:audit">
-            <button class="layui-btn"  id="recent-submit" >提交</button>
-            <!--<button class="layui-btn"  id="recent-alter" >修改</button>-->
+        <div  style="margin-top: 75px;text-align: center;" >
+            <button class="layui-btn"  id="recent-submit" shiro:hasPermission="recent:audit">提交</button>
+            <button class="layui-btn"  id="recent-alter" shiro:hasPermission="recent:alter">修改</button>
         </div>
     </div>
 </div>
@@ -236,12 +236,14 @@
                 $('#rConf-recent').addClass("febs-form-item-require");
                 $('#repDate-recent').addClass("febs-form-item-require");
             }
-            // if(recent.rConf ===null||recent.rConf ===""){
-            //     $('#rConf-recent').addClass("febs-form-item-require");
-            // }
-            // if(recent.repDate ===null||recent.repDate ===""){
-            //     $('#repDate-recent').addClass("febs-form-item-require")
-            // }
+            if(currentUser.roleId === "87"){
+                $('#repDate-show').html('');
+                $('#repDate-show').append('<input type="text" name="repDate" maxlength="50" autocomplete="off"\n' +
+                    '                           class="layui-input " readonly="readonly">');
+                $('#recent-rConf').html('');
+                $('#recent-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
+                    '                           class="layui-input " readonly="readonly">');
+            }
             if(recentShow==='1'){
                 $('#recent-submit').attr("style","display:none;")
             }else {
@@ -440,13 +442,14 @@
                     imageList+=images[i]+",";
             }
             data.field.images = imageList;
-            // if(recentShow ==='1'){
-            //     febs.post(ctx + 'recent/alter', data.field, function (data) {
-            //         layer.closeAll();
-            //         febs.alert.success('数据修改成功');
-            //         $('#fbs-recent').find('#recent-query').click();
-            //     });
-            // }else {
+            if(recentShow ==='1'){
+                $('#recent-alter').attr("style","display:none;");
+                febs.post(ctx + 'recent/alter', data.field, function (data) {
+                    layer.closeAll();
+                    febs.alert.success('数据修改成功');
+                    $('#fbs-recent').find('#recent-query').click();
+                });
+            }else {
                 $('#recent-submit').attr("style","display:none;");
                 if(recent.status ===1){
                     febs.post(ctx + 'recent/commit', data.field, function (data) {
@@ -462,19 +465,11 @@
                         $('#fbs-recent').find('#recent-query').click();
                     });
                 }
-            // }
+            }
 
             return false;
         });
 
-
-        if(recent.rConf !== ""){
-            var gettpl = document.getElementById('rConf_view').innerHTML;
-            laytpl(gettpl).render(recent, function(html){
-                document.getElementById('rConf').innerHTML = html;
-                $("#rConf_value").attr ("value",recent.rConf)
-            });
-        }
 
     });
 </script>

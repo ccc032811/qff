@@ -115,7 +115,7 @@
                         html += '<dd>';
                             if(child.exist) html+= '<div style="height: 0"><div class="item-exist"></div></div>';
                             html+= '<a style="padding-left:' + left + 'px"  target="'+(child.target||'')+'"
-                                       lay-href="'+ (child.href||'') +'" >' + child.title + '</a>';
+                                       lay-href="'+ (child.href||'') +'"    id="'+ (child.href||'') +'" >' + child.title + '</a>';
                             if(child.childs) html += __createSlidebar(child.childs,index+1);
                             html += '</dd>';
                         });
@@ -186,6 +186,26 @@
         $view.on('click', '#user-profile', function () {
             febs.navigate("/user/profile");
         });
+
+        // window.clickThis = function (obj) {
+        //     var name = obj.id;
+        //     console.log(name)
+        //     if(name === "/wrapper/view"){
+        //         $('#fbs-wrapper').find('#wrapper-query').click();
+        //     }else if(name ==="/conserve/view"){
+        //         $('#fbs-conserve').find('#conserve-query').click();
+        //     }else if(name === "/delivery/view"){
+        //         $('#fbs-delivery').find('#delivery-query').click();
+        //     }else if(name ==="/export/view"){
+        //         $('#fbs-export').find('#export-query').click();
+        //     }else if(name ==="/recent/view"){
+        //         $('#fbs-recent').find('#recent-query').click();
+        //     }else if(name === "/refund/view"){
+        //         $('#fbs-refund').find('#refund-query').click();
+        //     }else if(name === "/roche/view"){
+        //         $('#fbs-roche').find('#query').click();
+        //     }
+        // }
 
 
     });

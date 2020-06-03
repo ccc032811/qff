@@ -455,31 +455,29 @@ public class ProcessServiceImpl implements IProcessService {
         String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd");
         Commodity oldCommodity = commodityService.queryCommodityById(commodity.getId());
         if(!commodity.getBa().equals(oldCommodity.getBa())){
-            alteration.append("BA: " +date+ ".由"+oldCommodity.getBa()+"修改为"+commodity.getBa()+"。 ");
+            alteration.append("BA: " +date+ "。由  "+oldCommodity.getBa()+"修改为"+commodity.getBa()+"  。 ");
         }
         if(!commodity.getReason().equals(oldCommodity.getReason())){
-            alteration.append("QFF原因: " +date+ ".由"+oldCommodity.getReason()+"修改为"+commodity.getReason()+"。 ");
+            alteration.append("QFF原因: " +date+ "。由  "+oldCommodity.getReason()+"修改为"+commodity.getReason()+"  。 ");
         }
         if(!commodity.getCompNumber().equals(oldCommodity.getCompNumber())){
-            alteration.append("投诉编号: " +date+ ".由"+oldCommodity.getCompNumber()+"修改为"+commodity.getCompNumber()+"。 ");
+            alteration.append("投诉编号: " +date+ "。由  "+oldCommodity.getCompNumber()+"修改为"+commodity.getCompNumber()+"  。 ");
         }
         if(!commodity.getrConf().equals(oldCommodity.getrConf())){
-            alteration.append("罗氏处理意见: " +date+ ".由"+oldCommodity.getrConf()+"修改为"+commodity.getrConf()+"。 ");
+            alteration.append("罗氏处理意见: " +date+ "。由  "+oldCommodity.getrConf()+"修改为"+commodity.getrConf()+"  。 ");
         }
         if(!commodity.getCheckResult().equals(oldCommodity.getCheckResult())){
-            alteration.append("仪器工程师检查结果: " +date+ ".由"+oldCommodity.getCheckResult()+"修改为"+commodity.getCheckResult()+"。 ");
+            alteration.append("仪器工程师检查结果: " +date+ "。由  "+oldCommodity.getCheckResult()+"修改为"+commodity.getCheckResult()+"  。 ");
         }
         if(!commodity.getRemark().equals(oldCommodity.getRemark())){
-            alteration.append("备注: " +date+ ".由"+oldCommodity.getRemark()+"修改为"+commodity.getRemark()+"。 ");
+            alteration.append("备注: " +date+ "。由  "+oldCommodity.getRemark()+"修改为"+commodity.getRemark()+"  。 ");
         }
         commodity.setAlteration(oldCommodity.getAlteration()+"  "+alteration.toString());
         commodityService.editCommodity(commodity);
         if(StringUtils.isNotEmpty(commodity.getImages())){
             addOrEditFiles(commodity,currentUser);
         }
-        //TODO  发邮件
         String[] mails = getEmails(87);
-
 
         List<Commodity> list =new ArrayList<>();
         commodity.setAlteration(alteration.toString());
@@ -492,6 +490,76 @@ public class ProcessServiceImpl implements IProcessService {
 
         //发送带附件的邮件
         MailUtils.sendMail(text,mailProperties,mails,files);
+    }
+
+    @Override
+    @Transactional
+    public void alterRecent(Recent recent, User currentUser) {
+        StringBuffer alteration = new StringBuffer();
+        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd");
+        Recent oldRecent = recentService.queryRecentById(recent.getId());
+        if(!recent.getrConf().equals(oldRecent.getrConf())){
+            alteration.append("罗氏处理意见: " +date+ "。由  "+oldRecent.getrConf()+"修改为"+recent.getrConf()+"  。 ");
+        }
+        recent.setAlteration(oldRecent.getAlteration() +"  "+alteration.toString());
+        recentService.editRecent(recent);
+        if(StringUtils.isNotEmpty(recent.getImages())){
+            addOrEditFiles(recent,currentUser);
+        }
+        String[] mails = getEmails(87);
+
+        List<Recent> list =new ArrayList<>();
+        recent.setAlteration(alteration.toString());
+        list.add(recent);
+        Map<String,String> files = new HashMap<>();
+
+        Context context = new Context();
+        context.setVariable("list",list);
+        String text = templateEngine.process("kdlRecent", context);
+
+        //发送带附件的邮件
+        MailUtils.sendMail(text,mailProperties,mails,files);
+
+    }
+
+    @Override
+    @Transactional
+    public void alterRoche(Roche roche, User currentUser) {
+        StringBuffer alteration = new StringBuffer();
+        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd");
+        Roche oldRoche = rocheService.queryRocheById(roche.getId());
+        if(!roche.getReason().equals(oldRoche.getReason())){
+            alteration.append("原因: " +date+ "。由  "+oldRoche.getReason()+"修改为"+roche.getReason()+"  。 ");
+        }
+        if(!roche.getActions().equals(oldRoche.getActions())){
+            alteration.append("行动: " +date+ "。由  "+oldRoche.getActions()+"修改为"+roche.getActions()+"  。 ");
+        }
+        if(!roche.getCompleteDate().equals(oldRoche.getCompleteDate())){
+            alteration.append("实际日期: " +date+ "。由  "+oldRoche.getCompleteDate()+"修改为"+roche.getCompleteDate()+"  。 ");
+        }
+        if(!roche.getFollow().equals(oldRoche.getFollow())){
+            alteration.append("后续行动: " +date+ "。由  "+oldRoche.getFollow()+"修改为"+roche.getFollow()+"  。 ");
+        }
+        if(!roche.getActualDate().equals(oldRoche.getActualDate())){
+            alteration.append("实际日期: " +date+ "。由  "+oldRoche.getActualDate()+"修改为"+roche.getActualDate()+"  。 ");
+        }
+        roche.setAlteration(oldRoche.getAlteration() +"  "+alteration.toString());
+        rocheService.editRoche(roche);
+        String[] mails = getEmails(87);
+
+        List<Roche> list =new ArrayList<>();
+        roche.setAlteration(alteration.toString());
+        list.add(roche);
+        Map<String,String> files = new HashMap<>();
+
+        Context context = new Context();
+        context.setVariable("list",list);
+        String text = templateEngine.process("kdlRoche", context);
+
+        //发送带附件的邮件
+        MailUtils.sendMail(text,mailProperties,mails,files);
+
+
     }
 
 

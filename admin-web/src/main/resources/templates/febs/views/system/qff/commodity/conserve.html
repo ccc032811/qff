@@ -102,7 +102,11 @@
                                         <div class="layui-inline  ">
                                             <label class="layui-form-label" style="border-right: 1px solid white;">是否是危险品</label>
                                             <div class="layui-input-inline">
-                                                <input type="text" name="isDanger" maxlength="50" autocomplete="off" class="layui-input " placeholder="请输入" >
+                                                <select name="isDanger">
+                                                    <option value=""></option>
+                                                    <option value="01">危险</option>
+                                                    <option value="00">不危险</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="layui-inline  ">
@@ -138,7 +142,8 @@
                                         <div class="layui-inline ">
                                             <label class="layui-form-label" style="border-right: 1px solid white;">QFF原因</label>
                                             <div class="layui-input-inline">
-                                                <input type="text" name="reason"  maxlength="50" autocomplete="off" class="layui-input " placeholder="请输入QFF原因" >
+                                                <input type="text" name="reason"   maxlength="50" autocomplete="off" list="conserve-reason" class="layui-input" placeholder="请输入">
+                                                <datalist id="conserve-reason" style="display:none;"></datalist>
                                             </div>
                                         </div>
                                         <div class="layui-inline ">
@@ -222,6 +227,7 @@
 <script type="text/html" id="conserve-option">
     {{#  if(d.status == '1'){d.status = '新建状态'}}
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="conserve-detail" shiro:hasPermission="conserve:view">查看</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="conserve-del" shiro:hasPermission="conserve:del">删除</a>
     {{# }else if(d.status == '3'){d.status = '审核完成'}}
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="conserve-detail" shiro:hasPermission="conserve:view">查看</a>
     {{# }else if(d.status != '3'){d.status = '没审核完成'}}
@@ -237,7 +243,7 @@
 
 
 </script>
-<script type="text/html" id="toolbarCheck">
+<script type="text/html" id="conserve-toolbarCheck">
     <div class="layui-btn-container">
         <button  class="layui-btn layui-btn-sm " lay-event="conserve-download" shiro:hasPermission="conserve:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
@@ -260,6 +266,7 @@
             $searchForm = $view.find('form'),
             tableIns;
         var stage = '养护';
+        var reason = "QFF原因";
 
         //初始化表单
         form.render();
@@ -313,7 +320,7 @@
                 id: 'conserveTable',          //表单id
                 url: ctx + 'commodity/list',
                 where:{stage:stage},
-                toolbar: '#toolbarCheck',     //开启头部工具栏
+                toolbar: '#conserve-toolbarCheck',     //开启头部工具栏
                 defaultToolbar: ['filter','print'],   //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'
                 cols: [[
                     {field: 'number', title: 'QFF编号',align:'center'},
@@ -391,8 +398,7 @@
 
         });
 
-        function delCommodity(id)
-        {
+        function delCommodity(id) {
             febs.get(ctx + 'commodity/deleteCommodity/' + id, null, function () {
                 febs.alert.success('操作成功');
                 $query.click();
@@ -403,6 +409,13 @@
         table.on('sort(conserveTable)', function (obj) {
             tableIns.reload({
                 where: $.extend(getQueryParams())
+            });
+        });
+
+        $.get(ctx +"opinion/getOpinion/"+reason,function(res){
+            var data = res.data;
+            $.each(data,function(index,item){
+                $("#conserve-reason").append('<option value="'+item.name+'"></option>')
             });
         });
 
@@ -427,7 +440,7 @@
                 rMater: $searchForm.find('input[name="rMater"]').val().trim(),
                 pMater: $searchForm.find('input[name="pMater"]').val().trim(),
                 rBatch: $searchForm.find('input[name="rBatch"]').val().trim(),
-                isDanger: $searchForm.find('input[name="isDanger"]').val().trim(),
+                isDanger: $searchForm.find('select[name="isDanger"]').val(),
                 manuDate: $searchForm.find('input[name="manuDate"]').val().trim(),
                 expiryDate: $searchForm.find('input[name="expiryDate"]').val().trim(),
                 quarantine: $searchForm.find('input[name="quarantine"]').val().trim(),

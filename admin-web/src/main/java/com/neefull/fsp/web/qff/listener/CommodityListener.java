@@ -15,6 +15,7 @@ import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
 import com.sun.mail.util.MailSSLSocketFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.apache.commons.collections4.CollectionUtils;
@@ -39,7 +40,7 @@ import java.util.*;
  * @Author: chengchengchu
  * @Date: 2019/11/28  14:25
  */
-
+@Slf4j
 @Service("commodityListener")
 public class CommodityListener extends BaseController implements JavaDelegate{
 

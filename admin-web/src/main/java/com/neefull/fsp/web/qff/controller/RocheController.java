@@ -77,6 +77,14 @@ public class RocheController extends BaseController {
         }
     }
 
+    @Qff("修改罗氏发起QFF")
+    @PostMapping("/alter")
+    public FebsResponse alterRoche(Roche roche){
+        processService.alterRoche(roche,getCurrentUser());
+        return new FebsResponse().success();
+    }
+
+
     /**查询罗氏内部发起QFF
      * @param roche
      * @return

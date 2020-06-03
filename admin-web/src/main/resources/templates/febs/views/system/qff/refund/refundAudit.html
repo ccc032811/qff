@@ -168,7 +168,7 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label " id="ba-refund">BA</label>
                 <div class="layui-input-block" id = "refund-ba" >
-                    <input type="text" name="ba"  lay-verify="required" maxlength="50" autocomplete="off" list="refund-search-ba" class="layui-input" placeholder="请输入" >
+                    <input type="text" name="ba"  maxlength="50" autocomplete="off" list="refund-search-ba" class="layui-input" placeholder="请输入" >
                     <div style="overflow: auto; height: 30px";>
                         <datalist id="refund-search-ba" style="display:none;"></datalist>
                     </div>
@@ -177,7 +177,7 @@
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label " id="compNumber-refund">投诉编号</label>
                 <div class="layui-input-block" >
-                    <input type="text" id="refund-compNumber" name="compNumber" lay-verify="required" maxlength="50" autocomplete="off"
+                    <input type="text" id="refund-compNumber" name="compNumber"  maxlength="50" autocomplete="off"
                            class="layui-input" placeholder="请输入">
                 </div>
             </div>
@@ -364,8 +364,7 @@
                     '                           class="layui-input " readonly="readonly">');
                 $('#rConf-refund').addClass("febs-form-item-require");
                 $('#reason-refund').addClass("febs-form-item-require");
-                $('#ba-refund').addClass("febs-form-item-require");
-                $('#compNumber-refund').addClass("febs-form-item-require");
+
             }
             if(refundShow ==='1'){
                 $('#refund-submit').attr("style","display:none;")
@@ -562,7 +561,6 @@
 
         //提交更新
         form.on('submit(refund-form-submit)', function (data) {
-
             if (febs.nativeEqual(data.field, commodity)) {
                 febs.alert.warn('数据未作任何修改！');
                 return false;
@@ -576,7 +574,7 @@
                 $('#refund-submit-alter').attr("style","display:none;");
                 febs.post(ctx + 'commodity/alter', data.field , function (data) {
                     layer.closeAll();
-                    $('#fbs-conserve').find('#conserve-query').click();
+                    $('#fbs-refund').find('#refund-query').click();
                     febs.alert.success('数据修改成功');
                 });
             }else {
@@ -584,15 +582,15 @@
                 if(commodity.status ===1){
                     febs.post(ctx + 'commodity/commit', data.field, function (data) {
                         layer.closeAll();
-                        febs.alert.success('数据修改成功');
                         $('#fbs-refund').find('#refund-query').click();
+                        febs.alert.success('数据修改成功');
                     });
                 }
                 if(commodity.status ===2){
                     febs.post(ctx + 'commodity/agree', data.field, function (data) {
                         layer.closeAll();
-                        febs.alert.success('数据修改成功');
                         $('#fbs-refund').find('#refund-query').click();
+                        febs.alert.success('数据修改成功');
                     });
                 }
             }

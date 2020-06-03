@@ -110,15 +110,62 @@ public class FileServiceImpl implements IFileService {
                 public void onSuccess(int sheetIndex, int rowIndex, RecentResolver entity) {
                     if(rowIndex > SELECT_NUMBER){
                         Recent recent = new Recent();
-                        recent.setkMater(entity.getkMater());
-                        recent.setrMater(entity.getrMater());
-                        recent.setName(entity.getName());
-                        recent.setUseLife(entity.getUseLife());
-                        recent.setBatch(entity.getBatch());
-                        recent.setSapBatch(entity.getSapBatch());
-                        recent.setFactory(entity.getFactory());
-                        recent.setWareHouse(entity.getWareHouse());
-                        recent.setNumber(entity.getNumber());
+                        if(entity!=null){
+                            if(entity.getkMater().equals("康德乐物料号")||entity.getrMater().equals("罗氏物料号")) {
+                                return;
+                            }else {
+                                if(entity.getkMater().equals("$EMPTY_CELL$")&&entity.getrMater().equals("$EMPTY_CELL$")&&entity.getName().equals("$EMPTY_CELL$")) {
+                                    return;
+                                }else {
+                                    if(!entity.getkMater().equals("$EMPTY_CELL$")){
+                                        recent.setkMater(entity.getkMater());
+                                    }else {
+                                        recent.setkMater("");
+                                    }
+                                    if(!entity.getrMater().equals("$EMPTY_CELL$")){
+                                        recent.setrMater(entity.getrMater());
+                                    }else {
+                                        recent.setrMater("");
+                                    }
+                                    if(!entity.getName().equals("$EMPTY_CELL$")){
+                                        recent.setName(entity.getName());
+                                    }else {
+                                        recent.setName("");
+                                    }
+                                    if(!entity.getUseLife().equals("$EMPTY_CELL$")){
+                                        recent.setUseLife(entity.getUseLife());
+                                    }else {
+                                        recent.setUseLife("");
+                                    }
+                                    if(!entity.getBatch().equals("$EMPTY_CELL$")){
+                                        recent.setBatch(entity.getBatch());
+                                    }else {
+                                        recent.setBatch("");
+                                    }
+                                    if(!entity.getSapBatch().equals("$EMPTY_CELL$")){
+                                        recent.setSapBatch(entity.getSapBatch());
+                                    }else {
+                                        recent.setSapBatch("");
+                                    }
+                                    if(!entity.getFactory().equals("$EMPTY_CELL$")){
+                                        recent.setFactory(entity.getFactory());
+                                    }else {
+                                        recent.setFactory("");
+                                    }
+                                    if(!entity.getWareHouse().equals("$EMPTY_CELL$")){
+                                        recent.setWareHouse(entity.getWareHouse());
+                                    }else {
+                                        recent.setWareHouse("");
+                                    }
+                                    if(!entity.getNumber().equals("$EMPTY_CELL$")){
+                                        recent.setNumber(entity.getNumber());
+                                    }else {
+                                        recent.setNumber("");
+                                    }
+                                }
+                            }
+
+                        }
                         list.add(recent);
                     }
                 }

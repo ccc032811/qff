@@ -69,9 +69,8 @@ public class ViewController extends BaseController {
     public String getDeliveryAlter(@PathVariable Integer id,@PathVariable String isShow, Model model){
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
-        if(StringUtils.isNotEmpty(isShow)){
-            model.addAttribute("deliveryShow", isShow);
-        }
+        model.addAttribute("deliveryShow", isShow);
+
 
         return FebsUtil.view("system/qff/commodity/deliveryAudit");
     }
@@ -105,9 +104,8 @@ public class ViewController extends BaseController {
     public String getConserveAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
-        if(StringUtils.isNotEmpty(isShow)){
-            model.addAttribute("conserveShow", isShow);
-        }
+        model.addAttribute("conserveShow", isShow);
+
         return FebsUtil.view("system/qff/commodity/conserveAudit");
     }
 
@@ -140,9 +138,8 @@ public class ViewController extends BaseController {
     public String getWrapperAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
-        if(StringUtils.isNotEmpty(isShow)){
-            model.addAttribute("wrapperShow", isShow);
-        }
+        model.addAttribute("wrapperShow", isShow);
+
         return FebsUtil.view("system/qff/commodity/wrapperAudit");
     }
 
@@ -175,9 +172,8 @@ public class ViewController extends BaseController {
     public String getExportAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
-        if(StringUtils.isNotEmpty(isShow)){
-            model.addAttribute("exportShow", isShow);
-        }
+        model.addAttribute("exportShow", isShow);
+
         return FebsUtil.view("system/qff/commodity/exportAudit");
     }
 
@@ -205,14 +201,13 @@ public class ViewController extends BaseController {
         return FebsUtil.view("system/qff/recent/recentAudit");
     }
 
-    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/recent/recentAudit/{id}/{isShow}")
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/recent/recentAlter/{id}/{isShow}")
     @RequiresPermissions("recent:view")
     public String getRecentAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
         Recent recent = recentService.queryRecentById(id);
         model.addAttribute("recent", recent);
-        if(StringUtils.isNotEmpty(isShow)){
-            model.addAttribute("recentShow", isShow);
-        }
+        model.addAttribute("recentShow", isShow);
+
         return FebsUtil.view("system/qff/recent/recentAudit");
     }
 
@@ -245,9 +240,8 @@ public class ViewController extends BaseController {
     public String getRefundAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
-        if(StringUtils.isNotEmpty(isShow)){
-            model.addAttribute("refundShow", isShow);
-        }
+        model.addAttribute("refundShow", isShow);
+
         return FebsUtil.view("system/qff/refund/refundAudit");
     }
 
@@ -277,6 +271,16 @@ public class ViewController extends BaseController {
     public String getRocheAudit(@PathVariable Integer id, Model model) {
         Roche roche = rocheService.queryRocheById(id);
         model.addAttribute("roche", roche);
+        return FebsUtil.view("system/qff/roche/rocheAudit");
+    }
+
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/roche/rocheAlter/{id}/{isShow}")
+    @RequiresPermissions("roche:view")
+    public String getRocheAudit(@PathVariable Integer id,@PathVariable String isShow, Model model) {
+        Roche roche = rocheService.queryRocheById(id);
+        model.addAttribute("roche", roche);
+        model.addAttribute("rocheShow", isShow);
+
         return FebsUtil.view("system/qff/roche/rocheAudit");
     }
 

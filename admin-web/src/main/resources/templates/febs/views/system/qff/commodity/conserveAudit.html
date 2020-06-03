@@ -186,7 +186,7 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label " id="ba-conserve">BA</label>
                 <div class="layui-input-block" id = "conserve-ba" >
-                    <input type="text" name="ba"  lay-verify="required" maxlength="50" autocomplete="off" list="conserve-search-ba" class="layui-input" placeholder="请输入" >
+                    <input type="text" name="ba"  maxlength="50" autocomplete="off" list="conserve-search-ba" class="layui-input" placeholder="请输入" >
                     <div style="overflow: auto; height: 30px";>
                         <datalist id="conserve-search-ba" style="display:none;"></datalist>
                     </div>
@@ -213,7 +213,7 @@
                 <label class="layui-form-label " id="compNumber-conserve">投诉编号</label>
                 <div class="layui-input-block">
                     <input type="text" id="conserve-compNumber" name="compNumber" maxlength="50" autocomplete="off"
-                           class="layui-input " placeholder="请输入" lay-verify="required" >
+                           class="layui-input " placeholder="请输入"  >
                 </div>
             </div>
         </div>
@@ -389,8 +389,7 @@
                     '                           class="layui-input " readonly="readonly">');
                 $('#rConf-conserve').addClass("febs-form-item-require");
                 $('#reason-conserve').addClass("febs-form-item-require");
-                $('#ba-conserve').addClass("febs-form-item-require");
-                $('#compNumber-conserve').addClass("febs-form-item-require");
+
             }
             if(commodity.isDanger === '01'){
                 $("#isDanger").attr("value","危险");
@@ -638,21 +637,6 @@
         });
 
 
-        // form.on('submit(conserve-form-submit)', function (data) {
-        //
-        //     if (febs.nativeEqual(data.field, commodity)) {
-        //         febs.alert.warn('数据未作任何修改！');
-        //         return false;
-        //     }
-        //     for (var i = 0; i<=images.length-1;i++){
-        //         if(images[i]!== undefined)
-        //             imageList+=images[i]+",";
-        //     }
-        //     data.field.images = imageList;
-        //
-        // });
-
-
         $.get(ctx +"opinion/getOpinion/"+rConf,function(res){
             var data = res.data;
             $.each(data,function(index,item){
@@ -703,62 +687,6 @@
             dom.html(html);
             form.render("select");
         });
-
-
-
-
-
-
-        /* $.get(ctx +"opinion/getOpinion/"+classify,function(res){
-             var data=res.data;
-             var dom=$("#search_classify");
-             var html='<option value=""></option>';
-             $.each(data,function(index,item){
-                 html+='<option value="'+item.name+'">'+item.name+'</option>'
-             });
-             dom.html(html);
-             form.render("select");
-         });*/
-
-        /*  //页面渲染，放在初始化界面之前
-          if(currentUser.roleId == '86'){ //罗氏
-              $('#conserve-rConf').append(' <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="search_rConf" class="layui-input" placeholder="请输入" >\n' +
-                  '                    <div style="overflow: auto; height: 30px";>\n' +
-                  '                    <datalist id="search_rConf" style="display:none;"></datalist>\n' +
-                  '                    </div>')
-              $('#conserve-reason').append('<input type="text" name="reason"  lay-verify="required" maxlength="50" autocomplete="off" list="search_reason" class="layui-input" placeholder="请输入">\n' +
-                  '                    <datalist id="search_reason" style="display:none;"></datalist>')
-
-              $('#conserve-ba').append('<select name="ba" id="search_ba" lay-verify="required">\n' +
-                  '                        <option value="">请选择</option>\n' +
-                  '                    </select>')
-              $('#conserve-stage').append(' <input type="text" name="stage"  maxlength="50" autocomplete="off"\n' +
-                  '                           class="layui-input " readonly="readonly">')
-              $('#conserve-source').append('<input type="text" name="source"  maxlength="50" autocomplete="off"\n' +
-                  '                           class="layui-input " readonly="readonly">')
-              $('#conserve-compNumber').attr("lay-verify","required");
-              $('#conserve-checkResult').attr("lay-verify","required");
-              $('#conserve-remark').attr("lay-verify","required");
-
-          }else if(currentUser.roleId == '87'){  //康德乐
-              $('#conserve-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
-                  '                           class="layui-input " readonly="readonly">')
-              $('#conserve-reason').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
-                  '                           class="layui-input " readonly="readonly">')
-              $('#conserve-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
-                  '                           class="layui-input " readonly="readonly">')
-
-              $('#conserve-stage').append('<select name="stage" id="search_stage" lay-verify="required" >\n' +
-                  '                        <option value="">请选择</option>\n' +
-                  '                    </select>')
-              $('#conserve-source').append('<select name="source" id="search_source" lay-verify="required">\n' +
-                  '                        <option value="">请选择</option>\n' +
-                  '                    </select>')
-              $('#conserve-checkResult').attr("readonly","readonly");
-              $('#conserve-remark').attr("readonly","readonly");
-              $('#conserve-compNumber').attr("readonly","readonly");
-          }
-  */
 
     });
 </script>

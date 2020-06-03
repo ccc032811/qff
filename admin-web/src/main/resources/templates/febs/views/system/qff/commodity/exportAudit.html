@@ -182,7 +182,7 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label " id="ba-export">BA</label>
                 <div class="layui-input-block" id = "export-ba" >
-                    <input type="text" name="ba"  lay-verify="required" maxlength="50" autocomplete="off" list="export-search-ba" class="layui-input" placeholder="请输入" >
+                    <input type="text" name="ba"  maxlength="50" autocomplete="off" list="export-search-ba" class="layui-input" placeholder="请输入" >
                     <div style="overflow: auto; height: 30px";>
                         <datalist id="export-search-ba" style="display:none;"></datalist>
                     </div>
@@ -209,7 +209,7 @@
                 <label class="layui-form-label " id="compNumber-export">投诉编号</label>
                 <div class="layui-input-block">
                     <input type="text" id="export-compNumber" name="compNumber" maxlength="50" autocomplete="off"
-                           class="layui-input " placeholder="请输入"  lay-verify="required">
+                           class="layui-input " placeholder="请输入" >
                 </div>
             </div>
         </div>
@@ -386,8 +386,7 @@
                     '                           class="layui-input " readonly="readonly">');
                 $('#rConf-export').addClass("febs-form-item-require");
                 $('#reason-export').addClass("febs-form-item-require");
-                $('#ba-export').addClass("febs-form-item-require");
-                $('#compNumber-export').addClass("febs-form-item-require");
+
             }
             if(commodity.isDanger === '01'){
                 $("#isDanger").attr("value","危险");
@@ -607,7 +606,7 @@
                 $('#export-submit-alter').attr("style","display:none;");
                 febs.post(ctx + 'commodity/alter', data.field , function (data) {
                     layer.closeAll();
-                    $('#fbs-conserve').find('#conserve-query').click();
+                    $('#fbs-export').find('#export-query').click();
                     febs.alert.success('数据修改成功');
                 });
             }else {

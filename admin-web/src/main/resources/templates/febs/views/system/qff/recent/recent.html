@@ -154,17 +154,23 @@
 </script>
 <script type="text/html" id="recent-option">
     {{#  if(d.status == '1'){d.status = '新建状态'}}
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-del" shiro:hasPermission="recent:del">删除</a>
     {{# }else if(d.status == '3'){d.status = '审核完成'}}
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
     {{# }else if(d.status != '3'){d.status = '没审核完成'}}
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
-    <a class="layui-btn layui-btn-xs" lay-event="recent-edit"  shiro:hasPermission="recent:audit">审核</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-del" shiro:hasPermission="recent:del">删除</a>
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
+        {{#  if(d.isAllow != '1'){}}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-alter" shiro:hasPermission="recent:alter" >修改</a>
+        {{#}}}
+        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
+        <a class="layui-btn layui-btn-xs" lay-event="recent-edit"  shiro:hasPermission="recent:audit">审核</a>
+        {{#}}}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-del" shiro:hasPermission="recent:del">删除</a>
     {{#}}}
 
 </script>
-<script type="text/html" id="toolbarCheck">
+<script type="text/html" id="recent-toolbarCheck">
     <div class="layui-btn-container">
         <button class="layui-btn  layui-btn-sm layui-btn-success" lay-event="template-download"  shiro:hasPermission="recent:template" >
             <i class="layui-icon">&#xe82a;</i> 模板下载
@@ -232,11 +238,12 @@
         //加载表格数据
         function initTable() {
             tableIns = febs.table.init({
+                id: '#recentTable',
                 elem: $view.find('table'),
                 height: 360,
                 id: 'recentTable',          //表单id
                 url: ctx + 'recent/list',   //url
-                toolbar: '#toolbarCheck',     //开启头部工具栏
+                toolbar: '#recent-toolbarCheck',     //开启头部工具栏
                 defaultToolbar: ['filter','print'],    //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
                 cols: [[
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
@@ -253,32 +260,35 @@
                 done:function (res,curr,count) {
                     $(".layui-table-header .layui-table thead tr th").css("border","1px solid white").css("background-color","#E8E8E8");
                     $(".layui-table-body .layui-table-col-special .layui-table-cell .layui-btn").css("float","left").css("margin-top","4px");
+
+                    var tableId= this.id;
+                    var tableElem = this.elem;
+                    var tableViewElem = tableElem.next();
+                    upload.render({
+                        elem:tableViewElem.find('#recent-upload')
+                        ,url: ctx+'file/resolver'
+                        ,exts: 'xlsx|xls'
+                        ,multiple: false
+                        ,auto: true
+                        ,size: 1024*5 //kb
+                        ,before: function(obj){
+                            layer.load();
+                        }
+                        ,done:function (res) {
+                            if(res.code ===200){
+                                layer.closeAll('loading');
+                                febs.alert.success('操作成功');
+                                $query.click();
+                            }else if(res.code ===500){
+                                layer.closeAll('loading');
+                                febs.alert.success('解析失败');
+                            }
+
+                        }
+                    })
                 }
             });
         }
-
-        upload.render({
-            elem:'#recent-upload'
-            ,url: ctx+'file/resolver'
-            ,exts: 'xlsx|xls'
-            ,multiple: false
-            ,auto: true
-            ,size: 1024*5 //kb
-            ,before: function(obj){
-                layer.load();
-            }
-            ,done:function (res) {
-                if(res.code ===200){
-                    layer.closeAll('loading');
-                    febs.alert.success('操作成功');
-
-                }else if(res.code ===500){
-                    layer.closeAll('loading');
-                    febs.alert.success('解析失败');
-                }
-                $query.click();
-            }
-        });
 
 
         //查询表单事件
@@ -333,19 +343,20 @@
                 });
             }
             if (layEvent === 'recent-alter') {
-                febs.modal.open('审核', 'system/qff/recent/recentAlter/' + data.id+"/"+"1", {
+                febs.modal.open('修改', 'system/qff/recent/recentAlter/' + data.id+"/"+"1", {
                     area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
                 });
             }
 
         });
 
+
         function delRecent(id) {
             $.get(ctx + 'recent/deleteRecent/' + id, null, function () {
                 febs.alert.success('操作成功');
-
+                $query.click();
             });
-            $query.click();
+
         }
 
         table.on('sort(recentTable)', function (obj) {

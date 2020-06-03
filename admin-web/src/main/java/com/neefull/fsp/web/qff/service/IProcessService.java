@@ -74,4 +74,9 @@ public interface IProcessService  {
     List<String> findPrcessName(String username);
 
     void alterCommodity(Commodity commodity, User currentUser);
+
+    void alterRecent(Recent recent, User currentUser);
+
+    void alterRoche(Roche roche, User currentUser);
+
 }

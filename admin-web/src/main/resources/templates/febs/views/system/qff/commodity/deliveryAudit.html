@@ -182,7 +182,7 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label " id="ba-delivery">BA</label>
                 <div class="layui-input-block" id = "delivery-ba" >
-                    <input type="text" name="ba"  lay-verify="required" maxlength="50" autocomplete="off" list="delivery-search-ba" class="layui-input" placeholder="请输入" >
+                    <input type="text" name="ba"  maxlength="50" autocomplete="off" list="delivery-search-ba" class="layui-input" placeholder="请输入" >
                     <div style="overflow: auto; height: 30px";>
                         <datalist id="delivery-search-ba" style="display:none;"></datalist>
                     </div>
@@ -209,7 +209,7 @@
                 <label class="layui-form-label " id="compNumber-delivery">投诉编号</label>
                 <div class="layui-input-block">
                     <input type="text" id="delivery-compNumber" name="compNumber" maxlength="50" autocomplete="off"
-                           class="layui-input " placeholder="请输入" lay-verify="required">
+                           class="layui-input " placeholder="请输入" >
                 </div>
             </div>
         </div>
@@ -385,8 +385,7 @@
                     '                           class="layui-input " readonly="readonly">');
                 $('#rConf-delivery').addClass("febs-form-item-require");
                 $('#reason-delivery').addClass("febs-form-item-require");
-                $('#ba-delivery').addClass("febs-form-item-require");
-                $('#compNumber-delivery').addClass("febs-form-item-require");
+
             }
             if(commodity.isDanger === '01'){
                 $("#isDanger").attr("value","危险");
@@ -605,7 +604,7 @@
                 $('#delivery-submit-alter').attr("style","display:none;");
                 febs.post(ctx + 'commodity/alter', data.field , function (data) {
                     layer.closeAll();
-                    $('#fbs-conserve').find('#conserve-query').click();
+                    $('#fbs-delivery').find('#delivery-query').click();
                     febs.alert.success('数据修改成功');
                 });
             }else {

@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

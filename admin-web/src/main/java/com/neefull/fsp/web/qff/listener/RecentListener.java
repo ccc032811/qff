@@ -16,6 +16,7 @@ import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
 import com.sun.mail.util.MailSSLSocketFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.apache.commons.collections4.CollectionUtils;
@@ -36,7 +37,7 @@ import java.util.*;
  * @Author: chengchengchu
  * @Date: 2019/12/22  19:39
  */
-
+@Slf4j
 @Service("recentListener")
 public class RecentListener implements JavaDelegate {
 

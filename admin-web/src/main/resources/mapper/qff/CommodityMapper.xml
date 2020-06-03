@@ -26,9 +26,14 @@
             <if test="commodity.rMater!=null and commodity.rMater!=''">
                 and r_mater like concat('%',#{commodity.rMater},'%')
             </if>
-            <if test="commodity.isDanger!=null and commodity.isDanger!=''">
-                and is_danger like concat('%',#{commodity.isDanger},'%')
-            </if>
+            <choose>
+                <when test="commodity.isDanger =='01'">
+                    and is_danger = '01'
+                </when>
+                <when test="commodity.isDanger =='00'">
+                    and is_danger != '01'
+                </when>
+            </choose>
             <if test="commodity.pMater!=null and commodity.pMater!=''">
                 and p_mater like concat('%',#{commodity.pMater},'%')
             </if>
@@ -74,8 +79,11 @@
             <if test="commodity.classify!=null and commodity.classify!=''">
                 and classify like concat('%',#{commodity.classify},'%')
             </if>
-            <if test="commodity.startTime!=null and commodity.startTime!='' and commodity.endTime!=null and commodity.endTime!=''">
-                and create_time between  #{commodity.startTime} and #{commodity.endTime}
+            <if test="commodity.startTime!=null and commodity.startTime!=''">
+                and create_time  &gt;=  #{commodity.startTime}
+            </if>
+            <if test="commodity.endTime!=null and commodity.endTime!=''">
+                and create_time  &lt;=  #{commodity.endTime}
             </if>
             <choose>
                 <when test="commodity.status!=null and commodity.status!=''">
@@ -85,8 +93,8 @@
                     and status != 4
                 </otherwise>
             </choose>
-
         order by create_time desc
+
     </select>
     <select id="selectLastTime" resultType="java.util.Date">
         select c.create_time from qff_commodity c order by c.create_time desc limit 1
