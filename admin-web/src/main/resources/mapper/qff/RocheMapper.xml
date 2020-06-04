@@ -52,11 +52,8 @@
         <if test="roche.actualDate!=null and roche.actualDate!=''">
             and actual_date like concat('%',#{roche.actualDate},'%')
         </if>
-        <if test="roche.startTime!=null and roche.startTime!=''">
-            and req_date  &gt;=  #{roche.startTime}
-        </if>
-        <if test="roche.endTime!=null and roche.endTime!=''">
-            and req_date  &lt;=  #{roche.endTime}
+        <if test="roche.startTime!=null and roche.startTime!='' and roche.endTime!=null and roche.endTime!=''">
+            and date_format(create_time,'%Y-%m-%d') between  #{roche.startTime} and  #{roche.endTime}
         </if>
         <choose>
             <when test="roche.status!=null and roche.status!=''">

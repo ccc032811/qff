@@ -44,11 +44,8 @@
         <if test="recent.repDate!=null and recent.repDate!=''">
             and rep_date like concat('%',#{recent.repDate},'%')
         </if>
-        <if test="recent.startTime!=null and recent.startTime!=''">
-            and create_time  &gt;=  #{recent.startTime}
-        </if>
-        <if test="recent.endTime!=null and recent.endTime!=''">
-            and create_time  &lt;=  #{recent.endTime}
+        <if test="recent.startTime!=null and recent.startTime!='' and recent.endTime!=null and recent.endTime!=''">
+            and date_format(create_time,'%Y-%m-%d')  between  #{recent.startTime} and  #{recent.endTime}
         </if>
         <choose>
             <when test="recent.status!=null and recent.status!=''">

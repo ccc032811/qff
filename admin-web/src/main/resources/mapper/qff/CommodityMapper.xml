@@ -79,11 +79,8 @@
             <if test="commodity.classify!=null and commodity.classify!=''">
                 and classify like concat('%',#{commodity.classify},'%')
             </if>
-            <if test="commodity.startTime!=null and commodity.startTime!=''">
-                and create_time  &gt;=  #{commodity.startTime}
-            </if>
-            <if test="commodity.endTime!=null and commodity.endTime!=''">
-                and create_time  &lt;=  #{commodity.endTime}
+            <if test="commodity.startTime!=null and commodity.startTime!='' and commodity.endTime!=null and commodity.endTime!=''" >
+                and date_format(create_time,'%Y-%m-%d')  between  #{commodity.startTime} and  #{commodity.endTime}
             </if>
             <choose>
                 <when test="commodity.status!=null and commodity.status!=''and commodity.status !='5'">

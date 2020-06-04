@@ -100,7 +100,6 @@ public class QffProcess extends BaseController {
                 }else {
                     iterator.remove();
                 }
-
             }
         }
 
@@ -151,8 +150,6 @@ public class QffProcess extends BaseController {
             }finally {
                 sftp.disconnect();
             }
-
-
         }
 
 
