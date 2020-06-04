@@ -162,6 +162,9 @@ public class Recent implements Serializable {
     @TableField(exist = false)
     private Integer isAllow;
 
+    @TableField(exist = false)
+    private Integer att;
+
 
     public Integer getId() {
         return id;
@@ -345,5 +348,13 @@ public class Recent implements Serializable {
 
     public void setIsAllow(Integer isAllow) {
         this.isAllow = isAllow;
+    }
+
+    public Integer getAtt() {
+        return att;
+    }
+
+    public void setAtt(Integer att) {
+        this.att = att;
     }
 }

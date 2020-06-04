@@ -9,11 +9,13 @@ import com.neefull.fsp.web.qff.mapper.RecentMapper;
 import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.qff.service.IRecentService;
 import com.neefull.fsp.web.system.entity.User;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -54,7 +56,20 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
         IPage<Recent> pageInfo = recentMapper.getRecentPage(page,recent);
         List<Recent> records = pageInfo.getRecords();
         List<Recent> newRecent = processService.queryRecentTaskByName(records,user);
-        pageInfo.setRecords(newRecent);
+        if(recent.getAtt()!=null&&recent.getAtt()==1){
+            List<Recent> recentList = new ArrayList<>();
+            if(CollectionUtils.isNotEmpty(newRecent)){
+                for (Recent rec : newRecent) {
+                    if(rec.getIsAllow()!=null&&rec.getIsAllow()==1){
+                        recentList.add(rec);
+                    }
+                }
+            }
+            pageInfo.setRecords(recentList);
+        }else {
+            pageInfo.setRecords(newRecent);
+        }
+
         return pageInfo;
     }
 

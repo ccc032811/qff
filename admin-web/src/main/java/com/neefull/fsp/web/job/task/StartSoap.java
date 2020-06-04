@@ -126,47 +126,47 @@ public class StartSoap {
                         StringBuilder alteration = new StringBuilder();
 
                         if(!commodity.getPlant().equals(isCommodity.getPlant())){
-                            alteration.append("Plant工厂: " +date+ "。由"+isCommodity.getPlant()+"变更为"+commodity.getPlant()+" 。");
+                            alteration.append("Plant工厂:" +date+ " 由 "+isCommodity.getPlant()+" 变更为 "+commodity.getPlant()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getkMater().equals(isCommodity.getkMater())){
-                            alteration.append("KDLMaterial物料: " +date+ "。由"+isCommodity.getkMater()+"变更为"+commodity.getkMater()+" 。");
+                            alteration.append("KDLMaterial物料:" +date+ " 由 "+isCommodity.getkMater()+" 变更为 "+commodity.getkMater()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getkBatch().equals(isCommodity.getkBatch())){
-                            alteration.append("康德乐SAP批次: " +date+ "。由"+isCommodity.getkBatch()+"变更为"+commodity.getkBatch()+" 。");
+                            alteration.append("康德乐SAP批次:" +date+ " 由 "+isCommodity.getkBatch()+" 变更为 "+commodity.getkBatch()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getrMater().equals(isCommodity.getrMater())){
-                            alteration.append("罗氏物料号: " +date+ "。由"+isCommodity.getrMater()+"变更为"+commodity.getrMater()+" 。");
+                            alteration.append("罗氏物料号:" +date+ " 由 "+isCommodity.getrMater()+" 变更为 "+commodity.getrMater()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getrBatch().equals(isCommodity.getrBatch())){
-                            alteration.append("罗氏批号: " +date+ "。由"+isCommodity.getrBatch()+"变更为"+commodity.getrBatch()+" 。");
+                            alteration.append("罗氏批号:" +date+ " 由 "+isCommodity.getrBatch()+" 变更为 "+commodity.getrBatch()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getManuDate().equals(isCommodity.getManuDate())){
-                            alteration.append("生产日期: " +date+ "。由"+isCommodity.getManuDate()+"变更为"+commodity.getManuDate()+" 。");
+                            alteration.append("生产日期:" +date+ " 由 "+isCommodity.getManuDate()+" 变更为 "+commodity.getManuDate()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getExpiryDate().equals(isCommodity.getExpiryDate())){
-                            alteration.append("有效期: " +date+ "。由"+isCommodity.getExpiryDate()+"变更为"+commodity.getExpiryDate()+" 。");
+                            alteration.append("有效期:" +date+ " 由 "+isCommodity.getExpiryDate()+" 变更为 "+commodity.getExpiryDate()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getQuarantine().equals(isCommodity.getQuarantine())){
-                            alteration.append("异常总数: " +date+ "。由"+isCommodity.getQuarantine()+"变更为"+commodity.getQuarantine()+" 。");
+                            alteration.append("异常总数:" +date+ " 由 "+isCommodity.getQuarantine()+" 变更为 "+commodity.getQuarantine()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getGetRemark().equals(isCommodity.getGetRemark())){
-                            alteration.append("Remark箱号: " +date+ "。由"+isCommodity.getGetRemark()+"变更为"+commodity.getGetRemark()+" 。");
+                            alteration.append("Remark箱号:" +date+ " 由 "+isCommodity.getGetRemark()+" 变更为 "+commodity.getGetRemark()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getClassify().equals(isCommodity.getClassify())){
-                            alteration.append("产品分类: " +date+ "。由"+isCommodity.getClassify()+"变更为"+commodity.getClassify()+" 。");
+                            alteration.append("产品分类:" +date+ " 由 "+isCommodity.getClassify()+" 变更为 "+commodity.getClassify()+" 。");
                             rstart = true;
                         }
                         if(!commodity.getRegister().equals(isCommodity.getRegister())){
-                            alteration.append("注册证号: " +date+ "。由"+isCommodity.getRegister()+"变更为"+commodity.getRegister()+" 。");
+                            alteration.append("注册证号:" +date+ " 由 "+isCommodity.getRegister()+" 变更为 "+commodity.getRegister()+" 。");
                             rstart = true;
                         }
                         if(isCommodity.getStatus()==4){
@@ -180,7 +180,11 @@ public class StartSoap {
                             if(isExist){
                                 processService.deleteInstance(isCommodity);
                             }
-                            commodity.setAlteration(alteration.toString());
+                            if(StringUtils.isNotEmpty(isCommodity.getAlteration())){
+                                commodity.setAlteration(isCommodity.getAlteration()+"  "+alteration.toString());
+                            }else {
+                                commodity.setAlteration(alteration.toString());
+                            }
                             commodityList.add(commodity);
 
                         }

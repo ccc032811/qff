@@ -46,6 +46,15 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label" style="border-right: 1px solid white;">筛选</label>
+                                        <div class="layui-input-inline" style="border-bottom: white">
+                                            <select name="att">
+                                                <option value="">全部</option>
+                                                <option value="1">可审核</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div id="export-check" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%">
                                         <!--<div id="export-check" class="layui-form-item" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;">-->
                                             <div class="layui-btn layui-btn-normal layui-btn-sm" id="export-query" >
@@ -450,6 +459,7 @@
                 getRemark: $searchForm.find("input[name='getRemark']").val().trim(),
                 rConf: $searchForm.find("input[name='rConf']").val().trim(),
                 status: $searchForm.find("select[name='status']").val(),
+                att: $searchForm.find("select[name='att']").val(),
                 stage: stage,
                 invalidate_ie_cache: new Date()
             };

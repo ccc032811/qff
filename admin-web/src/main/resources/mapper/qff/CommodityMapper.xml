@@ -86,7 +86,7 @@
                 and create_time  &lt;=  #{commodity.endTime}
             </if>
             <choose>
-                <when test="commodity.status!=null and commodity.status!=''">
+                <when test="commodity.status!=null and commodity.status!=''and commodity.status !='5'">
                     and status = #{commodity.status}
                 </when>
                 <otherwise>

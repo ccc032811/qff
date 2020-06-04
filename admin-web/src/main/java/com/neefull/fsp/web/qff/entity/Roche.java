@@ -172,6 +172,8 @@ public class Roche implements Serializable {
     @TableField(exist = false)
     private Integer isAllow;
 
+    @TableField(exist = false)
+    private Integer att;
 
 
     public Integer getId() {
@@ -372,5 +374,13 @@ public class Roche implements Serializable {
 
     public void setIsAllow(Integer isAllow) {
         this.isAllow = isAllow;
+    }
+
+    public Integer getAtt() {
+        return att;
+    }
+
+    public void setAtt(Integer att) {
+        this.att = att;
     }
 }

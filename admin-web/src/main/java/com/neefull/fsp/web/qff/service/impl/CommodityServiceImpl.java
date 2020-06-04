@@ -10,12 +10,15 @@ import com.neefull.fsp.web.qff.service.ICommodityService;
 import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,7 +60,21 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
         //获取查询的数据
         List<Commodity> records = pageInfo.getRecords();
         List<Commodity> newCommodity = processService.queryCommodityTaskByName(records,user);
-        pageInfo.setRecords(newCommodity);
+        if(commodity.getAtt()!=null&&commodity.getAtt()==1){
+            List<Commodity> commodityList = new ArrayList<>();
+            if(CollectionUtils.isNotEmpty(newCommodity)) {
+                for (Commodity com : newCommodity) {
+                    if (com.getIsAllow() != null && com.getIsAllow() == 1) {
+                        commodityList.add(com);
+                    }
+                }
+            }
+            pageInfo.setRecords(commodityList);
+        }else {
+            pageInfo.setRecords(newCommodity);
+        }
+
+
         return pageInfo;
    }
 

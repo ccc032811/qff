@@ -10,11 +10,13 @@ import com.neefull.fsp.web.qff.mapper.RocheMapper;
 import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.qff.service.IRocheService;
 import com.neefull.fsp.web.system.entity.User;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -55,7 +57,19 @@ public class RocheServiceImpl extends ServiceImpl<RocheMapper, Roche> implements
         IPage<Roche> pageInfo = rocheMapper.getRochePage(page,roche);
         List<Roche> records = pageInfo.getRecords();
         List<Roche> newRoche = processService.queryRocheTaskByName(records,user);
-        pageInfo.setRecords(newRoche);
+        if(roche.getAtt()!=null&&roche.getAtt()==1){
+            List<Roche> rocheList = new ArrayList<>();
+            if(CollectionUtils.isNotEmpty(newRoche)){
+                for (Roche roc : newRoche) {
+                    if(roc.getIsAllow()!=null&&roc.getIsAllow()==1){
+                        rocheList.add(roc);
+                    }
+                }
+            }
+            pageInfo.setRecords(rocheList);
+        }else {
+            pageInfo.setRecords(newRoche);
+        }
         return pageInfo;
     }
 
