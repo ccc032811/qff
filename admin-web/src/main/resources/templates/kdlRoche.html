@@ -8,33 +8,33 @@
     <span>Dear KDL colleague，</span><br>
     <br>
     <span>您有待处理罗氏QFF如下，谢谢。</span><br>
-    <table  style='border:solid 1px #000;font-size:20px;'>
-        <tr style='background-color: #00A1DD'>
-            <td>运输单号</td>
-            <td>NO编号</td>
-            <td>Initiator发起人</td>
-            <td>申请日期</td>
-            <td>Reason原因</td>
-            <td>产品/物料名称</td>
-            <td>产品/物料编号</td>
-            <td>批号/序列号</td>
-            <td>受影响数量</td>
-            <td>期望完成日期</td>
-            <td>变更记录</td>
+    <table  style="width: 100%; border-collapse: collapse; border-top:1px solid #eee; font-size:14px; table-layout: fixed;">
+        <tr style=" background: #fafafa; color: #333; border: 1px solid #eee;">
+            <td style="border-right:1px solid #eee;text-align: center">运输单号</td>
+            <td style="border-right:1px solid #eee;text-align: center">NO编号</td>
+            <td style="border-right:1px solid #eee;text-align: center">Initiator发起人</td>
+            <td style="border-right:1px solid #eee;text-align: center">申请日期</td>
+            <td style="border-right:1px solid #eee;text-align: center">Reason原因</td>
+            <td style="border-right:1px solid #eee;text-align: center">产品/物料名称</td>
+            <td style="border-right:1px solid #eee;text-align: center">产品/物料编号</td>
+            <td style="border-right:1px solid #eee;text-align: center">批号/序列号</td>
+            <td style="border-right:1px solid #eee;text-align: center">受影响数量</td>
+            <td style="border-right:1px solid #eee;text-align: center">期望完成日期</td>
+            <td style="text-align: center">变更记录</td>
         </tr>
         <p th:each="roche:${list}">
-            <tr>
-                <td th:text="${roche.transport}"></td>
-                <td th:text="${roche.number}"></td>
-                <td th:text="${roche.sponsor}"></td>
-                <td th:text="${roche.reqDate}"></td>
-                <td th:text="${roche.reason}"></td>
-                <td th:text="${roche.materName}"></td>
-                <td th:text="${roche.materCode}"></td>
-                <td th:text="${roche.batch}"></td>
-                <td th:text="${roche.quantity}"></td>
-                <td th:text="${roche.exceptDate}"></td>
-                <td th:text="${roche.alteration}"></td>
+            <tr style=" background: #fafafa; color: #333; border-bottom: 1px solid #eee;">
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.transport}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.number}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.sponsor}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.reqDate}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.reason}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.materName}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.materCode}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.batch}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.quantity}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.exceptDate}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;border-right:1px solid #eee;text-align: center" th:text="${roche.alteration}"></td>
             </tr>
         </p>
     </table>
@@ -44,13 +44,7 @@
 
 </body>
 <style>
-    td{
-        border:solid 1px #000;
-        text-align: center;
-    }
-    tr {
-        border:solid 1px #000;
-    }
+
     span{
         font-size: 20px;
         font-family: "宋体";

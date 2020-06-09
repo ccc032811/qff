@@ -139,9 +139,8 @@ public class QffProcess extends BaseController {
                         String name = string.substring(0, string.lastIndexOf("."));
                         String type = string.substring(string.lastIndexOf(".") + 1);
 
-                        String newName = name+ DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
-                        String newFile = newName+"."+type;
-                        sftp.remove(properties.getSftpPath()+string,properties.getMovepath()+newFile);
+                        String newName = name+ DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss")+"."+type;
+                        sftp.remove(properties.getSftpPath()+string,properties.getMovepath()+newName);
 //                        sftp.deleteSFTP(properties.getSftpPath(),string);
                     }
                 }

@@ -9,41 +9,35 @@
     <br>
     <span >您有待处理QFF如下，请登录系统查看处理，谢谢。</span><br>
     <span >统一供应链门户：<a href="https://qff-stg.shaphar.com">https://qff-stg.shaphar.com</a> </span>
-    <table  style='border:solid 1px #000;font-size: 20px;'>
-        <tr style='background-color: #00A1DD'>
-            <td>康德乐物料号</td>
-            <td>罗氏物料号</td>
-            <td>产品物料号</td>
-            <td>有效期</td>
-            <td>批号</td>
-            <td>SAP批次</td>
-            <td>工厂</td>
-            <td>库位</td>
-            <td>数量</td>
+    <table  style="width: 100%; border-collapse: collapse; border-top:1px solid #eee; font-size:14px; table-layout: fixed;">
+        <tr style=" background: #fafafa; color: #333; border: 1px solid #eee;">
+            <td style="border-right:1px solid #eee;text-align: center">康德乐物料号</td>
+            <td style="border-right:1px solid #eee;text-align: center">罗氏物料号</td>
+            <td style="border-right:1px solid #eee;text-align: center">产品物料号</td>
+            <td style="border-right:1px solid #eee;text-align: center">有效期</td>
+            <td style="border-right:1px solid #eee;text-align: center">批号</td>
+            <td style="border-right:1px solid #eee;text-align: center">SAP批次</td>
+            <td style="border-right:1px solid #eee;text-align: center">工厂</td>
+            <td style="border-right:1px solid #eee;text-align: center">库位</td>
+            <td style="text-align: center">数量</td>
         </tr>
         <p th:each="recent:${list}">
-            <tr>
-                <td th:text="${recent.kMater}"></td>
-                <td th:text="${recent.rMater}"></td>
-                <td th:text="${recent.name}"></td>
-                <td th:text="${recent.useLife}"></td>
-                <td th:text="${recent.batch}"></td>
-                <td th:text="${recent.sapBatch}"></td>
-                <td th:text="${recent.factory}"></td>
-                <td th:text="${recent.wareHouse}"></td>
-                <td th:text="${recent.number}"></td>
+            <tr style=" background: #fafafa; color: #333; border-bottom: 1px solid #eee;">
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.kMater}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.rMater}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.name}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.useLife}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.batch}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.sapBatch}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.factory}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.wareHouse}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;border-right:1px solid #eee;text-align: center" th:text="${recent.number}"></td>
             </tr>
         </p>
     </table>
 </body>
 <style>
-    td{
-        border:solid 1px #000;
-        text-align: center;
-    }
-    tr {
-        border:solid 1px #000;
-    }
+
     span{
         font-size: 20px;
         font-family: "宋体";

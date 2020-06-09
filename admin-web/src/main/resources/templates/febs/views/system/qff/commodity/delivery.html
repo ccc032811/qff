@@ -311,11 +311,11 @@
         element.on('collapse(delivery-navi)', function(data){
             if(data.show == true){
                 $('#delivery-tag').html('');
-                $('#delivery-tag').append('<i  class="layui-icon tag-title">&#xe619;</i>')
+                $('#delivery-tag').append('<i  class="layui-icon tag-title">&#xe619;</i>');
                 $('#delivery-check').attr("style","display:none;")
             }else if(data.show == false){
                 $('#delivery-tag').html('');
-                $('#delivery-tag').append('<i  class="layui-icon tag-title" >&#xe61a;</i>')
+                $('#delivery-tag').append('<i  class="layui-icon tag-title" >&#xe61a;</i>');
                 $('#delivery-check').attr("style","border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%;display:inline")
             }
 
@@ -334,9 +334,9 @@
                 cols: [[
                     // {type: 'checkbox'},
                     {field: 'number', title: '编号',align:'center'},
-                    {field: 'plant', title: '工厂',align:'center'},
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
                     {field: 'rMater', title: '罗氏物料号',align:'center'},
+                    {field: 'rBatch', title: '罗氏批号',align:'center'},
                     {field: 'quarantine', title: '异常数',align:'center'},
                     {field: 'initDate', title: '发起日期',align:'center'},
                     {field: 'repTime', title: '回复日期',align:'center'},
@@ -376,7 +376,6 @@
                 params.pageSize = $view.find(".layui-laypage-limits option:selected").val();
                 params.pageNum = $view.find(".layui-laypage-em").next().html();
                 febs.download(ctx + 'commodity/excel',params, '到货QFF.xlsx');
-
             }
         });
 

@@ -140,7 +140,7 @@ public class Commodity implements Serializable {
      *  QFF 退货原因
      */
     @TableField("reason")
-    @ExcelField(value = "退货原因")
+    @ExcelField(value = "QFF原因")
     private String reason;
     /**
      *  投诉编号
