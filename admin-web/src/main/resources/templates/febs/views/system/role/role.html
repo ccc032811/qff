@@ -101,6 +101,8 @@
             $header = $view.find('#form-header'),
             tableIns;
 
+        var to = {time:new Date()};
+
         form.verify(validate);
         form.render();
 
@@ -262,7 +264,7 @@
         });
 
         function deleteRoles(roleIds) {
-            febs.get(ctx + 'role/delete/' + roleIds, null, function () {
+            febs.get(ctx + 'role/delete/' + roleIds, to, function () {
                 febs.alert.success('删除角色成功');
                 $query.trigger('click');
             })

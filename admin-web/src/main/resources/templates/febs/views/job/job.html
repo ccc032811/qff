@@ -82,6 +82,8 @@
             sortObject = {field: 'createTime', type: null},
             tableIns;
 
+        var to = {time:new Date()};
+
         form.render();
         initTable();
 
@@ -135,7 +137,7 @@
                             layui.each(checkStatus.data, function (key, item) {
                                 jobIds.push(item.jobId)
                             });
-                            febs.get(ctx + 'job/pause/' + jobIds.join(','), null, function () {
+                            febs.get(ctx + 'job/pause/' + jobIds.join(','), to, function () {
                                 febs.alert.success('暂停任务成功');
                                 $query.click();
                             })
@@ -151,7 +153,7 @@
                             layui.each(checkStatus.data, function (key, item) {
                                 jobIds.push(item.jobId)
                             });
-                            febs.get(ctx + 'job/resume/' + jobIds.join(','), null, function () {
+                            febs.get(ctx + 'job/resume/' + jobIds.join(','), to, function () {
                                 febs.alert.success('恢复任务成功');
                                 $query.click();
                             })
@@ -167,7 +169,7 @@
                             layui.each(checkStatus.data, function (key, item) {
                                 jobIds.push(item.jobId)
                             });
-                            febs.get(ctx + 'job/run/' + jobIds.join(','), null, function () {
+                            febs.get(ctx + 'job/run/' + jobIds.join(','), to, function () {
                                 febs.alert.success('执行任务成功');
                                 $query.click();
                             })
@@ -246,6 +248,9 @@
                 elem: $view.find('table'),
                 id: 'jobTable',
                 url: ctx + 'job',
+                where:{
+                    time:new Date()
+                },
                 cols: [[
                     {type: 'checkbox'},
                     {field: 'jobId', title: '任务ID', width: 80},
@@ -262,7 +267,7 @@
         }
 
         function deleteJobs(jobIds) {
-            febs.get(ctx + 'job/delete/' + jobIds, null, function () {
+            febs.get(ctx + 'job/delete/' + jobIds, to, function () {
                 febs.alert.success('删除任务成功');
                 $query.click();
             });

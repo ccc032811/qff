@@ -153,8 +153,10 @@ public class CommodityController extends BaseController {
      * @param commodity
      * @return
      */
-    @GetMapping("/queryHistory")
-    public FebsResponse queryHistory(Commodity commodity) throws FebsException {
+    @GetMapping("/queryHistory/{id}")
+    public FebsResponse queryHistory(@PathVariable Integer id) throws FebsException {
+        Commodity commodity = new Commodity();
+        commodity.setId(id);
         try {
             List<ProcessHistory> list = processService.queryHistory(commodity);
             return new FebsResponse().success().data(list);

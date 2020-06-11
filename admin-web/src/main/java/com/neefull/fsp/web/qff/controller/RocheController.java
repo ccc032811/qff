@@ -148,8 +148,10 @@ public class RocheController extends BaseController {
      * @param roche
      * @return
      */
-    @GetMapping("/queryHistory")
-    public FebsResponse queryHistory(Roche roche) throws FebsException {
+    @GetMapping("/queryHistory/{id}")
+    public FebsResponse queryHistory(@PathVariable Integer id) throws FebsException {
+        Roche roche = new Roche();
+        roche.setId(id);
         try {
             List<ProcessHistory> list = processService.queryHistory(roche);
             return new FebsResponse().success().data(list);

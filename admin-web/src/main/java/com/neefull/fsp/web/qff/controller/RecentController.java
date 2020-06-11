@@ -147,8 +147,10 @@ public class RecentController extends BaseController {
      * @param recent
      * @return
      */
-    @GetMapping("/queryHistory")
-    public FebsResponse queryHistory(Recent recent) throws FebsException {
+    @GetMapping("/queryHistory/{id}")
+    public FebsResponse queryHistory(@PathVariable Integer id) throws FebsException {
+        Recent recent = new Recent();
+        recent.setId(id);
         try {
             List<ProcessHistory> list = processService.queryHistory(recent);
             return new FebsResponse().success().data(list);

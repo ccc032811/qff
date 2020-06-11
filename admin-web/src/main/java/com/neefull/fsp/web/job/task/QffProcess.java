@@ -78,26 +78,45 @@ public class QffProcess extends BaseController {
             while (iterator.hasNext()){
                 String fileName = iterator.next();
                 String number = fileName.split("_")[0];
+                String attNumber = fileName.split("\\.")[0];
                 //根据number 去查询
                 Commodity commodity = commodityService.queryCommodityByNumber(number);
-                //判断是否为新建状态
-                if(commodity!=null&&commodity.getStatus()==1) {
-                    //添加到队列中去
-                    commoditys.put(number, commodity);
-                    //插入新的关联附件数据
-                    Attachment attachment = new Attachment();
-                    attachment.setQffId(number);
-                    attachment.setQffType(commodity.getStage());
-                    attachment.setAttachType(fileName.substring(fileName.lastIndexOf(".") + 1));
-                    attachment.setAttachSize(new File(properties.getLocalPath() + fileName).length() / 1024);
-                    attachment.setRemark(fileName.substring(0, fileName.lastIndexOf(".")));
-                    attachment.setSource(1);
-                    attachment.setEnable(1);
-                    attachmentService.addAttachment(attachment);
-                    //加入要发送的附件集合
-                    files.put(fileName,properties.getLocalPath() + fileName);
-
+                //判断该条数据是否存在
+                if(commodity!=null){
+                    //存在判断存在
+                    if(commodity.getStatus()==1) {
+                        //状态为1，添加到要发送邮件的集合中去
+                        commoditys.put(number, commodity);
+                        //插入新的关联附件数据
+                        Attachment attachment = new Attachment();
+                        attachment.setQffId(number);
+                        attachment.setQffType(commodity.getStage());
+                        attachment.setAttachType(fileName.substring(fileName.lastIndexOf(".") + 1));
+                        attachment.setAttachSize(new File(properties.getLocalPath() + fileName).length() / 1024);
+                        attachment.setRemark(fileName.substring(0, fileName.lastIndexOf(".")));
+                        attachment.setSource(1);
+                        attachment.setEnable(1);
+                        attachmentService.addAttachment(attachment);
+                        //加入要发送的附件集合
+//                        files.put(fileName, properties.getLocalPath() + fileName);
+                    }else {
+                        //状态不为1的情况下，判断这天数据是否存在
+                        Boolean isAtt = attachmentService.selectAttAndNumber(number, attNumber);
+                        if (!isAtt) {
+                            //不存在的情况下添加该条数据
+                            Attachment attachment = new Attachment();
+                            attachment.setQffId(number);
+                            attachment.setQffType(commodity.getStage());
+                            attachment.setAttachType(fileName.substring(fileName.lastIndexOf(".") + 1));
+                            attachment.setAttachSize(new File(properties.getLocalPath() + fileName).length() / 1024);
+                            attachment.setRemark(fileName.substring(0, fileName.lastIndexOf(".")));
+                            attachment.setSource(1);
+                            attachment.setEnable(1);
+                            attachmentService.addAttachment(attachment);
+                        }
+                    }
                 }else {
+                    //不存在删除这条数据
                     iterator.remove();
                 }
             }
@@ -129,29 +148,40 @@ public class QffProcess extends BaseController {
 
             //发送邮件
             MailUtils.sendMail(text,mailProperties,mails,files);
-
-            try {
-                sftp = new SftpUtils(properties.getHost(),properties.getUsername(),properties.getPassword());
-                sftp.connect();
-                if(!files.isEmpty()){
-                    Set<String> fileList = files.keySet();
-                    for (String string : fileList) {
-                        String name = string.substring(0, string.lastIndexOf("."));
-                        String type = string.substring(string.lastIndexOf(".") + 1);
-
-                        String newName = name+ DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss")+"."+type;
-                        sftp.remove(properties.getSftpPath()+string,properties.getMovepath()+newName);
-//                        sftp.deleteSFTP(properties.getSftpPath(),string);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }finally {
-                sftp.disconnect();
-            }
         }
 
+        try {
+            sftp = new SftpUtils(properties.getHost(),properties.getUsername(),properties.getPassword());
+            sftp.connect();
 
+            //移动文件
+            if(CollectionUtils.isNotEmpty(list)){
+                for (String string : list) {
+                    String name = string.substring(0, string.lastIndexOf("."));
+                    String type = string.substring(string.lastIndexOf(".") + 1);
+
+                    String newName = name+ DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss")+"."+type;
+                    sftp.remove(properties.getSftpPath()+string,properties.getMovepath()+newName);
+//                        sftp.deleteSFTP(properties.getSftpPath(),string);
+                }
+            }
+
+//                if(!files.isEmpty()){
+//                    Set<String> fileList = files.keySet();
+//                    for (String string : fileList) {
+//                        String name = string.substring(0, string.lastIndexOf("."));
+//                        String type = string.substring(string.lastIndexOf(".") + 1);
+//
+//                        String newName = name+ DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss")+"."+type;
+//                        sftp.remove(properties.getSftpPath()+string,properties.getMovepath()+newName);
+////                        sftp.deleteSFTP(properties.getSftpPath(),string);
+//                    }
+//                }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            sftp.disconnect();
+        }
 
 
 
@@ -209,5 +239,4 @@ public class QffProcess extends BaseController {
 
 
     }
-
 }

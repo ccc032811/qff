@@ -88,6 +88,8 @@
             _currentOpinionData,
             _opinionTree;
 
+        var to = {time:new Date()};
+
         form.verify(validate);
         form.render();
 
@@ -129,7 +131,7 @@
                         opinionIds.push(item.id)
                     });
                     febs.modal.confirm('提示', '当您点击确定按钮后，这些记录将会被彻底删除，如果其包含子记录，也将一并删除！', function () {
-                        febs.get(ctx + 'opinion/deleteOpinion/' + opinionIds.join(','), null, function () {
+                        febs.get(ctx + 'opinion/deleteOpinion/' + opinionIds.join(','), to, function () {
                             febs.alert.success('删除成功！');
                             reloadOpinionTree();
                             reset();

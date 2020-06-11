@@ -244,14 +244,31 @@ public class ProcessServiceImpl implements IProcessService {
     public void deleteInstance(Object object) {
         ProcessInstance processInstance = null;
         String businessKey = getBusinessKey(object);
+        deleteAtt(object);
         if(StringUtils.isNotEmpty(businessKey)){
             processInstance = queryProcessInstance(businessKey);
         }
-
         delete(processInstance);
+
     }
 
-    private String getBusinessKey(Object object){
+    @Transactional
+    public void deleteAtt(Object object){
+        if(object instanceof Commodity){
+            Commodity commodity = (Commodity) object;
+            Commodity comm = commodityService.queryCommodityById(commodity.getId());
+            attachmentService.deleteByNumber(comm.getNumber(),comm.getStage());
+        }else if(object instanceof Recent){
+            Recent recent = (Recent) object;
+            attachmentService.deleteByNumber(String.valueOf(recent.getId()),ProcessConstant.RECENT_NAME);
+        }else if(object instanceof Roche) {
+            Roche roche = (Roche) object;
+            attachmentService.deleteByNumber(String.valueOf(roche.getId()),ProcessConstant.ROCHE_NAME);
+        }
+    }
+
+
+    public String getBusinessKey(Object object){
         String businessKey = "";
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
@@ -259,13 +276,14 @@ public class ProcessServiceImpl implements IProcessService {
         }else if(object instanceof Recent){
             Recent recent = (Recent) object;
             businessKey = Recent.class.getSimpleName()+":"+recent.getId();
-
         }else if(object instanceof Roche) {
             Roche roche = (Roche) object;
             businessKey = Roche.class.getSimpleName() + ":" + roche.getId();
         }
         return businessKey;
     }
+
+
 
     @Override
     public Boolean queryProcessByKey(Object object) {
@@ -554,6 +572,9 @@ public class ProcessServiceImpl implements IProcessService {
         if(!roche.getActualDate().equals(oldRoche.getActualDate())){
             alteration.append("实际日期:" +date+ " 由 "+oldRoche.getActualDate()+" 修改为 "+roche.getActualDate()+"  。 ");
         }
+        if(!roche.getRemark().equals(oldRoche.getRemark())){
+            alteration.append("备注:" +date+ " 由 "+oldRoche.getRemark()+" 修改为 "+roche.getRemark()+"  。 ");
+        }
         if(StringUtils.isNotEmpty(oldRoche.getAlteration())){
             roche.setAlteration(oldRoche.getAlteration() +"  "+alteration.toString());
         }else {
@@ -588,6 +609,7 @@ public class ProcessServiceImpl implements IProcessService {
     protected void delete(ProcessInstance processInstance){
         if(processInstance!=null){
             runtimeService.deleteProcessInstance(processInstance.getProcessInstanceId(),null);
+            historyService.deleteHistoricProcessInstance(processInstance.getProcessInstanceId());
         }
     }
 
@@ -598,7 +620,6 @@ public class ProcessServiceImpl implements IProcessService {
         if (object instanceof Commodity) {
             Commodity commodity = (Commodity) object;
             list = saveAttachment(commodity.getNumber(),commodity.getStage(), commodity.getImages(),user);
-
         } else if (object instanceof Recent) {
             Recent recent = (Recent) object;
             list = saveAttachment(String.valueOf(recent.getId()),ProcessConstant.RECENT_NAME,recent.getImages(),user);

@@ -1,233 +1,233 @@
-<!--<html xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-    <!--<meta charset="utf-8">-->
-    <!--<title>QFF系统</title>-->
-    <!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>-->
-    <!--<meta name="renderer" content="webkit">-->
-    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
-    <!--<meta name="viewport"-->
-          <!--content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">-->
-    <!--<link rel="stylesheet" th:href="@{layui/css/layui.css(t=2)}" media="all">-->
-    <!--<link rel="stylesheet" th:href="@{febs/css/febs.css(t=2)}" media="all">-->
-    <!--<link rel="stylesheet" th:href="@{febs/css/login.css(t=2)}" media="all">-->
-    <!--<link rel="stylesheet" th:href="@{febs/css/component.css(t=2)}" media="all">-->
-    <!--<link rel="stylesheet" th:href="@{febs/css/demo.css(t=2)}" media="all">-->
-    <!--<link rel="stylesheet" th:href="@{febs/css/normalize.css(t=2)}" media="all">-->
-    <!--<link rel="icon" th:href="@{febs/images/favicon.ico}" type="image/x-icon"/>-->
-<!--</head>-->
-<!--<body>-->
-<!--&lt;!&ndash; 新登录 &ndash;&gt;-->
-<!--<div class="container demo-1" id="febs-login">-->
-    <!--<div class="content">-->
-        <!--<div id="large-header" class="large-header">-->
-            <!--<canvas id="demo-canvas"></canvas>-->
-            <!--<div class="logo_box grid-demo" id="logo_box" style="border: 1px solid #CDCDCD">-->
-                <!--<div style="width: 80%;height: 100px;border-bottom: 1px solid #E3E1DF;margin-left: 5%">-->
-                    <!--<img data-th-src="@{febs/images/cardinal_logo_small.jpg}" width="300px" height="68px" style="margin-top: 20px">-->
-                <!--</div>-->
-                <!--<form id="loginForm">-->
-                    <!--<div style="width: 100%;height: 70px">-->
-                        <!--<div class="input_outer" style="float: left">-->
-                            <!--<span class="u_user"></span>-->
-                            <!--<input id="username" name="username" class="text" lay-verify="required" style="color: #000 !important" type="text" placeholder="请输入账户">-->
-                        <!--</div>-->
-                        <!--<div class="input_outer" style="float: right">-->
-                            <!--<span class="us_uer"></span>-->
-                            <!--<input id="password" name="password" class="text" lay-verify="required" style="color: #000 !important; position:absolute; z-index:100;"value="" type="password" placeholder="请输入密码">-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div style="width: 100%;height: 70px">-->
-                        <!--<div class="input_outer_code" style="float: left">-->
-                            <!--<span class="us_code"></span>-->
-                            <!--<input type="text" maxlength="4" name="verifyCode" lay-verify="required" style="color: #000 !important"-->
-                                   <!--placeholder="验证码" class="text_code" autocomplete="off">-->
-                            <!--<img class="codeimg" id="codeimg" width="80" height="25px"/>-->
-                        <!--</div>-->
-                        <!--<div class="input_outer" style="float: right">-->
-                            <!--<div style="width: 80%;height: 30px;margin-top: 16px;">-->
-                                <!--<input id="color-input-red" class="chat-button-location-radio-input" type="checkbox" name="color-input-red" value="#f0544d" />-->
-                                <!--<label for="color-input-red"></label>-->
-                                <!--<span style="margin-left: 35px;color: #AAAAAA;font-size: 13px">记住</span>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>QFF系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" th:href="@{layui/css/layui.css(t=2)}" media="all">
+    <link rel="stylesheet" th:href="@{febs/css/febs.css(t=2)}" media="all">
+    <link rel="stylesheet" th:href="@{febs/css/login.css(t=2)}" media="all">
+    <link rel="stylesheet" th:href="@{febs/css/component.css(t=2)}" media="all">
+    <link rel="stylesheet" th:href="@{febs/css/demo.css(t=2)}" media="all">
+    <link rel="stylesheet" th:href="@{febs/css/normalize.css(t=2)}" media="all">
+    <link rel="icon" th:href="@{febs/images/favicon.ico}" type="image/x-icon"/>
+</head>
+<body>
+<!-- 新登录 -->
+<div class="container demo-1" id="febs-login">
+    <div class="content">
+        <div id="large-header" class="large-header">
+            <canvas id="demo-canvas"></canvas>
+            <div class="logo_box grid-demo" id="logo_box" style="border: 1px solid #CDCDCD">
+                <div style="width: 80%;height: 100px;border-bottom: 1px solid #E3E1DF;margin-left: 5%">
+                    <img data-th-src="@{febs/images/cardinal_logo_small.jpg}" width="300px" height="68px" style="margin-top: 20px">
+                </div>
+                <form id="loginForm">
+                    <div style="width: 100%;height: 70px">
+                        <div class="input_outer" style="float: left">
+                            <span class="u_user"></span>
+                            <input id="username" name="username" class="text" lay-verify="required" style="color: #000 !important" type="text" placeholder="请输入账户">
+                        </div>
+                        <div class="input_outer" style="float: right">
+                            <span class="us_uer"></span>
+                            <input id="password" name="password" class="text" lay-verify="required" style="color: #000 !important; position:absolute; z-index:100;"value="" type="password" placeholder="请输入密码">
+                        </div>
+                    </div>
+                    <div style="width: 100%;height: 70px">
+                        <div class="input_outer_code" style="float: left">
+                            <span class="us_code"></span>
+                            <input type="text" maxlength="4" name="verifyCode" lay-verify="required" style="color: #000 !important"
+                                   placeholder="验证码" class="text_code" autocomplete="off">
+                            <img class="codeimg" id="codeimg" width="80" height="25px"/>
+                        </div>
+                        <div class="input_outer" style="float: right">
+                            <div style="width: 80%;height: 30px;margin-top: 16px;">
+                                <input id="color-input-red" class="chat-button-location-radio-input" type="checkbox" name="color-input-red" value="#f0544d" />
+                                <label for="color-input-red"></label>
+                                <span style="margin-left: 35px;color: #AAAAAA;font-size: 13px">记住</span>
+                            </div>
+                        </div>
+                    </div>
 
-                    <!--<div class="mb2">-->
-                        <!--&lt;!&ndash;<a id = "sub" lay-filter="sub" class="act-but submit" href="javascript:;" style="color: #FFFFFF">登录</a>&ndash;&gt;-->
-                        <!--<button class="layui-btn layui-btn-normal layui-btn-fluid" lay-submit-->
-                                <!--lay-filter="login-submit" id="login" style="border-radius: 50px;height: 50px;line-height: 50px;font-size: 20px;width: 80%">-->
-                            <!--<i style="display: none"-->
-                               <!--class="layui-icon layui-icon-loading layui-icon layui-anim layui-anim-rotate layui-anim-loop"></i>-->
-                            <!--立即登录-->
-                        <!--</button>-->
-                    <!--</div>-->
-                <!--</form>-->
-                <!--<div style="width: 70%;height: 20px;font-size: 14px;margin-left: 5%;" id="msg">-->
+                    <div class="mb2">
+                        <!--<a id = "sub" lay-filter="sub" class="act-but submit" href="javascript:;" style="color: #FFFFFF">登录</a>-->
+                        <button class="layui-btn layui-btn-normal layui-btn-fluid" lay-submit
+                                lay-filter="login-submit" id="login" style="border-radius: 50px;height: 50px;line-height: 50px;font-size: 20px;width: 80%">
+                            <i style="display: none"
+                               class="layui-icon layui-icon-loading layui-icon layui-anim layui-anim-rotate layui-anim-loop"></i>
+                            立即登录
+                        </button>
+                    </div>
+                </form>
+                <div style="width: 70%;height: 20px;font-size: 14px;margin-left: 5%;" id="msg">
 
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
-<!--<script th:src="@{layui/layui.js}"></script>-->
-<!--<script th:src="@{febs/demo-1.js}"></script>-->
-<!--<script th:inline="javascript">-->
-    <!--var ctx = [[@{-->
-        <!--/}]];-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{layui/layui.js}"></script>
+<script th:src="@{febs/demo-1.js}"></script>
+<script th:inline="javascript">
+    var ctx = [[@{
+        /}]];
 
-        <!--layui.extend({-->
-            <!--validate: './febs/lay/modules/validate',-->
-            <!--cookie: './febs/lay/extends/cookie'-->
-        <!--}).use(['form', 'layer', 'validate','cookie'], function (form, layer) {-->
-            <!--var $ = layui.jquery,-->
-                <!--cookie = layui.cookie,-->
-                <!--validate = layui.validate,-->
-                <!--$view = $('#febs-login'),-->
-                <!--type = 'regist',-->
-                <!--$loginDiv = $view.find('#login-div'),-->
-                <!--$registDiv = $view.find('#regist-div');-->
-
-
-            <!--form.verify(validate);-->
-            <!--form.render();-->
-            <!--initCode();-->
+        layui.extend({
+            validate: './febs/lay/modules/validate',
+            cookie: './febs/lay/extends/cookie'
+        }).use(['form', 'layer', 'validate','cookie'], function (form, layer) {
+            var $ = layui.jquery,
+                cookie = layui.cookie,
+                validate = layui.validate,
+                $view = $('#febs-login'),
+                type = 'regist',
+                $loginDiv = $view.find('#login-div'),
+                $registDiv = $view.find('#regist-div');
 
 
-            <!--//提交登录表单-->
-            <!--form.on('submit(login-submit)', function (data) {-->
-                <!--var loading = $(this).find('.layui-icon');-->
-                <!--if (loading.is(":visible")) return;-->
-                <!--loading.show();-->
-                <!--$.post(ctx + 'login', $("#loginForm").serialize(), function (r) {-->
-                    <!--if (r.code === 200) {-->
-                        <!--location.href = ctx + 'index';-->
-                        <!--saveUserInfo();-->
-                    <!--} else {-->
-                        <!--layer.msg(r.message);-->
-                        <!--loading.hide();-->
-                        <!--initCode();-->
-                    <!--}-->
-                <!--});-->
-                <!--return false;-->
-            <!--});-->
+            form.verify(validate);
+            form.render();
+            initCode();
 
-            <!--//提交注册表单-->
-            <!--form.on('submit(regist-submit)', function (data) {-->
-                <!--if (data.field.password !== data.field.passwordB) {-->
-                    <!--layer.msg('两次密码输入不一致！');-->
-                    <!--return;-->
-                <!--}-->
-                <!--var loading = $(this).find('.layui-icon');-->
-                <!--if (loading.is(":visible")) return;-->
-                <!--loading.show();-->
-                <!--$.post(ctx + 'regist', data.field, function (r) {-->
-                    <!--if (r.code === 200) {-->
-                        <!--layer.msg('注册成功，请登录');-->
-                        <!--loading.hide();-->
-                        <!--$view.find('#login-href').trigger('click');-->
-                    <!--} else {-->
-                        <!--layer.msg(r.message);-->
-                        <!--loading.hide();-->
-                    <!--}-->
-                <!--});-->
-                <!--return false;-->
-            <!--});-->
 
-            <!--function initCode() {-->
-                <!--$view.find('#codeimg').attr("src", ctx + "images/captcha?data=" + new Date().getTime());-->
-            <!--}-->
+            //提交登录表单
+            form.on('submit(login-submit)', function (data) {
+                var loading = $(this).find('.layui-icon');
+                if (loading.is(":visible")) return;
+                loading.show();
+                $.post(ctx + 'login', $("#loginForm").serialize(), function (r) {
+                    if (r.code === 200) {
+                        location.href = ctx + 'index';
+                        saveUserInfo();
+                    } else {
+                        layer.msg(r.message);
+                        loading.hide();
+                        initCode();
+                    }
+                });
+                return false;
+            });
 
-            <!--$view.find('#codeimg').on('click', function () {-->
-                <!--initCode();-->
-            <!--});-->
+            //提交注册表单
+            form.on('submit(regist-submit)', function (data) {
+                if (data.field.password !== data.field.passwordB) {
+                    layer.msg('两次密码输入不一致！');
+                    return;
+                }
+                var loading = $(this).find('.layui-icon');
+                if (loading.is(":visible")) return;
+                loading.show();
+                $.post(ctx + 'regist', data.field, function (r) {
+                    if (r.code === 200) {
+                        layer.msg('注册成功，请登录');
+                        loading.hide();
+                        $view.find('#login-href').trigger('click');
+                    } else {
+                        layer.msg(r.message);
+                        loading.hide();
+                    }
+                });
+                return false;
+            });
 
-            <!--$view.find('#regist-href').on('click', function () {-->
-                <!--resetForm();-->
-                <!--type = 'regist';-->
-                <!--$loginDiv.hide();-->
-                <!--$registDiv.show();-->
-            <!--});-->
+            function initCode() {
+                $view.find('#codeimg').attr("src", ctx + "images/captcha?data=" + new Date().getTime());
+            }
 
-            <!--$view.find('#login-href').on('click', function () {-->
-                <!--resetForm();-->
-                <!--type = 'login';-->
-                <!--$loginDiv.show();-->
-                <!--$registDiv.hide();-->
-            <!--});-->
+            $view.find('#codeimg').on('click', function () {
+                initCode();
+            });
 
-            <!--function resetForm() {-->
-                <!--$registDiv.find('input[name="username"]').val('')-->
-                    <!--.end().find('input[name="password"]').val('')-->
-                    <!--.end().find('input[name="passwordB"]').val('');-->
+            $view.find('#regist-href').on('click', function () {
+                resetForm();
+                type = 'regist';
+                $loginDiv.hide();
+                $registDiv.show();
+            });
 
-                <!--$loginDiv.find('input[name="username"]').val('')-->
-                    <!--.end().find('input[name="password"]').val('')-->
-                    <!--.end().find('input[name="verifyCode"]').val('');-->
-            <!--}-->
+            $view.find('#login-href').on('click', function () {
+                resetForm();
+                type = 'login';
+                $loginDiv.show();
+                $registDiv.hide();
+            });
 
-            <!--$(document).on('keydown', function (e) {-->
-                <!--if (e.keyCode === 13) {-->
-                    <!--if (type === 'login')-->
-                    <!--// $view.find('#login').trigger("click");-->
-                        <!--form.on('submit(login-submit)', function (data) {-->
-                            <!--var loading = $(this).find('.layui-icon');-->
-                            <!--if (loading.is(":visible")) return;-->
-                            <!--loading.show();-->
-                            <!--$.post(ctx + 'login', $("#loginForm").serialize(), function (r) {-->
-                                <!--if (r.code === 200) {-->
-                                    <!--location.href = ctx + 'index';-->
-                                <!--} else {-->
-                                    <!--layer.msg(r.message);-->
-                                    <!--loading.hide();-->
-                                    <!--initCode();-->
-                                <!--}-->
-                            <!--});-->
-                            <!--return false;-->
-                        <!--});-->
-                    <!--if (type === 'regist')-->
-                        <!--$view.find('#regist').trigger("click");-->
-                <!--}-->
-            <!--});-->
+            function resetForm() {
+                $registDiv.find('input[name="username"]').val('')
+                    .end().find('input[name="password"]').val('')
+                    .end().find('input[name="passwordB"]').val('');
 
-            <!--$(function() {-->
-                <!--if ($.cookie("color-input-red")) {-->
-                    <!--$("#color-input-red").prop("checked", true);-->
-                    <!--$('#username').val($.cookie("username"));-->
-                    <!--$('#password').val($.cookie("password"));-->
-                <!--}-->
-            <!--});-->
+                $loginDiv.find('input[name="username"]').val('')
+                    .end().find('input[name="password"]').val('')
+                    .end().find('input[name="verifyCode"]').val('');
+            }
 
-            <!--function saveUserInfo() {-->
-                <!--if ($('#color-input-red').prop("checked") == true) {-->
-                    <!--var username = $('#username').val();-->
-                    <!--var password = $('#password').val();-->
-                    <!--$.cookie("color-input-red", "true", {expires: 7});-->
-                    <!--$.cookie("username", username, {expires: 7});-->
-                    <!--$.cookie("password", password, {expires: 7});-->
-                <!--} else {-->
-                    <!--$.cookie("color-input-red", "false", {expires: -1});-->
-                    <!--$.cookie("username", '', {expires: -1});-->
-                    <!--$.cookie("password", '', {expires: -1});-->
-                <!--}-->
-            <!--}-->
+            $(document).on('keydown', function (e) {
+                if (e.keyCode === 13) {
+                    if (type === 'login')
+                    // $view.find('#login').trigger("click");
+                        form.on('submit(login-submit)', function (data) {
+                            var loading = $(this).find('.layui-icon');
+                            if (loading.is(":visible")) return;
+                            loading.show();
+                            $.post(ctx + 'login', $("#loginForm").serialize(), function (r) {
+                                if (r.code === 200) {
+                                    location.href = ctx + 'index';
+                                } else {
+                                    layer.msg(r.message);
+                                    loading.hide();
+                                    initCode();
+                                }
+                            });
+                            return false;
+                        });
+                    if (type === 'regist')
+                        $view.find('#regist').trigger("click");
+                }
+            });
 
-            <!--$(function () {-->
-                <!--var year = new Date().getFullYear();-->
-                <!--$('#msg').append('上药控股有限公司版权所有©2013-'+year)-->
-            <!--})-->
+            $(function() {
+                if ($.cookie("color-input-red")) {
+                    $("#color-input-red").prop("checked", true);
+                    $('#username').val($.cookie("username"));
+                    $('#password').val($.cookie("password"));
+                }
+            });
 
-            <!--window.onresize = function () {-->
-                <!--var winHeight = $(window).height()-->
-                <!--var winWidth = $(window).width()-->
+            function saveUserInfo() {
+                if ($('#color-input-red').prop("checked") == true) {
+                    var username = $('#username').val();
+                    var password = $('#password').val();
+                    $.cookie("color-input-red", "true", {expires: 7});
+                    $.cookie("username", username, {expires: 7});
+                    $.cookie("password", password, {expires: 7});
+                } else {
+                    $.cookie("color-input-red", "false", {expires: -1});
+                    $.cookie("username", '', {expires: -1});
+                    $.cookie("password", '', {expires: -1});
+                }
+            }
 
-                <!--if(winWidth<800){-->
-                    <!--$('#logo_box').attr('style','width: 100%;height:100%;margin-top: 30%;-webkit-box-shadow: white 0px 0px 0px 0px;-moz-box-shadow: white 0px 0px 0px;')-->
-                <!--}else {-->
-                    <!--$('#logo_box').attr('style','width: 60%;height:450px;')-->
-                <!--}-->
-            <!--}-->
+            $(function () {
+                var year = new Date().getFullYear();
+                $('#msg').append('上药控股有限公司版权所有©2013-'+year)
+            });
 
-        <!--});-->
-<!--</script>-->
-<!--</body>-->
-<!--</html>-->
+            window.onresize = function () {
+                var winHeight = $(window).height()
+                var winWidth = $(window).width()
+
+                if(winWidth<800){
+                    $('#logo_box').attr('style','width: 100%;height:100%;margin-top: 30%;-webkit-box-shadow: white 0px 0px 0px 0px;-moz-box-shadow: white 0px 0px 0px;')
+                }else {
+                    $('#logo_box').attr('style','width: 60%;height:450px;')
+                }
+            }
+
+        });
+</script>
+</body>
+</html>

@@ -242,8 +242,7 @@
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="export-detail" shiro:hasPermission="export:view">查看</a>
         {{#  if(d.isAllow != '1'){d.status = '不可审核'}}
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="export-alter"  shiro:hasPermission="export:alter ">修改</a>
-        {{#}}}
-        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
+        {{# }else if (d.isAllow == '1'){d.status = '可审核'}}
         <a class="layui-btn layui-btn-xs" lay-event="export-edit"  shiro:hasPermission="export:audit">审核</a>
         {{#}}}
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="export-del" shiro:hasPermission="export:del">删除</a>
@@ -273,6 +272,7 @@
             tableIns;
         var stage = '出库';
         var reason = "QFF原因";
+        var to = {time:new Date()};
 
         //初始化表单
         form.render();
@@ -325,7 +325,10 @@
                 id: 'exportTable',
                 height: 455,
                 url: ctx + 'commodity/list',   //url
-                where:{stage:stage},
+                where:{
+                    stage:stage,
+                    time:new Date()
+                },
                 toolbar: '#export-toolbarCheck',     //开启头部工具栏
                 defaultToolbar: ['filter','print'],    //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
                 cols: [[
@@ -404,13 +407,13 @@
 
         function delCommodity(id)
         {
-            febs.get(ctx + 'commodity/deleteCommodity/' + id, null, function () {
+            febs.get(ctx + 'commodity/deleteCommodity/' + id, to, function () {
                 febs.alert.success('操作成功');
                 $query.click();
             });
         }
 
-        $.get(ctx +"opinion/getOpinion/"+reason,function(res){
+        $.get(ctx +"opinion/getOpinion/"+reason,to,function(res){
             var data = res.data;
             $.each(data,function(index,item){
                 $("#export-reason").append('<option value="'+item.name+'"></option>')

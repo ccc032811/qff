@@ -195,8 +195,7 @@
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
         {{#  if(d.isAllow != '1'){}}
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-alter"  shiro:hasPermission="roche:alter" >修改</a>
-        {{#}}}
-        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
+        {{# }else if (d.isAllow == '1'){d.status = '可审核'}}
         <a class="layui-btn layui-btn-xs" lay-event="roche-edit"  shiro:hasPermission="roche:audit">审核</a>
         {{#}}}
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-del" shiro:hasPermission="roche:del">删除</a>
@@ -228,6 +227,8 @@
             $cleanBtn = $view.find('#cleanBtn'),
             $searchForm = $view.find('form'),
             tableIns;
+
+        var to = {time:new Date()};
 
 
         //初始化表单
@@ -293,6 +294,9 @@
                 url: ctx + 'roche/list',   //url
                 toolbar: '#roche-toolbarCheck',     //开启头部工具栏
                 defaultToolbar: ['filter','print'],    //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
+                where:{
+                    time:new Date()
+                },
                 cols: [[
                     // {type: 'checkbox'},
                     {field: 'number', title: '编号',align:'center'},
@@ -343,7 +347,7 @@
             }
             if (layEvent === 'roche-add') {
                 febs.modal.open('新增', 'system/qff/roche/add' , {
-                    area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '80%']
+                    area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '75%']
                 });
             }
         });
@@ -354,12 +358,12 @@
                 layEvent = obj.event;
             if (layEvent === 'roche-detail') {
                 febs.modal.open('具体信息', 'system/qff/roche/rocheShow/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
+                    area:  [$(window).width() <= 750 ? '90%' : '70%',$(window).width() <= 750 ? '90%' : '75%']
                 });
             }
             if (layEvent === 'roche-edit') {
                 febs.modal.open('审核', 'system/qff/roche/rocheAudit/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
+                    area:  [$(window).width() <= 750 ? '90%' : '70%',$(window).width() <= 750 ? '90%' : '75%']
                 });
             }
             if (layEvent === 'roche-del') {
@@ -369,14 +373,14 @@
             }
             if(layEvent === 'roche-alter'){
                 febs.modal.open('修改', 'system/qff/roche/rocheAlter/' + data.id +"/"+ '1', {
-                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
+                    area:  [$(window).width() <= 750 ? '90%' : '70%',$(window).width() <= 750 ? '90%' : '75%']
                 });
             }
         });
 
         function delRoche(id)
         {
-            febs.get(ctx + 'roche/deleteRoche/' + id, null, function () {
+            febs.get(ctx + 'roche/deleteRoche/' + id, to, function () {
                 febs.alert.success('操作成功');
                 $query.click();
             });

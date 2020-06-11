@@ -72,4 +72,19 @@ public class AttachmentServiceImpl  extends ServiceImpl<AttachmentMapper, Attach
         delete.eq("qff_type",typt);
         attachmentMapper.delete(delete);
     }
+
+    @Override
+    public Boolean selectAttAndNumber(String number, String attNumber) {
+        QueryWrapper<Attachment> wrapper = new QueryWrapper<>();
+        wrapper.eq("qff_id",number);
+        wrapper.eq("remark",attNumber);
+        Attachment attachment = attachmentMapper.selectOne(wrapper);
+        if(attachment!=null){
+            return true;
+        }else {
+            return false;
+        }
+
+
+    }
 }

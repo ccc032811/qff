@@ -305,6 +305,7 @@
             $view = $('#export-detail-show');
 
         var type="出库";
+        var to = {time:new Date()};
 
         //表单渲染
         form.render();
@@ -345,7 +346,7 @@
             });
         }
 
-        $.get(ctx +"file/findImages/"+commodity.number +"/"+type,function (res) {
+        $.get(ctx +"file/findImages/"+commodity.number +"/"+type,to,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
                 var url = item.substring(item.lastIndexOf("/")+1);
@@ -393,7 +394,7 @@
             });
         };
 
-        $.get(ctx + "commodity/queryHistory",commodity ,function (res) {
+        $.get(ctx + "commodity/queryHistory/"+commodity.id,to,function (res) {
             var data = res.data;
             if(data[0]!=null&&data[0].date !=null){
                 $("#time-first").html(data[0].date);

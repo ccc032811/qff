@@ -339,6 +339,7 @@
         var rConf ="罗氏QA处理意见";
         var reason = "QFF原因";
         var type = "出库";
+        var to = {time:new Date()};
 
 
         $(function () {
@@ -501,7 +502,7 @@
             }
         });
         function deleteImage(url){
-            febs.get(ctx + "file/deleteImage/"+url, function (res) {
+            febs.get(ctx + "file/deleteImage/"+url,to, function (res) {
                 if(res.code === 200) {
                     febs.alert.success('删除成功');
                 }
@@ -509,7 +510,7 @@
         }
 
 
-        $.get(ctx +"file/findImages/"+commodity.number +"/"+type,function (res) {
+        $.get(ctx +"file/findImages/"+commodity.number +"/"+type,to,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
                 var url = item.substring(item.lastIndexOf("/")+1);
@@ -559,7 +560,7 @@
         };
 
 
-        $.get(ctx + "commodity/queryHistory",commodity ,function (res) {
+        $.get(ctx + "commodity/queryHistory/"+commodity.id,to ,function (res) {
             var data = res.data;
             if(data[0]!=null&&data[0].date !=null){
                 $("#time-first").html(data[0].date);
@@ -631,21 +632,21 @@
         });
 
 
-        $.get(ctx +"opinion/getOpinion/"+reason,function(res){
+        $.get(ctx +"opinion/getOpinion/"+reason,to,function(res){
             var data = res.data;
             $.each(data,function(index,item){
                 $("#export-search-reason").append('<option value="'+item.name+'"></option>')
             });
         });
 
-        $.get(ctx +"opinion/getOpinion/"+rConf,function(res){
+        $.get(ctx +"opinion/getOpinion/"+rConf,to,function(res){
             var data = res.data;
             $.each(data,function(index,item){
                 $("#export-search-rConf").append('<option value="'+item.name+'"></option>')
             });
         });
 
-        $.get(ctx +"opinion/getOpinion/"+ba,function(res){
+        $.get(ctx +"opinion/getOpinion/"+ba,to,function(res){
             var data = res.data;
             $.each(data,function(index,item){
                 $("#export-search-ba").append('<option value="'+item.name+'"></option>')
@@ -653,7 +654,7 @@
         });
 
 
-        $.get(ctx +"opinion/getOpinion/"+stage,function(res){
+        $.get(ctx +"opinion/getOpinion/"+stage,to,function(res){
             var data=res.data;
             var dom=$("#export-search-stage");
             var html='<option value=""></option>';
@@ -668,7 +669,7 @@
             form.render("select");
         });
 
-        $.get(ctx +"opinion/getOpinion/"+source,function(res){
+        $.get(ctx +"opinion/getOpinion/"+source,to,function(res){
             var data=res.data;
             var dom=$("#export-search-source");
             var html='<option value=""></option>';

@@ -254,6 +254,7 @@
             roche = [[${roche}]];
             $view = $('#roche-detail-show');
         var type = "罗氏内部发起";
+        var to = {time:new Date()};
 
         //表单渲染
         form.render();
@@ -285,7 +286,7 @@
         }
 
 
-        $.get(ctx +"file/findImages/"+roche.id+"/"+type,function (res) {
+        $.get(ctx +"file/findImages/"+roche.id+"/"+type,to,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
                 var url = item.substring(item.lastIndexOf("/")+1);
@@ -333,7 +334,7 @@
             });
         };
 
-        $.get(ctx + "roche/queryHistory",roche ,function (res) {
+        $.get(ctx + "roche/queryHistory/"+roche.id,to ,function (res) {
             var data = res.data;
             if(data[0]!=null&&data[0].date !=null){
                 $("#time-first").html(data[0].date);

@@ -223,6 +223,7 @@
         var images = [];
         var rConf ="罗氏QA处理意见";
         var type = "近效期";
+        var to = {time:new Date()};
 
         laydate.render({
             elem: '#recent-repDated',
@@ -338,14 +339,14 @@
             }
         });
         function deleteImage(url){
-            $.get(ctx + "file/deleteImage/"+url, function (res) {
+            $.get(ctx + "file/deleteImage/"+url, to,function (res) {
                 if(res.code === 200) {
                     febs.alert.success('删除成功');
                 }
             })
         }
 
-    $.get(ctx +"file/findImages/"+recent.id +"/"+type,function (res) {
+    $.get(ctx +"file/findImages/"+recent.id +"/"+type,to,function (res) {
         var data = res.data;
         $.each(data,function (index, item) {
             var url = item.substring(item.lastIndexOf("/")+1);
@@ -394,7 +395,7 @@
         };
 
 
-        $.get(ctx + "recent/queryHistory/",recent ,function (res) {
+        $.get(ctx + "recent/queryHistory/"+recent.id,to ,function (res) {
             var data = res.data;
             if(data[0]!=null&&data[0].date !=null){
                 $("#time-first").html(data[0].date);
@@ -416,7 +417,7 @@
         });
 
 
-        $.get(ctx +"opinion/getOpinion/"+rConf,function(res){
+        $.get(ctx +"opinion/getOpinion/"+rConf,to,function(res){
             var data = res.data;
             $.each(data,function(index,item){
                 $("#search_rConf").append('<option value="'+item.name+'"></option>')

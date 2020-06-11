@@ -48,7 +48,9 @@
         var $ = layui.jquery,
             febs = layui.febs;
 
-        $.get(ctx +"file/findTask",function (data) {
+        var to = {time:new Date()};
+
+        $.get(ctx +"file/findTask",to,function (data) {
             var num = data.data;
             if(num===0){
                 $("#num").append('<span style="color: red"><h2>当前没有待办任务</h2></span>')

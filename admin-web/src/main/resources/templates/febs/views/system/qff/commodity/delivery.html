@@ -243,11 +243,10 @@
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delivery-detail" shiro:hasPermission="delivery:view">查看</a>
         {{#  if(d.isAllow != '1'){d.status = '不可审核'}}
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delivery-alter"  shiro:hasPermission="delivery:alter ">修改</a>
-        {{#}}}
-        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
+        {{# }else if (d.isAllow == '1'){d.status = '可审核'}}
         <a class="layui-btn layui-btn-xs" lay-event="delivery-edit"  shiro:hasPermission="delivery:audit">审核</a>
         {{#}}}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delivery-del" shiro:hasPermission="delivery:del">删除</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delivery-del" shiro:hasPermission="delivery:del">删除</a>
     {{#}}}
 </script>
 <script type="text/html" id="delivery-toolbarCheck">
@@ -274,6 +273,7 @@
             tableIns;
         var stage = '到货';
         var reason = "QFF原因";
+        var to = {time:new Date()};
 
         //初始化表单
         form.render();
@@ -328,7 +328,10 @@
                 height: 455,
                 id: 'deliveryTable',          //表单id
                 url: ctx + 'commodity/list',   //url
-                where:{stage:stage},
+                where:{
+                    stage:stage,
+                    time:new Date()
+                },
                 toolbar: '#delivery-toolbarCheck',     //开启头部工具栏
                 defaultToolbar: ['filter','print'],    //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
                 cols: [[
@@ -407,7 +410,7 @@
 
         function delCommodity(id)
         {
-            febs.get(ctx + 'commodity/deleteCommodity/' + id, null, function () {
+            febs.get(ctx + 'commodity/deleteCommodity/' + id,to, function () {
                 febs.alert.success('操作成功');
                 $query.click();
             });
@@ -419,7 +422,7 @@
             });
         });
 
-        $.get(ctx +"opinion/getOpinion/"+reason,function(res){
+        $.get(ctx +"opinion/getOpinion/"+reason,to,function(res){
             var data = res.data;
             $.each(data,function(index,item){
                 $("#delivery-reason").append('<option value="'+item.name+'"></option>')

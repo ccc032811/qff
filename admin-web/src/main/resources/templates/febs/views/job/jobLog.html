@@ -177,6 +177,9 @@
                 elem: $view.find('table'),
                 id: 'jobLogTable',
                 url: ctx + 'jobLog',
+                where:{
+                    time:new Date()
+                },
                 cols: [[
                     {type: 'checkbox'},
                     {field: 'jobId', title: '任务ID', width: 80},

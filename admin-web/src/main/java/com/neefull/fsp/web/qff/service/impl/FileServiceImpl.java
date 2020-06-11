@@ -67,6 +67,12 @@ public class FileServiceImpl implements IFileService {
     public String uploadImage(MultipartFile file,String number) {
 
         String originalFilename = file.getOriginalFilename();
+        int unixp = originalFilename.lastIndexOf("/");
+        int winp = originalFilename.lastIndexOf("\\");
+        int posp = (winp > unixp ? winp : unixp);
+        if (posp != -1) {
+            originalFilename = originalFilename.substring(posp + 1);
+        }
         String filename = number+"-"+originalFilename;
         File filePath = new File(properties.getImagePath(), filename);
 

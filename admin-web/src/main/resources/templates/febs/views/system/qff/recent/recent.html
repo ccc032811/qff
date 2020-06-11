@@ -171,8 +171,7 @@
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
         {{#  if(d.isAllow != '1'){}}
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-alter" shiro:hasPermission="recent:alter" >修改</a>
-        {{#}}}
-        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
+        {{# }else if (d.isAllow == '1'){d.status = '可审核'}}
         <a class="layui-btn layui-btn-xs" lay-event="recent-edit"  shiro:hasPermission="recent:audit">审核</a>
         {{#}}}
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-del" shiro:hasPermission="recent:del">删除</a>
@@ -209,6 +208,8 @@
             $cleanBtn = $view.find('#recent-cleanBtn'),
             $searchForm = $view.find('form'),
             tableIns;
+
+        var to = {time:new Date()};
 
         //初始化表单
         form.render();
@@ -254,6 +255,9 @@
                 url: ctx + 'recent/list',   //url
                 toolbar: '#recent-toolbarCheck',     //开启头部工具栏
                 defaultToolbar: ['filter','print'],    //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
+                where:{
+                    time:new Date()
+                },
                 cols: [[
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
                     {field: 'rMater', title: '罗氏物料号',align:'center'},
@@ -361,7 +365,7 @@
 
 
         function delRecent(id) {
-            $.get(ctx + 'recent/deleteRecent/' + id, null, function () {
+            $.get(ctx + 'recent/deleteRecent/' + id, to, function () {
                 febs.alert.success('操作成功');
                 $query.click();
             });

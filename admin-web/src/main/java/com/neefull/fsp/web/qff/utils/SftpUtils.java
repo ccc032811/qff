@@ -146,11 +146,6 @@ public class SftpUtils {
         return filenames;
     }
 
-//    public void moveFile(String startPath,String fileName,String toPath){
-//        File file = new File("seegw-stg.shaphar.com"+startPath + fileName);
-//        File toFile = new File("seegw-stg.shaphar.com/to"+fileName);
-//
-//    }
 
     /**
      * 下载单个文件

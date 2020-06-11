@@ -218,6 +218,7 @@
             laydate = layui.laydate;
 
         var stage = "QFF上报阶段";
+        var to = {time:new Date()};
 
         laydate.render({
             elem: '#demo-initDate',
@@ -268,7 +269,7 @@
             return false;
         });
 
-        $.get(ctx +"opinion/getOpinion/"+stage,function(res){
+        $.get(ctx +"opinion/getOpinion/"+stage,to,function(res){
             var data=res.data;
             var dom=$("#search_stage");
             var html='<option value=""></option>';

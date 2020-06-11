@@ -145,6 +145,8 @@
             sortObject = {field: 'createTime', type: null},
             tableIns;
 
+        var to = {time:new Date()};
+
         form.render();
 
         initTable();
@@ -311,6 +313,9 @@
                 elem: $view.find('table'),
                 id: 'userTable',
                 url: ctx + 'user/list',
+                where:{
+                    time:new Date()
+                },
                 toolbar: '#toolbarCheck',     //开启头部工具栏
                 defaultToolbar: ['filter','print'],   //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'
                 cols: [[
@@ -353,7 +358,7 @@
                 febs.alert.warn('所选用户包含当前登录用户，无法删除');
                 return;
             }
-            febs.get(ctx + 'user/delete/' + userIds, null, function () {
+            febs.get(ctx + 'user/delete/' + userIds, to, function () {
                 febs.alert.success('删除用户成功');
                 $query.click();
             });
@@ -365,7 +370,7 @@
                 febs.alert.warn('无法对自己进行审核');
                 return;
             }
-            febs.get(ctx + 'user/examine/' + userIds, null, function () {
+            febs.get(ctx + 'user/examine/' + userIds, to, function () {
                 febs.alert.success('操作成功');
                 $query.click();
             });
