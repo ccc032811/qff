@@ -97,8 +97,10 @@ public class FileController extends BaseController {
             List<Attachment> attachments = attachmentService.selectAttsByQffId(number, type);
             if(CollectionUtils.isNotEmpty(attachments)){
                 for (Attachment attachment : attachments) {
-                    String fileName = properties.getImageUrl()+attachment.getRemark() + StringPool.DOT + attachment.getAttachType();
-                    list.add(fileName);
+                    if(attachment.getEnable()==1){
+                        String fileName = properties.getImageUrl()+attachment.getRemark() + StringPool.DOT + attachment.getAttachType();
+                        list.add(fileName);
+                    }
                 }
             }
             return new FebsResponse().success().data(list);

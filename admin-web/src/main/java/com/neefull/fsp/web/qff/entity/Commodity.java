@@ -196,16 +196,17 @@ public class Commodity implements Serializable {
     @TableField("alteration")
     @ExcelField(value = "变更记录")
     private String alteration;
-    /**
-     *  图片
-     */
-    @TableField(exist = false)
-    private String images;
+
     /**
      *  状态码  1新建  2 审核中 3 完结  4异常
      */
     @TableField("status")
     private Integer status;
+    /**
+     * 是否存在附件  0不存在   1存在
+     */
+    @TableField("accessory")
+    private Integer accessory;
 
     /**
      *  创建日期
@@ -248,7 +249,14 @@ public class Commodity implements Serializable {
      */
     @TableField(exist = false)
     private Integer isAllow;
-
+    /**
+     *  图片
+     */
+    @TableField(exist = false)
+    private String images;
+    /**
+     * 是否可审核   1  可审核
+     */
     @TableField(exist = false)
     private Integer att;
 
@@ -492,6 +500,14 @@ public class Commodity implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(Integer accessory) {
+        this.accessory = accessory;
     }
 
     public Integer getAtt() {

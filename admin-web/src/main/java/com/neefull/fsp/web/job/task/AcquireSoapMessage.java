@@ -59,6 +59,11 @@ public class AcquireSoapMessage extends BaseController {
         }
 
         String toTime = DateFormatUtils.format(new Date(), "HH:mm:ss");
+
+
+//        String seacheDate="2020-06-12";
+//        String fromTime = "00:00:00";
+//        String toTime = "23:00:00";
         startSoap.getMessage(seacheDate,fromTime,toTime,"");
     }
 

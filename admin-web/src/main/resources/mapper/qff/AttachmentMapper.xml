@@ -5,5 +5,15 @@
     <update id="updateStatusById"  >
         update qff_attachment set enable = #{status} where id= #{id}
     </update>
+    <update id="updateStatusByNumberAndType">
+        update qff_attachment set status  = 1  where  qff_id = #{number} and  qff_type = #{typt}
+    </update>
+    <select id="selectByNumberAndType" resultType="com.neefull.fsp.web.qff.entity.Attachment">
+        select * from qff_attachment where qff_id = #{number} and qff_type = #{type}  and  status !=1
+    </select>
+    <select id="selectByNumberAndRemark" resultType="com.neefull.fsp.web.qff.entity.Attachment">
+        select * from qff_attachment where qff_id = #{number} and remark = #{attNumber}  and  status !=1
+    </select>
+
 
 </mapper>

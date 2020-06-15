@@ -30,23 +30,23 @@ public class AttachmentServiceImpl  extends ServiceImpl<AttachmentMapper, Attach
 
     @Override
     public List<Attachment> selectAttsByQffId(String number,String type) {
-        QueryWrapper<Attachment> wrapper = new QueryWrapper<>();
-        wrapper.eq("qff_id",number);
-        wrapper.eq("qff_type",type);
-        return attachmentMapper.selectList(wrapper);
+        return attachmentMapper.selectByNumberAndType(number,type);
     }
 
     @Override
+    @Transactional
     public void updateStatusById(Integer id, Integer status) {
         attachmentMapper.updateStatusById(id,status);
     }
 
     @Override
+    @Transactional
     public void addAttachment(Attachment attachment) {
         attachmentMapper.insert(attachment);
     }
 
     @Override
+    @Transactional
     public void updateAttachment(Attachment attachment) {
         attachmentMapper.updateById(attachment);
     }
@@ -67,18 +67,14 @@ public class AttachmentServiceImpl  extends ServiceImpl<AttachmentMapper, Attach
     @Override
     @Transactional
     public void deleteByNumber(String number,String typt) {
-        QueryWrapper<Attachment> delete = new QueryWrapper<>();
-        delete.eq("qff_id",number);
-        delete.eq("qff_type",typt);
-        attachmentMapper.delete(delete);
+
+        attachmentMapper.updateStatusByNumberAndType(number,typt);
+
     }
 
     @Override
     public Boolean selectAttAndNumber(String number, String attNumber) {
-        QueryWrapper<Attachment> wrapper = new QueryWrapper<>();
-        wrapper.eq("qff_id",number);
-        wrapper.eq("remark",attNumber);
-        Attachment attachment = attachmentMapper.selectOne(wrapper);
+        Attachment attachment =  attachmentMapper.selectByNumberAndRemark(number,attNumber);
         if(attachment!=null){
             return true;
         }else {

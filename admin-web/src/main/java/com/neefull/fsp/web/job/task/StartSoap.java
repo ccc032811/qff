@@ -1,6 +1,7 @@
 package com.neefull.fsp.web.job.task;
 
 import com.neefull.fsp.web.qff.config.SoapUrlProperties;
+import com.neefull.fsp.web.qff.entity.Attachment;
 import com.neefull.fsp.web.qff.entity.Commodity;
 import com.neefull.fsp.web.qff.service.IAttachmentService;
 import com.neefull.fsp.web.qff.service.ICommodityService;
@@ -15,11 +16,10 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Author: chengchengchu
@@ -27,6 +27,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
+@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class StartSoap {
 
     @Autowired
@@ -44,6 +45,7 @@ public class StartSoap {
 
         log.info("*****************Execute query from SAP server.******************");
         long startTime = System.currentTimeMillis();
+
 
         String soapMessage = SapWsUtils.getSoapMessage(seacheDate,fromTime,toTime,number);
 
@@ -112,7 +114,7 @@ public class StartSoap {
                         commodity.setStage(ProcessConstant.WRAPPER_NAME);
                     }
                     commodity.setStatus(ProcessConstant.NEW_BUILD);
-                    commodity.setAtt(0);
+                    commodity.setAccessory(0);
 
                     //判断该条数据是否记录
                     Commodity isCommodity = commodityService.queryCommodityByNumber(commodity.getNumber());
@@ -120,119 +122,136 @@ public class StartSoap {
                         //没有改记录就直接添加
                         commodityList.add(commodity);
                     }else {
-                        //对变化的字段进行记录
-                        boolean rstart = false;
+//                        //对变化的字段进行记录
+//                        boolean rstart = false;
 
                         StringBuilder alteration = new StringBuilder();
 
                         if(!commodity.getPlant().equals(isCommodity.getPlant())){
                             alteration.append("Plant工厂:" +date+ " 由 "+isCommodity.getPlant()+" 变更为 "+commodity.getPlant()+" 。");
-                            rstart = true;
+//                            rstart = true;
                         }
                         if(!commodity.getkMater().equals(isCommodity.getkMater())){
                             alteration.append("KDLMaterial物料:" +date+ " 由 "+isCommodity.getkMater()+" 变更为 "+commodity.getkMater()+" 。");
-                            rstart = true;
+//                            rstart = true;
                         }
                         if(!commodity.getkBatch().equals(isCommodity.getkBatch())){
                             alteration.append("康德乐SAP批次:" +date+ " 由 "+isCommodity.getkBatch()+" 变更为 "+commodity.getkBatch()+" 。");
-                            rstart = true;
+//                            rstart = true;
                         }
                         if(!commodity.getrMater().equals(isCommodity.getrMater())){
                             alteration.append("罗氏物料号:" +date+ " 由 "+isCommodity.getrMater()+" 变更为 "+commodity.getrMater()+" 。");
-                            rstart = true;
+//                            rstart = true;
+                        }
+                        if(!commodity.getpMater().equals(isCommodity.getpMater())){
+                            alteration.append("药厂物料号:" +date+ " 由 "+isCommodity.getpMater()+" 变更为 "+commodity.getpMater()+" 。");
+//                            rstart = true;
                         }
                         if(!commodity.getrBatch().equals(isCommodity.getrBatch())){
                             alteration.append("罗氏批号:" +date+ " 由 "+isCommodity.getrBatch()+" 变更为 "+commodity.getrBatch()+" 。");
-                            rstart = true;
+//                            rstart = true;
                         }
                         if(!commodity.getManuDate().equals(isCommodity.getManuDate())){
                             alteration.append("生产日期:" +date+ " 由 "+isCommodity.getManuDate()+" 变更为 "+commodity.getManuDate()+" 。");
-                            rstart = true;
+//                            rstart = true;
                         }
                         if(!commodity.getExpiryDate().equals(isCommodity.getExpiryDate())){
                             alteration.append("有效期:" +date+ " 由 "+isCommodity.getExpiryDate()+" 变更为 "+commodity.getExpiryDate()+" 。");
-                            rstart = true;
+//                            rstart = true;
                         }
                         if(!commodity.getQuarantine().equals(isCommodity.getQuarantine())){
                             alteration.append("异常总数:" +date+ " 由 "+isCommodity.getQuarantine()+" 变更为 "+commodity.getQuarantine()+" 。");
-                            rstart = true;
+//                            rstart = true;
                         }
                         if(!commodity.getGetRemark().equals(isCommodity.getGetRemark())){
                             alteration.append("Remark箱号:" +date+ " 由 "+isCommodity.getGetRemark()+" 变更为 "+commodity.getGetRemark()+" 。");
-                            rstart = true;
+//                            rstart = true;
                         }
                         if(!commodity.getClassify().equals(isCommodity.getClassify())){
                             alteration.append("产品分类:" +date+ " 由 "+isCommodity.getClassify()+" 变更为 "+commodity.getClassify()+" 。");
-                            rstart = true;
+//                            rstart = true;
                         }
                         if(!commodity.getRegister().equals(isCommodity.getRegister())){
                             alteration.append("注册证号:" +date+ " 由 "+isCommodity.getRegister()+" 变更为 "+commodity.getRegister()+" 。");
-                            rstart = true;
+//                            rstart = true;
                         }
-                        if(isCommodity.getStatus()==4){
-                            rstart = true;
-                        }
-                        if(rstart){
+//                        if(isCommodity.getStatus()==4){
+//                            rstart = true;
+//                        }
+//                        if(rstart){
 
-                            commodityService.deleteCommoddityById(isCommodity.getId());
-                            attachmentService.deleteByNumber(isCommodity.getNumber(),isCommodity.getStage());
+                            //判断流程中是否存在
                             Boolean isExist = processService.queryProcessByKey(isCommodity);
                             if(isExist){
                                 processService.deleteInstance(isCommodity);
                             }
+                            //有变更，删除原来的数据
+                            commodityService.deleteCommodityById(isCommodity.getId());
+//                            attachmentService.deleteByNumber(isCommodity.getNumber(),isCommodity.getStage());
                             if(StringUtils.isNotEmpty(isCommodity.getAlteration())){
                                 commodity.setAlteration(isCommodity.getAlteration()+"  "+alteration.toString());
                             }else {
-                                commodity.setAlteration(alteration.toString());
+                                if(StringUtils.isNotEmpty(alteration.toString())) {
+                                    commodity.setAlteration(alteration.toString());
+                                }
                             }
                             commodityList.add(commodity);
+//                        }
+                    }
+                }
+            }
 
+            //对返回的数据附件进行存储
+            String attMessage = XmlUtils.getTagContent(messageBuffer.toString(), "<ET_QFF_ATT>", "</ET_QFF_ATT>");
+            String[] attString = attMessage.split("<item>");
+            List<String> attList = new ArrayList<>();
+            for (String s : attString) {
+                if(StringUtils.isNotEmpty(s)){
+                    String dom = s.split("</item>")[0];
+                    attList.add(dom);
+                }
+            }
+
+            Map<String, Attachment> attachmentMap = new HashMap<>();
+
+            if(CollectionUtils.isNotEmpty(attList)){
+                for (String s : attList) {
+                    String num = XmlUtils.getTagContent(s, "<QMNUM>", "</QMNUM>");
+                    String attName = XmlUtils.getTagContent(s, "<ATTACHNAME>", "</ATTACHNAME>");
+                    String[] split = attName.split("\\.");
+                    if(StringUtils.isNotBlank(num)&&StringUtils.isNotBlank(attName)){
+                        if(CollectionUtils.isNotEmpty(commodityList)){
+                            for (Commodity commodity : commodityList) {
+                                if(commodity.getNumber().equals(num)){
+                                    Attachment attachment = new Attachment();
+                                    attachment.setQffId(commodity.getNumber());
+                                    attachment.setQffType(commodity.getStage());
+                                    attachment.setAttachType(split[1]);
+                                    attachment.setRemark(split[0]);
+                                    attachment.setSource(1);
+                                    attachment.setEnable(0);
+                                    attachment.setStatus(0);
+                                    attachmentMap.put(attachment.getRemark(),attachment);
+                                    commodity.setAccessory(commodity.getAccessory()+1);
+                                }
+                            }
                         }
                     }
                 }
             }
 
-//            //对返回的数据附件进行存储
-//            String attMessage = XmlUtils.getTagContent(messageBuffer.toString(), "<ET_QFF_ATT>", "</ET_QFF_ATT>");
-//            String[] attString = attMessage.split("<item>");
-//            List<String> attList = new ArrayList<>();
-//            for (String s : attString) {
-//                if(StringUtils.isNotEmpty(s)){
-//                    String dom = s.split("</item>")[0];
-//                    attList.add(dom);
-//                }
-//            }
-//
-//            Map<String,Attachment> attachmentMap = new HashMap<>();
-//
-//            if(CollectionUtils.isNotEmpty(attList)){
-//                for (String s : attList) {
-//                    String number = XmlUtils.getTagContent(s, "<QMNUM>", "</QMNUM>");
-//                    String attName = XmlUtils.getTagContent(s, "<ATTACHNAME>", "</ATTACHNAME>");
-//                    String[] split = attName.split("\\.");
-//                    if(StringUtils.isNotBlank(number)&&StringUtils.isNotBlank(attName)){
-//                        if(CollectionUtils.isNotEmpty(commodityList)){
-//                            for (Commodity commodity : commodityList) {
-//                                if(commodity.getNumber().equals(number)){
-//                                    Attachment attachment = new Attachment();
-//                                    attachment.setQffId(commodity.getNumber());
-//                                    attachment.setQffType(commodity.getStage());
-//                                    attachment.setAttachType(split[1]);
-//                                    attachment.setRemark(split[0]);
-//                                    attachment.setSource(1);
-//                                    attachment.setEnable(0);
-//                                    attachmentMap.put(attachment.getRemark(),attachment);
-//                                    commodity.setAtt(1);
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-
             for (Commodity commodity : commodityList) {
                 commodityService.addCommodity(commodity);
             }
+
+            if(attachmentMap.size()!=0){
+                Set<String> strings = attachmentMap.keySet();
+                for (String atr : strings) {
+                    Attachment attachment = attachmentMap.get(atr);
+                    attachmentService.addAttachment(attachment);
+                }
+            }
+
         } catch (DocumentException e) {
             e.printStackTrace();
         }

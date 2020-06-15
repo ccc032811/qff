@@ -247,8 +247,8 @@ public class ProcessServiceImpl implements IProcessService {
         deleteAtt(object);
         if(StringUtils.isNotEmpty(businessKey)){
             processInstance = queryProcessInstance(businessKey);
-        }
-        delete(processInstance);
+    }
+    delete(processInstance);
 
     }
 
@@ -257,7 +257,10 @@ public class ProcessServiceImpl implements IProcessService {
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
             Commodity comm = commodityService.queryCommodityById(commodity.getId());
-            attachmentService.deleteByNumber(comm.getNumber(),comm.getStage());
+            if(comm!=null){
+                attachmentService.deleteByNumber(comm.getNumber(),comm.getStage());
+            }
+
         }else if(object instanceof Recent){
             Recent recent = (Recent) object;
             attachmentService.deleteByNumber(String.valueOf(recent.getId()),ProcessConstant.RECENT_NAME);

@@ -95,23 +95,22 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     public Commodity queryCommodityByNumber(String number) {
         QueryWrapper<Commodity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("number", number);
-        Commodity commodity = commodityMapper.selectOne(queryWrapper);
-        if(commodity!=null){
-            return commodity;
-        }
-        return null;
-
+        return commodityMapper.selectOne(queryWrapper);
+//        if(commodity!=null){
+//            return commodity;
+//        }
+//        return null;
     }
 
     @Override
-    public void deleteCommoddityById(Integer id) {
+    public void deleteCommodityById(Integer id) {
         this.baseMapper.deleteById(id);
     }
 
     @Override
     public List<Commodity> selectAllCommodity() {
         QueryWrapper<Commodity> wrapper = new QueryWrapper<>();
-        wrapper.eq("status",1);
+        wrapper.eq("status",ProcessConstant.NEW_BUILD);
         return commodityMapper.selectList(wrapper);
 
     }

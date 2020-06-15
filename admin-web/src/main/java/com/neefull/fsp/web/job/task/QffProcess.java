@@ -55,87 +55,65 @@ public class QffProcess extends BaseController {
 
 
     @Transactional
-    public void getAttmentAndStart(){
+    public void getAttmentAndStart() {
 
-        //下载文件获取所有的文件名
-        SftpUtils sftp = null;
-        List<String> list = new ArrayList<>();
-        try {
-            sftp = new SftpUtils(properties.getHost(),properties.getUsername(),properties.getPassword());
-            sftp.connect();
-            list = sftp.batchDownLoadFile(properties.getSftpPath(), properties.getLocalPath());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            sftp.disconnect();
-        }
+        List<Commodity> commodityEmail = new ArrayList<>();
+        Map<String, String> files = new HashMap<>();
 
-        Map<String,Commodity> commoditys = new HashMap<>();
-        Map<String,String> files = new HashMap<>();
+        List<Commodity> commodityList = commodityService.selectAllCommodity();
+        if (CollectionUtils.isNotEmpty(commodityList)) {
+            for (Commodity commodity : commodityList) {
+                if (commodity.getAccessory() == 0) {
+                    commodityEmail.add(commodity);
+                } else if (commodity.getAccessory() != 0 ) {
+                    int count =0;
+                    List<Attachment> attachments = attachmentService.selectAttsByQffId(commodity.getNumber(), commodity.getStage());
+                    if (CollectionUtils.isNotEmpty(attachments)) {
+                        SftpUtils sftp = null;
+                        try {
+                            sftp = new SftpUtils(properties.getHost(), properties.getUsername(), properties.getPassword());
+                            sftp.connect();
 
-        if(CollectionUtils.isNotEmpty(list)){
-            Iterator<String> iterator = list.iterator();
-            while (iterator.hasNext()){
-                String fileName = iterator.next();
-                String number = fileName.split("_")[0];
-                String attNumber = fileName.split("\\.")[0];
-                //根据number 去查询
-                Commodity commodity = commodityService.queryCommodityByNumber(number);
-                //判断该条数据是否存在
-                if(commodity!=null){
-                    //存在判断存在
-                    if(commodity.getStatus()==1) {
-                        //状态为1，添加到要发送邮件的集合中去
-                        commoditys.put(number, commodity);
-                        //插入新的关联附件数据
-                        Attachment attachment = new Attachment();
-                        attachment.setQffId(number);
-                        attachment.setQffType(commodity.getStage());
-                        attachment.setAttachType(fileName.substring(fileName.lastIndexOf(".") + 1));
-                        attachment.setAttachSize(new File(properties.getLocalPath() + fileName).length() / 1024);
-                        attachment.setRemark(fileName.substring(0, fileName.lastIndexOf(".")));
-                        attachment.setSource(1);
-                        attachment.setEnable(1);
-                        attachmentService.addAttachment(attachment);
-                        //加入要发送的附件集合
-//                        files.put(fileName, properties.getLocalPath() + fileName);
-                    }else {
-                        //状态不为1的情况下，判断这天数据是否存在
-                        Boolean isAtt = attachmentService.selectAttAndNumber(number, attNumber);
-                        if (!isAtt) {
-                            //不存在的情况下添加该条数据
-                            Attachment attachment = new Attachment();
-                            attachment.setQffId(number);
-                            attachment.setQffType(commodity.getStage());
-                            attachment.setAttachType(fileName.substring(fileName.lastIndexOf(".") + 1));
-                            attachment.setAttachSize(new File(properties.getLocalPath() + fileName).length() / 1024);
-                            attachment.setRemark(fileName.substring(0, fileName.lastIndexOf(".")));
-                            attachment.setSource(1);
-                            attachment.setEnable(1);
-                            attachmentService.addAttachment(attachment);
+                            for (Attachment attachment : attachments) {
+                                boolean isDown = sftp.downloadFile(properties.getSftpPath(), attachment.getRemark() + StringPool.DOT + attachment.getAttachType(), properties.getLocalPath(), attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
+                                if (isDown) {
+                                    count = count += 1;
+                                    File file = new File(properties.getLocalPath() + attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
+                                    if (file.exists() && file.isFile()) {
+                                        attachment.setEnable(1);
+                                        attachment.setAttachSize(file.length());
+                                        attachmentService.updateAttachment(attachment);
+                                    }
+                                }
+                            }
+                            if (count == commodity.getAccessory()) {
+                                commodityEmail.add(commodity);
+                                for (Attachment attachment : attachments) {
+                                    String newName = attachment.getRemark() + DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss") + StringPool.DOT + attachment.getAttachType();
+                                    sftp.remove(properties.getSftpPath() + attachment.getRemark() + StringPool.DOT + attachment.getAttachType(), properties.getMovepath() + newName);
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            sftp.disconnect();
                         }
+
                     }
-                }else {
-                    //不存在删除这条数据
-                    iterator.remove();
                 }
             }
         }
 
-        List<Commodity> commodityList = new ArrayList<>();
 
-        if(!commoditys.isEmpty()){
-            Set<String> strings = commoditys.keySet();
-            for (String string : strings) {
-                Commodity commodity = commoditys.get(string);
-                processService.commitProcess(commodity,new User());
+        if (CollectionUtils.isNotEmpty(commodityEmail)) {
+            for (Commodity commodity : commodityEmail) {
+                processService.commitProcess(commodity, new User());
                 commodityService.updateCommodityStatus(commodity.getId(), ProcessConstant.UNDER_REVIEW);
-                commodityList.add(commodity);
             }
 
             // 发送邮件
             Context context = new Context();
-            context.setVariable("list",commodityList);
+            context.setVariable("list", commodityEmail);
             String text = templateEngine.process("rocheCommodity", context);
 
             //查询收件人
@@ -147,96 +125,129 @@ public class QffProcess extends BaseController {
             String[] mails = userMails.toArray(new String[0]);
 
             //发送邮件
-            MailUtils.sendMail(text,mailProperties,mails,files);
+            MailUtils.sendMail(text, mailProperties, mails, files);
+
         }
+    }
 
-        try {
-            sftp = new SftpUtils(properties.getHost(),properties.getUsername(),properties.getPassword());
-            sftp.connect();
 
-            //移动文件
-            if(CollectionUtils.isNotEmpty(list)){
-                for (String string : list) {
-                    String name = string.substring(0, string.lastIndexOf("."));
-                    String type = string.substring(string.lastIndexOf(".") + 1);
 
-                    String newName = name+ DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss")+"."+type;
-                    sftp.remove(properties.getSftpPath()+string,properties.getMovepath()+newName);
-//                        sftp.deleteSFTP(properties.getSftpPath(),string);
-                }
-            }
 
-//                if(!files.isEmpty()){
-//                    Set<String> fileList = files.keySet();
-//                    for (String string : fileList) {
-//                        String name = string.substring(0, string.lastIndexOf("."));
-//                        String type = string.substring(string.lastIndexOf(".") + 1);
+//        //下载文件获取所有的文件名
+//        SftpUtils sftp = null;
+//        List<String> list = new ArrayList<>();
+//        try {
+//            sftp = new SftpUtils(properties.getHost(),properties.getUsername(),properties.getPassword());
+//            sftp.connect();
+//            list = sftp.batchDownLoadFile(properties.getSftpPath(), properties.getLocalPath());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }finally {
+//            sftp.disconnect();
+//        }
 //
-//                        String newName = name+ DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss")+"."+type;
-//                        sftp.remove(properties.getSftpPath()+string,properties.getMovepath()+newName);
-////                        sftp.deleteSFTP(properties.getSftpPath(),string);
-//                    }
-//                }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            sftp.disconnect();
-        }
-
-
-
+//        Map<String,Commodity> commoditys = new HashMap<>();
 //        Map<String,String> files = new HashMap<>();
-//        //去附件表查询所有的附件数
-//        if(CollectionUtils.isNotEmpty(commodityList)){
-//            for (Commodity commodity : commodityList) {
-//                if(commodity.getAtt()==0){
-//                    commoditys.add(commodity);
-//                }else if(commodity.getAtt()==1){
-//                    boolean isAready = true;
-//                    List<Attachment> attachments = attachmentService.selectAttsByQffId(commodity.getNumber(),commodity.getStage());
-//                    if(CollectionUtils.isNotEmpty(attachments)){
-//                        SftpUtils sftp = null;
-//                        // 本地存放地址   要设置
-//                        String localPath = "C:/QFF/";
-//                        // Sftp下载路径
-//                        String sftpPath = "/UploadOutbound/";
-//                        try {
-//                            sftp = new SftpUtils("seegw-stg.shaphar.com","QFFTest","1qaz2wsx");
-//                            sftp.connect();
 //
-//                            for (Attachment attachment : attachments) {
-//                                boolean isDown = sftp.downloadFile(sftpPath, attachment.getRemark() + StringPool.DOT + attachment.getAttachType(), localPath, attachment.getQffId() + "__" + attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
-//                                if(isDown){
-//                                    files.put(attachment.getQffId() + "__" + attachment.getRemark(), localPath + attachment.getQffId() + "__" + attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
-//                                    File file = new File( localPath + attachment.getQffId() + "__" + attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
-//                                    if(file.exists()&&file.isFile()){
-//                                        attachment.setEnable(1);
-//                                        attachment.setAttachSize(file.length());
-//                                        attachmentService.updateAttachment(attachment);
-//                                    }
-//                                    //attachmentService.updateStatusById(attachment.getId(),1);
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }finally {
-//                            sftp.disconnect();
+//        if(CollectionUtils.isNotEmpty(list)){
+//            Iterator<String> iterator = list.iterator();
+//            while (iterator.hasNext()){
+//                String fileName = iterator.next();
+//                String number = fileName.split("_")[0];
+//                String attNumber = fileName.split("\\.")[0];
+//                //根据number 去查询
+//                Commodity commodity = commodityService.queryCommodityByNumber(number);
+//                //判断该条数据是否存在
+//                if(commodity!=null){
+//                    //存在判断存在
+//                    if(commodity.getStatus()==1) {
+//                        //状态为1，添加到要发送邮件的集合中去
+//                        commoditys.put(number, commodity);
+//                        //插入新的关联附件数据
+//                        Attachment attachment = new Attachment();
+//                        attachment.setQffId(number);
+//                        attachment.setQffType(commodity.getStage());
+//                        attachment.setAttachType(fileName.substring(fileName.lastIndexOf(".") + 1));
+//                        attachment.setAttachSize(new File(properties.getLocalPath() + fileName).length() / 1024);
+//                        attachment.setRemark(fileName.substring(0, fileName.lastIndexOf(".")));
+//                        attachment.setSource(1);
+//                        attachment.setEnable(1);
+//                        attachmentService.addAttachment(attachment);
+//                        //加入要发送的附件集合
+////                        files.put(fileName, properties.getLocalPath() + fileName);
+//                    }else {
+//                        //状态不为1的情况下，判断这天数据是否存在
+//                        Boolean isAtt = attachmentService.selectAttAndNumber(number, attNumber);
+//                        if (!isAtt) {
+//                            //不存在的情况下添加该条数据
+//                            Attachment attachment = new Attachment();
+//                            attachment.setQffId(number);
+//                            attachment.setQffType(commodity.getStage());
+//                            attachment.setAttachType(fileName.substring(fileName.lastIndexOf(".") + 1));
+//                            attachment.setAttachSize(new File(properties.getLocalPath() + fileName).length() / 1024);
+//                            attachment.setRemark(fileName.substring(0, fileName.lastIndexOf(".")));
+//                            attachment.setSource(1);
+//                            attachment.setEnable(1);
+//                            attachmentService.addAttachment(attachment);
 //                        }
 //                    }
-//                    List<Attachment> newAttachment = attachmentService.selectAttsByQffId(commodity.getNumber(),commodity.getStage());
-//                    for (Attachment attachment : newAttachment) {
-//                        if(attachment.getEnable()==0){
-//                            isAready = false;
-//                            break;
-//                        }
-//                    }
-//                    if(isAready){
-//                        commoditys.add(commodity);
-//                    }
+//                }else {
+//                    //不存在删除这条数据
+//                    iterator.remove();
 //                }
 //            }
 //        }
+//
+//        List<Commodity> commodityList = new ArrayList<>();
+//
+//        if(!commoditys.isEmpty()){
+//            Set<String> strings = commoditys.keySet();
+//            for (String string : strings) {
+//                Commodity commodity = commoditys.get(string);
+//                processService.commitProcess(commodity,new User());
+//                commodityService.updateCommodityStatus(commodity.getId(), ProcessConstant.UNDER_REVIEW);
+//                commodityList.add(commodity);
+//            }
+//
+//            // 发送邮件
+//            Context context = new Context();
+//            context.setVariable("list",commodityList);
+//            String text = templateEngine.process("rocheCommodity", context);
+//
+//            //查询收件人
+//            List<User> userList = userService.findUserByRoleId(86);
+//            List<String> userMails = new ArrayList<>();
+//            for (User user : userList) {
+//                userMails.add(user.getEmail());
+//            }
+//            String[] mails = userMails.toArray(new String[0]);
+//
+//            //发送邮件
+//            MailUtils.sendMail(text,mailProperties,mails,files);
+//        }
+//
+//        try {
+//            sftp = new SftpUtils(properties.getHost(),properties.getUsername(),properties.getPassword());
+//            sftp.connect();
+//
+//            //移动文件
+//            if(CollectionUtils.isNotEmpty(list)){
+//                for (String string : list) {
+//                    String name = string.substring(0, string.lastIndexOf("."));
+//                    String type = string.substring(string.lastIndexOf(".") + 1);
+//
+//                    String newName = name+ DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss")+"."+type;
+//                    sftp.remove(properties.getSftpPath()+string,properties.getMovepath()+newName);
+////                        sftp.deleteSFTP(properties.getSftpPath(),string);
+//                }
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }finally {
+//            sftp.disconnect();
+//        }
 
 
-    }
+
 }

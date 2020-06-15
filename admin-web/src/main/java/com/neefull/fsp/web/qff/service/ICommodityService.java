@@ -56,7 +56,7 @@ public interface ICommodityService extends IService<Commodity> {
     /**根据id删除
      * @param id
      */
-    void deleteCommoddityById(Integer id);
+    void deleteCommodityById(Integer id);
 
     /**获取所有新建的
      * @return
