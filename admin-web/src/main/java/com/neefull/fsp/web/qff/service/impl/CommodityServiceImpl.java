@@ -103,6 +103,7 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     }
 
     @Override
+    @Transactional
     public void deleteCommodityById(Integer id) {
         this.baseMapper.deleteById(id);
     }

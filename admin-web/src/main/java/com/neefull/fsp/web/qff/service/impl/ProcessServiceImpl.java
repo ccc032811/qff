@@ -71,11 +71,11 @@ public class ProcessServiceImpl implements IProcessService {
 
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
-            if(commodity.getId()==null){
-                commodityService.addCommodity(commodity);
-            }else {
-                editCommodity(commodity);
-            }
+//            if(commodity.getId()==null){
+//                commodityService.addCommodity(commodity);
+//            }else {
+//                editCommodity(commodity);
+//            }
             String businessKey = Commodity.class.getSimpleName()+":"+commodity.getId();
             //启动流程
             startProcess(properties.getCommodityProcess(),businessKey);
@@ -271,7 +271,7 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
 
-    public String getBusinessKey(Object object){
+    private String getBusinessKey(Object object){
         String businessKey = "";
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
@@ -427,6 +427,7 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
     @Override
+    @Transactional
     public void deleteProcessCommit(String[] userIds) {
         if(ArrayUtils.isNotEmpty(userIds)){
             for (String userId : userIds) {
@@ -644,6 +645,7 @@ public class ProcessServiceImpl implements IProcessService {
                 attachment.setQffType(type);
                 attachment.setSource(2);
                 attachment.setEnable(1);
+                attachment.setStatus(0);
                 attachment.setVest(user.getDeptName());
                 attachment.setAttachType(file.substring(file.lastIndexOf(".")+1 ,file.length()));
                 attachment.setRemark(file.substring(0,file.lastIndexOf(".")));
@@ -664,7 +666,7 @@ public class ProcessServiceImpl implements IProcessService {
         commodityService.editCommodity(commodity);
     }
 
-    public String[] getEmails(Integer id){
+    private String[] getEmails(Integer id){
         List<User> userList = userService.findUserByRoleId(id);
         List<String> userMails = new ArrayList<>();
         for (User user : userList) {
