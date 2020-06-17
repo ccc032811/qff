@@ -72,12 +72,12 @@
                             <div class="layui-colla-item" >
                                 <div class="layui-colla-content" style="border:0px solid white">
                                     <div class="layui-form-item">
-                                        <div class="layui-inline">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">运输单号</label>
-                                            <div class="layui-input-inline">
-                                                <input type="text" name="transport"  maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入运输单号" >
-                                            </div>
-                                        </div>
+                                        <!--<div class="layui-inline">-->
+                                            <!--<label class="layui-form-label" style="border-right: 1px solid white;">运输单号</label>-->
+                                            <!--<div class="layui-input-inline">-->
+                                                <!--<input type="text" name="transport"  maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入运输单号" >-->
+                                            <!--</div>-->
+                                        <!--</div>-->
                                         <div class="layui-inline">
                                             <label class="layui-form-label" style="border-right: 1px solid white;">NO编号</label>
                                             <div class="layui-input-inline">
@@ -117,7 +117,8 @@
                                         <div class="layui-inline">
                                             <label class="layui-form-label" style="border-right: 1px solid white;">行动</label>
                                             <div class="layui-input-inline">
-                                                <input type="text" name="actions"  maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入行动">
+                                                <input type="text" name="actions"   autocomplete="off" list="roche_search_actions" class="layui-input" placeholder="请输入" >
+                                                <datalist id="roche_search_actions" style="display:none;"></datalist>
                                             </div>
                                         </div>
                                         <div class="layui-inline">
@@ -136,18 +137,6 @@
                                             <label class="layui-form-label" style="border-right: 1px solid white;">后续行动</label>
                                             <div class="layui-input-inline">
                                                 <input type="text" name="follow"  maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入后续行动">
-                                            </div>
-                                        </div>
-                                        <div class="layui-inline">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">期望完成日期</label>
-                                            <div class="layui-input-inline">
-                                                <input type="text" name="exceptedDate" id="exceptedDate" autocomplete="off" class="layui-input" placeholder="请选择时间" >
-                                            </div>
-                                        </div>
-                                        <div class="layui-inline">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">实际完成日期</label>
-                                            <div class="layui-input-inline">
-                                                <input type="text" name="actualDate" id="actualDate" autocomplete="off"  class="layui-input" placeholder="请选择时间">
                                             </div>
                                         </div>
                                     </div>
@@ -229,6 +218,7 @@
             tableIns;
 
         var to = {time:new Date()};
+        var actions = "Actions行动";
 
 
         //初始化表单
@@ -259,27 +249,14 @@
             ,btns: ['clear']
         });
 
-        laydate.render({
-            elem: '#exceptedDate'
-            ,trigger: 'click'
-            ,btns: ['clear']
-        });
-
-        laydate.render({
-            elem: '#actualDate'
-            ,trigger: 'click'
-            ,btns: ['clear']
-        });
-
-
         element.on('collapse(roche-navi)', function(data){
             if(data.show == true){
                 $('#roche-tag').html('');
-                $('#roche-tag').append('<i  class="layui-icon tag-title">&#xe619;</i>')
+                $('#roche-tag').append('<i  class="layui-icon tag-title">&#xe619;</i>');
                 $('#roche-check').attr("style","display:none;")
             }else if(data.show == false){
                 $('#roche-tag').html('');
-                $('#roche-tag').append('<i  class="layui-icon tag-title" >&#xe61a;</i>')
+                $('#roche-tag').append('<i  class="layui-icon tag-title" >&#xe61a;</i>');
                 $('#roche-check').attr("style","border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%;display:inline")
             }
         });
@@ -298,7 +275,6 @@
                     time:new Date()
                 },
                 cols: [[
-                    // {type: 'checkbox'},
                     {field: 'number', title: '编号',align:'center'},
                     {field: 'sponsor', title: '发起人',align:'center'},
                     {field: 'reqDate', title: '申请日期',align:'center'},
@@ -392,6 +368,13 @@
             });
         });
 
+        $.get(ctx +"opinion/getOpinion/"+actions,to,function(res){
+            var data = res.data;
+            $.each(data,function(index,item){
+                $("#roche_search_actions").append('<option value="'+item.name+'"></option>')
+            });
+        });
+
 
         //获取查询参数
         function getQueryParams() {
@@ -407,7 +390,6 @@
                 endTime: createTimeTo,
                 materCode: $searchForm.find('input[name="materCode"]').val().trim(),
                 batch: $searchForm.find('input[name="batch"]').val().trim(),
-                transport: $searchForm.find('input[name="transport"]').val().trim(),
                 number: $searchForm.find('input[name="number"]').val().trim(),
                 sponsor: $searchForm.find('input[name="sponsor"]').val().trim(),
                 reqDate: $searchForm.find('input[name="reqDate"]').val().trim(),
@@ -418,8 +400,6 @@
                 exceptDate: $searchForm.find('input[name="exceptDate"]').val().trim(),
                 completeDate: $searchForm.find('input[name="completeDate"]').val().trim(),
                 follow: $searchForm.find('input[name="follow"]').val().trim(),
-                exceptedDate: $searchForm.find('input[name="exceptedDate"]').val().trim(),
-                actualDate: $searchForm.find('input[name="actualDate"]').val().trim(),
                 status: $searchForm.find("select[name='status']").val(),
                 att: $searchForm.find("select[name='att']").val(),
                 invalidate_ie_cache: new Date()

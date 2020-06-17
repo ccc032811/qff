@@ -71,11 +71,11 @@ public class ProcessServiceImpl implements IProcessService {
 
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
-//            if(commodity.getId()==null){
-//                commodityService.addCommodity(commodity);
-//            }else {
-//                editCommodity(commodity);
-//            }
+            if(commodity.getId()==null){
+                commodityService.addCommodity(commodity);
+            }else {
+                editCommodity(commodity);
+            }
             String businessKey = Commodity.class.getSimpleName()+":"+commodity.getId();
             //启动流程
             startProcess(properties.getCommodityProcess(),businessKey);
@@ -93,6 +93,7 @@ public class ProcessServiceImpl implements IProcessService {
             String businessKey = Recent.class.getSimpleName()+":"+recent.getId();
             startProcess(properties.getRecentProcess(),businessKey);
             agreeCurrentProcess(recent,user);
+
             recentService.updateRecentStatus(recent.getId(), ProcessConstant.UNDER_REVIEW);
         }else if(object instanceof Roche){
             Roche roche = (Roche) object;
@@ -230,9 +231,37 @@ public class ProcessServiceImpl implements IProcessService {
 
 
     @Override
-    public List<Task> findTask(String name) {
-        return queryTaskByUserName(name);
+    public List<String> findTask(String name) {
+        List<Task> list = queryTaskByUserName(name);
+        List<String> names = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(list)){
+            for (Task task : list) {
+                ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+                if(processInstance.getBusinessKey().startsWith("Recent")){
+                    names.add("recent");
+                }else if(processInstance.getBusinessKey().startsWith("Roche")) {
+                    names.add("roche");
+                }else {
+                    String id = processInstance.getBusinessKey().split("\\:")[1];
+                    Commodity commodity = commodityService.queryCommodityById(Integer.parseInt(id));
+                    if(commodity!=null){
+                        if(commodity.getStage().equals(ProcessConstant.DELIVERY_NAME)){
+                            names.add("delivery");
+                        }else if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
+                            names.add("conserve");
+                        }else if(commodity.getStage().equals(ProcessConstant.EXPORT_NAME)){
+                            names.add("export");
+                        }else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
+                            names.add("wrapper");
+                        }else if(commodity.getStage().equals(ProcessConstant.REFUND_NAME)){
+                            names.add("refund");
+                        }
+                    }
+                }
+            }
+        }
 
+        return names;
     }
 
     private List<Task> queryTaskByUserName(String name){
@@ -439,9 +468,9 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Override
     public List<String> findPrcessName(String username) {
-        List<Task> list = findTask(username);
+        List<Task> list = queryTaskByUserName(username);
         Set<String> names = new HashSet<>();
-        if(com.baomidou.mybatisplus.core.toolkit.CollectionUtils.isNotEmpty(list)){
+        if(CollectionUtils.isNotEmpty(list)){
             for (Task task : list) {
                 ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
                 if(processInstance.getBusinessKey().startsWith("Recent")){
@@ -573,9 +602,6 @@ public class ProcessServiceImpl implements IProcessService {
         if(!roche.getFollow().equals(oldRoche.getFollow())){
             alteration.append("后续行动:" +date+ " 由 "+oldRoche.getFollow()+" 修改为 "+roche.getFollow()+"  。 ");
         }
-        if(!roche.getActualDate().equals(oldRoche.getActualDate())){
-            alteration.append("实际日期:" +date+ " 由 "+oldRoche.getActualDate()+" 修改为 "+roche.getActualDate()+"  。 ");
-        }
         if(!roche.getRemark().equals(oldRoche.getRemark())){
             alteration.append("备注:" +date+ " 由 "+oldRoche.getRemark()+" 修改为 "+roche.getRemark()+"  。 ");
         }
@@ -619,7 +645,6 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Transactional
     public List<Attachment> addOrEditFiles (Object object ,User user) {
-        String image = "";
         List<Attachment> list = new ArrayList<>();
         if (object instanceof Commodity) {
             Commodity commodity = (Commodity) object;

@@ -10,26 +10,132 @@
         text-align: center;
         color: #dcdfe6;
     }
+    .skip_table{
+        border-collapse: collapse;
+        width: 100%;
+        border-top:1px solid #eee;
+    }
+    .skip-tr{
+        color: #333;
+        border:1px solid #eee;
+    }
+    .skip-td{
+        text-align: center;
+        border-right:1px solid #eee;
+    }
+    .icon{
+        width:210px;
+        height:100px;
+        border-radius:4px;
+        color:#fff;
+        line-height:20px;
+        text-align:center;
+        float: left;
+    }
+
+    .tip{
+        width:130%;
+        border:0px;
+        border-radius:15px;
+        background-color:#37DB90;
+        margin-top:120px;
+        margin-left: 120px;
+        z-index:99;
+        color:white;
+        font-size:18px;
+    }
+
+    .tip .inner{
+        background-color:#FFF;
+        width:10px;
+        height:10px;
+        border:0px;
+        position:relative;
+        left:15px;
+        top:-5px;
+        transform:rotate(45deg);
+        border-right:0px;
+        border-bottom:0px;
+        background-color:#37DB90;
+    }
+    .label{
+        height: 100px;
+        width: 280px;
+        box-shadow: 0px 1px 6px 0px #827a7a;
+        float:left
+    }
+    .label-left{
+        margin-left: 15px;
+    }
+    .label-image{
+        height: 100px;
+        width: 60px;
+        float: left;
+        margin-left: 5px
+    }
+    .label-image-style{
+        width:60px;
+        height:60px;
+        margin-top: 20px;
+        margin-left: 5px;
+    }
+    .table-show{
+        width: 95%;
+        margin-left: 8px ;
+        z-index: 999999;
+        position: relative;
+        margin-top: -8px
+    }
+    .skip-td-color{
+        background-color: #37DB90
+    }
+    .qff-start{
+        height: 100px;
+        width: 215px;
+        float: left
+    }
+    .qff-start-button{
+        border: none;
+        background-color:transparent;
+    }
+    .qff-start-text{
+        text-align: center;
+        margin-top: 33px;
+    }
+
 </style>
 <div class="layui-fluid layui-anim febs-anim" id="fbs-serve" lay-title="我的待办">
     <div class="layui-row febs-container">
-        <div class="item" id="bubbling"/>
+        <div class="item" id="bubbling"></div>
         <div class="layui-card-body febs-table-full">
-            <div style="height: 100px; width: 280px;box-shadow: 0px 1px 6px 0px #827a7a;; float:left" >
-                <div style="height: 100px;width: 60px;float: left">
-                    <img data-th-src="@{febs/images/mycomm.png}" width="60px" height="60px" style="margin-top: 20px;margin-left: 5px">
+            <div class="label" >
+                <div class="label-image">
+                    <img data-th-src="@{febs/images/mycomm.png}" class="label-image-style">
                 </div>
-                <div style="height: 100px;width: 220px;float: left;">
-                    <div style="text-align: center;margin-top: 38px;" id = "num"></div>
+                <div class="icon"  id="os-show">
+                    <div style="text-align: center;margin-top: 38px;" id = "num" ></div>
                 </div>
+                <!--<div class="tip febs-hide" id="os">-->
+                    <!--<div class="inner"></div>-->
+                    <!--<div  class="table-show"  >-->
+                        <!--<table class="skip_table" id="opes">-->
+                            <!--<tr class="skip-tr">-->
+                                <!--<td class="skip-td skip-td-color"><span >QFF审核</span></td>-->
+                                <!--<td class="skip-td skip-td-color"><span >待审核数量</span></td>-->
+                                <!--<td class="skip-td skip-td-color"><span >跳转地址</span></td>-->
+                            <!--</tr>-->
+                        <!--</table>-->
+                    <!--</div>-->
+                <!--</div>-->
+
             </div>
-            <div style="height: 100px; width: 280px;box-shadow: 0px 1px 6px 0px #827a7a;margin-left: 15px ; float:left"   shiro:hasPermission="roche:add" >
-                <div style="height: 100px;width: 60px;float: left; margin-left: 5px">
-                    <img data-th-src="@{febs/images/start.png}" width="60px" height="60px" style="margin-top: 20px;margin-left: 5px">
+            <div  class="label  label-left"   shiro:hasPermission="roche:add" >
+                <div class="label-image">
+                    <img data-th-src="@{febs/images/start.png}" class="label-image-style">
                 </div>
-                <div style="height: 100px;width: 215px;float: left">
-                    <div style="text-align: center;margin-top: 33px;" class="site-demo-button" >
-                        <button  onclick="btnOn()" style="border: none;background-color:transparent;"><span style="color: #00A1DD"><h2>发起QFF</h2></span></button>
+                <div class="qff-start">
+                    <div  class="site-demo-button  qff-start-text" >
+                        <button  onclick="btnOn()" class="qff-start-button"><a style="color: #00A1DD"><h2>发起QFF</h2></a></button>
                     </div>
                 </div>
             </div>
@@ -43,8 +149,26 @@
                     <!--</div>-->
                 <!--</div>-->
             <!--</div>-->
+
+
         </div>
     </div>
+
+    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6 febs-hide"  style="margin-left: 15px;margin-top: 15px"  id="opes-show">
+        <div class="layui-card">
+            <div class="layui-card-body" >
+                <table class="skip_table" id="opes" >
+                    <tr class="skip-tr" >
+                        <td class="skip-td " ><span >QFF审核</span></td>
+                        <td class="skip-td "><span >待审核数量</span></td>
+                        <td class="skip-td "><span >跳转地址</span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 
@@ -52,18 +176,120 @@
     layui.use(['jquery', 'febs'], function () {
         var $ = layui.jquery,
             febs = layui.febs;
+
+
+        var  isShow = 1;
         var to = {time:new Date()};
+        var num = '';
+
+        function counts(arr,value){
+            var coun = 0;
+            for(var i=0;i<=arr.length;i++){
+                if(arr[i]===value){
+                    coun+=1;
+                }
+            }
+            return coun;
+        }
+
 
         $.get(ctx +"file/findTask",to,function (data) {
-            var num = data.data;
-            if(num==0){
-                $("#num").append('<span style="color: red"><h2>当前没有待办任务</h2></span>')
+            num = data.data;
+            if(num.length===0){
+                $("#num").append('<span style="color: red"><h2>当前没有待办任务</h2></span>');
                 $('#bubbling').attr("style","display:none;")
             }else {
-                $("#num").append('<span style="color: red"><h2>当前有'+num+'条待办任务</h2></span>')
-                $("#bubbling").append(num)
+                $("#num").append('<a ><h2 style="color: red">当前有'+num.length+'条待办任务</h2></a>');
+                $("#bubbling").append(num.length)
             }
+
+            if(counts(num,"delivery")!==0){
+                $("#opes").append('<tr class="skip-tr">\n' +
+                    '                    <td class="skip-td">到货</td>\n' +
+                    '                    <td class="skip-td">'+counts(num,"delivery")+'</td>\n' +
+                    '                    <td class="skip-td"><a lay-href="/delivery/view">点击跳转</a></td>\n' +
+                    '                </tr>')
+            }
+            if(counts(num,"conserve")!==0){
+                $("#opes").append('<tr class="skip-tr">\n' +
+                    '                    <td class="skip-td">养护</td>\n' +
+                    '                    <td class="skip-td">'+counts(num,"conserve")+'</td>\n' +
+                    '                    <td class="skip-td"><a lay-href="/conserve/view">点击跳转</a></td>\n' +
+                    '                </tr>')
+            }
+            if(counts(num,"export")!==0){
+                $("#opes").append('<tr class="skip-tr">\n' +
+                    '                    <td class="skip-td">出库</td>\n' +
+                    '                    <td class="skip-td">'+counts(num,"export")+'</td>\n' +
+                    '                    <td class="skip-td"><a lay-href="/export/view">点击跳转</a></td>\n' +
+                    '                </tr>')
+            }
+            if(counts(num,"wrapper")!==0){
+                $("#opes").append('<tr class="skip-tr">\n' +
+                    '                    <td class="skip-td">其他</td>\n' +
+                    '                    <td class="skip-td">'+counts(num,"wrapper")+'</td>\n' +
+                    '                    <td class="skip-td"><a lay-href="/wrapper/view">点击跳转</a></td>\n' +
+                    '                </tr>')
+            }
+            if(counts(num,"refund")!==0){
+                $("#opes").append('<tr class="skip-tr">\n' +
+                    '                    <td class="skip-td">退货</td>\n' +
+                    '                    <td class="skip-td">'+counts(num,"refund")+'</td>\n' +
+                    '                    <td class="skip-td"><a lay-href="/refund/view">点击跳转</a></td>\n' +
+                    '                </tr>')
+            }
+            if(counts(num,"recent")!==0){
+                $("#opes").append('<tr class="skip-tr">\n' +
+                    '                    <td class="skip-td">近效期</td>\n' +
+                    '                    <td class="skip-td">'+counts(num,"recent")+'</td>\n' +
+                    '                    <td class="skip-td"><a lay-href="/recent/view">点击跳转</a></td>\n' +
+                    '                </tr>')
+            }
+            if(counts(num,"roche")!==0){
+                $("#opes").append('<tr class="skip-tr">\n' +
+                    '                    <td class="skip-td">罗氏发起</td>\n' +
+                    '                    <td class="skip-td">'+counts(num,"roche")+'</td>\n' +
+                    '                    <td class="skip-td"><a lay-href="/roche/view">点击跳转</a></td>\n' +
+                    '                </tr>')
+            }
+
+
+            if(num.length!==0){
+                $('#opes-show').removeClass("febs-hide")
+            }
+
+
         });
+
+
+        //
+        // $('#os-show').on('click',function () {
+        //     if(num.length!==0) {
+        //         if (isShow === 1) {
+        //             $('#os').removeClass("febs-hide");
+        //             isShow = 2;
+        //         } else {
+        //             $('#os').addClass("febs-hide");
+        //             isShow = 1;
+        //         }
+        //     }
+        // });
+        //
+        // $(document).on('click',function(e){
+        //     var e = e || window.event;
+        //     var elem = e.target || e.srcElement;
+        //     while (elem) {
+        //         if (elem.id && elem.id==='os-show'  ) {
+        //             return;
+        //         }else if(elem.id && elem.id==='opes'  ) {
+        //             return;
+        //         }
+        //         elem = elem.parentNode;
+        //     }
+        //     $("#os").addClass("febs-hide");
+        //     isShow = 1;
+        // });
+        //
 
 
         window.btnOn = function () {

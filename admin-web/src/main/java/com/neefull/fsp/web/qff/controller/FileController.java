@@ -76,8 +76,8 @@ public class FileController extends BaseController {
     public FebsResponse findTask() throws FebsException {
         try {
             User user = getCurrentUser();
-            List<Task> list = processService.findTask(user.getUsername());
-            return new FebsResponse().success().data(list.size());
+            List<String> list = processService.findTask(user.getUsername());
+            return new FebsResponse().success().data(list);
         } catch (Exception e) {
             String message = "查询需要完成的任务数失败";
             log.error(message,e);

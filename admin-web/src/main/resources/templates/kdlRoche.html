@@ -10,7 +10,6 @@
     <span>您有待处理罗氏QFF如下，谢谢。</span><br>
     <table  style="width: 100%; border-collapse: collapse; border-top:1px solid #eee; font-size:14px; table-layout: fixed;">
         <tr style=" background: #fafafa; color: #333; border: 1px solid #eee;">
-            <td style="border-right:1px solid #eee;text-align: center">运输单号</td>
             <td style="border-right:1px solid #eee;text-align: center">NO编号</td>
             <td style="border-right:1px solid #eee;text-align: center">Initiator发起人</td>
             <td style="border-right:1px solid #eee;text-align: center">申请日期</td>
@@ -24,7 +23,6 @@
         </tr>
         <p th:each="roche:${list}">
             <tr style=" background: #fafafa; color: #333; border-bottom: 1px solid #eee;">
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.transport}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.number}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.sponsor}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.reqDate}"></td>

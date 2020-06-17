@@ -26,18 +26,11 @@ import java.util.Date;
 public class Roche implements Serializable {
     private static final long serialVersionUID = 4462069592504890849L;
 
-
     /**
      *  主键id
      */
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
-    /**
-     *  运输单号
-     */
-    @TableField("transport")
-    @ExcelField(value = "运输单号")
-    private String transport;
     /**
      *  NO编号
      */
@@ -117,18 +110,6 @@ public class Roche implements Serializable {
     @ExcelField(value = "后续行动")
     private String follow;
     /**
-     *  Excepted Date 期望完成日期
-     */
-    @TableField("excepted_date")
-    @ExcelField(value = "期望完成日期")
-    private String exceptedDate;
-    /**
-     *  Actual Complete date 实际完成日期
-     */
-    @TableField("actual_date")
-    @ExcelField(value = "实际完成日期")
-    private String actualDate;
-    /**
      *  变更记录
      */
     @TableField("alteration")
@@ -182,14 +163,6 @@ public class Roche implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getTransport() {
-        return transport;
-    }
-
-    public void setTransport(String transport) {
-        this.transport = transport;
     }
 
     public String getNumber() {
@@ -296,21 +269,21 @@ public class Roche implements Serializable {
         this.follow = follow;
     }
 
-    public String getExceptedDate() {
-        return exceptedDate;
-    }
-
-    public void setExceptedDate(String exceptedDate) {
-        this.exceptedDate = exceptedDate;
-    }
-
-    public String getActualDate() {
-        return actualDate;
-    }
-
-    public void setActualDate(String actualDate) {
-        this.actualDate = actualDate;
-    }
+//    public String getExceptedDate() {
+//        return exceptedDate;
+//    }
+//
+//    public void setExceptedDate(String exceptedDate) {
+//        this.exceptedDate = exceptedDate;
+//    }
+//
+//    public String getActualDate() {
+//        return actualDate;
+//    }
+//
+//    public void setActualDate(String actualDate) {
+//        this.actualDate = actualDate;
+//    }
 
     public String getAlteration() {
         return alteration;

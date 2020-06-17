@@ -13,9 +13,6 @@
         <if test="roche.batch!=null and roche.batch!=''">
             and batch like concat('%',#{roche.batch},'%')
         </if>
-        <if test="roche.transport!=null and roche.transport!=''">
-            and transport like concat('%',#{roche.transport},'%')
-        </if>
         <if test="roche.number!=null and roche.number!=''">
             and number like concat('%',#{roche.number},'%')
         </if>
@@ -45,12 +42,6 @@
         </if>
         <if test="roche.follow!=null and roche.follow!=''">
             and follow like concat('%',#{roche.follow},'%')
-        </if>
-        <if test="roche.exceptedDate!=null and roche.exceptedDate!=''">
-            and excepted_date like concat('%',#{roche.exceptedDate},'%')
-        </if>
-        <if test="roche.actualDate!=null and roche.actualDate!=''">
-            and actual_date like concat('%',#{roche.actualDate},'%')
         </if>
         <if test="roche.startTime!=null and roche.startTime!='' and roche.endTime!=null and roche.endTime!=''">
             and date_format(create_time,'%Y-%m-%d') between  #{roche.startTime} and  #{roche.endTime}

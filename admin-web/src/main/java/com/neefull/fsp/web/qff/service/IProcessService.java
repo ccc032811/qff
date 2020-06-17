@@ -41,7 +41,7 @@ public interface IProcessService  {
      * @param name
      * @return
      */
-    List<Task> findTask(String name);
+    List<String> findTask(String name);
 
     /**删除流程
      * @param object

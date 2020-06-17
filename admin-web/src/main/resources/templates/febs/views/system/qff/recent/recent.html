@@ -116,8 +116,9 @@
                                         </div>
                                         <div class="layui-inline">
                                             <label class="layui-form-label" style="border-right: 1px solid white;">罗氏处理意见</label>
-                                            <div class="layui-input-inline">
-                                                <input type="text" name="rConf"   maxlength="50" autocomplete="off"  class="layui-input" placeholder="请输入罗氏处理意见" >
+                                            <div class="layui-input-inline" >
+                                                <input type="text" name="rConf"   lay-verify="required" maxlength="50" autocomplete="off" list="recent_search_rConf" class="layui-input" placeholder="请输入" >
+                                                <datalist id="recent_search_rConf" style="display:none;"></datalist>
                                             </div>
                                         </div>
                                         <div class="layui-inline">
@@ -210,6 +211,7 @@
             tableIns;
 
         var to = {time:new Date()};
+        var rConf ="罗氏QA处理意见";
 
         //初始化表单
         form.render();
@@ -377,6 +379,14 @@
                 where: $.extend(getQueryParams())
             });
         });
+
+        $.get(ctx +"opinion/getOpinion/"+rConf,to,function(res){
+            var data = res.data;
+            $.each(data,function(index,item){
+                $("#recent_search_rConf").append('<option value="'+item.name+'"></option>')
+            });
+        });
+
 
         //获取查询参数
         function getQueryParams() {

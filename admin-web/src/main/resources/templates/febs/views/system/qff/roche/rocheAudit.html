@@ -75,13 +75,13 @@
 <div class="layui-fluid" id="roche-detail" lay-title = "罗氏内部发起QFF" style="margin-left: 18px">
     <form class="layui-form " action="" lay-filter="roche-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">运输单号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="transport"  maxlength="50" autocomplete="off"
-                           class="layui-input "  readonly="readonly" >
-                </div>
-            </div>
+            <!--<div class="layui-inline layui-col-sm4 ">-->
+                <!--<label class="layui-form-label ">运输单号</label>-->
+                <!--<div class="layui-input-block">-->
+                    <!--<input type="text" name="transport"  maxlength="50" autocomplete="off"-->
+                           <!--class="layui-input "  readonly="readonly" >-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">NO编号</label>
                 <div class="layui-input-block">
@@ -96,8 +96,6 @@
                            class="layui-input" readonly="readonly" >
                 </div>
             </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">申请日期</label>
                 <div class="layui-input-block">
@@ -105,6 +103,9 @@
                            placeholder="请选择时间" readonly="readonly" >
                 </div>
             </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label " id="reason-show">原因</label>
                 <div class="layui-input-block">
@@ -119,8 +120,6 @@
                            class="layui-input"  readonly="readonly"  >
                 </div>
             </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label " >物料编号</label>
                 <div class="layui-input-block">
@@ -128,6 +127,9 @@
                            class="layui-input "  readonly="readonly" >
                 </div>
             </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">批号/序列号</label>
                 <div class="layui-input-block">
@@ -142,8 +144,6 @@
                            class="layui-input"  readonly="readonly" >
                 </div>
             </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label " id="actions-show">行动</label>
                 <div class="layui-input-block" id="actions">
@@ -151,6 +151,9 @@
                     <datalist id="search_actions" style="display:none;"></datalist>
                 </div>
             </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">期望日期</label>
                 <div class="layui-input-block">
@@ -165,27 +168,11 @@
                            placeholder="请选择时间"  autocomplete="off" >
                 </div>
             </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label " id="follow-show" >后续行动</label>
                 <div class="layui-input-block">
                     <input type="text" name="follow" id="follow"  maxlength="50" autocomplete="off"
                            class="layui-input "  >
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">期望日期</label>
-                <div class="layui-input-block">
-                    <input type="text" name="exceptedDate"  id="audit-exceptedDate" class="layui-input"
-                           placeholder="请选择时间" readonly="readonly"  autocomplete="off">
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label " id="audit-actualDate-show">实际日期</label>
-                <div class="layui-input-block">
-                    <input type="text" name="actualDate" id="audit-actualDate" class="layui-input"
-                           placeholder="请选择时间"  autocomplete="off">
                 </div>
             </div>
         </div>
@@ -276,27 +263,6 @@
         var actions = "Actions行动";
         var to = {time:new Date()};
 
-        // laydate.render({
-        //     elem: '#audit-reqDate',
-        //     trigger: 'click'
-        //     ,min:0
-        //     ,btns: ['clear']
-        // });
-
-        // laydate.render({
-        //     elem: '#audit-exceptDate',
-        //     trigger: 'click'
-        //     ,min:0
-        //     ,btns: ['clear']
-        // });
-
-        // laydate.render({
-        //     elem: '#audit-exceptedDate',
-        //     trigger: 'click'
-        //     ,min:0
-        //     ,btns: ['clear']
-        // });
-
 
         $(function () {
             if(rocheShow !== '1') {
@@ -306,7 +272,7 @@
                     '                           class="layui-input"  readonly="readonly" >')
                 $('#follow').attr("readonly", "readonly");
                 $('#audit-completeDate').attr("readonly", "readonly");
-                $('#audit-actualDate').attr("readonly", "readonly");
+                // $('#audit-actualDate').attr("readonly", "readonly");
                 $('#remark').attr("readonly", "readonly");
                 $('#roche-alter').attr("style","display:none;");
             }
@@ -315,7 +281,7 @@
                 $('#actions-show').addClass("febs-form-item-require");
                 $('#follow-show').addClass("febs-form-item-require");
                 $('#audit-completeDate-show').addClass("febs-form-item-require");
-                $('#audit-actualDate-show').addClass("febs-form-item-require");
+                // $('#audit-actualDate-show').addClass("febs-form-item-require");
                 $('#roche-submit').attr("style","display:none;");
                 laydate.render({
                     elem: '#audit-completeDate',
@@ -355,8 +321,6 @@
                 "completeDate": roche.completeDate,
                 "remark": roche.remark,
                 "follow": roche.follow,
-                "exceptedDate": roche.exceptedDate,
-                "actualDate": roche.actualDate,
                 "alteration":roche.alteration
 
             });
