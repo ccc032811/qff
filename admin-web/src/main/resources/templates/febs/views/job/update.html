@@ -40,6 +40,27 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">日期：</label>
+            <div class="layui-input-block">
+                <input type="text" name="toDate" maxlength="50" lay-verify="range"
+                       autocomplete="off" class="layui-input" placeholder="2020-05-21" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始时间：</label>
+            <div class="layui-input-block">
+                <input type="text" name="fromTime" maxlength="50" lay-verify="range"
+                       autocomplete="off" class="layui-input" placeholder="08:00:00" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">结束时间：</label>
+            <div class="layui-input-block">
+                <input type="text" name="toTime" maxlength="50" lay-verify="range"
+                       autocomplete="off" class="layui-input" placeholder="08:00:00" >
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">参数：</label>
             <div class="layui-input-block">
                 <input type="text" name="params" maxlength="50" lay-verify="range"
@@ -86,7 +107,6 @@
                 "status": job.status,
                 "beanName": job.beanName,
                 "methodName": job.methodName,
-                "params":job.params,
                 "cronExpression": job.cronExpression,
                 "remark": job.remark
             });

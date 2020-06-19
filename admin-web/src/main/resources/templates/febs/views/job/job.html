@@ -219,16 +219,29 @@
                 });
             }
             if (layEvent === 'edit') {
-                febs.modal.open('修改任务', 'job/job/update/' + data.jobId, {
-                    area: $(window).width() <= 750 ? '90%' : '50%',
-                    btn: ['提交', '取消'],
-                    yes: function (index, layero) {
-                        $('#job-update').find('#submit').trigger('click');
-                    },
-                    btn2: function () {
-                        layer.closeAll();
-                    }
-                });
+                if(data.beanName === 'acquireOneSoap'){
+                    febs.modal.open('修改任务', 'job/job/updateProcess/' + data.jobId, {
+                        area: $(window).width() <= 750 ? '90%' : '50%',
+                        btn: ['提交', '取消'],
+                        yes: function (index, layero) {
+                            $('#job-update').find('#submit').trigger('click');
+                        },
+                        btn2: function () {
+                            layer.closeAll();
+                        }
+                    });
+                }else {
+                    febs.modal.open('修改任务', 'job/job/update/' + data.jobId, {
+                        area: $(window).width() <= 750 ? '90%' : '50%',
+                        btn: ['提交', '取消'],
+                        yes: function (index, layero) {
+                            $('#job-update').find('#submit').trigger('click');
+                        },
+                        btn2: function () {
+                            layer.closeAll();
+                        }
+                    });
+                }
             }
         });
 

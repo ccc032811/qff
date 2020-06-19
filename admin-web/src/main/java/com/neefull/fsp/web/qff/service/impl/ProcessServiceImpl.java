@@ -65,17 +65,19 @@ public class ProcessServiceImpl implements IProcessService {
     @Autowired
     private TemplateEngine templateEngine;
 
+
+
     @Override
     @Transactional
     public void commitProcess(Object object, User user) {
 
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
-            if(commodity.getId()==null){
-                commodityService.addCommodity(commodity);
-            }else {
-                editCommodity(commodity);
-            }
+//            if(commodity.getId()==null){
+//                commodityService.addCommodity(commodity);
+//            }else {
+//                editCommodity(commodity);
+//            }
             String businessKey = Commodity.class.getSimpleName()+":"+commodity.getId();
             //启动流程
             startProcess(properties.getCommodityProcess(),businessKey);
@@ -180,8 +182,26 @@ public class ProcessServiceImpl implements IProcessService {
             ProcessInstance processInstance = getNewProcessInstance(businessKey, user,attachments);
             if(processInstance==null){
                 rocheService.updateRocheStatus(roche.getId(),ProcessConstant.HAS_FINISHED);
-            }
+                // 发送邮件
+                Map<String,String> files = new HashMap<>();
+                String[] rocheMails = getEmails(86);
+                String[] kdlMails = getEmails(87);
+                String[] mails = new String[rocheMails.length+kdlMails.length];
+                System.arraycopy(rocheMails,0,mails,0,rocheMails.length);
+                System.arraycopy(kdlMails,0,mails,rocheMails.length,kdlMails.length);
 
+
+                List<Roche> list =new ArrayList<>();
+                list.add(roche);
+
+                Context context = new Context();
+                context.setVariable("list",list);
+                String text = templateEngine.process("rocheRoche", context);
+
+                //发送带附件的邮件
+                MailUtils.sendMail(text,mailProperties,mails,files);
+
+            }
         }
     }
 
@@ -276,20 +296,16 @@ public class ProcessServiceImpl implements IProcessService {
         deleteAtt(object);
         if(StringUtils.isNotEmpty(businessKey)){
             processInstance = queryProcessInstance(businessKey);
-    }
-    delete(processInstance);
+        }
+        delete(processInstance);
 
     }
 
     @Transactional
-    public void deleteAtt(Object object){
+    public void  deleteAtt(Object object){
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
-            Commodity comm = commodityService.queryCommodityById(commodity.getId());
-            if(comm!=null){
-                attachmentService.deleteByNumber(comm.getNumber(),comm.getStage());
-            }
-
+            attachmentService.deleteByNumber(commodity.getNumber(),commodity.getStage());
         }else if(object instanceof Recent){
             Recent recent = (Recent) object;
             attachmentService.deleteByNumber(String.valueOf(recent.getId()),ProcessConstant.RECENT_NAME);
@@ -404,7 +420,7 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
 
-    public ProcessInstance getProcessInstanceById(String processInstanceId){
+    private ProcessInstance getProcessInstanceById(String processInstanceId){
         return  runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
     }
 
@@ -529,6 +545,8 @@ public class ProcessServiceImpl implements IProcessService {
             commodity.setAlteration(alteration.toString());
         }
         commodityService.editCommodity(commodity);
+
+
         if(StringUtils.isNotEmpty(commodity.getImages())){
             addOrEditFiles(commodity,currentUser);
         }
@@ -546,6 +564,8 @@ public class ProcessServiceImpl implements IProcessService {
         //发送带附件的邮件
         MailUtils.sendMail(text,mailProperties,mails,files);
     }
+
+
 
     @Override
     @Transactional
@@ -623,7 +643,6 @@ public class ProcessServiceImpl implements IProcessService {
         context.setVariable("list",list);
         String text = templateEngine.process("kdlRoche", context);
 
-        //发送带附件的邮件
         MailUtils.sendMail(text,mailProperties,mails,files);
 
 

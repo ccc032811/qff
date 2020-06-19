@@ -110,7 +110,11 @@ public class QffProcess extends BaseController {
                 processService.commitProcess(commodity, new User());
                 commodityService.updateCommodityStatus(commodity.getId(), ProcessConstant.UNDER_REVIEW);
             }
+        }
 
+
+
+        if (CollectionUtils.isNotEmpty(commodityEmail)) {
             // 发送邮件
             Context context = new Context();
             context.setVariable("list", commodityEmail);
@@ -126,8 +130,10 @@ public class QffProcess extends BaseController {
 
             //发送邮件
             MailUtils.sendMail(text, mailProperties, mails, files);
-
         }
+
+
+
     }
 
 

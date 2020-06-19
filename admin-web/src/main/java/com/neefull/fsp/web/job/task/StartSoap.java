@@ -187,7 +187,9 @@ public class StartSoap {
                             }
                             //有变更，删除原来的数据
                             commodityService.deleteCommodityById(isCommodity.getId());
-//                            attachmentService.deleteByNumber(isCommodity.getNumber(),isCommodity.getStage());
+                            if(!isExist) {
+                                attachmentService.deleteByNumber(isCommodity.getNumber(), isCommodity.getStage());
+                            }
                             if(StringUtils.isNotEmpty(isCommodity.getAlteration())){
                                 commodity.setAlteration(isCommodity.getAlteration()+"  "+alteration.toString());
                             }else {

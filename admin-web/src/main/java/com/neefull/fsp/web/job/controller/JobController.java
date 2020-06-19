@@ -7,6 +7,7 @@ import com.neefull.fsp.web.common.controller.BaseController;
 import com.neefull.fsp.web.common.entity.FebsResponse;
 import com.neefull.fsp.web.common.entity.QueryRequest;
 import com.neefull.fsp.web.common.exception.FebsException;
+import com.neefull.fsp.web.common.utils.DateUtil;
 import com.neefull.fsp.web.job.entity.Job;
 import com.neefull.fsp.web.job.service.IJobService;
 import com.wuwenze.poi.ExcelKit;
@@ -83,23 +84,20 @@ public class JobController extends BaseController {
     @Log("修改定时任务")
     @PostMapping("update")
     public FebsResponse updateJob(@Valid Job job) throws FebsException {
+
+        Job oldJob = jobService.findJob(job.getJobId());
         if(job.getBeanName().equals("acquireOneSoap")){
             String toDate = job.getToDate();
             String fromTime = job.getFromTime();
             String toTime = job.getToTime();
-            String params = job.getParams();
-            String message = "";
-            if(StringUtils.isEmpty(toDate)||StringUtils.isEmpty(fromTime)||StringUtils.isEmpty(toTime)){
-                throw new FebsException("请输入日期，开始时间，结束时间");
-            }else {
-                Job byId = jobService.getById(job.getJobId());
-                if(byId.getParams().equals(job.getParams())){
-                    message = toDate+","+fromTime+","+toTime+",";
-                }else {
-                    message = toDate+","+fromTime+","+toTime+","+params;
+            String message = job.getParams();
+            if(StringUtils.isNotEmpty(toDate)&&StringUtils.isNotEmpty(fromTime)&&StringUtils.isNotEmpty(toTime)){
+                message = toDate+","+fromTime+","+toTime+","+message;
+                if(StringUtils.isNotEmpty(message)){
+                    job.setParams(message);
                 }
-
-                job.setParams(message);
+            }else {
+                job.setParams(oldJob.getParams());
             }
         }
 
@@ -112,6 +110,8 @@ public class JobController extends BaseController {
             throw new FebsException(message);
         }
     }
+
+
 
     @Log("执行定时任务")
     @RequiresPermissions("job:run")

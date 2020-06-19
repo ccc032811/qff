@@ -44,6 +44,14 @@ public class ViewController {
         return FebsUtil.view("job/jobUpdate");
     }
 
+    @GetMapping("job/updateProcess/{jobId}")
+    @RequiresPermissions("job:update")
+    public String updateProcess(@NotBlank(message = "{required}") @PathVariable Long jobId, Model model) {
+        Job job = jobService.findJob(jobId);
+        model.addAttribute("job", job);
+        return FebsUtil.view("job/update");
+    }
+
     @GetMapping("log")
     @RequiresPermissions("job:log:view")
     public String log() {
