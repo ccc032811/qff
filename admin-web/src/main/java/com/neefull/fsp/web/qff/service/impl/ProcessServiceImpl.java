@@ -73,11 +73,11 @@ public class ProcessServiceImpl implements IProcessService {
 
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
-//            if(commodity.getId()==null){
-//                commodityService.addCommodity(commodity);
-//            }else {
-//                editCommodity(commodity);
-//            }
+            if(commodity.getId()==null){
+                commodityService.addCommodity(commodity);
+            }else {
+                editCommodity(commodity);
+            }
             String businessKey = Commodity.class.getSimpleName()+":"+commodity.getId();
             //启动流程
             startProcess(properties.getCommodityProcess(),businessKey);

@@ -55,28 +55,68 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
 
     @Override
     public IPage<Commodity> getCommodityPage(Commodity commodity, User user) {
-        Page<Commodity> page = new Page<>(commodity.getPageNum(),commodity.getPageSize());
-        IPage<Commodity> pageInfo = commodityMapper.getConservePage(page,commodity);
-        //获取查询的数据
-        List<Commodity> records = pageInfo.getRecords();
-        List<Commodity> newCommodity = processService.queryCommodityTaskByName(records,user);
+
+
+        IPage<Commodity> pageInfo = new Page<>();
         if(commodity.getAtt()!=null&&commodity.getAtt()==1){
-            List<Commodity> commodityList = new ArrayList<>();
-            if(CollectionUtils.isNotEmpty(newCommodity)) {
-                for (Commodity com : newCommodity) {
-                    if (com.getIsAllow() != null && com.getIsAllow() == 1) {
-                        commodityList.add(com);
+            List<Commodity> commodityList = commodityMapper.getPageConserve(commodity);
+            List<Commodity> newCommodity = processService.queryCommodityTaskByName(commodityList,user);
+            List<Commodity> commodities = new ArrayList<>();
+            if(CollectionUtils.isNotEmpty(newCommodity)){
+                for (Commodity commo : newCommodity) {
+                    if(commo.getIsAllow()!=null&&commo.getIsAllow()==1){
+                        commodities.add(commo);
                     }
                 }
             }
-            pageInfo.setRecords(commodityList);
+            List<Commodity> page = page(commodities, commodity.getPageSize(), commodity.getPageNum());
+
+            pageInfo.setRecords(page);
+            pageInfo.setCurrent(commodity.getPageNum());
+            pageInfo.setTotal(commodities.size());
+
+
         }else {
+            Page<Commodity> page = new Page<>(commodity.getPageNum(),commodity.getPageSize());
+            pageInfo = commodityMapper.getConservePage(page,commodity);
+            List<Commodity> records = pageInfo.getRecords();
+            List<Commodity> newCommodity = processService.queryCommodityTaskByName(records,user);
             pageInfo.setRecords(newCommodity);
         }
-
+//        Page<Commodity> page = new Page<>(commodity.getPageNum(),commodity.getPageSize());
+//        IPage<Commodity> pageInfo = commodityMapper.getConservePage(page,commodity);
+//        //获取查询的数据
+//        List<Commodity> records = pageInfo.getRecords();
+//
+//        List<Commodity> newCommodity = processService.queryCommodityTaskByName(records,user);
+//        if(commodity.getAtt()!=null&&commodity.getAtt()==1){
+//            List<Commodity> commodityList = new ArrayList<>();
+//            if(CollectionUtils.isNotEmpty(newCommodity)) {
+//                for (Commodity com : newCommodity) {
+//                    if (com.getIsAllow() != null && com.getIsAllow() == 1) {
+//                        commodityList.add(com);
+//                    }
+//                }
+//            }
+//            pageInfo.setRecords(commodityList);
+//        }else {
+//            pageInfo.setRecords(newCommodity);
+//        }
 
         return pageInfo;
    }
+
+    private List<Commodity>  page(List<Commodity> applyList, int pageSize,int currentPage) {
+        List<Commodity> currentPageList = new ArrayList<>();
+        if (applyList != null && applyList.size() > 0) {
+            int currIdx = (currentPage > 1 ? (currentPage - 1) * pageSize : 0);
+            for (int i = 0; i < pageSize && i < applyList.size() - currIdx; i++) {
+                currentPageList.add(applyList.get(currIdx + i));
+            }
+        }
+        return currentPageList;
+    }
+
 
     @Override
     @Transactional

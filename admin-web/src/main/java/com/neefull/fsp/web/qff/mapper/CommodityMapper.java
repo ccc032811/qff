@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: chengchengchu
@@ -32,4 +33,5 @@ public interface CommodityMapper extends BaseMapper<Commodity> {
 
     Date selectLastTime();
 
+    List<Commodity> getPageConserve(Commodity commodity);
 }
