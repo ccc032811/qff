@@ -73,11 +73,11 @@ public class ProcessServiceImpl implements IProcessService {
 
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
-            if(commodity.getId()==null){
-                commodityService.addCommodity(commodity);
-            }else {
-                editCommodity(commodity);
-            }
+//            if(commodity.getId()==null){
+//                commodityService.addCommodity(commodity);
+//            }else {
+//                editCommodity(commodity);
+//            }
             String businessKey = Commodity.class.getSimpleName()+":"+commodity.getId();
             //启动流程
             startProcess(properties.getCommodityProcess(),businessKey);
@@ -520,6 +520,7 @@ public class ProcessServiceImpl implements IProcessService {
     public void alterCommodity(Commodity commodity, User currentUser) {
         StringBuffer alteration = new StringBuffer();
         String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd");
+        commodity.setRepTime(date);
         Commodity oldCommodity = commodityService.queryCommodityById(commodity.getId());
         if(!commodity.getBa().equals(oldCommodity.getBa())){
             alteration.append("BA:" +date+ " 由 "+oldCommodity.getBa()+" 修改为 "+commodity.getBa()+"  。 ");
