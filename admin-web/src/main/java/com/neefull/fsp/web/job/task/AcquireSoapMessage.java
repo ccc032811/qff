@@ -1,28 +1,17 @@
 package com.neefull.fsp.web.job.task;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.neefull.fsp.web.common.controller.BaseController;
-import com.neefull.fsp.web.qff.config.SendMailProperties;
-import com.neefull.fsp.web.qff.config.SoapUrlProperties;
-import com.neefull.fsp.web.qff.entity.Attachment;
-import com.neefull.fsp.web.qff.entity.Commodity;
-import com.neefull.fsp.web.qff.service.IAttachmentService;
 import com.neefull.fsp.web.qff.service.ICommodityService;
-import com.neefull.fsp.web.qff.service.IProcessService;
-import com.neefull.fsp.web.qff.utils.ProcessConstant;
-import com.neefull.fsp.web.qff.utils.SapWsUtils;
-import com.neefull.fsp.web.qff.utils.XmlUtils;
-import com.neefull.fsp.web.system.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -34,6 +23,10 @@ import java.util.*;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class AcquireSoapMessage extends BaseController {
 
+    private static final String ZORE_TIME = "00:00:00";
+    private static final String END_TIME = "23:59:59";
+    private static final String BEFORE_TIME = "00:08:00";
+
     @Autowired
     private ICommodityService commodityService;
     @Autowired
@@ -42,44 +35,48 @@ public class AcquireSoapMessage extends BaseController {
     @Transactional
     public void startSapMessage() {
         //获取更新时间
-        String seacheDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+
+        String seacheDate =DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
         String lastDate = null;
         String fromTime = "";
         try {
             lastDate = commodityService.selectLastTime();
         } catch (Exception e) {
             log.info("当前数据库无数据，初始化起始时间");
-            fromTime = "00:00:00";
+            fromTime = ZORE_TIME;
         }
         if(StringUtils.isNotEmpty(lastDate)){
-            if (StringUtils.isNotEmpty(lastDate)&&lastDate.startsWith(seacheDate)) {
+            if (StringUtils.isNotEmpty(lastDate)&&lastDate.startsWith(seacheDate.split(" ")[0])) {
                 fromTime = lastDate.split(" ")[1];
             } else {
-                fromTime = "00:00:00";
+                fromTime = ZORE_TIME;
             }
         }
 
         String toTime = DateFormatUtils.format(new Date(), "HH:mm:ss");
+        Boolean before = false;
+        try {
+            before = simpleDateFormat.parse(seacheDate.split(" ")[1]).getTime() < simpleDateFormat.parse(BEFORE_TIME).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        if(fromTime.equals("00:00:00")){
+        if(fromTime.equals(ZORE_TIME)&&before){
             Calendar instance = Calendar.getInstance();
             instance.add(Calendar.DAY_OF_MONTH,-1);
             String date = DateFormatUtils.format(instance.getTime(), "yyyy-MM-dd");
-            String startTime = "00:00:00";
+            String startTime = ZORE_TIME;
             if(StringUtils.isNotEmpty(lastDate)&&lastDate.startsWith(date)){
                 startTime = lastDate.split(" ")[1];
             }
-            String endTime = "23:59:59";
+            String endTime = END_TIME;
             startSoap.getMessage(date,startTime,endTime,"");
+            System.out.println("*************************");
         }else {
-            startSoap.getMessage(seacheDate,fromTime,toTime,"");
+            startSoap.getMessage(seacheDate.split(" ")[0],fromTime,toTime,"");
+            System.out.println("*************************");
         }
-
-
-//        String seacheDate="2020-06-12";
-//        String fromTime = "00:00:00";
-//        String toTime = "23:00:00";
-
     }
 
 }
