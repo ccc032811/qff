@@ -17,6 +17,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -143,7 +144,9 @@ public class SelfProcessCommit {
         List<User> userList = userService.findUserByRoleId(id);
         List<String> userMails = new ArrayList<>();
         for (User user : userList) {
-            userMails.add(user.getEmail());
+            if(StringUtils.isNotEmpty(user.getEmail())) {
+                userMails.add(user.getEmail());
+            }
         }
         return userMails.toArray(new String[0]);
     }

@@ -75,7 +75,7 @@ public class User implements Serializable {
      * 用户名
      */
     @TableField("USERNAME")
-    @Size(min = 1, max = 10, message = "{range}")
+    @Size(min = 1, max = 50, message = "{range}")
     @ExcelField(value = "用户名")
     private String username;
 
@@ -104,7 +104,7 @@ public class User implements Serializable {
      * 联系电话
      */
     @TableField("MOBILE")
-    @IsMobile(message = "{mobile}")
+//    @IsMobile(message = "{mobile}")
     @ExcelField(value = "联系电话")
     private String mobile;
 

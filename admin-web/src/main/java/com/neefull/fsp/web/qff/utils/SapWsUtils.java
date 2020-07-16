@@ -105,7 +105,7 @@ public abstract class SapWsUtils {
                 "            <soap:PASSWORD>1</soap:PASSWORD>\n" +
                 "            <soap:COMMENTS>1</soap:COMMENTS>\n" +
                 "         </soap:commonHeader>\n" +
-                "         <soap:LIST><![CDATA[<urn:ZCHN_FM_QFF xmlns:urn=\"urn:sap-com:document:sap:rfc:functions:ZCHN_FM_QFF_BS\"><urn:IV_QMNUM/><urn:IV_UDATE>"+seacheDate+"</urn:IV_UDATE><urn:IV_UTIME_FROM>"+fromTime+"</urn:IV_UTIME_FROM><urn:IV_UTIME_TO>"+toTime+"</urn:IV_UTIME_TO><urn:ET_QFF><urn:item><urn:QMNUM>"+qmunm+"</urn:QMNUM><urn:HERKUNFT></urn:HERKUNFT><urn:MAWERK></urn:MAWERK><urn:MATNR></urn:MATNR><urn:MSTAE></urn:MSTAE><urn:CHARG></urn:CHARG><urn:IDNLF></urn:IDNLF><urn:BISMT></urn:BISMT><urn:LICHN></urn:LICHN><urn:HSDAT></urn:HSDAT><urn:VFDAT></urn:VFDAT><urn:MGEIG></urn:MGEIG><urn:QMTXT></urn:QMTXT><urn:ZPROCLAS></urn:ZPROCLAS><urn:REGNO></urn:REGNO><urn:AWBNO></urn:AWBNO><urn:ERDAT></urn:ERDAT></urn:item></urn:ET_QFF><urn:ET_QFF_ATT><urn:item><urn:QMNUM></urn:QMNUM><urn:ATTACHNAME></urn:ATTACHNAME><urn:ATTACH></urn:ATTACH></urn:item></urn:ET_QFF_ATT></urn:ZCHN_FM_QFF>]]></soap:LIST>\n" +
+                "         <soap:LIST><![CDATA[<urn:ZCHN_FM_QFF xmlns:urn=\"urn:sap-com:document:sap:rfc:functions:ZCHN_FM_QFF_BS\"><urn:IV_QMNUM/><urn:IV_UDATE>"+seacheDate+"</urn:IV_UDATE><urn:IV_UTIME_FROM>"+fromTime+"</urn:IV_UTIME_FROM><urn:IV_UTIME_TO>"+toTime+"</urn:IV_UTIME_TO></urn:ZCHN_FM_QFF>]]></soap:LIST>\n" +
                 "      </soap:REQUEST_DATA>\n" +
                 "   </soapenv:Body>\n" +
                 "</soapenv:Envelope>");

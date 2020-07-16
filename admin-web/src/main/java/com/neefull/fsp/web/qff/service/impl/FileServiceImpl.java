@@ -258,7 +258,9 @@ public class FileServiceImpl implements IFileService {
         List<User> userList = userService.findUserByRoleId(id);
         List<String> userMails = new ArrayList<>();
         for (User user : userList) {
-            userMails.add(user.getEmail());
+            if(StringUtils.isNotEmpty(user.getEmail())) {
+                userMails.add(user.getEmail());
+            }
         }
         return userMails.toArray(new String[0]);
     }

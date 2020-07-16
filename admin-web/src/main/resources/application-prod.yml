@@ -18,18 +18,18 @@ spring:
           username: root
           password: qKmtTwt@vNc8Sy#5
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://10.1.147.126:3306/qff?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=falsmezone=GMT%2b8&serverTimezone=UTC&nullCatalogMeansCurrent=true&autoReconnect=true&failOverReadOnly=false
+          url: jdbc:mysql://10.1.147.126:3306/qff?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=falsmezone=GMT%2b8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&autoReconnect=true&failOverReadOnly=false
         # 数据源-2，名称为 quartz
         quartz:
           username: root
           password: qKmtTwt@vNc8Sy#5
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://10.1.147.126:3306/qff?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=falsrTimezone=GMT%2b8&serverTimezone=UTC&nullCatalogMeansCurrent=true&autoReconnect=true&failOverReadOnly=false
+          url: jdbc:mysql://10.1.147.126:3306/qff?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=falsmezone=GMT%2b8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&autoReconnect=true&failOverReadOnly=false
         typt:
           username: root
           password: qKmtTwt@vNc8Sy#5
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://10.1.147.126:3306/typt?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=falsrTimezone=GMT%2b8&serverTimezone=UTC&nullCatalogMeansCurrent=true&autoReconnect=true&failOverReadOnly=false
+          url: jdbc:mysql://10.1.147.126:3306/typt?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=falsmezone=GMT%2b8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&autoReconnect=true&failOverReadOnly=false
   redis:
     # Redis数据库索引（默认为 0）
     database: 0

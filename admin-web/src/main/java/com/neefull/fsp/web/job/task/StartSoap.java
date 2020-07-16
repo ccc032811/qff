@@ -1,5 +1,6 @@
 package com.neefull.fsp.web.job.task;
 
+import com.neefull.fsp.web.common.utils.DateUtil;
 import com.neefull.fsp.web.qff.config.SoapUrlProperties;
 import com.neefull.fsp.web.qff.entity.Attachment;
 import com.neefull.fsp.web.qff.entity.Commodity;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -57,13 +60,15 @@ public class StartSoap {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        log.info("返回结果为："+messageBuffer.toString());long endTime = System.currentTimeMillis();
+        log.info("返回结果为："+messageBuffer.toString());
+        long endTime = System.currentTimeMillis();
         log.info("响应时间: {}ms", (endTime - startTime));
         log.info("*****************Finish query from SAP server.******************");
 
         //对返回数据结果进行截取
         try {
-
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date parse = simpleDateFormat.parse(seacheDate+" "+toTime);
             String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
 
             String qffMessage = XmlUtils.getTagContent(messageBuffer.toString(), "<ET_QFF>", "</ET_QFF>");
@@ -115,6 +120,7 @@ public class StartSoap {
                     }
                     commodity.setStatus(ProcessConstant.NEW_BUILD);
                     commodity.setAccessory(0);
+                    commodity.setCreateTime(parse);
 
                     //判断该条数据是否记录
                     Commodity isCommodity = commodityService.queryCommodityByNumber(commodity.getNumber());
@@ -255,6 +261,8 @@ public class StartSoap {
             }
 
         } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 

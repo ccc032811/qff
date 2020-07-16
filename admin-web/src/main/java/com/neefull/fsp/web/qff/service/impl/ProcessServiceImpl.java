@@ -520,6 +520,7 @@ public class ProcessServiceImpl implements IProcessService {
     public void alterCommodity(Commodity commodity, User currentUser) {
         StringBuffer alteration = new StringBuffer();
         String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd");
+        commodity.setRepTime(date);
         Commodity oldCommodity = commodityService.queryCommodityById(commodity.getId());
         if(!commodity.getBa().equals(oldCommodity.getBa())){
             alteration.append("BA:" +date+ " 由 "+oldCommodity.getBa()+" 修改为 "+commodity.getBa()+"  。 ");
@@ -572,6 +573,7 @@ public class ProcessServiceImpl implements IProcessService {
     public void alterRecent(Recent recent, User currentUser) {
         StringBuffer alteration = new StringBuffer();
         String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd");
+        recent.setRepDate(date);
         Recent oldRecent = recentService.queryRecentById(recent.getId());
         if(!recent.getrConf().equals(oldRecent.getrConf())){
             alteration.append("罗氏处理意见:" +date+ " 由 "+oldRecent.getrConf()+" 修改为 "+recent.getrConf()+"  。 ");
@@ -705,8 +707,13 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Transactional
     protected void editCommodity(Commodity commodity){
-        String format = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
-        commodity.setRepTime(format);
+        String businessKey = Commodity.class.getSimpleName()+":"+commodity.getId();
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceBusinessKey(businessKey).singleResult();
+        String activityId = processInstance.getActivityId();
+        if(activityId.equals(ProcessConstant.THREE_STEP)){
+            String format = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
+            commodity.setRepTime(format);
+        }
         commodityService.editCommodity(commodity);
     }
 
@@ -714,7 +721,9 @@ public class ProcessServiceImpl implements IProcessService {
         List<User> userList = userService.findUserByRoleId(id);
         List<String> userMails = new ArrayList<>();
         for (User user : userList) {
-            userMails.add(user.getEmail());
+            if(StringUtils.isNotEmpty(user.getEmail())) {
+                userMails.add(user.getEmail());
+            }
         }
         return userMails.toArray(new String[0]);
     }

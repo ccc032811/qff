@@ -96,4 +96,83 @@
     <select id="selectLastTime" resultType="java.util.Date">
         select c.create_time from qff_commodity c order by c.create_time desc limit 1
     </select>
+
+    <select id="getPageConserve" resultType="com.neefull.fsp.web.qff.entity.Commodity">
+        select * from qff_commodity where stage = #{stage}
+        <if test="transport!=null and transport!=''">
+            and transport like concat('%',#{transport},'%')
+        </if>
+        <if test="number!=null and number!=''">
+            and number like concat('%',#{number},'%')
+        </if>
+        <if test="plant!=null and plant!=''">
+            and plant like concat('%',#{plant},'%')
+        </if>
+        <if test="kMater!=null and kMater!=''">
+            and k_mater like concat('%',#{kMater},'%')
+        </if>
+        <if test="kBatch!=null and kBatch!=''">
+            and k_batch like concat('%',#{kBatch},'%')
+        </if>
+        <if test="rMater!=null and rMater!=''">
+            and r_mater like concat('%',#{rMater},'%')
+        </if>
+        <choose>
+            <when test="isDanger =='01'">
+                and is_danger = '01'
+            </when>
+            <when test="isDanger =='00'">
+                and is_danger != '01'
+            </when>
+        </choose>
+        <if test="pMater!=null and pMater!=''">
+            and p_mater like concat('%',#{pMater},'%')
+        </if>
+        <if test="rBatch!=null and rBatch!=''">
+            and r_batch like concat('%',#{rBatch},'%')
+        </if>
+        <if test="manuDate!=null and manuDate!=''">
+            and manu_date like concat('%',#{manuDate},'%')
+        </if>
+        <if test="expiryDate!=null and expiryDate!=''">
+            and expiry_date like concat('%',#{expiryDate},'%')
+        </if>
+        <if test="quarantine!=null and quarantine!=''">
+            and quarantine like concat('%',#{quarantine},'%')
+        </if>
+        <if test="getRemark!=null and getRemark!=''">
+            and get_remark like concat('%',#{getRemark},'%')
+        </if>
+        <if test="initDate!=null and initDate!=''">
+            and init_date like concat('%',#{initDate},'%')
+        </if>
+        <if test="rConf!=null and rConf!=''">
+            and r_conf like concat('%',#{rConf},'%')
+        </if>
+        <if test="repTime!=null and repTime!=''">
+            and rep_time like concat('%',#{repTime},'%')
+        </if>
+        <if test="reason!=null and reason!=''">
+            and reason like concat('%',#{reason},'%')
+        </if>
+        <if test="compNumber!=null and compNumber!=''">
+            and comp_number like concat('%',#{compNumber},'%')
+        </if>
+        <if test="ba!=null and ba!=''">
+            and ba like concat('%',#{.ba},'%')
+        </if>
+        <if test="source!=null and source!=''">
+            and source like concat('%',#{source},'%')
+        </if>
+        <if test="register!=null and register!=''">
+            and register like concat('%',#{register},'%')
+        </if>
+        <if test="classify!=null and classify!=''">
+            and classify like concat('%',#{classify},'%')
+        </if>
+        <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''" >
+            and date_format(create_time,'%Y-%m-%d')  between  #{startTime} and  #{endTime}
+        </if>
+        and  status = 2  order by create_time desc
+    </select>
 </mapper>

@@ -48,6 +48,7 @@ public class AcquireSoapMessage extends BaseController {
         try {
             lastDate = commodityService.selectLastTime();
         } catch (Exception e) {
+            log.info("当前数据库无数据，初始化起始时间");
             fromTime = "00:00:00";
         }
         if(StringUtils.isNotEmpty(lastDate)){
@@ -60,11 +61,25 @@ public class AcquireSoapMessage extends BaseController {
 
         String toTime = DateFormatUtils.format(new Date(), "HH:mm:ss");
 
+        if(fromTime.equals("00:00:00")){
+            Calendar instance = Calendar.getInstance();
+            instance.add(Calendar.DAY_OF_MONTH,-1);
+            String date = DateFormatUtils.format(instance.getTime(), "yyyy-MM-dd");
+            String startTime = "00:00:00";
+            if(StringUtils.isNotEmpty(lastDate)&&lastDate.startsWith(date)){
+                startTime = lastDate.split(" ")[1];
+            }
+            String endTime = "23:59:59";
+            startSoap.getMessage(date,startTime,endTime,"");
+        }else {
+            startSoap.getMessage(seacheDate,fromTime,toTime,"");
+        }
+
 
 //        String seacheDate="2020-06-12";
 //        String fromTime = "00:00:00";
 //        String toTime = "23:00:00";
-        startSoap.getMessage(seacheDate,fromTime,toTime,"");
+
     }
 
 }

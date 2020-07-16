@@ -8,7 +8,7 @@ spring:
     multipart:
       max-file-size: 10MB # 限制文件上传的大小
   profiles:
-    active: dev
+    active: test
 
   thymeleaf:
     cache: false
@@ -48,11 +48,11 @@ mybatis-plus:
 qff:
   sftps:
     sftppath:  /UploadOutbound/   # sftp文件地址
-    movepath:  /backup/    #移动的目标文件
+    movepath:  /UploadArchive/    #移动的目标文件
     localpath: /usr/local/files/  #文件下载到当前地址   /usr/local/files/
-    host: 10.1.151.25
-    username: QFFTest
-    password: 1qaz2wsx
+    host: 10.1.158.100                               #10.1.151.25
+    username: QFFProd         #QFFTest
+    password:  KDL@seeburger        #1qaz2wsx
   send:
     conserveTemplatePath:   #到货养护包装QFF pdf模板地址
     conserveDownLoadPath:   #到货养护包装QFF 生成的模板地址
@@ -67,7 +67,7 @@ qff:
     recentProcess: 近效期QFF
     rocheProcess: 罗氏内部发起QFF
     imagePath: /usr/local/files/    #/usr/local/files/  图片存储的地址
-    imageUrl:  /usr/local/files/   #  图片展示路径
+    imageUrl:  /usr/local/files/  #  图片展示路径
   soap:
-    soapUrl: http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl   #http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl   http://10.1.225.155:80/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS   #QFF 请求地址
+    soapUrl: http://10.1.16.55/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl     #http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl    http://10.1.16.55/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl
 
