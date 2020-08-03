@@ -647,7 +647,6 @@ public class ProcessServiceImpl implements IProcessService {
 
         MailUtils.sendMail(text,mailProperties,mails,files);
 
-
     }
 
 

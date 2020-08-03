@@ -86,7 +86,6 @@ public class StartSoap {
             if(CollectionUtils.isNotEmpty(qffList)){
                 //将数据转换成对象存入数据库中
                 for (String s : qffList) {
-                    String stage = XmlUtils.getTagContent(s, "<HERKUNFT>", "</HERKUNFT>");
 
                     Commodity commodity = new Commodity();
                     commodity.setNumber(XmlUtils.getTagContent(s,"<QMNUM>","</QMNUM>"));
@@ -105,6 +104,7 @@ public class StartSoap {
                     commodity.setClassify(XmlUtils.getTagContent(s,"<ZPROCLAS>","</ZPROCLAS>"));
                     commodity.setRegister(XmlUtils.getTagContent(s,"<REGNO>","</REGNO>"));
                     commodity.setTransport(XmlUtils.getTagContent(s,"<AWBNO>","</AWBNO>"));
+                    String stage = XmlUtils.getTagContent(s, "<HERKUNFT>", "</HERKUNFT>");
                     commodity.setType(stage);
 //                    commodity.setStage(XmlUtils.getTagContent(s,"<HERKUNFT>","</HERKUNFT>"));
                     if(stage.equals("01")){

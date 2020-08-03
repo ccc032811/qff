@@ -72,10 +72,10 @@ public class AcquireSoapMessage extends BaseController {
             }
             String endTime = END_TIME;
             startSoap.getMessage(date,startTime,endTime,"");
-            System.out.println("*************************");
+
         }else {
             startSoap.getMessage(seacheDate.split(" ")[0],fromTime,toTime,"");
-            System.out.println("*************************");
+
         }
     }
 
