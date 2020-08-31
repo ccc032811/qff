@@ -97,7 +97,7 @@
                                             </div>
                                         </div>
                                         <div class="layui-inline ">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">药厂物料号</label>
+                                            <label class="layui-form-label" style="border-right: 1px solid white;">物料描述</label>
                                             <div class="layui-input-inline">
                                                 <input type="text" name="pMater"  maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入药厂物料号" >
                                             </div>
@@ -241,9 +241,10 @@
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="conserve-detail" shiro:hasPermission="conserve:view">查看</a>
     {{# }else if(d.status != '3'){d.status = '没审核完成'}}
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="conserve-detail" shiro:hasPermission="conserve:view">查看</a>
-        {{#  if(d.isAllow != '1'){d.status = '不可审核'}}
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="conserve-alter"  shiro:hasPermission="conserve:alter ">修改</a>
-        {{# }else  if(d.isAllow == '1'){d.status = '可审核'}}
+        {{#  if(d.isAllow == '1'){d.status = '可审核'}}
+            {{#  if(d.repTime != ''){d.status = '可审核'}}
+               <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="conserve-alter"  shiro:hasPermission="conserve:alter ">修改</a>
+            {{#}}}
         <a class="layui-btn layui-btn-xs" lay-event="conserve-edit"  shiro:hasPermission="conserve:audit">审核</a>
         {{#}}}
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="conserve-del" shiro:hasPermission="conserve:del">删除</a>
@@ -343,7 +344,7 @@
                     {field: 'rConf', title: '罗氏QA处理意见',align:'center'},
                     {field: 'reason', title: 'QFF原因',align:'center'},
                     {title: '处理阶段', templet: '#conserve-status',align:'center'},
-                    {title: '操作', toolbar: '#conserve-option',align:'center',width: 160}
+                    {title: '操作', toolbar: '#conserve-option',align:'center',width: 200}
                 ]],
                 done:function (res,curr,count) {
                     $(".layui-table-header .layui-table thead tr th").css("border","1px solid white").css("background-color","#E8E8E8");

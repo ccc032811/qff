@@ -4048,7 +4048,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 .timeline-main-line{
     width: 90%;
     height: 50px;
-    margin-left: 5%
+    margin-left:-9%
 }
 .timeline-item-start{
     width: 25%;

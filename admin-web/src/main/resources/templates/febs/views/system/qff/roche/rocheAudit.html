@@ -10,7 +10,7 @@
     .timeline-main-line{
         width: 85%;
         height: 50px;
-        margin-left: 18%
+        margin-left: 6%
     }
     .timeline-item-start{
         width: 25%;
@@ -49,7 +49,7 @@
     .layui-col-sm12{
         border-left: 1px solid #000;
         border-top: 1px solid #000;
-        height: 100px;
+
     }
     .layui-form-label {
         float: left;
@@ -153,7 +153,6 @@
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
-
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">期望日期</label>
                 <div class="layui-input-block">
@@ -174,6 +173,16 @@
                     <input type="text" name="follow" id="follow"  maxlength="50" autocomplete="off"
                            class="layui-input "  >
                 </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth" >
+            <div class="layui-inline layui-col-sm12" >
+                <label class="layui-form-label ">单位</label>
+                <div class="layui-input-block">
+                    <input type="text" name="unit" maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly" >
+                </div>
+
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth" >
@@ -224,7 +233,12 @@
                 <div class="timeline-item" id="item-second">
                     <div class="timeline-item-timestamp" id="time-second"></div>
                     <div class="timeline-item-cricle" id="cricle-second">2</div>
-                    <div class="timeline-item-name" id="name-second">康德乐审批</div>
+                    <div class="timeline-item-name" id="name-second">待确认</div>
+                </div>
+                <div class="timeline-item" id="item-three">
+                    <div class="timeline-item-timestamp" id="time-three"></div>
+                    <div class="timeline-item-cricle" id="cricle-three">3</div>
+                    <div class="timeline-item-name" id="name-three">待确认</div>
                 </div>
             </div>
         </div>
@@ -316,6 +330,7 @@
                 "materCode": roche.materCode,
                 "batch": roche.batch,
                 "quantity": roche.quantity,
+                "unit":roche.unit,
                 "actions": roche.actions,
                 "exceptDate": roche.exceptDate,
                 "completeDate": roche.completeDate,
@@ -389,6 +404,11 @@
                 $("#name-second").html(data[1].name);
                 $("#cricle-second").attr("style","background-color: #3DCCA6");
                 $("#item-three").attr("style","border-bottom: 3px solid #3DCCA6;");
+            }
+            if(data[2]!=null&&data[2].date !=null){
+                $("#time-three").html(data[2].date);
+                $("#name-three").html(data[2].name);
+                $("#cricle-three").attr("style","background-color: #3DCCA6");
             }
         });
 

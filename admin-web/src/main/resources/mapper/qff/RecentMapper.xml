@@ -57,4 +57,48 @@
         </choose>
     order by create_time desc
     </select>
+    <select id="getPageConserve" resultType="com.neefull.fsp.web.qff.entity.Recent">
+        select * from qff_recent where 1=1
+        <if test="kMater!=null and kMater!=''">
+            and k_mater like concat('%',#{kMater},'%')
+        </if>
+        <if test="batch!=null and batch!=''">
+            and batch like concat('%',#{batch},'%')
+        </if>
+        <if test="transport!=null and transport!=''">
+            and transport like concat('%',#{transport},'%')
+        </if>
+        <if test="rMater!=null and rMater!=''">
+            and r_mater like concat('%',#{rMater},'%')
+        </if>
+        <if test="name!=null and name!=''">
+            and name like concat('%',#{name},'%')
+        </if>
+        <if test="useLife!=null and useLife!=''">
+            and use_life like concat('%',#{useLife},'%')
+        </if>
+        <if test="sapBatch!=null and sapBatch!=''">
+            and sap_batch like concat('%',#{sapBatch},'%')
+        </if>
+        <if test="factory!=null and factory!=''">
+            and factory like concat('%',#{factory},'%')
+        </if>
+        <if test="wareHouse!=null and wareHouse!=''">
+            and ware_house like concat('%',#{wareHouse},'%')
+        </if>
+        <if test="number!=null and number!=''">
+            and number like concat('%',#{number},'%')
+        </if>
+        <if test="rConf!=null and rConf!=''">
+            and r_conf like concat('%',#{rConf},'%')
+        </if>
+        <if test="repDate!=null and repDate!=''">
+            and rep_date like concat('%',#{repDate},'%')
+        </if>
+        <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+            and date_format(create_time,'%Y-%m-%d')  between  #{startTime} and  #{endTime}
+        </if>
+
+        and status = 2  order by create_time desc
+    </select>
 </mapper>

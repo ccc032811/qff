@@ -82,6 +82,12 @@ public class Roche implements Serializable {
     @ExcelField(value = "受影响数量")
     private String quantity;
     /**
+     * unit  单位
+     */
+    @TableField("unit")
+    @ExcelField(value = "单位")
+    private String unit;
+    /**
      *  Actions  行动
      */
     @TableField("actions")
@@ -117,11 +123,7 @@ public class Roche implements Serializable {
     @TableField("alteration")
     @ExcelField(value = "变更记录")
     private String alteration;
-    /**
-     *  图片
-     */
-    @TableField(exist = false)
-    private String images;
+
     /**
      *  状态码  1新建  2 审核中 3 完结  4异常
      */
@@ -131,8 +133,8 @@ public class Roche implements Serializable {
      *  创建日期
      */
     @TableField("create_time")
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy/MM/dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
     private Date createTime;
 
 
@@ -164,6 +166,13 @@ public class Roche implements Serializable {
 
     @TableField(exist = false)
     private Integer att;
+
+    /**
+     *  图片
+     */
+    @TableField(exist = false)
+    private String images;
+
 
 
     public Integer getId() {
@@ -238,6 +247,14 @@ public class Roche implements Serializable {
         this.quantity = quantity;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     public String getActions() {
         return actions;
     }
@@ -286,20 +303,20 @@ public class Roche implements Serializable {
         this.alteration = alteration;
     }
 
-    public String getImages() {
-        return images;
-    }
-
-    public void setImages(String images) {
-        this.images = images;
-    }
-
     public Integer getStatus() {
         return status;
     }
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public String getStartTime() {
@@ -350,11 +367,11 @@ public class Roche implements Serializable {
         this.att = att;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public String getImages() {
+        return images;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setImages(String images) {
+        this.images = images;
     }
 }

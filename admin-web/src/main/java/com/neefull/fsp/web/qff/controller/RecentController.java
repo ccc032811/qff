@@ -48,7 +48,7 @@ public class RecentController extends BaseController {
     @PostMapping("/add")
     public FebsResponse addRecent(Recent recent) throws FebsException {
         try {
-            Integer count = recentService.addRecent(recent);
+            recentService.addRecent(recent);
             return new FebsResponse().success();
         } catch (Exception e) {
             String message = "新增近效期QFF失败";
@@ -68,7 +68,7 @@ public class RecentController extends BaseController {
     @RequiresPermissions("recent:audit")
     public FebsResponse editRecent(Recent recent) throws FebsException {
         try {
-            Integer count = recentService.editRecent(recent);
+            recentService.editRecent(recent);
             return new FebsResponse().success();
         } catch (Exception e) {
             String message = "更新近效期QFF失败";
@@ -115,7 +115,7 @@ public class RecentController extends BaseController {
             Recent recent = new Recent();
             recent.setId(id);
             processService.deleteInstance(recent);
-            Integer count = recentService.updateRecentStatus(id, ProcessConstant.HAVE_ABNORMAL);
+            recentService.updateRecentStatus(id, ProcessConstant.HAVE_ABNORMAL);
             return new FebsResponse().success();
         } catch (Exception e) {
             String message = "删除近效期QFF失败";
@@ -144,7 +144,7 @@ public class RecentController extends BaseController {
 
 
     /**查询流程
-     * @param recent
+     * @param
      * @return
      */
     @GetMapping("/queryHistory/{id}")

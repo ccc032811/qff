@@ -8,8 +8,10 @@ import com.neefull.fsp.web.qff.mapper.RecentExcelImportMapper;
 import com.neefull.fsp.web.qff.mapper.RecentMapper;
 import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.qff.service.IRecentService;
+import com.neefull.fsp.web.qff.utils.PageUtils;
 import com.neefull.fsp.web.system.entity.User;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -38,25 +40,24 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
 
     @Override
     @Transactional
-    public Integer addRecent(Recent recent) {
-        int count = recentMapper.insert(recent);
-        return count;
+    public void addRecent(Recent recent) {
+        recentMapper.insert(recent);
     }
 
     @Override
     @Transactional
-    public Integer editRecent(Recent recent) {
-        int count = recentMapper.updateById(recent);
-        return count;
+    public void editRecent(Recent recent) {
+        recentMapper.updateById(recent);
     }
 
     @Override
     public IPage<Recent> getRecentPage(Recent recent, User user) {
-        Page<Recent> page = new Page<>(recent.getPageNum(),recent.getPageSize());
-        IPage<Recent> pageInfo = recentMapper.getRecentPage(page,recent);
-        List<Recent> records = pageInfo.getRecords();
-        List<Recent> newRecent = processService.queryRecentTaskByName(records,user);
+        IPage<Recent> pageInfo = new Page<>();
+
         if(recent.getAtt()!=null&&recent.getAtt()==1){
+
+            List<Recent> recents = recentMapper.getPageConserve(recent);
+            List<Recent> newRecent = processService.queryRecentTaskByName(recents, user);
             List<Recent> recentList = new ArrayList<>();
             if(CollectionUtils.isNotEmpty(newRecent)){
                 for (Recent rec : newRecent) {
@@ -65,25 +66,35 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
                     }
                 }
             }
-            pageInfo.setRecords(recentList);
+            List<Recent> page = PageUtils.page(recentList, recent.getPageSize(), recent.getPageNum());
+
+            pageInfo.setRecords(page);
+            pageInfo.setCurrent(recent.getPageNum());
+            pageInfo.setTotal(recentList.size());
+
         }else {
+            pageInfo = recentMapper.getRecentPage(new Page<>(recent.getPageNum(),recent.getPageSize()),recent);
+            List<Recent> newRecent = processService.queryRecentTaskByName( pageInfo.getRecords(),user);
             pageInfo.setRecords(newRecent);
         }
 
         return pageInfo;
     }
 
+
+
+
     @Override
     @Transactional
-    public Integer updateRecentStatus(Integer id,Integer status) {
-        Integer count = recentMapper.updateRecentStatus(id,status);
-        return count;
+    public void updateRecentStatus(Integer id,Integer status) {
+         recentMapper.updateRecentStatus(id,status);
+
     }
 
     @Override
     public Recent queryRecentById(Integer id) {
-        Recent recent = recentMapper.selectById(id);
-        return recent;
+        return recentMapper.selectById(id);
+
     }
 
     @Override

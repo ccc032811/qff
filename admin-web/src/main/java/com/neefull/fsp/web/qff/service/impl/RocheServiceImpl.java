@@ -9,6 +9,7 @@ import com.neefull.fsp.web.qff.entity.*;
 import com.neefull.fsp.web.qff.mapper.RocheMapper;
 import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.qff.service.IRocheService;
+import com.neefull.fsp.web.qff.utils.PageUtils;
 import com.neefull.fsp.web.system.entity.User;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,27 +38,27 @@ public class RocheServiceImpl extends ServiceImpl<RocheMapper, Roche> implements
 
     @Override
     @Transactional
-    public Integer addRoche(Roche roche) {
-        int count = rocheMapper.insert(roche);
-        return count;
+    public void addRoche(Roche roche) {
+        rocheMapper.insert(roche);
     }
 
     @Override
     @Transactional
-    public Integer editRoche(Roche roche) {
-        UpdateWrapper<Roche> update = new UpdateWrapper<>();
-        update.eq("number",roche.getNumber());
-        int count = rocheMapper.update(roche, update);
-        return count;
+    public void editRoche(Roche roche) {
+        rocheMapper.update(roche, new UpdateWrapper<Roche>().eq("number",roche.getNumber()));
+
     }
 
     @Override
     public IPage<Roche> getRochePage(Roche roche, User user) {
-        Page<Roche> page = new Page<>(roche.getPageNum(),roche.getPageSize());
-        IPage<Roche> pageInfo = rocheMapper.getRochePage(page,roche);
-        List<Roche> records = pageInfo.getRecords();
-        List<Roche> newRoche = processService.queryRocheTaskByName(records,user);
+
+        IPage<Roche> pageInfo = new Page<>();
+
         if(roche.getAtt()!=null&&roche.getAtt()==1){
+
+            List<Roche> roches = rocheMapper.getPageConserve(roche);
+            List<Roche> newRoche = processService.queryRocheTaskByName(roches, user);
+
             List<Roche> rocheList = new ArrayList<>();
             if(CollectionUtils.isNotEmpty(newRoche)){
                 for (Roche roc : newRoche) {
@@ -66,24 +67,30 @@ public class RocheServiceImpl extends ServiceImpl<RocheMapper, Roche> implements
                     }
                 }
             }
-            pageInfo.setRecords(rocheList);
+            List<Roche> page = PageUtils.page(rocheList, roche.getPageSize(), roche.getPageNum());
+
+            pageInfo.setRecords(page);
+            pageInfo.setCurrent(roche.getPageNum());
+            pageInfo.setTotal(rocheList.size());
+
         }else {
+            pageInfo = rocheMapper.getRochePage(new Page<>(roche.getPageNum(),roche.getPageSize()),roche);
+            List<Roche> newRoche = processService.queryRocheTaskByName(pageInfo.getRecords(),user);
             pageInfo.setRecords(newRoche);
+
         }
         return pageInfo;
     }
 
     @Override
     @Transactional
-    public Integer updateRocheStatus(Integer id,Integer status) {
-        Integer count = rocheMapper.updateRocheStatus(id,status);
-        return count;
+    public void updateRocheStatus(Integer id,Integer status) {
+        rocheMapper.updateRocheStatus(id,status);
     }
 
     @Override
     public Roche queryRocheById(Integer id) {
-        Roche roche = rocheMapper.selectById(id);
-        return roche;
+        return rocheMapper.selectById(id);
     }
 
 }

@@ -118,17 +118,24 @@
         </div>
         <div class="layui-form-item layui-form-item-rigth" >
 
-            <div class="layui-inline layui-col-sm6">
+            <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label " id="rConf-recent">罗氏意见</label>
                 <div class="layui-input-block" id="recent-rConf">
                     <input type="text" name="rConf"   lay-verify="required" maxlength="50" autocomplete="off" list="search_rConf" class="layui-input" placeholder="请输入" >
                     <datalist id="search_rConf" style="display:none;"></datalist>
                 </div>
             </div>
-            <div class="layui-inline layui-col-sm6">
+            <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label " id="repDate-recent">回复日期</label>
                 <div class="layui-input-block" id="repDate-show">
                     <input type="text" name="repDate" id="recent-repDated" class="layui-input"  lay-verify="required" placeholder="请选择时间" autocomplete="off">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">单位</label>
+                <div class="layui-input-block">
+                    <input type="text" name="unit" maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly" >
                 </div>
             </div>
         </div>
@@ -176,9 +183,13 @@
                 <div class="timeline-item" id="item-three">
                     <div class="timeline-item-timestamp" id="time-three"></div>
                     <div class="timeline-item-cricle" id="cricle-three">3</div>
-                    <div class="timeline-item-name" id="name-three">康德乐完成</div>
+                    <div class="timeline-item-name" id="name-three">待确认</div>
                 </div>
-
+                <div class="timeline-item" id="item-four">
+                    <div class="timeline-item-timestamp" id="time-four"></div>
+                    <div class="timeline-item-cricle" id="cricle-four">4</div>
+                    <div class="timeline-item-name" id="name-four">待确认</div>
+                </div>
             </div>
         </div>
         <div class="layui-form-item febs-hide">
@@ -233,11 +244,21 @@
         });
 
         $(function () {
-            if(currentUser.roleId === "86"){
+            if(currentUser.roleId.search("86")!=-1){
                 $('#rConf-recent').addClass("febs-form-item-require");
                 $('#repDate-recent').addClass("febs-form-item-require");
+                if(recent.repDate !=null && recentShow !=='1'){
+
+                    $('#repDate-show').html('');
+                    $('#repDate-show').append('<input type="text" name="repDate" maxlength="50" autocomplete="off"\n' +
+                        '                           class="layui-input " readonly="readonly">');
+                    $('#recent-rConf').html('');
+                    $('#recent-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
+                        '                           class="layui-input " readonly="readonly">');
+                }
             }
-            if(currentUser.roleId === "87"){
+            if(currentUser.roleId.search("87")!=-1){
+
                 $('#repDate-show').html('');
                 $('#repDate-show').append('<input type="text" name="repDate" maxlength="50" autocomplete="off"\n' +
                     '                           class="layui-input " readonly="readonly">');
@@ -271,6 +292,7 @@
                 "factory": recent.factory,
                 "wareHouse": recent.wareHouse,
                 "number": recent.number,
+                "unit":recent.unit,
                 "rConf": recent.rConf,
                 "repDate": recent.repDate,
                 "alteration":recent.alteration
@@ -413,6 +435,12 @@
                 $("#time-three").html(data[2].date);
                 $("#name-three").html(data[2].name);
                 $("#cricle-three").attr("style","background-color: #3DCCA6");
+                $("#item-four").attr("style","border-bottom: 3px solid #3DCCA6;");
+            }
+            if(data[3]!=null&&data[3].date !=null){
+                $("#time-four").html(data[3].date);
+                $("#name-four").html(data[3].name);
+                $("#cricle-four").attr("style","background-color: #3DCCA6");
             }
         });
 

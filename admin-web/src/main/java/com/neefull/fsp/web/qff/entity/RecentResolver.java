@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.wuwenze.poi.annotation.Excel;
 import com.wuwenze.poi.annotation.ExcelField;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -78,11 +79,19 @@ public class RecentResolver implements Serializable {
     @ExcelField(value = "数量")
     private String number;
     /**
+     * unit  单位
+     */
+    @TableField("unit")
+    @ExcelField(value = "unit")
+    private String unit;
+    /**
      *  罗氏QA处理意见
      */
     @TableField("r_conf")
     @ExcelField(value = "罗氏QA处理意见")
     private String rConf;
+
+
 
     public String getTransport() {
         return transport;
@@ -162,6 +171,14 @@ public class RecentResolver implements Serializable {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public String getrConf() {

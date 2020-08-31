@@ -57,4 +57,47 @@
 
     order by create_time  desc
     </select>
+    <select id="getPageConserve" resultType="com.neefull.fsp.web.qff.entity.Roche">
+        select * from qff_roche where 1=1
+        <if test="materCode!=null and materCode!=''">
+            and mater_code like concat('%',#{materCode},'%')
+        </if>
+        <if test="batch!=null and batch!=''">
+            and batch like concat('%',#{batch},'%')
+        </if>
+        <if test="number!=null and number!=''">
+            and number like concat('%',#{number},'%')
+        </if>
+        <if test="sponsor!=null and sponsor!=''">
+            and sponsor like concat('%',#{sponsor},'%')
+        </if>
+        <if test="reqDate!=null and reqDate!=''">
+            and req_date like concat('%',#{reqDate},'%')
+        </if>
+        <if test="reason!=null and reason!=''">
+            and reason like concat('%',#{reason},'%')
+        </if>
+        <if test="materName!=null and materName!=''">
+            and mater_name like concat('%',#{materName},'%')
+        </if>
+        <if test="quantity!=null and quantity!=''">
+            and quantity like concat('%',#{quantity},'%')
+        </if>
+        <if test="actions!=null and actions!=''">
+            and actions like concat('%',#{actions},'%')
+        </if>
+        <if test="exceptDate!=null and exceptDate!=''">
+            and except_date like concat('%',#{exceptDate},'%')
+        </if>
+        <if test="completeDate!=null and completeDate!=''">
+            and complete_date like concat('%',#{completeDate},'%')
+        </if>
+        <if test="follow!=null and follow!=''">
+            and follow like concat('%',#{follow},'%')
+        </if>
+        <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+            and date_format(create_time,'%Y-%m-%d') between  #{startTime} and  #{endTime}
+        </if>
+        and status = 2 order by create_time  desc
+    </select>
 </mapper>

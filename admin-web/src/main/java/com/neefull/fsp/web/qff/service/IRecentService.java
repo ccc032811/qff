@@ -18,13 +18,13 @@ public interface IRecentService extends IService<Recent> {
      * @param recent
      * @return
      */
-    Integer addRecent(Recent recent);
+    void addRecent(Recent recent);
 
     /**更新近效期QFF
      * @param recent
      * @return
      */
-    Integer editRecent(Recent recent);
+    void editRecent(Recent recent);
 
     /**查询近效期QFF
      * @param recent
@@ -36,7 +36,7 @@ public interface IRecentService extends IService<Recent> {
      * @param id
      * @return
      */
-    Integer updateRecentStatus(Integer id,Integer status);
+    void updateRecentStatus(Integer id,Integer status);
 
     /**查询近效期QFF
      * @param id

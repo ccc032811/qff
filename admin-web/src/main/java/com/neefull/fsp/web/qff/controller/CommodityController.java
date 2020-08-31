@@ -52,7 +52,7 @@ public class CommodityController extends BaseController {
     @PostMapping("/add")
     public FebsResponse addCommodity(Commodity commodity) throws FebsException {
         try {
-            Integer count = commodityService.addCommodity(commodity);
+            commodityService.addCommodity(commodity);
             return new FebsResponse().success();
         } catch (Exception e) {
             String message = "新增QFF失败";
@@ -71,7 +71,7 @@ public class CommodityController extends BaseController {
     @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","conserve:audit"},logical = Logical.OR)
     public FebsResponse editCommodity(Commodity commodity) throws FebsException {
         try {
-            Integer count = commodityService.editCommodity(commodity);
+            commodityService.editCommodity(commodity);
             return new FebsResponse().success();
         } catch (Exception e) {
             String message = "更新QFF失败";
@@ -122,7 +122,7 @@ public class CommodityController extends BaseController {
             Commodity commodity = new Commodity();
             commodity.setId(id);
             processService.deleteInstance(commodity);
-            int count = commodityService.updateCommodityStatus(id, ProcessConstant.HAVE_ABNORMAL);
+            commodityService.updateCommodityStatus(id, ProcessConstant.HAVE_ABNORMAL);
             return new FebsResponse().success();
         } catch (Exception e) {
             String message = "删除QFF失败";

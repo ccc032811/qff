@@ -49,7 +49,7 @@ public class RocheController extends BaseController {
     @PostMapping("/add")
     public FebsResponse addRoche(Roche roche) throws FebsException {
         try {
-            Integer count = rocheService.addRoche(roche);
+            rocheService.addRoche(roche);
             return new FebsResponse().success();
         } catch (Exception e) {
             String message = "新增罗氏内部QFF失败";
@@ -68,7 +68,7 @@ public class RocheController extends BaseController {
     @RequiresPermissions("roche:audit")
     public FebsResponse editRoche(Roche roche) throws FebsException {
         try {
-            Integer count = rocheService.editRoche(roche);
+            rocheService.editRoche(roche);
             return new FebsResponse().success();
         } catch (Exception e) {
             String message = "更新罗氏内部QFF失败";
@@ -116,7 +116,7 @@ public class RocheController extends BaseController {
             Roche roche = new Roche();
             roche.setId(id);
             processService.deleteInstance(roche);
-            Integer count = rocheService.updateRocheStatus(id, ProcessConstant.HAVE_ABNORMAL);
+            rocheService.updateRocheStatus(id, ProcessConstant.HAVE_ABNORMAL);
             return new FebsResponse().success();
         } catch (Exception e) {
             String message = "删除罗氏内部QFF失败";

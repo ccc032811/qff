@@ -20,13 +20,13 @@ public interface ICommodityService extends IService<Commodity> {
      * @param commodity
      * @return
      */
-    Integer addCommodity(Commodity commodity);
+    void addCommodity(Commodity commodity);
 
     /**更新养护QFF
      * @param commodity
      * @return
      */
-    Integer editCommodity(Commodity commodity);
+    void editCommodity(Commodity commodity);
 
     /**获取养护操作的信息
      * @param commodity
@@ -38,7 +38,7 @@ public interface ICommodityService extends IService<Commodity> {
      * @param id
      * @return
      */
-    Integer updateCommodityStatus(Integer id,Integer status);
+    void updateCommodityStatus(Integer id,Integer status);
 
     /**根据编号查询
      * @param id

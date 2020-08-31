@@ -5,7 +5,6 @@
     <userTask activiti:exclusive="true" id="_3" name="罗氏">
       <extensionElements>
         <activiti:taskListener class="com.neefull.fsp.web.qff.listener.RocheListener" event="create"/>
-        <activiti:executionListener delegateExpression="${commodityListener}" event="start"/>
       </extensionElements>
     </userTask>
     <userTask activiti:exclusive="true" id="_4" name="康德乐">

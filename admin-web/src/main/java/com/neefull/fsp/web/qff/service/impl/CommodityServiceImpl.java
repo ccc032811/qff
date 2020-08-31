@@ -8,6 +8,7 @@ import com.neefull.fsp.web.qff.entity.Commodity;
 import com.neefull.fsp.web.qff.mapper.CommodityMapper;
 import com.neefull.fsp.web.qff.service.ICommodityService;
 import com.neefull.fsp.web.qff.service.IProcessService;
+import com.neefull.fsp.web.qff.utils.PageUtils;
 import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import org.apache.commons.collections4.CollectionUtils;
@@ -40,17 +41,16 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
 
     @Override
     @Transactional
-    public Integer addCommodity(Commodity commodity) {
+    public void addCommodity(Commodity commodity) {
         commodity.setStatus(ProcessConstant.NEW_BUILD);
-        int count = commodityMapper.insert(commodity);
-        return count;
+        commodityMapper.insert(commodity);
     }
 
     @Override
     @Transactional
-    public Integer editCommodity(Commodity commodity) {
-        int count = commodityMapper.updateById(commodity);
-        return count;
+    public void editCommodity(Commodity commodity) {
+        commodityMapper.updateById(commodity);
+
     }
 
     @Override
@@ -58,6 +58,7 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
 
         IPage<Commodity> pageInfo = new Page<>();
         if(commodity.getAtt()!=null&&commodity.getAtt()==1){
+
             List<Commodity> commodityList = commodityMapper.getPageConserve(commodity);
             List<Commodity> newCommodity = processService.queryCommodityTaskByName(commodityList,user);
             List<Commodity> commodities = new ArrayList<>();
@@ -68,65 +69,34 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
                     }
                 }
             }
-            List<Commodity> page = page(commodities, commodity.getPageSize(), commodity.getPageNum());
+            List<Commodity> page = PageUtils.page(commodities, commodity.getPageSize(), commodity.getPageNum());
 
             pageInfo.setRecords(page);
             pageInfo.setCurrent(commodity.getPageNum());
             pageInfo.setTotal(commodities.size());
 
         }else {
-            Page<Commodity> page = new Page<>(commodity.getPageNum(),commodity.getPageSize());
-            pageInfo = commodityMapper.getConservePage(page,commodity);
-            List<Commodity> records = pageInfo.getRecords();
-            List<Commodity> newCommodity = processService.queryCommodityTaskByName(records,user);
+
+            pageInfo = commodityMapper.getConservePage(new Page<>(commodity.getPageNum(),commodity.getPageSize()),commodity);
+            List<Commodity> newCommodity = processService.queryCommodityTaskByName(pageInfo.getRecords(),user);
             pageInfo.setRecords(newCommodity);
         }
-//        Page<Commodity> page = new Page<>(commodity.getPageNum(),commodity.getPageSize());
-//        IPage<Commodity> pageInfo = commodityMapper.getConservePage(page,commodity);
-//        //获取查询的数据
-//        List<Commodity> records = pageInfo.getRecords();
-//
-//        List<Commodity> newCommodity = processService.queryCommodityTaskByName(records,user);
-//        if(commodity.getAtt()!=null&&commodity.getAtt()==1){
-//            List<Commodity> commodityList = new ArrayList<>();
-//            if(CollectionUtils.isNotEmpty(newCommodity)) {
-//                for (Commodity com : newCommodity) {
-//                    if (com.getIsAllow() != null && com.getIsAllow() == 1) {
-//                        commodityList.add(com);
-//                    }
-//                }
-//            }
-//            pageInfo.setRecords(commodityList);
-//        }else {
-//            pageInfo.setRecords(newCommodity);
-//        }
 
         return pageInfo;
     }
 
-    private List<Commodity>  page(List<Commodity> applyList, int pageSize,int currentPage) {
-        List<Commodity> currentPageList = new ArrayList<>();
-        if (applyList != null && applyList.size() > 0) {
-            int currIdx = (currentPage > 1 ? (currentPage - 1) * pageSize : 0);
-            for (int i = 0; i < pageSize && i < applyList.size() - currIdx; i++) {
-                currentPageList.add(applyList.get(currIdx + i));
-            }
-        }
-        return currentPageList;
-    }
 
 
     @Override
     @Transactional
-    public Integer updateCommodityStatus(Integer id,Integer status) {
-        Integer count = commodityMapper.updateConserveStatus(id,status);
-        return count;
+    public void updateCommodityStatus(Integer id,Integer status) {
+        commodityMapper.updateConserveStatus(id,status);
     }
 
     @Override
     public Commodity queryCommodityById(Integer id) {
-        Commodity commodity = commodityMapper.selectById(id);
-        return commodity;
+        return commodityMapper.selectById(id);
+
     }
 
     @Override
@@ -134,16 +104,12 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
         QueryWrapper<Commodity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("number", number);
         return commodityMapper.selectOne(queryWrapper);
-//        if(commodity!=null){
-//            return commodity;
-//        }
-//        return null;
     }
 
     @Override
     @Transactional
     public void deleteCommodityById(Integer id) {
-        this.baseMapper.deleteById(id);
+        commodityMapper.deleteById(id);
     }
 
     @Override

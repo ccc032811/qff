@@ -95,6 +95,12 @@ public class Recent implements Serializable {
     @ExcelField(value = "数量")
     private String number;
     /**
+     * unit  单位
+     */
+    @TableField("unit")
+    @ExcelField(value = "单位")
+    private String unit;
+    /**
      *  罗氏QA处理意见
      */
     @TableField("r_conf")
@@ -164,6 +170,8 @@ public class Recent implements Serializable {
 
     @TableField(exist = false)
     private Integer att;
+
+
 
 
     public Integer getId() {
@@ -252,6 +260,14 @@ public class Recent implements Serializable {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public String getrConf() {

@@ -18,8 +18,10 @@
             <td style="border-right:1px solid #eee;text-align: center">产品/物料编号</td>
             <td style="border-right:1px solid #eee;text-align: center">批号/序列号</td>
             <td style="border-right:1px solid #eee;text-align: center">受影响数量</td>
-            <td style="border-right:1px solid #eee;text-align: center">期望完成日期</td>
-            <td style="text-align: center">变更记录</td>
+            <td style="border-right:1px solid #eee;text-align: center">单位</td>
+            <td style="text-align: center">Actions行动</td>
+            <td style="text-align: center">期望完成日期</td>
+            <td style="text-align: center">备注</td>
         </tr>
         <p th:each="roche:${list}">
             <tr style=" background: #fafafa; color: #333; border-bottom: 1px solid #eee;">
@@ -31,8 +33,10 @@
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.materCode}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.batch}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.quantity}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.exceptDate}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;border-right:1px solid #eee;text-align: center" th:text="${roche.alteration}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.unit}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;border-right:1px solid #eee;text-align: center" th:text="${roche.actions}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;border-right:1px solid #eee;text-align: center" th:text="${roche.exceptDate}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;border-right:1px solid #eee;text-align: center" th:text="${roche.remark}"></td>
             </tr>
         </p>
     </table>

@@ -18,13 +18,13 @@ public interface IRocheService extends IService<Roche> {
      * @param roche
      * @return
      */
-    Integer addRoche(Roche roche);
+    void addRoche(Roche roche);
 
     /**更新罗氏内部发起QFF
      * @param roche
      * @return
      */
-    Integer editRoche(Roche roche);
+    void editRoche(Roche roche);
 
     /**查询罗氏内部QFF
      * @param roche
@@ -36,7 +36,7 @@ public interface IRocheService extends IService<Roche> {
      * @param id
      * @return
      */
-    Integer updateRocheStatus(Integer id,Integer status);
+    void updateRocheStatus(Integer id,Integer status);
 
     /**查询罗氏内部QFF
      * @param id

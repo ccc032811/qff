@@ -187,18 +187,25 @@
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm6 ">
+            <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">箱号/备注</label>
                 <div class="layui-input-block">
                     <input type="text" name="getRemark" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input " readonly="readonly">
                 </div>
             </div>
-            <div class="layui-inline layui-col-sm6">
+            <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">罗氏意见</label>
                 <div class="layui-input-block">
                     <input type="text" name="rConf" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">单位</label>
+                <div class="layui-input-block">
+                    <input type="text" name="unit" maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly" >
                 </div>
             </div>
         </div>
@@ -249,7 +256,7 @@
                 </div>
             </div>
         </div>
-        <div class="layui-form-item" style="margin-top: 30px">
+        <div class="layui-form-item" style="margin-top: 30px;height: 120px">
             <div class="timeline-main-line" id="process">
                 <div class="timeline-item-start">
                     <div class="timeline-item-timestamp" id="time-first"></div>
@@ -264,9 +271,13 @@
                 <div class="timeline-item" id="item-three">
                     <div class="timeline-item-timestamp" id="time-three"></div>
                     <div class="timeline-item-cricle" id="cricle-three">3</div>
-                    <div class="timeline-item-name" id="name-three">康德乐完成</div>
+                    <div class="timeline-item-name" id="name-three">待确认</div>
                 </div>
-
+                <div class="timeline-item" id="item-four">
+                    <div class="timeline-item-timestamp" id="time-four"></div>
+                    <div class="timeline-item-cricle" id="cricle-four">4</div>
+                    <div class="timeline-item-name" id="name-four">待确认</div>
+                </div>
             </div>
         </div>
     </form>
@@ -302,6 +313,7 @@
                 "manuDate": commodity.manuDate,
                 "expiryDate": commodity.expiryDate,
                 "quarantine": commodity.quarantine,
+                "unit":commodity.unit,
                 "getRemark": commodity.getRemark,
                 "initDate": commodity.initDate,
                 "rConf": commodity.rConf,
@@ -385,6 +397,12 @@
                 $("#time-three").html(data[2].date);
                 $("#name-three").html(data[2].name);
                 $("#cricle-three").attr("style","background-color: #3DCCA6");
+                $("#item-four").attr("style","border-bottom: 3px solid #3DCCA6;");
+            }
+            if(data[3]!=null&&data[3].date !=null){
+                $("#time-four").html(data[3].date);
+                $("#name-four").html(data[3].name);
+                $("#cricle-four").attr("style","background-color: #3DCCA6");
             }
         });
 

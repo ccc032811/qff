@@ -88,6 +88,7 @@ public class StartSoap {
                 for (String s : qffList) {
 
                     Commodity commodity = new Commodity();
+
                     commodity.setNumber(XmlUtils.getTagContent(s,"<QMNUM>","</QMNUM>"));
                     commodity.setPlant(XmlUtils.getTagContent(s,"<MAWERK>","</MAWERK>"));
                     commodity.setkMater(XmlUtils.getTagContent(s,"<MATNR>","</MATNR>"));
@@ -96,15 +97,16 @@ public class StartSoap {
                     commodity.setIsDanger(XmlUtils.getTagContent(s,"<MSTAE>","</MSTAE>"));
                     commodity.setpMater(XmlUtils.getTagContent(s,"<BISMT>","</BISMT>"));
                     commodity.setrBatch(XmlUtils.getTagContent(s,"<LICHN>","</LICHN>"));
-                    commodity.setManuDate(XmlUtils.getTagContent(s,"<HSDAT>","</HSDAT>"));
-                    commodity.setExpiryDate(XmlUtils.getTagContent(s,"<VFDAT>","</VFDAT>"));
+                    commodity.setManuDate(XmlUtils.getTagContent(s,"<HSDAT>","</HSDAT>").replace("-","/"));
+                    commodity.setExpiryDate(XmlUtils.getTagContent(s,"<VFDAT>","</VFDAT>").replace("-","/"));
                     commodity.setQuarantine(XmlUtils.getTagContent(s,"<MGEIG>","</MGEIG>"));
                     commodity.setGetRemark(XmlUtils.getTagContent(s,"<QMTXT>","</QMTXT>"));
-                    commodity.setInitDate(XmlUtils.getTagContent(s,"<ERDAT>","</ERDAT>"));
+                    commodity.setInitDate(XmlUtils.getTagContent(s,"<ERDAT>","</ERDAT>").replace("-","/"));
                     commodity.setClassify(XmlUtils.getTagContent(s,"<ZPROCLAS>","</ZPROCLAS>"));
                     commodity.setRegister(XmlUtils.getTagContent(s,"<REGNO>","</REGNO>"));
                     commodity.setTransport(XmlUtils.getTagContent(s,"<AWBNO>","</AWBNO>"));
                     String stage = XmlUtils.getTagContent(s, "<HERKUNFT>", "</HERKUNFT>");
+                    //TODO  采购来源数据采集
                     commodity.setType(stage);
 //                    commodity.setStage(XmlUtils.getTagContent(s,"<HERKUNFT>","</HERKUNFT>"));
                     if(stage.equals("01")){
@@ -150,7 +152,7 @@ public class StartSoap {
 //                            rstart = true;
                         }
                         if(!commodity.getpMater().equals(isCommodity.getpMater())){
-                            alteration.append("药厂物料号:" +date+ " 由 "+isCommodity.getpMater()+" 变更为 "+commodity.getpMater()+" 。");
+                            alteration.append("物料描述:" +date+ " 由 "+isCommodity.getpMater()+" 变更为 "+commodity.getpMater()+" 。");
 //                            rstart = true;
                         }
                         if(!commodity.getrBatch().equals(isCommodity.getrBatch())){

@@ -7,6 +7,8 @@ import com.neefull.fsp.web.qff.entity.Roche;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**罗氏内部发起QFF
  * @Author: chengchengchu
  * @Date: 2019/11/29  13:14
@@ -29,4 +31,7 @@ public interface RocheMapper extends BaseMapper<Roche> {
      * @return
      */
     Integer updateRocheStatus(@Param("id") Integer id, @Param("status") Integer status);
+
+    List<Roche> getPageConserve(Roche roche);
+
 }

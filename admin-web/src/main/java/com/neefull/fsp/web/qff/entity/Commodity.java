@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wuwenze.poi.annotation.Excel;
 import com.wuwenze.poi.annotation.ExcelField;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
@@ -80,7 +81,7 @@ public class Commodity implements Serializable {
      *  Principal Material 药厂物料号
      */
     @TableField("p_mater")
-    @ExcelField(value = "药厂物料号")
+    @ExcelField(value = "物料描述")
     private String pMater;
     /**
      *  RD Batch 罗氏批号
@@ -106,6 +107,12 @@ public class Commodity implements Serializable {
     @TableField("quarantine")
     @ExcelField(value = "异常总数")
     private String quarantine;
+    /**
+     * unit  单位
+     */
+    @TableField("unit")
+    @ExcelField(value = "单位")
+    private String unit;
     /**
      *  Remark箱号/备注
      */
@@ -255,11 +262,10 @@ public class Commodity implements Serializable {
     @TableField(exist = false)
     private String images;
     /**
-     * 是否可审核   1  可审核
+     * 是否可审核   1  可审核  用于接收前端页面查询条件
      */
     @TableField(exist = false)
     private Integer att;
-
 
 
     public Integer getId() {
@@ -366,20 +372,20 @@ public class Commodity implements Serializable {
         this.quarantine = quarantine;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     public String getGetRemark() {
         return getRemark;
     }
 
     public void setGetRemark(String getRemark) {
         this.getRemark = getRemark;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getInitDate() {
@@ -454,6 +460,14 @@ public class Commodity implements Serializable {
         this.stage = stage;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getSource() {
         return source;
     }
@@ -486,14 +500,6 @@ public class Commodity implements Serializable {
         this.alteration = alteration;
     }
 
-    public String getImages() {
-        return images;
-    }
-
-    public void setImages(String images) {
-        this.images = images;
-    }
-
     public Integer getStatus() {
         return status;
     }
@@ -508,14 +514,6 @@ public class Commodity implements Serializable {
 
     public void setAccessory(Integer accessory) {
         this.accessory = accessory;
-    }
-
-    public Integer getAtt() {
-        return att;
-    }
-
-    public void setAtt(Integer att) {
-        this.att = att;
     }
 
     public Date getCreateTime() {
@@ -574,5 +572,19 @@ public class Commodity implements Serializable {
         this.isAllow = isAllow;
     }
 
+    public String getImages() {
+        return images;
+    }
 
+    public void setImages(String images) {
+        this.images = images;
+    }
+
+    public Integer getAtt() {
+        return att;
+    }
+
+    public void setAtt(Integer att) {
+        this.att = att;
+    }
 }

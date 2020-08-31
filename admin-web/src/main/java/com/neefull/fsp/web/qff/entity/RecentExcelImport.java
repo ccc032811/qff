@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wuwenze.poi.annotation.Excel;
 import com.wuwenze.poi.annotation.ExcelField;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -88,6 +89,12 @@ public class RecentExcelImport implements Serializable {
     @ExcelField(value = "数量")
     private String number;
     /**
+     * unit  单位
+     */
+    @TableField("unit")
+    @ExcelField(value = "unit")
+    private String unit;
+    /**
      *  罗氏QA处理意见
      */
     @TableField("r_conf")
@@ -113,16 +120,18 @@ public class RecentExcelImport implements Serializable {
      *  创建日期
      */
     @TableField("create_time")
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy/MM/dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
     private Date createTime;
     /**
      *  更新日期
      */
     @TableField("update_time")
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy/MM/dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
     private Date updateTime;
+
+
 
 
     public Integer getId() {
@@ -213,6 +222,14 @@ public class RecentExcelImport implements Serializable {
         this.number = number;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     public String getrConf() {
         return rConf;
     }
@@ -260,5 +277,4 @@ public class RecentExcelImport implements Serializable {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
-
 }

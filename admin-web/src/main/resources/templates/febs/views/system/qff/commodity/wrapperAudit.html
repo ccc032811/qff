@@ -102,7 +102,7 @@
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">药厂物料号</label>
+                <label class="layui-form-label ">物料描述</label>
                 <div class="layui-input-block">
                     <input type="text" name="pMater"  maxlength="50" autocomplete="off"
                            class="layui-input " readonly="readonly">
@@ -156,8 +156,8 @@
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label " id="reason-wrapper">QFF原因</label>
-                <div class="layui-input-block" id="wrapper-reason">
-                    <input type="text" name="reason"  lay-verify="required" maxlength="50" autocomplete="off" list="wrapper-search-reason" class="layui-input" placeholder="请输入">
+                <div class="layui-input-block" id="wrapper-reasons">
+                    <input type="text" name="reason"   maxlength="50" autocomplete="off" list="wrapper-search-reason" class="layui-input" placeholder="请输入">
                     <datalist id="wrapper-search-reason" style="display:none;"></datalist>
                 </div>
             </div>
@@ -174,9 +174,11 @@
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label " id="source-wrapper">采购来源</label>
                 <div class="layui-input-block" id = "wrapper-source">
-                    <select name="source" id="wrapper-search-source" >
-                        <option value="">请选择</option>
-                    </select>
+                    <!--<select name="source" id="wrapper-search-source" >-->
+                        <!--<option value="">请选择</option>-->
+                    <!--</select>-->
+                    <input type="text" name="source"  maxlength="50" autocomplete="off"
+                           class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4 ">
@@ -214,20 +216,27 @@
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm6 ">
+            <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">Remark箱号</label>
                 <div class="layui-input-block">
                     <input type="text" name="getRemark" maxlength="50" autocomplete="off"
                            class="layui-input " readonly="readonly" >
                 </div>
             </div>
-            <div class="layui-inline layui-col-sm6">
+            <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label " id="rConf-wrapper">罗氏意见</label>
                 <div class="layui-input-block" id = "wrapper-rConf" >
                     <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="wrapper-search-rConf" class="layui-input" placeholder="请输入" >
                     <div style="overflow: auto; height: 30px";>
                         <datalist id="wrapper-search-rConf" style="display:none;"></datalist>
                     </div>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">单位</label>
+                <div class="layui-input-block">
+                    <input type="text" name="unit" maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly" >
                 </div>
             </div>
         </div>
@@ -295,7 +304,12 @@
                 <div class="timeline-item" id="item-three">
                     <div class="timeline-item-timestamp" id="time-three"></div>
                     <div class="timeline-item-cricle" id="cricle-three">3</div>
-                    <div class="timeline-item-name" id="name-three">康德乐完成</div>
+                    <div class="timeline-item-name" id="name-three">待确认</div>
+                </div>
+                <div class="timeline-item" id="item-four">
+                    <div class="timeline-item-timestamp" id="time-four"></div>
+                    <div class="timeline-item-cricle" id="cricle-four">4</div>
+                    <div class="timeline-item-name" id="name-four">待确认</div>
                 </div>
             </div>
         </div>
@@ -344,49 +358,17 @@
         var to = {time:new Date()};
 
 
-
         $(function () {
-            if(commodity.rConf!==null&&commodity.rConf!==""){
-                if(wrapperShow==null||wrapperShow!=='1') {
-                    $('#wrapper-rConf').html('');
-                    $('#wrapper-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
-                        '                           class="layui-input " readonly="readonly">');
+            if(currentUser.roleId.search("87")!=-1){
+                pubShow();
+            }
+            if(currentUser.roleId.search("86")!=-1){
+                if(commodity.repTime!==''&&wrapperShow !== '1'){
+                    pubShow();
                 }
-            }
-            if(commodity.reason!==null&&commodity.reason!==""){
-                if(wrapperShow==null||wrapperShow!=='1') {
-                    $('#wrapper-reason').html('');
-                    $('#wrapper-reason').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
-                        '                           class="layui-input " readonly="readonly">')
-                }
-            }
-            if(commodity.ba!==null&&commodity.ba!==""){
-                if(wrapperShow==null||wrapperShow!=='1') {
-                    $('#wrapper-ba').html('');
-                    $('#wrapper-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
-                        '                           class="layui-input " readonly="readonly">')
-                }
-            }
-            if(commodity.checkResult!==null&&commodity.checkResult!==""){
-                if(wrapperShow==null||wrapperShow!=='1') {
-                    $('#wrapper-checkResult').attr("readonly", "readonly");
-                }
-            }
-            if(commodity.compNumber!==null&&commodity.compNumber!==""){
-                if(wrapperShow==null||wrapperShow!=='1') {
-                    $('#wrapper-compNumber').attr("readonly", "readonly");
-                }
-            }
-            if(currentUser.roleId === "87"){
-                $('#wrapper-remark').attr("readonly","readonly");
-                $('#source-wrapper').addClass("febs-form-item-require")
-            }
-            if(currentUser.roleId === "86"){
+
                 $('#wrapper-stage').html('');
                 $('#wrapper-stage').append(' <input type="text" name="stage"  maxlength="50" autocomplete="off"\n' +
-                    '                           class="layui-input " readonly="readonly">');
-                $('#wrapper-source').html('');
-                $('#wrapper-source').append('<input type="text" name="source"  maxlength="50" autocomplete="off"\n' +
                     '                           class="layui-input " readonly="readonly">');
                 $('#rConf-wrapper').addClass("febs-form-item-require");
                 $('#reason-wrapper').addClass("febs-form-item-require");
@@ -405,6 +387,21 @@
 
         });
 
+
+        function pubShow(){
+            $('#wrapper-remark').attr("readonly","readonly");
+            $('#wrapper-checkResult').attr("readonly","readonly");
+            $('#wrapper-compNumber').attr("readonly", "readonly");
+            $('#wrapper-rConf').html('');
+            $('#wrapper-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
+                '                           class="layui-input " readonly="readonly">');
+            $('#wrapper-reasons').html('');
+            $('#wrapper-reasons').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
+                '                           class="layui-input " readonly="readonly">');
+            $('#wrapper-ba').html('');
+            $('#wrapper-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
+                '                           class="layui-input " readonly="readonly">')
+        }
 
         //表单渲染
         form.render();
@@ -426,6 +423,7 @@
                 "manuDate": commodity.manuDate,
                 "expiryDate": commodity.expiryDate,
                 "quarantine": commodity.quarantine,
+                "unit":commodity.unit,
                 "getRemark": commodity.getRemark,
                 "initDate": commodity.initDate,
                 "rConf": commodity.rConf,
@@ -581,6 +579,12 @@
                 $("#time-three").html(data[2].date);
                 $("#name-three").html(data[2].name);
                 $("#cricle-three").attr("style","background-color: #3DCCA6");
+                $("#item-four").attr("style","border-bottom: 3px solid #3DCCA6;");
+            }
+            if(data[3]!=null&&data[3].date !=null){
+                $("#time-four").html(data[3].date);
+                $("#name-four").html(data[3].name);
+                $("#cricle-four").attr("style","background-color: #3DCCA6");
             }
         });
 

@@ -226,9 +226,10 @@
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="refund-detail" shiro:hasPermission="refund:view">查看</a>
     {{# }else if(d.status != '3'){d.status = '没审核完成'}}
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="refund-detail" shiro:hasPermission="refund:view">查看</a>
-        {{#  if(d.isAllow != '1'){d.status = '不可审核'}}
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-alter"  shiro:hasPermission="refund:alter ">修改</a>
-        {{# }else if (d.isAllow == '1'){d.status = '可审核'}}
+        {{#  if(d.isAllow == '1'){d.status = '不可审核'}}
+            {{#  if(d.repTime != ''){d.status = '可审核'}}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-alter"  shiro:hasPermission="refund:alter ">修改</a>
+            {{#}}}
         <a class="layui-btn layui-btn-xs" lay-event="refund-edit"  shiro:hasPermission="refund:audit">审核</a>
         {{#}}}
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-del" shiro:hasPermission="refund:del">删除</a>
@@ -320,17 +321,17 @@
                 defaultToolbar: ['filter','print'],     //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
                 cols: [[
                     // {type: 'checkbox'},
-                    {field: 'number', title: '编号',align:'center'},
+                    {field: 'number', title: 'QFF编号',align:'center'},
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
                     {field: 'rMater', title: '罗氏物料号',align:'center'},
                     {field: 'rBatch', title: '罗氏批号',align:'center'},
                     {field: 'kBatch', title: '康德乐SAP批次',align:'center'},
                     {field: 'rBatch', title: '罗氏批号',align:'center'},
                     {field: 'manuDate', title: '生产日期',align:'center'},
-                    {field: 'expiryDate', title: '有效期',align:'center'},
-                    {field: 'quarantine', title: '异常数',align:'center'},
+                    {field: 'rConf', title: '罗氏QA处理意见',align:'center'},
+                    {field: 'reason', title: '退货原因',align:'center'},
                     {title: '处理阶段', templet: '#refund-status',align:'center'},
-                    {title: '操作', toolbar: '#refund-option',align:'center',width: 160}
+                    {title: '操作', toolbar: '#refund-option',align:'center',width: 200}
                 ]],
                 done:function (res,curr,count) {
                     $(".layui-table-header .layui-table thead tr th").css("border","1px solid white").css("background-color","#E8E8E8");
@@ -338,6 +339,7 @@
                 }
             });
         }
+
 
         //查询表单事件
         $query.on('click', function () {

@@ -158,9 +158,11 @@
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label " id="source-ba">采购来源</label>
                 <div class="layui-input-block" id="refund-source">
-                    <select name="source" id="refund_search_source" >
-                        <option value="">请选择</option>
-                    </select>
+                    <!--<select name="source" id="refund_search_source" >-->
+                        <!--<option value="">请选择</option>-->
+                    <!--</select>-->
+                    <input type="text" name="source"  maxlength="50" autocomplete="off"
+                           class="layui-input" readonly="readonly">
                 </div>
             </div>
         </div>
@@ -183,7 +185,7 @@
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label " id="reason-refund">退货原因</label>
-                <div class="layui-input-block" id="refund-reason">
+                <div class="layui-input-block" id="refund-reasons">
                     <select name="reason" id="refund_search_reason" lay-verify="required">
                         <option value="">请选择</option>
                     </select>
@@ -191,20 +193,27 @@
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm6 ">
+            <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">箱号/备注</label>
                 <div class="layui-input-block">
                     <input type="text" name="getRemark"  maxlength="50" autocomplete="off"
                            class="layui-input " readonly="readonly">
                 </div>
             </div>
-            <div class="layui-inline layui-col-sm6">
+            <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label " id="rConf-refund">罗氏意见</label>
                 <div class="layui-input-block" id="refund-rConf">
                     <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="refund_search_rConf" class="layui-input" placeholder="请输入" >
                     <div style="overflow: auto; height: 30px";>
                         <datalist id="refund_search_rConf" style="display:none;"></datalist>
                     </div>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">单位</label>
+                <div class="layui-input-block">
+                    <input type="text" name="unit" maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly" >
                 </div>
             </div>
         </div>
@@ -270,9 +279,13 @@
                 <div class="timeline-item" id="item-three">
                     <div class="timeline-item-timestamp" id="time-three"></div>
                     <div class="timeline-item-cricle" id="cricle-three">3</div>
-                    <div class="timeline-item-name" id="name-three">康德乐完成</div>
+                    <div class="timeline-item-name" id="name-three">待确认</div>
                 </div>
-
+                <div class="timeline-item" id="item-four">
+                    <div class="timeline-item-timestamp" id="time-four"></div>
+                    <div class="timeline-item-cricle" id="cricle-four">4</div>
+                    <div class="timeline-item-name" id="name-four">待确认</div>
+                </div>
 
             </div>
         </div>
@@ -322,57 +335,50 @@
         var to = {time:new Date()};
 
 
-
         $(function () {
-            if(commodity.rConf!==null&&commodity.rConf!==""){
-                if(refundShow==null||refundShow!=='1') {
-                    $('#refund-rConf').html('');
-                    $('#refund-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
-                        '                           class="layui-input " readonly="readonly">');
+            if(currentUser.roleId.search("87")!=-1){
+                pubShow();
+            }
+            if(currentUser.roleId.search("86")!=-1){
+                if(commodity.repTime!==''&&refundShow !== '1'){
+                    pubShow();
                 }
-            }
-            if(commodity.reason!==null&&commodity.reason!=="") {
-                if (refundShow == null || refundShow !=='1') {
-                    $('#refund-reason').html('');
-                    $('#refund-reason').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
-                        '                           class="layui-input " readonly="readonly">')
-                }
-            }
-            if(commodity.ba!==null&&commodity.ba!==""){
-                if(refundShow==null||refundShow!=='1') {
-                    $('#refund-ba').html('');
-                    $('#refund-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
-                        '                           class="layui-input " readonly="readonly">')
-                }
-            }
-            if(commodity.checkResult!==null&&commodity.checkResult!==""){
-                if(refundShow==null||refundShow!=='1') {
-                    $('#refund-checkResult').attr("readonly", "readonly");
-                }
-            }
-            if(commodity.compNumber!==null&&commodity.compNumber!==""){
-                if(refundShow==null||refundShow!=='1') {
-                    $('#refund-compNumber').attr("readonly", "readonly");
-                }
-            }
-            if(currentUser.roleId === "87"){
-                $('#refund-remark').attr("readonly","readonly");
-                $('#source-refund').addClass("febs-form-item-require");
-            }
-            if(currentUser.roleId === "86"){
-                $('#refund-source').html('');
-                $('#refund-source').append('<input type="text" name="source"  maxlength="50" autocomplete="off"\n' +
+
+                $('#refund-stage').html('');
+                $('#refund-stage').append(' <input type="text" name="stage"  maxlength="50" autocomplete="off"\n' +
                     '                           class="layui-input " readonly="readonly">');
                 $('#rConf-refund').addClass("febs-form-item-require");
                 $('#reason-refund').addClass("febs-form-item-require");
 
+            }
+            if(commodity.isDanger === '01'){
+                $("#isDanger").attr("value","危险");
+            }else{
+                $("#isDanger").attr("value","不危险");
             }
             if(refundShow ==='1'){
                 $('#refund-submit').attr("style","display:none;")
             }else {
                 $('#refund-submit-alter').attr("style","display:none;")
             }
+
         });
+
+
+        function pubShow(){
+            $('#refund-remark').attr("readonly","readonly");
+            $('#refund-checkResult').attr("readonly","readonly");
+            $('#refund-compNumber').attr("readonly", "readonly");
+            $('#refund-rConf').html('');
+            $('#refund-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
+                '                           class="layui-input " readonly="readonly">');
+            $('#refund-reasons').html('');
+            $('#refund-reasons').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
+                '                           class="layui-input " readonly="readonly">');
+            $('#refund-ba').html('');
+            $('#refund-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
+                '                           class="layui-input " readonly="readonly">')
+        }
 
 
         //表单渲染
@@ -393,6 +399,7 @@
                 "manuDate": commodity.manuDate,
                 "expiryDate": commodity.expiryDate,
                 "quarantine": commodity.quarantine,
+                "unit":commodity.unit,
                 "getRemark": commodity.getRemark,
                 "initDate": commodity.initDate,
                 "rConf": commodity.rConf,
@@ -547,6 +554,12 @@
                 $("#time-three").html(data[2].date);
                 $("#name-three").html(data[2].name);
                 $("#cricle-three").attr("style","background-color: #3DCCA6");
+                $("#item-four").attr("style","border-bottom: 3px solid #3DCCA6;");
+            }
+            if(data[3]!=null&&data[3].date !=null){
+                $("#time-four").html(data[3].date);
+                $("#name-four").html(data[3].name);
+                $("#cricle-four").attr("style","background-color: #3DCCA6");
             }
         });
 
