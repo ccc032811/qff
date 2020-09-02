@@ -173,6 +173,19 @@
         <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''" >
             and date_format(create_time,'%Y-%m-%d')  between  #{startTime} and  #{endTime}
         </if>
-        and  status = 2  order by create_time desc
+        <choose>
+            <when test="status == '2'">
+                and status = 2
+            </when>
+            <otherwise>
+                and status != 4
+            </otherwise>
+        </choose>
+        order by create_time desc
+        <if test="pageNum == null " >
+            limit  #{pageSize}
+        </if>
+
     </select>
+
 </mapper>

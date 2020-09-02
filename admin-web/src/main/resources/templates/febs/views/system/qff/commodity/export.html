@@ -373,12 +373,42 @@
             var layEvent = obj.event;
             if (layEvent === 'export-download') {
                 var params = $.extend(getQueryParams(),{stage:stage});
-                params.pageSize = $view.find(".layui-laypage-limits option:selected").val();
-                params.pageNum = $view.find(".layui-laypage-em").next().html();
-                febs.download(ctx + 'commodity/excel',params, '出库QFF.xlsx');
+                layer.open({
+                    id:'export-downLoad',
+                    type: 1,
+                    title: '需导出的个数',
+                    shadeClose: false,
+                    btn: '确认',
+                    area:  ['350px','180px'],
+                    content:'<div class="layui-inline" style="left: -15px;margin-top: 25px">\n' +
+                        '                        <label class="layui-form-label" >请输入</label>\n' +
+                        '                        <div class="layui-input-inline">\n' +
+                        '                            <input type="text" id="export-count" maxlength="50" autocomplete="off" class="layui-input" lay-verify="required" >\n' +
+                        '                        </div>\n' +
+                        '                    </div>',
+                    yes:function(index, layero){
+                        var count = layero.find('#export-count');
 
+                        if(isNumber($(count).val())){
+                            params.pageSize = $(count).val();
+                            febs.download(ctx + 'commodity/excel',params, '养护QFF.xlsx');
+                        }
+
+                        layer.close(index);
+                    }
+                })
             }
         });
+
+        function isNumber(value) {
+            var patrn = /^(-)?\d+(\.\d+)?$/;
+            if (patrn.exec(value) === null || value === "") {
+                return false
+            } else {
+                return true
+            }
+        }
+
 
 
         table.on('tool(exportTable)', function (obj) {

@@ -56,17 +56,7 @@ public class RocheServiceImpl extends ServiceImpl<RocheMapper, Roche> implements
 
         if(roche.getAtt()!=null&&roche.getAtt()==1){
 
-            List<Roche> roches = rocheMapper.getPageConserve(roche);
-            List<Roche> newRoche = processService.queryRocheTaskByName(roches, user);
-
-            List<Roche> rocheList = new ArrayList<>();
-            if(CollectionUtils.isNotEmpty(newRoche)){
-                for (Roche roc : newRoche) {
-                    if(roc.getIsAllow()!=null&&roc.getIsAllow()==1){
-                        rocheList.add(roc);
-                    }
-                }
-            }
+            List<Roche> rocheList = getAttRoche(roche, user);
             List<Roche> page = PageUtils.page(rocheList, roche.getPageSize(), roche.getPageNum());
 
             pageInfo.setRecords(page);
@@ -82,6 +72,21 @@ public class RocheServiceImpl extends ServiceImpl<RocheMapper, Roche> implements
         return pageInfo;
     }
 
+    private List<Roche> getAttRoche(Roche roche,User user){
+        roche.setStatus(2);
+        List<Roche> roches = rocheMapper.getPageConserve(roche);
+        List<Roche> newRoche = processService.queryRocheTaskByName(roches, user);
+        List<Roche> rocheList = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(newRoche)){
+            for (Roche roc : newRoche) {
+                if(roc.getIsAllow()!=null&&roc.getIsAllow()==1){
+                    rocheList.add(roc);
+                }
+            }
+        }
+        return rocheList;
+    }
+
     @Override
     @Transactional
     public void updateRocheStatus(Integer id,Integer status) {
@@ -91,6 +96,20 @@ public class RocheServiceImpl extends ServiceImpl<RocheMapper, Roche> implements
     @Override
     public Roche queryRocheById(Integer id) {
         return rocheMapper.selectById(id);
+    }
+
+    @Override
+    public List<Roche> getRocheExcelPage(Roche roche, User user) {
+
+        List<Roche> rocheList = null;
+        if(roche.getAtt()!=null&&roche.getAtt()==1){
+            roche.setPageNum(1);
+            List<Roche> attRoche = getAttRoche(roche, user);
+            rocheList = PageUtils.page(attRoche,roche.getPageSize(),1);
+        }else {
+            rocheList = rocheMapper.getPageConserve(roche);
+        }
+        return rocheList;
     }
 
 }

@@ -214,9 +214,18 @@ public class RecentController extends BaseController {
     @RequiresPermissions("recent:down")
     public void download(Recent recent, HttpServletResponse response) throws FebsException {
         try {
-            IPage<RecentExcelImport> recentPage = recentService.getRecentExcelImportPage(recent);
-            List<RecentExcelImport> excelImportList = recentPage.getRecords();
-            ExcelKit.$Export(RecentExcelImport.class, response).downXlsx(excelImportList, false);
+            List<Recent> recentList = recentService.getRecentExcelImportPage(recent,getCurrentUser());
+            for (Recent rec : recentList) {
+                if(rec.getUseLife()!=null){
+                    rec.setUseLife(rec.getUseLife().replace("-","/"));
+                }
+                if(rec.getRepDate()!=null){
+                    rec.setRepDate(rec.getRepDate().replace("-","/"));
+                }
+
+
+            }
+            ExcelKit.$Export(Recent.class, response).downXlsx(recentList, false);
         } catch (Exception e) {
             String message = "导出近效期QFFexcel失败";
             log.error(message,e);

@@ -6,6 +6,8 @@ import com.neefull.fsp.web.qff.entity.Recent;
 import com.neefull.fsp.web.qff.entity.RecentExcelImport;
 import com.neefull.fsp.web.system.entity.User;
 
+import java.util.List;
+
 
 /**近效期QFF
  * @Author: chengchengchu
@@ -48,5 +50,5 @@ public interface IRecentService extends IService<Recent> {
      * @param recent
      * @return
      */
-    IPage<RecentExcelImport> getRecentExcelImportPage(Recent recent);
+    List<Recent> getRecentExcelImportPage(Recent recent,User user);
 }

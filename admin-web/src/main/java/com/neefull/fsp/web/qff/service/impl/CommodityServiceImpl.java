@@ -59,16 +59,7 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
         IPage<Commodity> pageInfo = new Page<>();
         if(commodity.getAtt()!=null&&commodity.getAtt()==1){
 
-            List<Commodity> commodityList = commodityMapper.getPageConserve(commodity);
-            List<Commodity> newCommodity = processService.queryCommodityTaskByName(commodityList,user);
-            List<Commodity> commodities = new ArrayList<>();
-            if(CollectionUtils.isNotEmpty(newCommodity)){
-                for (Commodity commo : newCommodity) {
-                    if(commo.getIsAllow()!=null&&commo.getIsAllow()==1){
-                        commodities.add(commo);
-                    }
-                }
-            }
+            List<Commodity> commodities = getAttCommodity(commodity, user);
             List<Commodity> page = PageUtils.page(commodities, commodity.getPageSize(), commodity.getPageNum());
 
             pageInfo.setRecords(page);
@@ -86,6 +77,20 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     }
 
 
+    private List<Commodity> getAttCommodity(Commodity commodity,User user){
+        commodity.setStatus(2);
+        List<Commodity> commodityList = commodityMapper.getPageConserve(commodity);
+        List<Commodity> newCommodity = processService.queryCommodityTaskByName(commodityList,user);
+        List<Commodity> commodities = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(newCommodity)){
+            for (Commodity commo : newCommodity) {
+                if(commo.getIsAllow()!=null&&commo.getIsAllow()==1){
+                    commodities.add(commo);
+                }
+            }
+        }
+        return commodities;
+    }
 
     @Override
     @Transactional
@@ -124,6 +129,20 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     public String selectLastTime() {
         Date date = commodityMapper.selectLastTime();
         return DateFormatUtils.format(date,"yyyy-MM-dd HH:mm:ss");
+    }
+
+    @Override
+    public List<Commodity> getPageConserve(Commodity commodity,User user) {
+        List<Commodity> commodityList = null;
+        if(commodity.getAtt()!=null&&commodity.getAtt()==1){
+            commodity.setPageNum(1);
+            List<Commodity> commodities = getAttCommodity(commodity, user);
+            commodityList = PageUtils.page(commodities, commodity.getPageSize(), 1);
+        }else {
+            commodityList = commodityMapper.getPageConserve(commodity);
+        }
+        return commodityList;
+
     }
 
 

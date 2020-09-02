@@ -221,8 +221,22 @@ public class CommodityController extends BaseController {
     @RequiresPermissions(value = {"delivery:down","recent:down","refund:down","conserve:down","conserve:down"},logical = Logical.OR)
     public void download(Commodity commodity, HttpServletResponse response) throws FebsException {
         try {
-            IPage<Commodity> commodityPage = commodityService.getCommodityPage(commodity,getCurrentUser());
-            List<Commodity> commodityList = commodityPage.getRecords();
+            List<Commodity> commodityList = commodityService.getPageConserve(commodity,getCurrentUser());
+            for (Commodity com : commodityList) {
+                if(com.getManuDate()!=null){
+                    com.setManuDate(com.getManuDate().replace("-","/"));
+                }
+                if(com.getExpiryDate()!=null){
+                    com.setExpiryDate(com.getExpiryDate().replace("-","/"));
+                }
+                if(com.getInitDate()!=null){
+                    com.setInitDate(com.getInitDate().replace("-","/"));
+                }
+                if(com.getRepTime()!=null){
+                    com.setRepTime(com.getRepTime().replace("-","/"));
+                }
+
+            }
             ExcelKit.$Export(Commodity.class, response).downXlsx(commodityList, false);
         } catch (Exception e) {
             String message = "导出QFF excel失败";

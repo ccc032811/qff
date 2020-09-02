@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.neefull.fsp.web.qff.entity.Roche;
 import com.neefull.fsp.web.system.entity.User;
 
+import java.util.List;
+
 
 /**罗氏内部发起QFF
  * @Author: chengchengchu
@@ -44,4 +46,5 @@ public interface IRocheService extends IService<Roche> {
      */
     Roche queryRocheById(Integer id);
 
+    List<Roche> getRocheExcelPage(Roche roche, User currentUser);
 }

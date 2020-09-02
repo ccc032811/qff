@@ -82,7 +82,7 @@ public class RecentResolver implements Serializable {
      * unit  单位
      */
     @TableField("unit")
-    @ExcelField(value = "unit")
+    @ExcelField(value = "单位")
     private String unit;
     /**
      *  罗氏QA处理意见

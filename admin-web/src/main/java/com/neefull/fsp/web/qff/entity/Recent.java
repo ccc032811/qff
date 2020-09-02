@@ -38,7 +38,6 @@ public class Recent implements Serializable {
      *  运输单号
      */
     @TableField("transport")
-    @ExcelField(value = "运输单号")
     private String transport;
     /**
      *  康德乐物料号
@@ -110,6 +109,7 @@ public class Recent implements Serializable {
      *  回复日期
      */
     @TableField("rep_date")
+    @ExcelField(value = "回复日期")
     private String repDate;
     /**
      *  变更记录

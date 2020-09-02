@@ -10,6 +10,7 @@ import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.qff.service.IRecentService;
 import com.neefull.fsp.web.qff.utils.PageUtils;
 import com.neefull.fsp.web.system.entity.User;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,16 +58,7 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
 
         if(recent.getAtt()!=null&&recent.getAtt()==1){
 
-            List<Recent> recents = recentMapper.getPageConserve(recent);
-            List<Recent> newRecent = processService.queryRecentTaskByName(recents, user);
-            List<Recent> recentList = new ArrayList<>();
-            if(CollectionUtils.isNotEmpty(newRecent)){
-                for (Recent rec : newRecent) {
-                    if(rec.getIsAllow()!=null&&rec.getIsAllow()==1){
-                        recentList.add(rec);
-                    }
-                }
-            }
+            List<Recent> recentList = getAttRecent(recent, user);
             List<Recent> page = PageUtils.page(recentList, recent.getPageSize(), recent.getPageNum());
 
             pageInfo.setRecords(page);
@@ -81,6 +74,21 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
         return pageInfo;
     }
 
+
+    private List<Recent> getAttRecent(Recent recent, User user){
+        recent.setStatus(2);
+        List<Recent> recents = recentMapper.getPageConserve(recent);
+        List<Recent> newRecent = processService.queryRecentTaskByName(recents, user);
+        List<Recent> recentList = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(newRecent)){
+            for (Recent rec : newRecent) {
+                if(rec.getIsAllow()!=null&&rec.getIsAllow()==1){
+                    recentList.add(rec);
+                }
+            }
+        }
+        return recentList;
+    }
 
 
 
@@ -98,9 +106,20 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
     }
 
     @Override
-    public IPage<RecentExcelImport> getRecentExcelImportPage(Recent recent) {
-        Page<RecentExcelImport> page = new Page<>(recent.getPageNum(),recent.getPageSize());
-        return recentExcelImportMapper.getRecentExcelImportPage(page,recent);
+    public List<Recent> getRecentExcelImportPage(Recent recent,User user) {
+        List<Recent> recentList = null;
+        List<RecentExcelImport> excelImports = null;
+        if(recent.getAtt()!=null&&recent.getAtt()==1){
+            recent.setPageNum(1);
+            List<Recent> commodities = getAttRecent(recent, user);
+            recentList = PageUtils.page(commodities, recent.getPageSize(), 1);
+        }else {
+            recentList = recentMapper.getPageConserve(recent);
+        }
+
+
+
+        return recentList;
     }
 
 }

@@ -34,4 +34,7 @@ public interface CommodityMapper extends BaseMapper<Commodity> {
     Date selectLastTime();
 
     List<Commodity> getPageConserve(Commodity commodity);
+
+
+
 }

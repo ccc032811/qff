@@ -70,4 +70,11 @@ public interface ICommodityService extends IService<Commodity> {
     String selectLastTime();
 
 
+    /**excel导出
+     * @param commodity
+     * @param user
+     * @return
+     */
+    List<Commodity> getPageConserve(Commodity commodity,User user);
+
 }

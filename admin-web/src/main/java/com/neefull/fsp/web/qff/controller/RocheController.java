@@ -145,7 +145,7 @@ public class RocheController extends BaseController {
 
 
     /**查询流程
-     * @param roche
+     * @param id
      * @return
      */
     @GetMapping("/queryHistory/{id}")
@@ -215,8 +215,18 @@ public class RocheController extends BaseController {
     @RequiresPermissions("roche:down")
     public void download(Roche roche, HttpServletResponse response) throws FebsException {
         try {
-            IPage<Roche> rochePage = rocheService.getRochePage(roche,getCurrentUser());
-            List<Roche> rocheList = rochePage.getRecords();
+            List<Roche> rocheList = rocheService.getRocheExcelPage(roche,getCurrentUser());
+            for (Roche roc : rocheList) {
+                if(roc.getReqDate()!=null){
+                    roc.setReqDate(roc.getReqDate().replace("-","/"));
+                }
+                if(roc.getExceptDate()!=null){
+                    roc.setExceptDate(roc.getExceptDate().replace("-","/"));
+                }
+                if(roc.getCompleteDate()!=null){
+                    roc.setCompleteDate(roc.getCompleteDate().replace("-","/"));
+                }
+            }
             ExcelKit.$Export(Roche.class, response).downXlsx(rocheList, false);
         } catch (Exception e) {
             String message = "导出罗氏内部QFFexcel失败";
