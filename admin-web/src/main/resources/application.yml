@@ -49,7 +49,7 @@ qff:
   sftps:
     sftppath:  /UploadOutbound/   # sftp文件地址
     movepath:  /UploadArchive/    #移动的目标文件
-    localpath: /usr/local/files/  #文件下载到当前地址   /usr/local/files/
+    localpath: D:\JavaSoft\nginx-1.12.2\html\ #文件下载到当前地址   /usr/local/files/
     host: 10.1.158.100                               #10.1.151.25
     username: QFFProd         #QFFTest
     password:  KDL@seeburger        #1qaz2wsx
@@ -66,8 +66,8 @@ qff:
     commodityProcess: 到货养护分包出库QFF
     recentProcess: 近效期QFF
     rocheProcess: 罗氏内部发起QFF
-    imagePath: /usr/local/files/    #/usr/local/files/  图片存储的地址
-    imageUrl:  /usr/local/files/  #  图片展示路径
+    imagePath: D:\JavaSoft\nginx-1.12.2\html\   #/usr/local/files/  图片存储的地址
+    imageUrl:  http://127.0.0.1:10086/   #  图片展示路径   /usr/local/files/
   soap:
     soapUrl: http://10.1.16.55/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl     #http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl    http://10.1.16.55/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl
 

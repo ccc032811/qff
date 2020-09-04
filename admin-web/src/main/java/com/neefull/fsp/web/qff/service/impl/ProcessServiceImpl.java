@@ -284,6 +284,7 @@ public class ProcessServiceImpl implements IProcessService {
         List<ProcessHistory> list = new ArrayList<>();
 
         String businessKey = getBusinessKey(object);
+
         List<HistoricTaskInstance> taskInstances = queryHistoryList(businessKey);
 
         if(taskInstances!=null){
@@ -547,7 +548,7 @@ public class ProcessServiceImpl implements IProcessService {
     @Transactional
     public void alterCommodity(Commodity commodity, User currentUser) {
         StringBuffer alteration = new StringBuffer();
-        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd");
+        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
         commodity.setRepTime(date);
         Commodity oldCommodity = commodityService.queryCommodityById(commodity.getId());
         if(!commodity.getBa().equals(oldCommodity.getBa())){
@@ -599,7 +600,7 @@ public class ProcessServiceImpl implements IProcessService {
     @Transactional
     public void alterRecent(Recent recent, User currentUser) {
         StringBuffer alteration = new StringBuffer();
-        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd");
+        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
         recent.setRepDate(date);
         Recent oldRecent = recentService.queryRecentById(recent.getId());
         if(!recent.getrConf().equals(oldRecent.getrConf())){
@@ -637,7 +638,8 @@ public class ProcessServiceImpl implements IProcessService {
     @Transactional
     public void alterRoche(Roche roche, User currentUser) {
         StringBuffer alteration = new StringBuffer();
-        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd");
+        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
+        roche.setCreateTime(new Date());
         Roche oldRoche = rocheService.queryRocheById(roche.getId());
         if(!roche.getReason().equals(oldRoche.getReason())){
             alteration.append("原因:" +date+ " 由 "+oldRoche.getReason()+" 修改为 "+roche.getReason()+"  。 ");
@@ -661,6 +663,9 @@ public class ProcessServiceImpl implements IProcessService {
         }
 
         rocheService.editRoche(roche);
+        if(StringUtils.isNotEmpty(roche.getImages())){
+            addOrEditFiles(roche,currentUser);
+        }
         String[] mails = getEmails(87);
 
         List<Roche> list =new ArrayList<>();
@@ -737,7 +742,7 @@ public class ProcessServiceImpl implements IProcessService {
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceBusinessKey(businessKey).singleResult();
         String activityId = processInstance.getActivityId();
         if(activityId.equals(ProcessConstant.THREE_STEP)){
-            String format = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
+            String format = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
             commodity.setRepTime(format);
         }
         commodityService.editCommodity(commodity);
@@ -747,7 +752,7 @@ public class ProcessServiceImpl implements IProcessService {
         List<User> userList = userService.findUserByRoleId(id);
         List<String> userMails = new ArrayList<>();
         for (User user : userList) {
-            if(StringUtils.isNotEmpty(user.getEmail())) {
+            if(StringUtils.isNotEmpty(user.getEmail())&&user.getAccept()==1) {
                 userMails.add(user.getEmail());
             }
         }

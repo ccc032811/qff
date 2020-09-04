@@ -42,4 +42,6 @@ public interface IAttachmentService extends IService<Attachment> {
 
     Boolean selectAttAndNumber(String number, String attNumber);
 
+    Boolean removeImage(String number, String url, String stage);
+
 }

@@ -13,6 +13,8 @@ import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -154,6 +156,11 @@ public class RocheController extends BaseController {
         roche.setId(id);
         try {
             List<ProcessHistory> list = processService.queryHistory(roche);
+            Roche roc = rocheService.queryRocheById(id);
+            if(list.size()>=1){
+                ProcessHistory processHistory = list.get(0);
+                processHistory.setDate(DateFormatUtils.format(roc.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
             return new FebsResponse().success().data(list);
         } catch (Exception e) {
             String message = "查询罗氏内部QFF流程失败";

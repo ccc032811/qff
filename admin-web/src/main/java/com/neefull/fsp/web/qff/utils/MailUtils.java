@@ -1,12 +1,16 @@
 package com.neefull.fsp.web.qff.utils;
 
 import com.neefull.fsp.web.qff.config.SendMailProperties;
+import com.neefull.fsp.web.system.entity.User;
+import com.neefull.fsp.web.system.service.IUserService;
 import com.sun.mail.util.MailSSLSocketFactory;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,18 +18,14 @@ import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.security.GeneralSecurityException;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author: chengchengchu
  * @Date: 2020/1/8  15:01
  */
+
 public class MailUtils {
-
-
 
     public static void sendMail(String text, SendMailProperties mailProperties, String[] mails, Map<String,String> files ) {
 

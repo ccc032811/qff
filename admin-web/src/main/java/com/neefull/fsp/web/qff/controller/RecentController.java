@@ -1,6 +1,7 @@
 package com.neefull.fsp.web.qff.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.neefull.fsp.common.util.DateUtils;
 import com.neefull.fsp.web.common.controller.BaseController;
 import com.neefull.fsp.web.common.entity.FebsResponse;
 import com.neefull.fsp.web.common.exception.FebsException;
@@ -12,6 +13,8 @@ import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -153,6 +156,11 @@ public class RecentController extends BaseController {
         recent.setId(id);
         try {
             List<ProcessHistory> list = processService.queryHistory(recent);
+            Recent rec = recentService.queryRecentById(id);
+            if(list.size()>=2){
+                ProcessHistory processHistory = list.get(1);
+                processHistory.setDate(rec.getRepDate());
+            }
             return new FebsResponse().success().data(list);
         } catch (Exception e) {
             String message = "查询近效期QFF流程失败";
@@ -222,8 +230,6 @@ public class RecentController extends BaseController {
                 if(rec.getRepDate()!=null){
                     rec.setRepDate(rec.getRepDate().replace("-","/"));
                 }
-
-
             }
             ExcelKit.$Export(Recent.class, response).downXlsx(recentList, false);
         } catch (Exception e) {

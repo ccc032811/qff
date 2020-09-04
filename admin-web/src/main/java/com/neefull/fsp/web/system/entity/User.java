@@ -165,6 +165,13 @@ public class User implements Serializable {
     private String isTab;
 
     /**
+     * 是否接收邮件
+     */
+    @TableField("ACCEPT")
+    private Integer accept;
+
+
+    /**
      * 描述
      */
     @TableField("DESCRIPTION")

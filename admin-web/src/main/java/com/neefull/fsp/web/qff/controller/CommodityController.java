@@ -14,7 +14,9 @@ import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,6 +161,11 @@ public class CommodityController extends BaseController {
         commodity.setId(id);
         try {
             List<ProcessHistory> list = processService.queryHistory(commodity);
+            Commodity commod= commodityService.queryCommodityById(id);
+            if(list.size()>=2){
+                ProcessHistory processHistory = list.get(1);
+                processHistory.setDate(commod.getRepTime());
+            }
             return new FebsResponse().success().data(list);
         } catch (Exception e) {
             String message = "查询QFF流程";

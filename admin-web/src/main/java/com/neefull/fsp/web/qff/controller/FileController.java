@@ -132,6 +132,26 @@ public class FileController extends BaseController {
         }
     }
 
+    @GetMapping("/removeImage/{url}/{number}/{stage}")
+    public FebsResponse removeImage(@PathVariable String url,@PathVariable String number ,@PathVariable String stage) throws FebsException {
+
+        try {
+            Boolean isDelete = attachmentService.removeImage(number,url,stage);
+            if(isDelete){
+                return new FebsResponse().success();
+            }else {
+                return new FebsResponse().fail();
+            }
+
+        } catch (Exception e) {
+            String message = "删除文件失败";
+            log.error(message,e);
+            throw new FebsException(message);
+        }
+
+    }
+
+
     /**上传文件
      * @param file
      * @return

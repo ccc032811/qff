@@ -144,7 +144,7 @@ public class SelfProcessCommit {
         List<User> userList = userService.findUserByRoleId(id);
         List<String> userMails = new ArrayList<>();
         for (User user : userList) {
-            if(StringUtils.isNotEmpty(user.getEmail())) {
+            if(StringUtils.isNotEmpty(user.getEmail())&&user.getAccept()==1) {
                 userMails.add(user.getEmail());
             }
         }

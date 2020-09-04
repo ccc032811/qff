@@ -497,9 +497,10 @@
                         // }
                         // $("#wrapper-upload-image").append(input);
                         $('#wrapper-List').append(tr);
-
+                        febs.alert.success('上传成功');
+                    }else {
+                        febs.alert.error("不能重复上传");
                     }
-                    febs.alert.success('上传成功');
                 }
             }
         });
@@ -518,15 +519,31 @@
                 var url = item.substring(item.lastIndexOf("/")+1);
                 var type =url.substring(url.lastIndexOf(".")+1,url.length);
                 var name =url.substring(0,url.lastIndexOf("."));
+                images.push(url);
                 // if(type==='jpg'||type ==='png'||type ==='gif') {
                 //     $("#wrapper-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;"> \n' +
                 //         '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
                 // }else {
-                    $('#wrapper-List').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
-                        '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="wrapper-upload-' + index + '">下载</button></td></tr>');
+
+                    $('#wrapper-List').append('<tr id="wrapper-file-'+ index + '" ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
+                        '<td style="width: 10%"><button class="layui-btn layui-btn-xs " type="button" id="wrapper-upload-' + index + '" >下载</button>' +
+                        '                       <button class="layui-btn layui-btn-xs layui-btn-danger" type="button" id="wrapper-del-'+ index + '">删除</button></td></tr>');
                     $view.find('#wrapper-upload-'+index ).on('click',function () {
+                        // window.open(ctx +"file/uploadFile/"+item)
                         window.location.href=ctx +"file/uploadFile/"+url;
-                    })
+                    });
+                    $view.find('#wrapper-del-'+index).on('click',function () {
+
+                        febs.modal.confirm('删除该条数据','确定删除该条数据？该删除不可逆！', function () {
+                            febs.get(ctx + "file/removeImage/"+url+'/'+commodity.number+'/'+commodity.stage,to, function (res) {
+                                if(res.code === 200) {
+                                    $('#wrapper-file-'+index).remove();
+                                    febs.alert.success('删除成功');
+                                }
+                            });
+                        });
+
+                    });
                 // }
             })
         });
