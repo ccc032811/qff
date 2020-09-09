@@ -272,12 +272,12 @@
         var reason = "QFF原因";
         var to = {time:new Date()};
 
-        //初始化表单
+
         form.render();
         element.render('collapse');
-        //初始化表格
+
         initTable();
-        //设置时间样式
+
         laydate.render({
             elem: '#export-searchTime'
             ,range: true
@@ -316,19 +316,19 @@
 
         });
 
-        //加载表格数据
+
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
                 id: 'exportTable',
                 height: 455,
-                url: ctx + 'commodity/list',   //url
+                url: ctx + 'commodity/list',
                 where:{
                     stage:stage,
                     time:new Date()
                 },
-                toolbar: '#export-toolbarCheck',     //开启头部工具栏
-                defaultToolbar: ['filter','print'],    //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
+                toolbar: '#export-toolbarCheck',
+                defaultToolbar: ['filter','print'],
                 cols: [[
                     {field: 'number', title: '编号',align:'center'},
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
@@ -349,7 +349,7 @@
             });
         }
 
-        //查询表单事件
+
         $query.on('click', function () {
             tableIns.reload({where: getQueryParams(), page: {curr: 1}});
         });
@@ -360,7 +360,6 @@
             $searchForm[0].reset();
             tableIns.reload({where: getQueryParams(), page: {curr: 1}});
         });
-        //清空表单事件
         $reset.on('click', function () {
             $searchForm[0].reset();
             tableIns.reload({where: getQueryParams(), page: {curr: 1}});
@@ -405,7 +404,6 @@
                 return true
             }
         }
-
 
 
         table.on('tool(exportTable)', function (obj) {
@@ -454,7 +452,7 @@
             });
         });
 
-        //获取查询参数
+
         function getQueryParams() {
             var createTimeFrom,
                 createTimeTo,

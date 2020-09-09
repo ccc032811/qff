@@ -181,7 +181,7 @@
         $.get(ctx +"file/findTask",to,function (data) {
             num = data.data;
             if(num.length===0){
-                $("#num").append('<span style="color: red"><h2>当前没有待办任务</h2></span>');
+                $("#num").append('<span style="color: #09FF7A"><h2>当前没有待办任务</h2></span>');
                 $('#bubbling').attr("style","display:none;")
             }else {
                 $("#num").append('<a ><h2 style="color: red">当前有'+num.length+'条待办任务</h2></a>');

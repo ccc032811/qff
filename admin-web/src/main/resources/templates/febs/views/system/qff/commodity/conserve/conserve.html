@@ -275,12 +275,12 @@
         var reason = "QFF原因";
         var to = {time:new Date()};
 
-        //初始化表单
+
         form.render();
         element.render('collapse');
-        //初始化表格
+
         initTable();
-        //设置时间样式
+
         laydate.render({
             elem: '#conserve-searchTime'
             ,range: true
@@ -319,19 +319,19 @@
 
         });
 
-        //加载表格数据
+
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
                 height: 455,
-                id: 'conserveTable',          //表单id
+                id: 'conserveTable',
                 url: ctx + 'commodity/list',
                 where:{
                     stage:stage,
                     time:new Date()
                 },
-                toolbar: '#conserve-toolbarCheck',     //开启头部工具栏
-                defaultToolbar: ['filter','print'],   //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'
+                toolbar: '#conserve-toolbarCheck',
+                defaultToolbar: ['filter','print'],
                 cols: [[
                     {field: 'number', title: 'QFF编号',align:'center'},
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
@@ -352,7 +352,7 @@
             });
         }
 
-        //查询表单事件
+
         $query.on('click', function () {
             tableIns.reload({where: getQueryParams(), page: {curr: 1}});
         });
@@ -363,7 +363,7 @@
             $searchForm[0].reset();
             tableIns.reload({where: getQueryParams(), page: {curr: 1}});
         });
-        //清空表单事件
+
         $reset.on('click', function () {
             $searchForm[0].reset();
             tableIns.reload({where: getQueryParams(), page: {curr: 1}});
@@ -447,7 +447,7 @@
             });
         }
 
-        //表格重新加载
+
         table.on('sort(conserveTable)', function (obj) {
             tableIns.reload({
                 where: $.extend(getQueryParams())
@@ -462,7 +462,6 @@
         });
 
 
-        //获取查询参数
         function getQueryParams() {
             var createTimeFrom,
                 createTimeTo,

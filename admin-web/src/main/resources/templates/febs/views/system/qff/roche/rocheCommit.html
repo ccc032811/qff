@@ -226,7 +226,7 @@
         });
 
 
-        //表单渲染
+
         form.render();
 
 
@@ -277,6 +277,8 @@
                 }
             }
         });
+
+
         function deleteImage(url){
             febs.get(ctx + "file/deleteImage/"+url,to, function (res) {
                 if(res.code === 200) {
@@ -284,6 +286,7 @@
                 }
             })
         }
+
 
         $.get(ctx +"opinion/getOpinion/"+actions,to,function(res){
             var data = res.data;
@@ -297,7 +300,7 @@
             $view.find('#audit').trigger('click');
         });
 
-        //提交更新
+
         form.on('submit(roche-form-audit)', function (data) {
             $('#roche-audit').attr("style","display:none;");
             for (var i = 0; i<=images.length-1;i++){

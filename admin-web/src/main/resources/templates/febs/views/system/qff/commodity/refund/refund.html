@@ -258,12 +258,12 @@
         var reason = "退货原因";
         var to = {time:new Date()};
 
-        //初始化表单
+
         form.render();
         element.render('collapse');
-        //初始化表格
+
         initTable();
-        //设置时间样式
+
         laydate.render({
             elem: '#refund-searchTime'
             ,range: true
@@ -303,21 +303,20 @@
         });
 
 
-        // //加载表格数据
+
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
                 height: 455,
-                id: 'refundTable',          //表单id
-                url: ctx + 'commodity/list',   //url
+                id: 'refundTable',
+                url: ctx + 'commodity/list',
                 where:{
                     stage:stage,
                     time:new Date()
                 },
-                toolbar: '#refund-toolbarCheck',     //开启头部工具栏
-                defaultToolbar: ['filter','print'],     //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
+                toolbar: '#refund-toolbarCheck',
+                defaultToolbar: ['filter','print'],
                 cols: [[
-                    // {type: 'checkbox'},
                     {field: 'number', title: 'QFF编号',align:'center'},
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
                     {field: 'rMater', title: '罗氏物料号',align:'center'},

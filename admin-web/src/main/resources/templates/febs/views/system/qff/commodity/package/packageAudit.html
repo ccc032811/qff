@@ -352,7 +352,6 @@
         var image = [];
         var ba = "BA";
         var stage = "QFF上报阶段";
-        var source = "采购来源";
         var rConf ="罗氏QA处理意见";
         var reason = "QFF原因";
         var type = "分包";
@@ -403,11 +402,11 @@
                '                           class="layui-input " readonly="readonly">')
        }
 
-        //表单渲染
+
         form.render();
         initPackageValue();
 
-        //给表单赋值
+
         function initPackageValue() {
             form.val("package-detail-form", {
                 "id":commodity.id,
@@ -581,7 +580,6 @@
 
 
 
-        //提交更新
         form.on('submit(package-form-submit)', function (data) {
 
             if (febs.nativeEqual(data.field, commodity)) {
@@ -656,21 +654,6 @@
             dom.html(html);
             form.render("select");
         });
-
-        // $.get(ctx +"opinion/getOpinion/"+source,to,function(res){
-        //     var data=res.data;
-        //     var dom=$("#package-search-source");
-        //     var html='<option value=""></option>';
-        //     $.each(data,function(index,item){
-        //         if(item.name === commodity.source){
-        //             html+='<option selected value="'+item.name+'">'+item.name+'</option>'
-        //         }else {
-        //             html+='<option value="'+item.name+'">'+item.name+'</option>'
-        //         }
-        //     });
-        //     dom.html(html);
-        //     form.render("select");
-        // });
 
     });
 </script>

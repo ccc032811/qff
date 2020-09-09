@@ -275,11 +275,11 @@
 
         });
 
-        //表单渲染
+
         form.render();
         initRecentValue();
 
-        //给表单赋值
+
         function initRecentValue() {
             form.val("recent-detail-form", {
                 "id":recent.id,
@@ -443,7 +443,7 @@
             $view.find('#submit').trigger('click');
         });
 
-        //提交更新
+
         form.on('submit(recent-form-submit)', function (data) {
             if (febs.nativeEqual(data.field, recent)) {
                 febs.alert.warn('数据未作任何修改！');
@@ -478,7 +478,6 @@
                     });
                 }
             }
-
             return false;
         });
 

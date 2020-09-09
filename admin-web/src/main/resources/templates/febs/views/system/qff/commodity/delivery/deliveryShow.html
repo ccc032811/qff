@@ -320,12 +320,12 @@
         var type = "到货";
         var to = {time:new Date()};
 
-        //表单渲染
+
         form.render();
 
         initDeliveryValue();
 
-        //给表单赋值
+
         function initDeliveryValue() {
             form.val("delivery-detail-form-show", {
                 "id": commodity.id,
@@ -443,7 +443,6 @@
                 $(this).html($(this).val());
             });
         }
-
 
 
         $(function () {

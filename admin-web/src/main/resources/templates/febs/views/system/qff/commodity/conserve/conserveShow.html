@@ -384,11 +384,11 @@
         var type = "储存";
         var to = {time:new Date()};
 
-        //表单渲染
+
         form.render();
         initConserveValue();
 
-        //给表单赋值
+
         function initConserveValue() {
             form.val("conserve-detail-form-show", {
                 "id":commodity.id,
@@ -429,16 +429,13 @@
                 var url = item.substring(item.lastIndexOf("/")+1);
                 var type =url.substring(url.lastIndexOf(".")+1,url.length);
                 var name =url.substring(0,url.lastIndexOf("."));
-                // if(type==='jpg'||type ==='png'||type ==='gif') {
-                //     $("#conserve-upload-image-show").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;left: 5px"> \n' +
-                //         '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
-                // }else {
-                    $('#conserve-List-show').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
-                                                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="conserve-upload-show-' + index + '">下载</button></td></tr>');
-                    $view.find('#conserve-upload-show-'+index ).on('click',function (res) {
-                        window.location.href=ctx +"file/uploadFile/"+url;
-                    })
-                // }
+
+                $('#conserve-List-show').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
+                                                '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="conserve-upload-show-' + index + '">下载</button></td></tr>');
+                $view.find('#conserve-upload-show-'+index ).on('click',function (res) {
+                    window.location.href=ctx +"file/uploadFile/"+url;
+                })
+
             })
         });
 

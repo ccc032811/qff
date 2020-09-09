@@ -248,6 +248,9 @@
 </script>
 <script type="text/html" id="wrapper-toolbarCheck">
     <div class="layui-btn-container">
+        <button  class="layui-btn layui-btn-sm" style="background-color: #87e8de;"  lay-event="wrapper-add" >
+            <i class="layui-icon">&#xe654;</i> 新增QFF
+        </button>
         <button  class="layui-btn layui-btn-sm" lay-event="wrapper-download" shiro:hasPermission="wrapper:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
         </button>
@@ -320,16 +323,15 @@
             tableIns = febs.table.init({
                 elem: $view.find('table'),
                 height: 455,
-                id: 'wrapperTable',          //表单id
-                url: ctx + 'commodity/list',   //url
+                id: 'wrapperTable',
+                url: ctx + 'commodity/list',
                 where:{
                     stage:stage,
                     time:new Date()
                 },
-                toolbar: '#wrapper-toolbarCheck',     //开启头部工具栏
-                defaultToolbar: ['filter','print'],    //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'*/
+                toolbar: '#wrapper-toolbarCheck',
+                defaultToolbar: ['filter','print'],
                 cols: [[
-                    // {type: 'checkbox'},
                     {field: 'number', title: '编号',align:'center'},
                     {field: 'kMater', title: '康德乐物料号',align:'center'},
                     {field: 'rMater', title: '罗氏物料号',align:'center'},
@@ -395,6 +397,11 @@
                     }
                 })
             }
+            if (layEvent === 'wrapper-add') {
+                febs.modal.open('新增手工QFF', 'system/qff/commodity/addQff',{
+                    area: [$(window).width() <= 750 ? '90%' : '70%',$(window).height() <= 750 ? '90%' : '60%']
+                });
+            }
         });
 
         function isNumber(value) {
@@ -453,7 +460,7 @@
             });
         });
 
-        //获取查询参数
+
         function getQueryParams() {
             var createTimeFrom,
                 createTimeTo,

@@ -403,11 +403,11 @@
                 '                           class="layui-input " readonly="readonly">')
         }
 
-        //表单渲染
+
         form.render();
         initWrapperValue();
 
-        //给表单赋值
+
         function initWrapperValue() {
             form.val("wrapper-detail-form", {
                 "id":commodity.id,
@@ -582,7 +582,7 @@
             $view.find('#wrapper-submit').trigger('click');
         });
 
-        //提交更新
+
         form.on('submit(wrapper-form-submit)', function (data) {
 
             if (febs.nativeEqual(data.field, commodity)) {

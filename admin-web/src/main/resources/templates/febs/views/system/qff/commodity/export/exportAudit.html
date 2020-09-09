@@ -403,11 +403,11 @@
         }
 
 
-        //表单渲染
+
         form.render();
         initExportValue();
 
-        //给表单赋值
+
         function initExportValue() {
             form.val("export-detail-form", {
                 "id": commodity.id,
@@ -538,9 +538,7 @@
                             }
                         })
                     });
-
                 });
-
             })
         });
 
@@ -581,7 +579,7 @@
         });
 
 
-        //提交更新
+
         form.on('submit(export-form-submit)', function (data) {
 
             if (febs.nativeEqual(data.field, commodity)) {

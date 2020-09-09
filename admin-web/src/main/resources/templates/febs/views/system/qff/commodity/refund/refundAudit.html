@@ -381,11 +381,11 @@
         }
 
 
-        //表单渲染
+
         form.render();
         initConserveValue();
 
-        //给表单赋值
+
         function initConserveValue() {
             form.val("refund-detail-form", {
                 "id":commodity.id,
@@ -556,7 +556,7 @@
         });
 
 
-        //提交更新
+
         form.on('submit(refund-form-submit)', function (data) {
             if (febs.nativeEqual(data.field, commodity)) {
                 febs.alert.warn('数据未作任何修改！');

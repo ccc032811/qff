@@ -401,11 +401,11 @@
                '                           class="layui-input " readonly="readonly">')
        }
 
-        //表单渲染
+
         form.render();
         initConserveValue();
 
-        //给表单赋值
+
         function initConserveValue() {
             form.val("conserve-detail-form", {
                 "id":commodity.id,
@@ -642,7 +642,7 @@
 
 
 
-        //提交更新
+
         form.on('submit(conserve-form-submit)', function (data) {
 
             if (febs.nativeEqual(data.field, commodity)) {
@@ -718,20 +718,6 @@
             form.render("select");
         });
 
-        // $.get(ctx +"opinion/getOpinion/"+source,to,function(res){
-        //     var data=res.data;
-        //     var dom=$("#conserve-search-source");
-        //     var html='<option value=""></option>';
-        //     $.each(data,function(index,item){
-        //         if(item.name === commodity.source){
-        //             html+='<option selected value="'+item.name+'">'+item.name+'</option>'
-        //         }else {
-        //             html+='<option value="'+item.name+'">'+item.name+'</option>'
-        //         }
-        //     });
-        //     dom.html(html);
-        //     form.render("select");
-        // });
 
     });
 </script>
