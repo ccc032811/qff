@@ -363,7 +363,7 @@
                 pubShow();
             }
             if(currentUser.roleId.search("86")!=-1){
-                if(commodity.repTime!==''&&packageShow !== '1'){
+                if(commodity.repTime!==''&&commodity.repTime!==null&&packageShow !== '1'){
                     pubShow();
                 }
 
@@ -396,7 +396,7 @@
            $('#package-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
                '                           class="layui-input " readonly="readonly">');
            $('#package-reasons').html('');
-           $('#packagee-reasons').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
+           $('#package-reasons').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
                '                           class="layui-input " readonly="readonly">');
            $('#package-ba').html('');
            $('#package-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +

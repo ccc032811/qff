@@ -360,7 +360,7 @@
                 pubShow();
             }
             if(currentUser.roleId.search("86")!=-1){
-                if(commodity.repTime!==''&&deliveryShow !== '1'){
+                if(commodity.repTime!==''&&commodity.repTime!==null && deliveryShow !== '1'){
                     pubShow();
                 }
 

@@ -52,7 +52,7 @@
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">NO编号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="number"  maxlength="50" autocomplete="off"
+                    <input type="text" name="number" id="number" maxlength="50" autocomplete="off"
                            class="layui-input" >
                 </div>
             </div>
@@ -144,7 +144,7 @@
                 <label class="layui-form-label ">单位</label>
                 <div class="layui-input-block">
                     <input type="text" name="unit" maxlength="50" autocomplete="off"
-                           class="layui-input " readonly="readonly" >
+                           class="layui-input "  >
                 </div>
             </div>
         </div>
@@ -232,10 +232,15 @@
 
         upload.render({
             elem: '#roche-chose-com'
-            ,url: ctx+ 'file/uploadImage/'+'roche'
+            ,url: ctx+ 'file/uploadImage'
             ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
             ,multiple: true
             ,auto: true
+            ,data: {
+                number: function () {
+                    return $("#number").val();
+                }
+            }
             ,size: 1024*10
             ,before: function(obj){
                 layer.load();

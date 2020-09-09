@@ -50,7 +50,7 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label">QFF编号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="number" id="qff" maxlength="50" autocomplete="off"
+                    <input type="text" name="number" id="number"  maxlength="50" autocomplete="off"
                            class="layui-input " lay-verify="required" placeholder="请输入">
                 </div>
             </div>
@@ -205,7 +205,8 @@
             layer = layui.layer,
             form = layui.form,
             upload = layui.upload,
-            $view = $('#commodity-detail');
+            $view = $('#commodity-detail'),
+            $searchFrom = $view.find("form");
 
 
         var imageList = '';
@@ -226,13 +227,18 @@
             ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
             ,multiple: true
             ,auto: false
-            ,data: {number:''}
+            ,data: {
+                number: function () {
+                    return $("#number").val();
+                }
+            }
             ,size: 1020*10
             ,before: function(obj){
                 layer.load();
             }
             ,choose: function(obj){
                 var flag = true;
+                var num =  $("#number").val();
 
                 obj.preview(function (index,file,result) {
                     for (var i =images.length-1 ; i>=0 ;i--){
@@ -277,6 +283,7 @@
                 }
             }
         }
+
 
         function deleteImage(url){
             febs.get(ctx + "file/deleteImage/"+url ,to, function (res) {
