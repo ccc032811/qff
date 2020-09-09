@@ -1,9 +1,9 @@
 <style>
-    #conserve-detail-show {
+    #wrapper-detail-show {
         padding: 20px 25px 25px 0;
     }
 
-    #conserve-detail .layui-treeSelect .ztree li a, .ztree li span {
+    #wrapper-detail .layui-treeSelect .ztree li a, .ztree li span {
         margin: 0 0 2px 3px !important;
     }
 
@@ -45,11 +45,9 @@
         margin-bottom: 0px;
     }
 </style>
-<div class="layui-fluid" id="conserve-detail-show" lay-title = "养护QFF" style="margin-left: 18px">
-    <div class="layui-form-item" id="conserve-title">
+<div class="layui-fluid" id="wrapper-detail-show" lay-title = "其他QFF" style="margin-left: 18px">
 
-    </div>
-    <form class="layui-form " action="" lay-filter="conserve-detail-form-show">
+    <form class="layui-form " action="" lay-filter="wrapper-detail-form" id="wrapper-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label" >运输单号</label>
@@ -234,98 +232,103 @@
                 </div>
             </div>
         </div>
-        <div class="layui-form-item layui-form-item-rigth">
+        <div class="layui-form-item layui-form-item-rigth textarea-class">
             <div class="layui-inline layui-col-sm12">
-                <label class="layui-form-label" style="height: 80px;border-right: 1px solid #000;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
+                <label class="layui-form-label" style="height: 80px;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
                 <div class="layui-input-block">
-                    <textarea name="checkResult"  readonly class="layui-textarea"></textarea>
+                    <textarea name="checkResult" readonly
+                              class="layui-textarea"></textarea>
                 </div>
             </div>
         </div>
-        <div class="layui-form-item layui-form-item-rigth" >
+        <div class="layui-form-item layui-form-item-rigth textarea-class" >
             <div class="layui-inline layui-col-sm12" >
                 <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">备注</div></label>
                 <div class="layui-input-block" >
-                    <textarea name="remark" readonly class="layui-textarea" ></textarea>
+                    <textarea name="remark"   readonly class="layui-textarea" ></textarea>
                 </div>
 
             </div>
         </div>
-        <div class="layui-form-item layui-form-item-rigth" >
+        <div class="layui-form-item layui-form-item-rigth textarea-class" >
             <div class="layui-inline layui-col-sm12" >
                 <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">变更记录</div></label>
                 <div class="layui-input-block" >
-                    <textarea id="" name="alteration" readonly  class="layui-textarea" ></textarea>
+                    <textarea id="" name="alteration" readonly class="layui-textarea" ></textarea>
                 </div>
 
             </div>
         </div>
         <div class="layui-form-item"><div style="border-top: 1px solid #000;margin-top: 1px"></div></div>
-
-        <div class="layui-form-item" style="border: 0;padding-top: 20px">
-            <div class="layui-upload">
-                <div id="conserve-upload-image-show">
-
-                </div>
-                <div class="layui-upload-list">
-                    <table class="layui-table">
-                        <thead>
-                        <tr><th>文件名</th>
-                            <th>类型</th>
-                            <th>状态</th>
-                            <th>操作</th>
-                        </tr></thead>
-                        <tbody id="conserve-List-show"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item" style="margin-top: 30px;height: 120px">
-            <div class="timeline-main-line" id="conserve-process-show">
-                <div class="timeline-item-start">
-                    <div class="timeline-item-timestamp" id="time-first"></div>
-                    <div class="timeline-item-cricle" id="cricle-first">1</div>
-                    <div class="timeline-item-name" id="name-first">康德乐创建</div>
-                </div>
-                <div class="timeline-item" id="item-second">
-                    <div class="timeline-item-timestamp" id="time-second"></div>
-                    <div class="timeline-item-cricle" id="cricle-second">2</div>
-                    <div class="timeline-item-name" id="name-second">罗氏审批</div>
-                </div>
-                <div class="timeline-item" id="item-three">
-                    <div class="timeline-item-timestamp" id="time-three"></div>
-                    <div class="timeline-item-cricle" id="cricle-three">3</div>
-                    <div class="timeline-item-name" id="name-three">待确认</div>
-                </div>
-                <div class="timeline-item" id="item-four">
-                    <div class="timeline-item-timestamp" id="time-four"></div>
-                    <div class="timeline-item-cricle" id="cricle-four">4</div>
-                    <div class="timeline-item-name" id="name-four">待确认</div>
-                </div>
-            </div>
-        </div>
-
     </form>
+    <div class="layui-form-item" style="border: 0;padding-top: 20px">
+        <div class="layui-upload">
+            <div id="wrapper-upload-image-show">
+
+            </div>
+            <div class="layui-upload-list">
+                <table class="layui-table">
+                    <thead>
+                    <tr><th>文件名</th>
+                        <th>类型</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr></thead>
+                    <tbody id="wrapper-List-show"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-top: 30px;height: 120px">
+        <div class="timeline-main-line" id="process">
+            <div class="timeline-item-start">
+                <div class="timeline-item-timestamp" id="time-first"></div>
+                <div class="timeline-item-cricle" id="cricle-first">1</div>
+                <div class="timeline-item-name" id="name-first">康德乐创建</div>
+            </div>
+            <div class="timeline-item" id="item-second">
+                <div class="timeline-item-timestamp" id="time-second"></div>
+                <div class="timeline-item-cricle" id="cricle-second">2</div>
+                <div class="timeline-item-name" id="name-second">罗氏审批</div>
+            </div>
+            <div class="timeline-item" id="item-three">
+                <div class="timeline-item-timestamp" id="time-three"></div>
+                <div class="timeline-item-cricle" id="cricle-three">3</div>
+                <div class="timeline-item-name" id="name-three">待确认</div>
+            </div>
+            <div class="timeline-item" id="item-four">
+                <div class="timeline-item-timestamp" id="time-four"></div>
+                <div class="timeline-item-cricle" id="cricle-four">4</div>
+                <div class="timeline-item-name" id="name-four">待确认</div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div  style="margin-top: 75px;text-align: center;" >
+            <button class="layui-btn" id="wrapper-print" >打印</button>
+        </div>
+    </div>
 </div>
-<img alt="" style="display:none" id="conserve-displayImg-show" src="" />
+<img alt="" style="display:none" id="displayImg" src="" />
 <script data-th-inline="javascript">
-    layui.use([ 'form','layer','jquery'], function () {
-        var $ = layui.jquery,
+    layui.use(['form','layer','jquery'], function () {
+        var $ = layui.$,
             layer = layui.layer,
             form = layui.form,
-            commodity = [[${commodity}]],
-            $view = $('#conserve-detail-show');
+            commodity = [[${commodity}]];
+            $view = $('#wrapper-detail-show');
 
-        var type = "养护";
+        var type = "其他";
         var to = {time:new Date()};
 
         //表单渲染
         form.render();
-        initConserveValue();
+
+        initWrapperValue();
 
         //给表单赋值
-        function initConserveValue() {
-            form.val("conserve-detail-form-show", {
+        function initWrapperValue() {
+            form.val("wrapper-detail-form", {
                 "id":commodity.id,
                 "transport": commodity.transport,
                 "number": commodity.number,
@@ -364,47 +367,15 @@
                 var url = item.substring(item.lastIndexOf("/")+1);
                 var type =url.substring(url.lastIndexOf(".")+1,url.length);
                 var name =url.substring(0,url.lastIndexOf("."));
-                // if(type==='jpg'||type ==='png'||type ==='gif') {
-                //     $("#conserve-upload-image-show").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;left: 5px"> \n' +
-                //         '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
-                // }else {
-                    $('#conserve-List-show').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
-                                                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="conserve-upload-show-' + index + '">下载</button></td></tr>');
-                    $view.find('#conserve-upload-show-'+index ).on('click',function (res) {
-                        window.location.href=ctx +"file/uploadFile/"+url;
-                    })
-                // }
+
+                $('#wrapper-List-show').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
+                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="wrapper-upload-show-' + index + '">下载</button></td></tr>');
+                $view.find('#wrapper-upload-show-'+index ).on('click',function () {
+                    window.location.href=ctx +"file/uploadFile/"+url;
+                })
             })
         });
 
-        window.amplificationImg = function (name, url) {
-            $("#conserve-displayImg").attr("src", url);
-            var height =$("#conserve-displayImg").height();//拿的图片原来宽高，建议自定义宽高
-            var width = $("#conserve-displayImg").width();
-            var winHeight = $(window).height() - 100;  // 浏览器可视部分高度
-            var winWidth = $(window).width() - 120;  // 浏览器可视部分宽度
-            if (height > winHeight || width > winWidth) {
-                if (winWidth/ winHeight <= width / height) {
-                    width = winWidth;
-                    height = winWidth * (height / width);
-                }
-                if (winWidth/ winHeight > width / height) {
-                    width = winHeight  * (width / height);
-                    height = winHeight  ;
-                }
-            }else {
-                height = winHeight -100;
-                width = winWidth -520;
-            }
-            layer.open({
-                type: 1,
-                title: false,
-                closeBtn: 0,
-                shadeClose: true,
-                area: [width + 'px', height + 'px'], //宽高
-                content: '<img name="'+name+'" alt=" '+name+'" src="' + url + '" style="height:'+height+'px ;width: '+width+'px"/>'
-            });
-        };
 
         $.get(ctx + "commodity/queryHistory/"+commodity.id,to ,function (res) {
             var data = res.data;
@@ -431,8 +402,47 @@
                 $("#name-four").html(data[3].name);
                 $("#cricle-four").attr("style","background-color: #3DCCA6");
             }
+        });
+
+        $view.on('click', '#wrapper-print', function () {
+
+            bindData();
+
+            var headstr = "<html><head><title></title></head><body>";
+            var footstr = "</body></html>";
+
+            var printData = document.getElementById("wrapper-detail-form").innerHTML;
+            var newWindow = window.open();
+
+            newWindow.document.write("<style>\n" +
+                "    .layui-form-item{float: left;height: 48px;width: 1200px;}  .layui-form-item-rigth{border-right: 1px solid #000;}\n" +
+                "    .layui-col-sm4,.layui-form-label,.layui-input-block{float: left;height: 48px;}\n" +
+                "    .layui-col-sm4{border-top: 1px solid #000;border-left: 1px solid #000;width: 399px;}\n" +
+                "    .layui-form-label{text-align: center;width: 100px;font-size: 14px;display: -webkit-inline-flex;margin-top: 12px;}\n" +
+                "    .layui-input-block {width: 298px;}.textarea-class{height: 110px;}\n" +
+                "    .layui-input{border: none;height: 48px;width: 298px;font-size: 14px;border-left: 1px solid #000;}\n" +
+                "    textarea{width: 1099px;height: 110px;border-bottom: 1px solid #000;border-right: 1px solid #000;border-left: 1px solid #000;}\n" +
+                "    .layui-col-sm12{height: 110px;border-top: 1px solid #000;border-left: 1px solid #000;}\n" +
+                "</style>");
+            newWindow.document.write(headstr+printData+footstr);
+            newWindow.document.close();
+            newWindow.focus();
+            newWindow.print();
+            newWindow.close();
 
         });
+
+
+        function bindData() {
+            $("input[type='text'],select option").each(function () {
+                $(this).attr('value', $(this).val());
+            });
+
+            $('textarea').each(function () {
+                $(this).html($(this).val());
+            });
+        }
+
 
 
         $(function () {
@@ -440,11 +450,6 @@
                 $("#isDanger").attr("value","危险");
             }else{
                 $("#isDanger").attr("value","不危险");
-            }
-            if(commodity.status ===1&&commodity.att ===1){
-                $('#conserve-title').append('<div  style="text-align: center;" >\n' +
-                    '            <h3   style="color: red" >附件获取中。。。</h3>\n' +
-                    '        </div>')
             }
         })
 

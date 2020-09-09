@@ -74,7 +74,8 @@
     }
 </style>
 <div class="layui-fluid" id="roche-detail-show" lay-title = "罗氏内部发起QFF" style="margin-left: 18px">
-    <form class="layui-form " action="" lay-filter="roche-detail-form" >
+
+    <form class="layui-form " action="" lay-filter="roche-detail-form" id="roche-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">NO编号</label>
@@ -180,7 +181,7 @@
 
             </div>
         </div>
-        <div class="layui-form-item layui-form-item-rigth" >
+        <div class="layui-form-item layui-form-item-rigth textarea-class" >
             <div class="layui-inline layui-col-sm12" >
                 <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">备注</div></label>
                 <div class="layui-input-block" >
@@ -189,7 +190,7 @@
 
             </div>
         </div>
-        <div class="layui-form-item layui-form-item-rigth" >
+        <div class="layui-form-item layui-form-item-rigth textarea-class" >
             <div class="layui-inline layui-col-sm12" >
                 <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">变更记录</div></label>
                 <div class="layui-input-block" >
@@ -199,45 +200,49 @@
             </div>
         </div>
         <div class="layui-form-item"><div style="border-top: 1px solid #000;margin-top: 1px"></div></div>
-
-        <div class="layui-form-item" style="border: 0;padding-top: 20px">
-            <div class="layui-upload">
-                <div id="roche-upload-image-show">
-
-                </div>
-                <div class="layui-upload-list">
-                    <table class="layui-table">
-                        <thead>
-                        <tr><th>文件名</th>
-                            <th>类型</th>
-                            <th>状态</th>
-                            <th>操作</th>
-                        </tr></thead>
-                        <tbody id="roche-List-show"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item" style="margin-top: 30px;height: 120px">
-            <div class="timeline-main-line" id="process">
-                <div class="timeline-item-start">
-                    <div class="timeline-item-timestamp" id="time-first"></div>
-                    <div class="timeline-item-cricle" id="cricle-first">1</div>
-                    <div class="timeline-item-name" id="name-first">罗氏创建</div>
-                </div>
-                <div class="timeline-item" id="item-second">
-                    <div class="timeline-item-timestamp" id="time-second"></div>
-                    <div class="timeline-item-cricle" id="cricle-second">2</div>
-                    <div class="timeline-item-name" id="name-second">康德乐审批</div>
-                </div>
-                <div class="timeline-item" id="item-three">
-                    <div class="timeline-item-timestamp" id="time-three"></div>
-                    <div class="timeline-item-cricle" id="cricle-three">3</div>
-                    <div class="timeline-item-name" id="name-three">待确认</div>
-                </div>
-            </div>
-        </div>
     </form>
+    <div class="layui-form-item" style="border: 0;padding-top: 20px">
+        <div class="layui-upload">
+            <div id="roche-upload-image-show">
+
+            </div>
+            <div class="layui-upload-list">
+                <table class="layui-table">
+                    <thead>
+                    <tr><th>文件名</th>
+                        <th>类型</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr></thead>
+                    <tbody id="roche-List-show"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-top: 30px;height: 120px">
+        <div class="timeline-main-line" id="process">
+            <div class="timeline-item-start">
+                <div class="timeline-item-timestamp" id="time-first"></div>
+                <div class="timeline-item-cricle" id="cricle-first">1</div>
+                <div class="timeline-item-name" id="name-first">罗氏创建</div>
+            </div>
+            <div class="timeline-item" id="item-second">
+                <div class="timeline-item-timestamp" id="time-second"></div>
+                <div class="timeline-item-cricle" id="cricle-second">2</div>
+                <div class="timeline-item-name" id="name-second">康德乐审批</div>
+            </div>
+            <div class="timeline-item" id="item-three">
+                <div class="timeline-item-timestamp" id="time-three"></div>
+                <div class="timeline-item-cricle" id="cricle-three">3</div>
+                <div class="timeline-item-name" id="name-three">待确认</div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div  style="margin-top: 75px;text-align: center;" >
+            <button class="layui-btn" id="roche-print" >打印</button>
+        </div>
+    </div>
 </div>
 <img alt="" style="display:none" id="displayImg" src="" />
 <script data-th-inline="javascript">
@@ -285,47 +290,15 @@
                 var url = item.substring(item.lastIndexOf("/")+1);
                 var type =url.substring(url.lastIndexOf(".")+1,url.length);
                 var name =url.substring(0,url.lastIndexOf("."));
-                // if(type==='jpg'||type ==='png'||type ==='gif') {
-                //     $("#roche-upload-image-show").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;left: 5px"> \n' +
-                //         '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
-                // }else {
-                    $('#roche-List-show').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
-                        '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="roche-upload-show-' + index + '">下载</button></td></tr>');
-                    $view.find('#roche-upload-show-'+index ).on('click',function () {
-                        window.location.href=ctx +"file/uploadFile/"+url;
-                    })
-                // }
+                $('#roche-List-show').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
+                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="roche-upload-show-' + index + '">下载</button></td></tr>');
+                $view.find('#roche-upload-show-'+index ).on('click',function () {
+                    window.location.href=ctx +"file/uploadFile/"+url;
+                })
+
             })
         });
-        window.amplificationImg = function (name, url) {
-            $("#displayImg").attr("src", url);
-            var height =$("#displayImg").height();
-            var width = $("#displayImg").width();
-            var winHeight = $(window).height() - 100;
-            var winWidth = $(window).width() - 120;
-            if (height > winHeight || width > winWidth) {
-                if (winWidth/ winHeight <= width / height) {
-                    width = winWidth;
-                    height = winWidth * (height / width);
-                }
-                if (winWidth/ winHeight > width / height) {
-                    width = winHeight  * (width / height);
-                    height = winHeight  ;
-                }
-            }else {
-                height = winHeight -100;
-                width = winWidth -520;
-            }
 
-            layer.open({
-                type: 1,
-                title: false,
-                closeBtn: 0,
-                shadeClose: true,
-                area: [width + 'px', height + 'px'], //宽高
-                content: '<img name="'+name+'" alt=" '+name+'" src="' + url + '" style="height:'+height+'px ;width: '+width+'px"/>'
-            });
-        };
 
         $.get(ctx + "roche/queryHistory/"+roche.id,to ,function (res) {
             var data = res.data;
@@ -347,6 +320,47 @@
                 $("#cricle-three").attr("style","background-color: #3DCCA6");
             }
         });
+
+
+
+        $view.on('click', '#roche-print', function () {
+
+            bindData();
+
+            var headstr = "<html><head><title></title></head><body>";
+            var footstr = "</body></html>";
+
+            var printData = document.getElementById("roche-detail-form").innerHTML;
+            var newWindow = window.open();
+
+            newWindow.document.write("<style>\n" +
+                "    .layui-form-item{float: left;height: 48px;width: 1200px;}  .layui-form-item-rigth{border-right: 1px solid #000;}\n" +
+                "    .layui-col-sm4,.layui-form-label,.layui-input-block{float: left;height: 48px;}\n" +
+                "    .layui-col-sm4{border-top: 1px solid #000;border-left: 1px solid #000;width: 399px;}\n" +
+                "    .layui-form-label{text-align: center;width: 100px;font-size: 14px;display: -webkit-inline-flex;margin-top: 12px;}\n" +
+                "    .layui-input-block {width: 298px;}.textarea-class{height: 110px;}\n" +
+                "    .layui-input{border: none;height: 48px;width: 298px;font-size: 14px;border-left: 1px solid #000;}\n" +
+                "    textarea{width: 1099px;height: 110px;border-bottom: 1px solid #000;border-right: 1px solid #000;border-left: 1px solid #000;}\n" +
+                "    .layui-col-sm12{height: 110px;border-top: 1px solid #000;border-left: 1px solid #000;}\n" +
+                "</style>");
+            newWindow.document.write(headstr+printData+footstr);
+            newWindow.document.close();
+            newWindow.focus();
+            newWindow.print();
+            newWindow.close();
+
+        });
+
+
+        function bindData() {
+            $("input[type='text'],select option").each(function () {
+                $(this).attr('value', $(this).val());
+            });
+
+            $('textarea').each(function () {
+                $(this).html($(this).val());
+            });
+        }
 
 
 

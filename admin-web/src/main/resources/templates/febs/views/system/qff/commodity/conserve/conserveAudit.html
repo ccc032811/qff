@@ -7,7 +7,6 @@
         margin: 0 0 2px 3px !important;
     }
 
-
     /* 覆盖样式 */
     .layui-form-item {
          margin-bottom: 0px;
@@ -48,7 +47,7 @@
 
 
 </style>
-<div class="layui-fluid" id="conserve-detail" lay-title = "养护QFF" style="margin-left: 18px">
+<div class="layui-fluid" id="conserve-detail" lay-title = "储存QFF" style="margin-left: 18px">
 
     <form class="layui-form " action="" lay-filter="conserve-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
@@ -246,7 +245,7 @@
         </div>
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm12">
-                <label class="layui-form-label" id="checkResult-conserve" style="height: 80px;border-right: 1px solid #000;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
+                <label class="layui-form-label" id="checkResult-conserve" style="height: 80px;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
                 <div class="layui-input-block">
                     <textarea id="conserve-checkResult" name="checkResult"  placeholder="请输入"
                               class="layui-textarea" ></textarea>
@@ -273,7 +272,6 @@
             </div>
         </div>
         <div class="layui-form-item"><div style="border-top: 1px solid #000;margin-top: 1px"></div></div>
-
         <div class="layui-form-item" style="border: 0;padding-top: 20px">
             <div class="layui-upload">
                 <div id="conserve-upload-image">
@@ -332,7 +330,6 @@
             <button class="layui-btn" id="conserve-submit-alter" shiro:hasPermission="conserve:alter">修改</button>
         </div>
     </div>
-
 </div>
 <img alt="" style="display:none" id="conserve-displayImg" src=""/>
 
@@ -347,15 +344,16 @@
             conserveShow = [[${conserveShow}]],
             $view = $('#conserve-detail');
 
-        var files = '';
+
         var imageList = '';
         var images = [];
+        var image=[];
         var ba = "BA";
         var stage = "QFF上报阶段";
         var source = "采购来源";
         var rConf ="罗氏QA处理意见";
         var reason = "QFF原因";
-        var type = "养护";
+        var type = "储存";
         var to = {time:new Date()};
 
         $(function () {
@@ -444,13 +442,30 @@
 
         upload.render({
             elem: '#conserve-chose'
-            ,url: ctx+ 'file/uploadImage/'+commodity.number
+            ,url: ctx+ 'file/uploadImage'
             ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
             ,multiple: true
-            ,auto: true
+            ,auto: false
             ,size: 1020*10
+            ,data:{number:commodity.number}
             ,before: function(obj){
                 layer.load();
+            }
+            ,choose: function(obj){
+                var flag = true;
+
+                obj.preview(function (index,file,result) {
+                    for (var i =images.length-1 ; i>=0 ;i--){
+                        if(images[i]===file.name){
+                            flag = false;
+                        }
+                    }
+                    if(flag){
+                        obj.upload(index, file);
+                    }else {
+                        febs.alert.error("不能重复上传");
+                    }
+                });
             }
             ,done: function(res,index){
                 layer.closeAll('loading');
@@ -458,27 +473,26 @@
                     var url = res.data.substring(res.data.lastIndexOf("/")+1);
                     var type = url.substring(url.lastIndexOf(".")+1,url.length);
                     var name = url.substring(0,url.lastIndexOf("."));
-                    var show = false;
-                    for (var i =images.length-1 ; i>=0 ;i--){
-                        if(images[i]===url){
-                            show = true;
-                        }
-                    }
-                    if(!show){
+                    // var show = false;
+                    // for (var i =images.length-1 ; i>=0 ;i--){
+                    //     if(images[i]===url){
+                    //         show = true;
+                    //     }
+                    // }
+                    // if(!show){
                         // if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type !=='PNG') {
                             var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
                                   '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
                             images.push(url);
+                            image.push(url);
                             tr.find('.file-delete').on('click', function(){
-                                delete files[index];
+
                                 tr.remove();
                                 deleteImage(url);
-                                for (var i =images.length-1 ; i>=0 ;i--){
-                                    if(images[i]===url){
-                                        delete images[i];
-                                    }
-                                }
+                                removeImages(images,url);
+                                removeImages(image,url);
                             });
+
                         // }else {
                         //     var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
                         //     '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
@@ -499,12 +513,20 @@
                         $('#conserve-List').append(tr);
 
                         febs.alert.success('上传成功');
-                    }else {
-                        febs.alert.error("不能重复上传");
-                    }
+                    // }else {
+                    //     febs.alert.error("不能重复上传");
+                    // }
                 }
             }
         });
+
+        function removeImages(imageList,url) {
+            for (var i =imageList.length-1 ; i>=0 ;i--){
+                if(imageList[i]===url){
+                    delete imageList[i];
+                }
+            }
+        }
 
 
         function deleteImage(url){
@@ -538,6 +560,7 @@
 
                             febs.get(ctx + "file/removeImage/"+url+'/'+commodity.number+'/'+commodity.stage,to, function (res) {
                                 if(res.code === 200) {
+                                    removeImages(images,url);
                                     $('#conserve-file-'+index).remove();
                                     febs.alert.success('删除成功');
                                 }
@@ -626,9 +649,9 @@
                 febs.alert.warn('数据未作任何修改！');
                 return false;
             }
-            for (var i = 0; i<=images.length-1;i++){
-                if(images[i]!== undefined)
-                imageList+=images[i]+",";
+            for (var i = 0; i<=image.length-1;i++){
+                if(image[i]!== undefined)
+                imageList+=image[i]+",";
             }
             data.field.images = imageList;
             if(conserveShow ==='1'){

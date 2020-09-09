@@ -1,0 +1,680 @@
+<style>
+    #wrapper-detail {
+        padding: 20px 25px 25px 0;
+    }
+
+    #wrapper-detail .layui-treeSelect .ztree li a, .ztree li span {
+        margin: 0 0 2px 3px !important;
+    }
+
+    /* 覆盖样式 */
+    .layui-form-item {
+        margin-bottom: 0px;
+    }
+    .layui-form-item-rigth{
+        border-right: 1px solid #000;
+    }
+    .layui-col-sm4,.layui-col-sm6 {
+        border-left: 1px solid #000;
+        border-top: 1px solid #000;
+        height: 39px;
+    }
+    .layui-col-sm12{
+        border-left: 1px solid #000;
+        border-top: 1px solid #000;
+        height: 100px;
+    }
+    .layui-form-label {
+        float: left;
+        display: block;
+        padding: 10px 14px;
+        width: 80px;
+        font-weight: 400;
+        line-height: 20px;
+        text-align: center;
+        height: 21px;
+        border-right: 1px solid #000;
+    }
+    .layui-input-block{
+        height: 39px;
+    }
+    .layui-input, .layui-textarea {
+        width: 100%;
+    }
+    .layui-form-item .layui-inline {
+        margin-bottom: 0px;
+    }
+</style>
+<div class="layui-fluid" id="wrapper-detail" lay-title = "其他QFF" style="margin-left: 18px">
+    <form class="layui-form " action="" lay-filter="wrapper-detail-form">
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label" >运输单号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="transport"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label">QFF编号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="number"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">工厂</label>
+                <div class="layui-input-block">
+                    <input type="text" name="plant"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">康德乐物料号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="kMater"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">康德乐SAP号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="kBatch"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">罗氏物料号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="rMater"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">是否是危险品</label>
+                <div class="layui-input-block">
+                    <input type="text" id="isDanger"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">物料描述</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pMater"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">罗氏批号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="rBatch" maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">生产日期</label>
+                <div class="layui-input-block">
+                    <input type="text" name="manuDate"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">有效期</label>
+                <div class="layui-input-block">
+                    <input type="text" name="expiryDate" maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">异常总数</label>
+                <div class="layui-input-block">
+                    <input type="text" name="quarantine"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">发起日期</label>
+                <div class="layui-input-block">
+                    <input type="text" name="initDate"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">回复日期</label>
+                <div class="layui-input-block">
+                    <input type="text" name="repTime"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label " id="reason-wrapper">QFF原因</label>
+                <div class="layui-input-block" id="wrapper-reasons">
+                    <input type="text" name="reason"   maxlength="50" autocomplete="off" list="wrapper-search-reason" class="layui-input" placeholder="请输入">
+                    <datalist id="wrapper-search-reason" style="display:none;"></datalist>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">上报阶段</label>
+                <div class="layui-input-block" id="wrapper-stage">
+                    <select name="stage" id="wrapper-search-stage" lay-verify="required" >
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label " id="source-wrapper">采购来源</label>
+                <div class="layui-input-block" id = "wrapper-source">
+                    <!--<select name="source" id="wrapper-search-source" >-->
+                        <!--<option value="">请选择</option>-->
+                    <!--</select>-->
+                    <input type="text" name="source"  maxlength="50" autocomplete="off"
+                           class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label " id="ba-wrapper">BA</label>
+                <div class="layui-input-block" id = "wrapper-ba" >
+                    <input type="text" name="ba"  maxlength="50" autocomplete="off" list="wrapper-search-ba" class="layui-input" placeholder="请输入" >
+                    <div style="overflow: auto; height: 30px";>
+                        <datalist id="wrapper-search-ba" style="display:none;"></datalist>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">注册证号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="register"  maxlength="50" autocomplete="off"
+                           class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">产品分类</label>
+                <div class="layui-input-block" id="classify">
+                    <input type="text" name="classify"  maxlength="50" autocomplete="off"
+                           class="layui-input" readonly="readonly">
+
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label " id="compNumber-wrapper">投诉编号</label>
+                <div class="layui-input-block">
+                    <input type="text" id="wrapper-compNumber" name="compNumber" maxlength="50" autocomplete="off"
+                           class="layui-input " placeholder="请输入">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">Remark箱号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="getRemark" maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly" >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label " id="rConf-wrapper">罗氏意见</label>
+                <div class="layui-input-block" id = "wrapper-rConf" >
+                    <input type="text" name="rConf"  lay-verify="required" maxlength="50" autocomplete="off" list="wrapper-search-rConf" class="layui-input" placeholder="请输入" >
+                    <div style="overflow: auto; height: 30px";>
+                        <datalist id="wrapper-search-rConf" style="display:none;"></datalist>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">单位</label>
+                <div class="layui-input-block">
+                    <input type="text" name="unit" maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly" >
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm12">
+                <label class="layui-form-label" id="checkResult-wrapper" style="height: 80px;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
+                <div class="layui-input-block">
+                    <textarea id="wrapper-checkResult" name="checkResult"  placeholder="请输入"
+                              class="layui-textarea" ></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth" >
+            <div class="layui-inline layui-col-sm12" >
+                <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">备注</div></label>
+                <div class="layui-input-block" >
+                    <textarea id="wrapper-remark" name="remark"  placeholder="请输入"
+                              class="layui-textarea"></textarea>
+                </div>
+
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth" >
+            <div class="layui-inline layui-col-sm12" >
+                <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">变更记录</div></label>
+                <div class="layui-input-block" >
+                    <textarea id="" name="alteration" readonly class="layui-textarea" ></textarea>
+                </div>
+
+            </div>
+        </div>
+        <div class="layui-form-item"><div style="border-top: 1px solid #000;margin-top: 1px"></div></div>
+
+        <div class="layui-form-item" style="border: 0;padding-top: 20px">
+            <div class="layui-upload">
+                <div id="wrapper-upload-image">
+                    <img data-th-src="@{febs/images/image_add.png}" width="70px" height="70px" id="wrapper-chose">
+                </div>
+                <div class="layui-upload-list">
+                    <table class="layui-table">
+                        <thead>
+                        <tr><th>文件名</th>
+                            <th>类型</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr></thead>
+                        <tbody id="wrapper-List"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="margin-top: 30px">
+            <div class="timeline-main-line" id="wrapper-process">
+                <div class="timeline-item-start">
+                    <div class="timeline-item-timestamp" id="time-first"></div>
+                    <div class="timeline-item-cricle" id="cricle-first">1</div>
+                    <div class="timeline-item-name" id="name-first">康德乐创建</div>
+                </div>
+                <div class="timeline-item" id="item-second">
+                    <div class="timeline-item-timestamp" id="time-second"></div>
+                    <div class="timeline-item-cricle" id="cricle-second">2</div>
+                    <div class="timeline-item-name" id="name-second">罗氏审批</div>
+                </div>
+                <div class="timeline-item" id="item-three">
+                    <div class="timeline-item-timestamp" id="time-three"></div>
+                    <div class="timeline-item-cricle" id="cricle-three">3</div>
+                    <div class="timeline-item-name" id="name-three">待确认</div>
+                </div>
+                <div class="timeline-item" id="item-four">
+                    <div class="timeline-item-timestamp" id="time-four"></div>
+                    <div class="timeline-item-cricle" id="cricle-four">4</div>
+                    <div class="timeline-item-name" id="name-four">待确认</div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item febs-hide">
+            <div  style="margin-top: 75px;text-align: center;" shiro:hasPermission="wrapper:audit">
+                <button class="layui-btn" lay-submit="" lay-filter="wrapper-form-submit" id="wrapper-submit" ></button>
+            </div>
+            <br>
+            <div style="float: right">
+                <input style="border:0;" name="id" type="hidden">
+            </div>
+        </div>
+    </form>
+    <div class="layui-form-item">
+        <div  style="margin-top: 75px;text-align: center;" >
+            <button class="layui-btn"  id="wrapper-submit-control" shiro:hasPermission="wrapper:audit">提交</button>
+            <button class="layui-btn" id="wrapper-submit-alter" shiro:hasPermission="wrapper:alter">修改</button>
+        </div>
+    </div>
+</div>
+<img alt="" style="display:none" id="wrapper-displayImg" src="" />
+
+
+<script data-th-inline="javascript">
+    layui.use(['febs', 'form','upload','layer'], function () {
+        var $ = layui.$,
+            febs = layui.febs,
+            layer = layui.layer,
+            form = layui.form,
+            upload = layui.upload,
+            commodity = [[${commodity}]],
+            wrapperShow = [[${wrapperShow}]],
+            $view = $('#wrapper-detail');
+
+
+
+        var imageList = "";
+        var images = [];
+        var image = [];
+        var ba = "BA";
+        var stage = "QFF上报阶段";
+        var source = "采购来源";
+        var rConf ="罗氏QA处理意见";
+        var reason = "QFF原因";
+        var type = "其他";
+        var to = {time:new Date()};
+
+
+        $(function () {
+            if(currentUser.roleId.search("87")!=-1){
+                pubShow();
+            }
+            if(currentUser.roleId.search("86")!=-1){
+                if(commodity.repTime!==''&&wrapperShow !== '1'){
+                    pubShow();
+                }
+
+                $('#wrapper-stage').html('');
+                $('#wrapper-stage').append(' <input type="text" name="stage"  maxlength="50" autocomplete="off"\n' +
+                    '                           class="layui-input " readonly="readonly">');
+                $('#rConf-wrapper').addClass("febs-form-item-require");
+                $('#reason-wrapper').addClass("febs-form-item-require");
+
+            }
+            if(commodity.isDanger === '01'){
+                $("#isDanger").attr("value","危险");
+            }else{
+                $("#isDanger").attr("value","不危险");
+            }
+            if(wrapperShow ==='1'){
+                $('#wrapper-submit-control').attr("style","display:none;")
+            }else {
+                $('#wrapper-submit-alter').attr("style","display:none;")
+            }
+
+        });
+
+
+        function pubShow(){
+            $('#wrapper-remark').attr("readonly","readonly");
+            $('#wrapper-checkResult').attr("readonly","readonly");
+            $('#wrapper-compNumber').attr("readonly", "readonly");
+            $('#wrapper-rConf').html('');
+            $('#wrapper-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
+                '                           class="layui-input " readonly="readonly">');
+            $('#wrapper-reasons').html('');
+            $('#wrapper-reasons').append('<input type="text" name="reason"  maxlength="50" autocomplete="off"\n' +
+                '                           class="layui-input " readonly="readonly">');
+            $('#wrapper-ba').html('');
+            $('#wrapper-ba').append('<input type="text" name="ba"  maxlength="50" autocomplete="off"\n' +
+                '                           class="layui-input " readonly="readonly">')
+        }
+
+        //表单渲染
+        form.render();
+        initWrapperValue();
+
+        //给表单赋值
+        function initWrapperValue() {
+            form.val("wrapper-detail-form", {
+                "id":commodity.id,
+                "transport": commodity.transport,
+                "number": commodity.number,
+                "plant": commodity.plant,
+                "kMater": commodity.kMater,
+                "kBatch": commodity.kBatch,
+                "rMater": commodity.rMater,
+                "isDanger": commodity.isDanger,
+                "pMater": commodity.pMater,
+                "rBatch": commodity.rBatch,
+                "manuDate": commodity.manuDate,
+                "expiryDate": commodity.expiryDate,
+                "quarantine": commodity.quarantine,
+                "unit":commodity.unit,
+                "getRemark": commodity.getRemark,
+                "initDate": commodity.initDate,
+                "rConf": commodity.rConf,
+                "repTime": commodity.repTime,
+                "checkResult": commodity.checkResult,
+                "reason": commodity.reason,
+                "compNumber": commodity.compNumber,
+                "remark": commodity.remark,
+                "ba": commodity.ba,
+                "stage": commodity.stage,
+                "source": commodity.source,
+                "register": commodity.register,
+                "classify": commodity.classify,
+                "images": commodity.images,
+                "alteration":commodity.alteration
+            });
+        }
+
+        upload.render({
+            elem: '#wrapper-chose'
+            ,url: ctx+ 'file/uploadImage'
+            ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
+            ,multiple: true
+            ,auto: false
+            ,data:{number:commodity.number}
+            ,size: 1024*10
+            ,before: function(obj){
+                layer.load();
+            }
+            ,choose: function(obj){
+                var flag = true;
+
+                obj.preview(function (index,file,result) {
+                    for (var i =images.length-1 ; i>=0 ;i--){
+                        if(images[i]===file.name){
+                            flag = false;
+                        }
+                    }
+                    if(flag){
+                        obj.upload(index, file);
+                    }else {
+                        febs.alert.error("不能重复上传");
+                    }
+                });
+            }
+            ,done: function(res,index){
+                layer.closeAll('loading');
+                if(res.code === 200){ //上传成功
+                    var url = res.data.substring(res.data.lastIndexOf("/")+1);
+                    var type = url.substring(url.lastIndexOf(".")+1,url.length);
+                    var name = url.substring(0,url.lastIndexOf("."));
+
+                    var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
+                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
+                    images.push(url);
+                    image.push(url);
+                    tr.find('.file-delete').on('click', function(){
+
+                        tr.remove();
+                        deleteImage(url);
+                        removeImages(images,url);
+                        removeImages(image,url);
+                    });
+
+                    $('#wrapper-List').append(tr);
+                    febs.alert.success('上传成功');
+
+                }
+            }
+        });
+
+        function removeImages(imageList,url) {
+            for (var i =imageList.length-1 ; i>=0 ;i--){
+                if(imageList[i]===url){
+                    delete imageList[i];
+                }
+            }
+        }
+
+
+        function deleteImage(url){
+            febs.get(ctx + "file/deleteImage/"+url, to,function (res) {
+                if(res.code === 200) {
+                    febs.alert.success('删除成功');
+                }
+            })
+        }
+
+
+        $.get(ctx +"file/findImages/"+commodity.number +"/"+type,to,function (res) {
+            var data = res.data;
+            $.each(data,function (index, item) {
+                var url = item.substring(item.lastIndexOf("/")+1);
+                var type =url.substring(url.lastIndexOf(".")+1,url.length);
+                var name =url.substring(0,url.lastIndexOf("."));
+                images.push(url);
+
+                $('#wrapper-List').append('<tr id="wrapper-file-'+ index + '" ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
+                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs " type="button" id="wrapper-upload-' + index + '" >下载</button>' +
+                    '                       <button class="layui-btn layui-btn-xs layui-btn-danger" type="button" id="wrapper-del-'+ index + '">删除</button></td></tr>');
+                $view.find('#wrapper-upload-'+index ).on('click',function () {
+                    // window.open(ctx +"file/uploadFile/"+item)
+                    window.location.href=ctx +"file/uploadFile/"+url;
+                });
+                $view.find('#wrapper-del-'+index).on('click',function () {
+
+                    febs.modal.confirm('删除该条数据','确定删除该条数据？该删除不可逆！', function () {
+                        febs.get(ctx + "file/removeImage/"+url+'/'+commodity.number+'/'+commodity.stage,to, function (res) {
+                            if(res.code === 200) {
+                                removeImages(images,url);
+                                $('#wrapper-file-'+index).remove();
+                                febs.alert.success('删除成功');
+                            }
+                        });
+                    });
+
+                });
+            })
+        });
+
+
+        $.get(ctx + "commodity/queryHistory/"+commodity.id,to ,function (res) {
+            var data = res.data;
+            if(data[0]!=null&&data[0].date !=null){
+                $("#time-first").html(data[0].date);
+                $("#name-first").html(data[0].name);
+                $("#cricle-first").attr("style","background-color: #3DCCA6");
+                $("#item-second").attr("style","border-bottom: 3px solid #3DCCA6;");
+            }
+            if(data[1]!=null&&data[1].date !=null){
+                $("#time-second").html(data[1].date);
+                $("#name-second").html(data[1].name);
+                $("#cricle-second").attr("style","background-color: #3DCCA6");
+                $("#item-three").attr("style","border-bottom: 3px solid #3DCCA6;");
+            }
+            if(data[2]!=null&&data[2].date !=null){
+                $("#time-three").html(data[2].date);
+                $("#name-three").html(data[2].name);
+                $("#cricle-three").attr("style","background-color: #3DCCA6");
+                $("#item-four").attr("style","border-bottom: 3px solid #3DCCA6;");
+            }
+            if(data[3]!=null&&data[3].date !=null){
+                $("#time-four").html(data[3].date);
+                $("#name-four").html(data[3].name);
+                $("#cricle-four").attr("style","background-color: #3DCCA6");
+            }
+        });
+
+
+
+        $view.on('click', '#wrapper-submit-control', function () {
+            $view.find('#wrapper-submit').trigger('click');
+        });
+
+        $view.on('click', '#wrapper-submit-alter', function () {
+            $view.find('#wrapper-submit').trigger('click');
+        });
+
+        //提交更新
+        form.on('submit(wrapper-form-submit)', function (data) {
+
+            if (febs.nativeEqual(data.field, commodity)) {
+                febs.alert.warn('数据未作任何修改！');
+                return false;
+            }
+            for (var i = 0; i<=image.length-1;i++){
+                if(image[i]!== undefined)
+                    imageList+=image[i]+",";
+            }
+            data.field.images = imageList;
+            if(wrapperShow==='1'){
+                $('#wrapper-submit-alter').attr("style","display:none;");
+                febs.post(ctx + 'commodity/alter', data.field , function (data) {
+                    layer.closeAll();
+                    $('#fbs-wrapper').find('#wrapper-query').click();
+                    febs.alert.success('数据修改成功');
+                });
+            }else {
+                $('#wrapper-submit-control').attr("style","display:none;");
+                if(commodity.status ===1){
+                    febs.post(ctx + 'commodity/commit', data.field , function (data) {
+                        layer.closeAll();
+                        $('#fbs-wrapper').find('#wrapper-query').click();
+                        febs.alert.success('数据修改成功');
+                    });
+                }
+                if(commodity.status ===2){
+                    febs.post(ctx + 'commodity/agree', data.field , function (data) {
+                        layer.closeAll();
+                        $('#fbs-wrapper').find('#wrapper-query').click();
+                        febs.alert.success('数据修改成功');
+                    });
+                }
+            }
+            return false;
+        });
+
+
+        $.get(ctx +"opinion/getOpinion/"+reason,to,function(res){
+            var data = res.data;
+            $.each(data,function(index,item){
+                $("#wrapper-search-reason").append('<option value="'+item.name+'"></option>')
+            });
+        });
+
+        $.get(ctx +"opinion/getOpinion/"+rConf,to,function(res){
+            var data = res.data;
+            $.each(data,function(index,item){
+                $("#wrapper-search-rConf").append('<option value="'+item.name+'"></option>')
+            });
+        });
+
+
+        $.get(ctx +"opinion/getOpinion/"+ba,to,function(res){
+            var data = res.data;
+            $.each(data,function(index,item){
+                $("#wrapper-search-ba").append('<option value="'+item.name+'"></option>')
+            });
+        });
+
+
+        $.get(ctx +"opinion/getOpinion/"+stage,to,function(res){
+            var data=res.data;
+            var dom=$("#wrapper-search-stage");
+            var html='<option value=""></option>';
+            $.each(data,function(index,item){
+                if(item.name === commodity.stage){
+                    html+='<option selected value="'+item.name+'">'+item.name+'</option>'
+                }else {
+                    html+='<option value="'+item.name+'">'+item.name+'</option>'
+                }
+            });
+            dom.html(html);
+            form.render("select");
+        });
+
+        $.get(ctx +"opinion/getOpinion/"+source,to,function(res){
+            var data=res.data;
+            var dom=$("#wrapper-search-source");
+            var html='<option value=""></option>';
+            $.each(data,function(index,item){
+                if(item.name === commodity.source){
+                    html+='<option selected value="'+item.name+'">'+item.name+'</option>'
+                }else {
+                    html+='<option value="'+item.name+'">'+item.name+'</option>'
+                }
+            });
+            dom.html(html);
+            form.render("select");
+        });
+
+
+    });
+</script>

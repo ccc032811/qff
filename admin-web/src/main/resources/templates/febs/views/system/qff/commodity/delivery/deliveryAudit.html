@@ -242,7 +242,7 @@
         </div>
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm12">
-                <label class="layui-form-label" id="checkResult-delivery" style="height: 80px;border-right: 1px solid #000;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
+                <label class="layui-form-label" id="checkResult-delivery" style="height: 80px;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
                 <div class="layui-input-block">
                     <textarea id="delivery-checkResult" name="checkResult"  placeholder="请输入"
                               class="layui-textarea" ></textarea>
@@ -288,7 +288,6 @@
                 </div>
             </div>
         </div>
-
         <div class="layui-form-item" style="margin-top: 30px">
             <div class="timeline-main-line" id="delivery-process">
                 <div class="timeline-item-start">
@@ -330,7 +329,7 @@
         </div>
     </div>
 </div>
-<img alt="" style="display:none" id="delivery-displayImg" src="" />
+
 
 <script data-th-inline="javascript">
     layui.use(['febs', 'form','upload','layer'], function () {
@@ -343,9 +342,10 @@
             deliveryShow = [[${deliveryShow}]],
             $view = $('#delivery-detail');
 
-        var files ="";
+
         var imageList = "";
         var images = [];
+        var image=[];
         var ba = "BA";
         var stage = "QFF上报阶段";
         var source = "采购来源";
@@ -444,13 +444,30 @@
 
         upload.render({
             elem: '#delivery-chose'
-            ,url: ctx+ 'file/uploadImage/'+commodity.number
+            ,url: ctx+ 'file/uploadImage'
             ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
             ,multiple: true
-            ,auto: true
+            ,auto: false
+            ,data:{number:commodity.number}
             ,size: 1024*10
             ,before: function(obj){
                 layer.load();
+            }
+            ,choose: function(obj){
+                var flag = true;
+
+                obj.preview(function (index,file,result) {
+                    for (var i =images.length-1 ; i>=0 ;i--){
+                        if(images[i]===file.name){
+                            flag = false;
+                        }
+                    }
+                    if(flag){
+                        obj.upload(index, file);
+                    }else {
+                        febs.alert.error("不能重复上传");
+                    }
+                });
             }
             ,done: function(res,index){
                 layer.closeAll('loading');
@@ -458,52 +475,35 @@
                     var url = res.data.substring(res.data.lastIndexOf("/")+1);
                     var type = url.substring(url.lastIndexOf(".")+1,url.length);
                     var name = url.substring(0,url.lastIndexOf("."));
-                    var show = false;
-                    for (var i =images.length-1 ; i>=0 ;i--){
-                        if(images[i]===url){
-                            show = true;
-                        }
-                    }
-                    if(!show){
-                        // if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type !=="PNG") {
-                            var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
-                            '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
-                            images.push(url);
-                            tr.find('.file-delete').on('click', function(){
-                                delete files[index];
-                                tr.remove();
-                                deleteImage(url);
-                                for (var i =images.length-1 ; i>=0 ;i--){
-                                    if(images[i]===url){
-                                        delete images[i];
-                                    }
-                                }
-                            });
-                        // }else {
-                        //     var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
-                        //     '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
-                        //
-                        //     images.push(url);
-                        //     input.find('.delsingle').on('click', function () {
-                        //         delete files[index];
-                        //         input.remove();
-                        //         deleteImage(url);
-                        //         for (var i =images.length-1 ; i>=0 ;i-- ){
-                        //             if(images[i]===url){
-                        //                 delete images[i];
-                        //             }
-                        //         }
-                        //     });
-                        // }
-                        // $("#delivery-upload-image").append(input);
-                        $('#delivery-List').append(tr);
-                        febs.alert.success('上传成功');
-                    }else {
-                        febs.alert.error("不能重复上传");
-                    }
+
+                    var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
+                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
+                    images.push(url);
+                    image.push(url);
+                    tr.find('.file-delete').on('click', function(){
+
+                        tr.remove();
+                        deleteImage(url);
+                        removeImages(images,url);
+                        removeImages(image,url);
+                    });
+
+                    $('#delivery-List').append(tr);
+                    febs.alert.success('上传成功');
+
                 }
             }
         });
+
+        function removeImages(imageList,url) {
+            for (var i =imageList.length-1 ; i>=0 ;i--){
+                if(imageList[i]===url){
+                    delete imageList[i];
+                }
+            }
+        }
+
+
         function deleteImage(url){
             febs.get(ctx + "file/deleteImage/"+url,to, function (res) {
                 if(res.code === 200) {
@@ -519,61 +519,30 @@
                 var type =url.substring(url.lastIndexOf(".")+1,url.length);
                 var name =url.substring(0,url.lastIndexOf("."));
                 images.push(url);
-                // if(type==='jpg'||type ==='png'||type ==='gif') {
-                //     $("#delivery-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px"> \n' +
-                //         '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
-                // }else {
-                    $('#delivery-List').append('<tr id="delivery-file-'+ index + '" ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
-                        '<td style="width: 10%"><button class="layui-btn layui-btn-xs " type="button" id="delivery-upload-' + index + '" >下载</button>' +
-                        '                       <button class="layui-btn layui-btn-xs layui-btn-danger" type="button" id="delivery-del-'+ index + '">删除</button></td></tr>');
-                    $view.find('#delivery-upload-'+index ).on('click',function () {
-                        // window.open(ctx +"file/uploadFile/"+item)
-                        window.location.href=ctx +"file/uploadFile/"+url;
-                    });
-                    $view.find('#delivery-del-'+index).on('click',function () {
 
-                        febs.modal.confirm('删除该条数据','确定删除该条数据？该删除不可逆！', function () {
-                            febs.get(ctx + "file/removeImage/"+url+'/'+commodity.number+'/'+commodity.stage,to, function (res) {
-                                if(res.code === 200) {
-                                    $('#delivery-file-'+index).remove();
-                                    febs.alert.success('删除成功');
-                                }
-                            });
+                $('#delivery-List').append('<tr id="delivery-file-'+ index + '" ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
+                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs " type="button" id="delivery-upload-' + index + '" >下载</button>' +
+                    '                       <button class="layui-btn layui-btn-xs layui-btn-danger" type="button" id="delivery-del-'+ index + '">删除</button></td></tr>');
+                $view.find('#delivery-upload-'+index ).on('click',function () {
+                    // window.open(ctx +"file/uploadFile/"+item)
+                    window.location.href=ctx +"file/uploadFile/"+url;
+                });
+                $view.find('#delivery-del-'+index).on('click',function () {
+
+                    febs.modal.confirm('删除该条数据','确定删除该条数据？该删除不可逆！', function () {
+                        febs.get(ctx + "file/removeImage/"+url+'/'+commodity.number+'/'+commodity.stage,to, function (res) {
+                            if(res.code === 200) {
+                                removeImages(images,url);
+                                $('#delivery-file-'+index).remove();
+                                febs.alert.success('删除成功');
+                            }
                         });
-
                     });
-                // }
+
+                });
+
             })
         });
-        window.amplificationImg = function (name, url) {
-            $("#delivery-displayImg").attr("src", url);
-            var height =$("#delivery-displayImg").height();//拿的图片原来宽高，建议自定义宽高
-            var width = $("#delivery-displayImg").width();
-            var winHeight = $(window).height() - 100;  // 浏览器可视部分高度
-            var winWidth = $(window).width() - 120;  // 浏览器可视部分宽度
-            if (height > winHeight || width > winWidth) {
-                if (winWidth/ winHeight <= width / height) {
-                    width = winWidth;
-                    height = winWidth * (height / width);
-                }
-                if (winWidth/ winHeight > width / height) {
-                    width = winHeight  * (width / height);
-                    height = winHeight  ;
-                }
-            }else {
-                height = winHeight -100;
-                width = winWidth -520;
-            }
-
-            layer.open({
-                type: 1,
-                title: false,
-                closeBtn: 0,
-                shadeClose: true,
-                area: [width + 'px', height + 'px'], //宽高
-                content: '<img name="'+name+'" alt=" '+name+'" src="' + url + '" style="height:'+height+'px ;width: '+width+'px"/>'
-            });
-        };
 
 
         $.get(ctx + "commodity/queryHistory/"+commodity.id,to,function (res) {
@@ -615,13 +584,14 @@
 
         //提交更新
         form.on('submit(delivery-form-submit)', function (data) {
+
             if (febs.nativeEqual(data.field, commodity)) {
                 febs.alert.warn('数据未作任何修改！');
                 return false;
             }
-            for (var i = 0; i<=images.length-1;i++){
-                if(images[i]!== undefined)
-                    imageList+=images[i]+",";
+            for (var i = 0; i<=image.length-1;i++){
+                if(image[i]!== undefined)
+                    imageList+=image[i]+",";
             }
 
             data.field.images = imageList;

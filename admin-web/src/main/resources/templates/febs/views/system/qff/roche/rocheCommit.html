@@ -177,11 +177,6 @@
                 </div>
             </div>
         </div>
-        <!--<div class="layui-form-item" style="margin-top: 30px">-->
-            <!--<div class="timeline-main-line" id="process">-->
-
-            <!--</div>-->
-        <!--</div>-->
         <div class="layui-form-item febs-hide">
             <div  style="margin-top: 75px;text-align: center;" shiro:hasPermission="roche:audit">
                 <button class="layui-btn" lay-submit="" lay-filter="roche-form-audit" id="audit" ></button>
@@ -258,39 +253,20 @@
                         }
                     }
                     if(!show){
-                        // if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type!=='type') {
-                            var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
-                            '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
-                            images.push(url);
-                            tr.find('.file-delete').on('click', function(){
-                                delete files[index];
-                                tr.remove();
-                                deleteImage(url);
-                                for (var i =images.length-1 ; i>=0 ;i--){
-                                    if(images[i]===url){
-                                        delete images[i];
-                                    }
+                        var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
+                        '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
+                        images.push(url);
+                        tr.find('.file-delete').on('click', function(){
+                            delete files[index];
+                            tr.remove();
+                            deleteImage(url);
+                            for (var i =images.length-1 ; i>=0 ;i--){
+                                if(images[i]===url){
+                                    delete images[i];
                                 }
-                            });
-                        // }else {
-                        //     var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 5px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
-                        //     '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
-                        //
-                        //     images.push(url);
-                        //     input.find('.delsingle').on('click', function () {
-                        //         delete files[index];
-                        //         input.remove();
-                        //         deleteImage(url);
-                        //         for (var i =images.length-1 ; i>=0 ;i-- ){
-                        //             if(images[i]===url){
-                        //                 delete images[i];
-                        //             }
-                        //         }
-                        //     });
-                        // }
-                        // $("#roche-upload-image-com").append(input);
+                            }
+                        });
                         $('#roche-List-com').append(tr);
-
                     }
                     febs.alert.success('上传成功');
                 }

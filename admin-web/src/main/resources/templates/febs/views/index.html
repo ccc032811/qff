@@ -115,19 +115,6 @@
                 <div class="icon"  id="os-show">
                     <div style="text-align: center;margin-top: 38px;" id = "num" ></div>
                 </div>
-                <!--<div class="tip febs-hide" id="os">-->
-                    <!--<div class="inner"></div>-->
-                    <!--<div  class="table-show"  >-->
-                        <!--<table class="skip_table" id="opes">-->
-                            <!--<tr class="skip-tr">-->
-                                <!--<td class="skip-td skip-td-color"><span >QFF审核</span></td>-->
-                                <!--<td class="skip-td skip-td-color"><span >待审核数量</span></td>-->
-                                <!--<td class="skip-td skip-td-color"><span >跳转地址</span></td>-->
-                            <!--</tr>-->
-                        <!--</table>-->
-                    <!--</div>-->
-                <!--</div>-->
-
             </div>
             <div  class="label  label-left"   shiro:hasPermission="roche:add" >
                 <div class="label-image">
@@ -139,18 +126,16 @@
                     </div>
                 </div>
             </div>
-            <div style="height: 100px; width: 280px;box-shadow: 0px 1px 6px 0px #827a7a;;margin-left: 15px ; float:left" >
-                <div style="height: 100px;width: 60px;float: left; margin-left: 5px">
-                    <img data-th-src="@{febs/images/start.png}" width="60px" height="60px" style="margin-top: 20px;margin-left: 5px">
+            <div class="label  label-left" >
+                <div class="label-image">
+                    <img data-th-src="@{febs/images/start.png}" class="label-image-style">
                 </div>
-                <div style="height: 100px;width: 215px;float: left">
-                    <div style="text-align: center;margin-top: 33px;" class="site-demo-button" >
-                        <button  onclick="addQff()" style="border: none;background-color:transparent;"><span style="color: #00A1DD"><h2>新增QFF</h2></span></button>
+                <div class="qff-start">
+                    <div class="site-demo-button  qff-start-text">
+                        <button  onclick="addQff()" class="qff-start-button"><span style="color: #00A1DD"><h2>手工新增QFF</h2></span></button>
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 
@@ -212,9 +197,16 @@
             }
             if(counts(num,"conserve")!==0){
                 $("#opes").append('<tr class="skip-tr">\n' +
-                    '                    <td class="skip-td">养护</td>\n' +
+                    '                    <td class="skip-td">储存</td>\n' +
                     '                    <td class="skip-td">'+counts(num,"conserve")+'</td>\n' +
                     '                    <td class="skip-td"><a lay-href="/conserve/view">点击跳转</a></td>\n' +
+                    '                </tr>')
+            }
+            if(counts(num,"package")!==0){
+                $("#opes").append('<tr class="skip-tr">\n' +
+                    '                    <td class="skip-td">分包</td>\n' +
+                    '                    <td class="skip-td">'+counts(num,"package")+'</td>\n' +
+                    '                    <td class="skip-td"><a lay-href="/package/view">点击跳转</a></td>\n' +
                     '                </tr>')
             }
             if(counts(num,"export")!==0){
@@ -292,14 +284,14 @@
 
 
         window.btnOn = function () {
-            febs.modal.open('新增', 'system/qff/roche/add' , {
-                area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '80%']
+            febs.modal.open('新增罗氏内部发起QFF', 'system/qff/roche/add' , {
+                area: [$(window).width() <= 750 ? '90%' : '70%',$(window).width() <= 750 ? '90%' : '70%']
             });
         };
 
         window.addQff = function () {
-            febs.modal.open('测试', 'system/qff/commodity/textDemo',{
-                area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '50%']
+            febs.modal.open('新增手工QFF', 'system/qff/commodity/addQff',{
+                area: [$(window).width() <= 750 ? '90%' : '70%',$(window).height() <= 750 ? '90%' : '60%']
             });
         }
 

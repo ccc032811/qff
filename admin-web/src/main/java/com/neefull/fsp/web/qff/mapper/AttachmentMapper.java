@@ -23,6 +23,6 @@ public interface AttachmentMapper extends BaseMapper<Attachment> {
 
     Attachment selectByNumberAndRemark(@Param("number") String number, @Param("attNumber") String attNumber);
 
-    void deleteAttacheByNumberAndStage(@Param("number") String number, @Param("stage") String stage);
+    void deleteAttacheByNumberAndStage(@Param("number") String number, @Param("stage") String stage, @Param("url") String url);
 
 }

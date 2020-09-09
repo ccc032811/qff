@@ -1,79 +1,79 @@
-<style>
-    .item-bubb{
-        width: 20px;
-        height: 20px;
-        border-radius: 60%;
-        background-color: red;
-        position: relative;
-        top: 30px;
-        right:-300px;
-        text-align: center;
-        color: #dcdfe6;
-    }
-</style>
-<div class="layui-fluid layui-anim febs-anim" id="fbs-serve" lay-title="我的代办">
-    <div class="layui-row febs-container">
-        <div class="item-bubb" id="bubbling"></div>
-        <div class="layui-card-body febs-table-full">
-            <div style="height: 100px; width: 280px;box-shadow: 0px 1px 6px 0px #827a7a;margin-left:17px;margin-top:5px ; float:left" >
-                <div style="height: 100px;width: 60px;float: left">
-                    <img data-th-src="@{febs/images/mycomm.png}" width="60px" height="60px" style="margin-top: 20px;margin-left: 5px">
-                </div>
-                <div style="height: 100px;width: 220px;float: left;">
-                    <div style="text-align: center;margin-top: 38px;" id = "num"></div>
-                </div>
-            </div>
-            <div style="height: 100px; width: 280px;box-shadow: 0px 1px 6px 0px #827a7a;margin-left:17px ;margin-top:5px;float:left"  shiro:hasPermission="roche:add" >
-                <div style="height: 100px;width: 60px;float: left; margin-left: 5px">
-                    <img data-th-src="@{febs/images/start.png}" width="60px" height="60px" style="margin-top: 20px;margin-left: 5px">
-                </div>
-                <div style="height: 100px;width: 215px;float: left">
-                    <div style="text-align: center;margin-top: 33px;" class="site-demo-button" >
-                        <button id="btn"  onclick="btnOn()" style="border: none;background-color:transparent;"><span style="color: #00A1DD"><h2>发起QFF</h2></span></button>
-                    </div>
-                </div>
-            </div>
-            <div style="height: 100px; width: 280px;box-shadow: 0px 1px 6px 0px #827a7a;;margin-left:17px;margin-top:5px ; float:left" >
-                <div style="text-align: center;margin-top: 33px;" class="site-demo-button" >
-                    <button type="button" class="layui-btn layui-btn-warm" onclick="textDemo()">创建测试使用</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!--<style>-->
+    <!--.item-bubb{-->
+        <!--width: 20px;-->
+        <!--height: 20px;-->
+        <!--border-radius: 60%;-->
+        <!--background-color: red;-->
+        <!--position: relative;-->
+        <!--top: 30px;-->
+        <!--right:-300px;-->
+        <!--text-align: center;-->
+        <!--color: #dcdfe6;-->
+    <!--}-->
+<!--</style>-->
+<!--<div class="layui-fluid layui-anim febs-anim" id="fbs-serve" lay-title="我的代办">-->
+    <!--<div class="layui-row febs-container">-->
+        <!--<div class="item-bubb" id="bubbling"></div>-->
+        <!--<div class="layui-card-body febs-table-full">-->
+            <!--<div style="height: 100px; width: 280px;box-shadow: 0px 1px 6px 0px #827a7a;margin-left:17px;margin-top:5px ; float:left" >-->
+                <!--<div style="height: 100px;width: 60px;float: left">-->
+                    <!--<img data-th-src="@{febs/images/mycomm.png}" width="60px" height="60px" style="margin-top: 20px;margin-left: 5px">-->
+                <!--</div>-->
+                <!--<div style="height: 100px;width: 220px;float: left;">-->
+                    <!--<div style="text-align: center;margin-top: 38px;" id = "num"></div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div style="height: 100px; width: 280px;box-shadow: 0px 1px 6px 0px #827a7a;margin-left:17px ;margin-top:5px;float:left"  shiro:hasPermission="roche:add" >-->
+                <!--<div style="height: 100px;width: 60px;float: left; margin-left: 5px">-->
+                    <!--<img data-th-src="@{febs/images/start.png}" width="60px" height="60px" style="margin-top: 20px;margin-left: 5px">-->
+                <!--</div>-->
+                <!--<div style="height: 100px;width: 215px;float: left">-->
+                    <!--<div style="text-align: center;margin-top: 33px;" class="site-demo-button" >-->
+                        <!--<button id="btn"  onclick="btnOn()" style="border: none;background-color:transparent;"><span style="color: #00A1DD"><h2>发起QFF</h2></span></button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div style="height: 100px; width: 280px;box-shadow: 0px 1px 6px 0px #827a7a;;margin-left:17px;margin-top:5px ; float:left" >-->
+                <!--<div style="text-align: center;margin-top: 33px;" class="site-demo-button" >-->
+                    <!--<button type="button" class="layui-btn layui-btn-warm" onclick="textDemo()">创建测试使用</button>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
 
 
-<script data-th-inline="none" type="text/javascript">
-    layui.use(['jquery', 'febs'], function () {
-        var $ = layui.jquery,
-            febs = layui.febs;
+<!--<script data-th-inline="none" type="text/javascript">-->
+    <!--layui.use(['jquery', 'febs'], function () {-->
+        <!--var $ = layui.jquery,-->
+            <!--febs = layui.febs;-->
 
-        var to = {time:new Date()};
+        <!--var to = {time:new Date()};-->
 
-        $.get(ctx +"file/findTask",to,function (data) {
-            var num = data.data;
-            if(num===0){
-                $("#num").append('<span style="color: red"><h2>当前没有待办任务</h2></span>')
-                $('#bubbling').attr("style","display:none;")
-            }else {
-                $("#num").append('<span style="color: red"><h2>当前有'+num+'条待办任务</h2></span>')
-                $("#bubbling").append(num)
-            }
-        });
-
-
-        window.btnOn = function () {
-            febs.modal.open('新增', 'system/qff/roche/add' , {
-                area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '80%']
-            });
-        };
-
-        window.textDemo = function () {
-            febs.modal.open('测试', 'system/qff/commodity/textDemo',{
-                area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '50%']
-            });
-        }
+        <!--$.get(ctx +"file/findTask",to,function (data) {-->
+            <!--var num = data.data;-->
+            <!--if(num===0){-->
+                <!--$("#num").append('<span style="color: red"><h2>当前没有待办任务</h2></span>')-->
+                <!--$('#bubbling').attr("style","display:none;")-->
+            <!--}else {-->
+                <!--$("#num").append('<span style="color: red"><h2>当前有'+num+'条待办任务</h2></span>')-->
+                <!--$("#bubbling").append(num)-->
+            <!--}-->
+        <!--});-->
 
 
-    });
-</script>
+        <!--window.btnOn = function () {-->
+            <!--febs.modal.open('新增', 'system/qff/roche/add' , {-->
+                <!--area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '80%']-->
+            <!--});-->
+        <!--};-->
+
+        <!--window.textDemo = function () {-->
+            <!--febs.modal.open('测试', 'system/qff/commodity/textDemo',{-->
+                <!--area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '50%']-->
+            <!--});-->
+        <!--}-->
+
+
+    <!--});-->
+<!--</script>-->

@@ -74,11 +74,8 @@ public class ProcessServiceImpl implements IProcessService {
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
 
-            //TODO 正式环境注解掉
             if(commodity.getId()==null){
                 commodityService.addCommodity(commodity);
-            }else {
-                editCommodity(commodity);
             }
 
             String businessKey = getBusinessKey(commodity);
@@ -325,6 +322,8 @@ public class ProcessServiceImpl implements IProcessService {
                             names.add("delivery");
                         }else if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
                             names.add("conserve");
+                        }else if(commodity.getStage().equals(ProcessConstant.PACKAGE_NAME)){
+                            names.add("package");
                         }else if(commodity.getStage().equals(ProcessConstant.EXPORT_NAME)){
                             names.add("export");
                         }else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
@@ -530,6 +529,8 @@ public class ProcessServiceImpl implements IProcessService {
                             names.add(ProcessConstant.DELIVERY_NAME);
                         }else if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
                             names.add(ProcessConstant.CONSERVE_NAME);
+                        }else if(commodity.getStage().equals(ProcessConstant.PACKAGE_NAME)) {
+                            names.add(ProcessConstant.PACKAGE_NAME);
                         }else if(commodity.getStage().equals(ProcessConstant.EXPORT_NAME)){
                             names.add(ProcessConstant.EXPORT_NAME);
                         }else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){

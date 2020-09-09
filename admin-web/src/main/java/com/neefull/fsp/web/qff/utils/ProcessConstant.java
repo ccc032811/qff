@@ -39,7 +39,9 @@ public class ProcessConstant {
 
     public static final String DELIVERY_NAME = "到货";
 
-    public static final String CONSERVE_NAME = "养护";
+    public static final String CONSERVE_NAME = "储存";
+
+    public static final String PACKAGE_NAME = "分包";
 
     public static final String EXPORT_NAME = "出库";
 

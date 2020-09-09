@@ -9,7 +9,7 @@
         update qff_attachment set status  = 1  where  qff_id = #{number} and  qff_type = #{typt}
     </update>
     <delete id="deleteAttacheByNumberAndStage">
-        delete from qff_attachment where  qff_id = #{number} and  qff_type = #{stage}
+        delete from qff_attachment where  qff_id = #{number} and  qff_type = #{stage}  and remark = #{url}
     </delete>
     <select id="selectByNumberAndType" resultType="com.neefull.fsp.web.qff.entity.Attachment">
         select * from qff_attachment where qff_id = #{number} and qff_type = #{type}  and  status !=1

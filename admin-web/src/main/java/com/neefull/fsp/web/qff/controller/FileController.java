@@ -142,7 +142,6 @@ public class FileController extends BaseController {
             }else {
                 return new FebsResponse().fail();
             }
-
         } catch (Exception e) {
             String message = "删除文件失败";
             log.error(message,e);
@@ -158,8 +157,8 @@ public class FileController extends BaseController {
      * @throws FebsException
      */
     @Qff("上传文件")
-    @PostMapping("/uploadImage/{number}")
-    public FebsResponse uploadImage(@RequestParam("file") MultipartFile file,@PathVariable(required = false) String number) throws FebsException {
+    @PostMapping("/uploadImage")
+    public FebsResponse uploadImage(MultipartFile file, String number) throws FebsException {
 
         try {
             String url  = fileService.uploadImage(file,number);

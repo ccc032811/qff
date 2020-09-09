@@ -68,7 +68,7 @@ public class AttachmentServiceImpl  extends ServiceImpl<AttachmentMapper, Attach
     @Transactional
     public Boolean removeImage(String number, String url, String stage) {
 
-        attachmentMapper.deleteAttacheByNumberAndStage(number,stage);
+        attachmentMapper.deleteAttacheByNumberAndStage(number,stage,url.substring(0,url.lastIndexOf(".")));
         return deleteImage(url);
 
     }

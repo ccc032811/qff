@@ -229,9 +229,10 @@
             recentShow = [[${recentShow}]],
             $view = $('#recent-detail');
 
-        var files ="";
+
         var imageList = "";
         var images = [];
+        var image = [];
         var rConf ="罗氏QA处理意见";
         var type = "近效期";
         var to = {time:new Date()};
@@ -276,7 +277,6 @@
 
         //表单渲染
         form.render();
-
         initRecentValue();
 
         //给表单赋值
@@ -301,67 +301,65 @@
 
         upload.render({
             elem: '#recent-chose'
-            ,url: ctx+ 'file/uploadImage/'+recent.id
+            ,url: ctx+ 'file/uploadImage'
             ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
             ,multiple: true
-            ,auto: true
+            ,auto: false
+            ,data:{number:recent.id}
             ,size: 1024*10
             ,before: function(obj){
                 layer.load();
             }
-            ,done: function(res,index){
-                layer.closeAll('loading');
-                if(res.code === 200){ //上传成功
-                    var url = res.data.substring(res.data.lastIndexOf("/")+1);
-                    var type = url.substring(url.lastIndexOf(".")+1,url.length);
-                    var name = url.substring(0,url.lastIndexOf("."));
-                    var show = false;
+            ,choose: function(obj){
+                var flag = true;
+
+                obj.preview(function (index,file,result) {
                     for (var i =images.length-1 ; i>=0 ;i--){
-                        if(images[i]===url){
-                            show = true;
+                        if(images[i]===file.name){
+                            flag = false;
                         }
                     }
-                    if(!show){
-                        // if(type!=='jpg'&&type !=='png'&&type !=='gif'&&type!=='PNG') {
-                            var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
-                            '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
-                            images.push(url);
-                            tr.find('.file-delete').on('click', function(){
-                                delete files[index];
-                                tr.remove();
-                                deleteImage(url);
-                                for (var i =images.length-1 ; i>=0 ;i--){
-                                    if(images[i]===url){
-                                        delete images[i];
-                                    }
-                                }
-                            });
-                        // }else {
-                        //     var input = $(['<div class="upmul-item layui-inline" id="uploadPH-'+index+'" style="width:100px;height: 100px;left: 8px"><div class="upmul-ab layui-show"><a class="delsingle" href="javascript:;"><i class="layui-icon"></i></a></div>\n' +
-                        //     '                    <img src="'+res.data+'"  alt="'+name+'"  style="width:100px;height: 80px "  class="layui-upload-img"></div>'].join(''));
-                        //
-                        //     images.push(url);
-                        //     input.find('.delsingle').on('click', function () {
-                        //         delete files[index];
-                        //         input.remove();
-                        //         deleteImage(url);
-                        //         for (var i =images.length-1 ; i>=0 ;i-- ){
-                        //             if(images[i]===url){
-                        //                 delete images[i];
-                        //             }
-                        //         }
-                        //     });
-                        // }
-                        // $("#recent-upload-image").append(input);
-                        $('#recent-List').append(tr);
-                        febs.alert.success('上传成功');
+                    if(flag){
+                        obj.upload(index, file);
                     }else {
                         febs.alert.error("不能重复上传");
                     }
+                });
+            }
+            ,done: function(res,index){
+                layer.closeAll('loading');
+                if(res.code === 200){
+                    var url = res.data.substring(res.data.lastIndexOf("/")+1);
+                    var type = url.substring(url.lastIndexOf(".")+1,url.length);
+                    var name = url.substring(0,url.lastIndexOf("."));
 
+                    var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
+                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
+                    images.push(url);
+                    image.push(url);
+                    tr.find('.file-delete').on('click', function(){
+
+                        tr.remove();
+                        deleteImage(url);
+                        removeImages(images,url);
+                        removeImages(image,url);
+                    });
+
+                    $('#recent-List').append(tr);
+                    febs.alert.success('上传成功');
                 }
             }
         });
+
+        function removeImages(imageList,url) {
+            for (var i =imageList.length-1 ; i>=0 ;i--){
+                if(imageList[i]===url){
+                    delete imageList[i];
+                }
+            }
+        }
+
+
         function deleteImage(url){
             $.get(ctx + "file/deleteImage/"+url, to,function (res) {
                 if(res.code === 200) {
@@ -370,17 +368,13 @@
             })
         }
 
-    $.get(ctx +"file/findImages/"+recent.id +"/"+type,to,function (res) {
-        var data = res.data;
-        $.each(data,function (index, item) {
-            var url = item.substring(item.lastIndexOf("/")+1);
-            var form =url.substring(url.lastIndexOf(".")+1,url.length);
-            var name =url.substring(0,url.lastIndexOf("."));
-            images.push(url);
-            // if(type==='jpg'||type ==='png'||type ==='gif') {
-            //     $("#recent-upload-image").append(' <div class="upmul-item layui-inline" style="width:100px;height: 95px;"> \n' +
-            //         '                        <a href="javascript:amplificationImg('+index+',\''+item+'\')"><img name=" '+index+'"src = "'+item+' " style="width:100px;height:95px;"></a> </div>');
-            // }else {
+        $.get(ctx +"file/findImages/"+recent.id +"/"+type,to,function (res) {
+            var data = res.data;
+            $.each(data,function (index, item) {
+                var url = item.substring(item.lastIndexOf("/")+1);
+                var form =url.substring(url.lastIndexOf(".")+1,url.length);
+                var name =url.substring(0,url.lastIndexOf("."));
+                images.push(url);
 
                 $('#recent-List').append('<tr id="recent-file-'+ index + '" ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + form + '</td><td style="width: 10%">可下载</td>' +
                     '<td style="width: 10%"><button class="layui-btn layui-btn-xs " type="button" id="recent-upload-' + index + '" >下载</button>' +
@@ -394,6 +388,7 @@
                     febs.modal.confirm('删除该条数据','确定删除该条数据？该删除不可逆！', function () {
                         febs.get(ctx + "file/removeImage/"+url+'/'+recent.id+'/'+type,to, function (res) {
                             if(res.code === 200) {
+                                removeImages(images,url);
                                 $('#recent-file-'+index).remove();
                                 febs.alert.success('删除成功');
                             }
@@ -401,38 +396,8 @@
                     });
 
                 });
-            // }
-        })
-    });
-        window.amplificationImg = function (name, url) {
-            $("#displayImg").attr("src", url);
-            var height =$("#displayImg").height();//拿的图片原来宽高，建议自定义宽高
-            var width = $("#displayImg").width();
-            var winHeight = $(window).height() - 100;  // 浏览器可视部分高度
-            var winWidth = $(window).width() - 120;  // 浏览器可视部分宽度
-            if (height > winHeight || width > winWidth) {
-                if (winWidth/ winHeight <= width / height) {
-                    width = winWidth;
-                    height = winWidth * (height / width);
-                }
-                if (winWidth/ winHeight > width / height) {
-                    width = winHeight  * (width / height);
-                    height = winHeight  ;
-                }
-            }else {
-                height = winHeight -100;
-                width = winWidth -520;
-            }
-
-            layer.open({
-                type: 1,
-                title: false,
-                closeBtn: 0,
-                shadeClose: true,
-                area: [width + 'px', height + 'px'], //宽高
-                content: '<img name="'+name+'" alt=" '+name+'" src="' + url + '" style="height:'+height+'px ;width: '+width+'px"/>'
-            });
-        };
+            })
+        });
 
 
         $.get(ctx + "recent/queryHistory/"+recent.id,to ,function (res) {
@@ -484,9 +449,9 @@
                 febs.alert.warn('数据未作任何修改！');
                 return false;
             }
-            for (var i = 0; i<=images.length-1;i++){
-                if(images[i]!== undefined)
-                    imageList+=images[i]+",";
+            for (var i = 0; i<=image.length-1;i++){
+                if(image[i]!== undefined)
+                    imageList+=image[i]+",";
             }
             data.field.images = imageList;
             if(recentShow ==='1'){

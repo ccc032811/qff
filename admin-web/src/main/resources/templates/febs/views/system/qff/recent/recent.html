@@ -376,12 +376,12 @@
                 layEvent = obj.event;
             if (layEvent === 'recent-detail') {
                 febs.modal.open('具体信息', 'system/qff/recent/recentShow/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
+                    area:  [$(window).width() <= 750 ? '90%' : '70%',$(window).width() <= 750 ? '90%' : '70%']
                 });
             }
             if (layEvent === 'recent-edit') {
                 febs.modal.open('审核', 'system/qff/recent/recentAudit/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
+                    area:  [$(window).width() <= 750 ? '90%' : '70%',$(window).width() <= 750 ? '90%' : '70%']
                 });
             }
             if (layEvent === 'recent-del') {
@@ -391,7 +391,7 @@
             }
             if (layEvent === 'recent-alter') {
                 febs.modal.open('修改', 'system/qff/recent/recentAlter/' + data.id+"/"+"1", {
-                    area:  [$(window).width() <= 750 ? '90%' : '80%',$(window).width() <= 750 ? '90%' : '80%']
+                    area:  [$(window).width() <= 750 ? '90%' : '70%',$(window).width() <= 750 ? '90%' : '70%']
                 });
             }
 

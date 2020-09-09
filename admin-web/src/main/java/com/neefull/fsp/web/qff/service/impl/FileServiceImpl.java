@@ -73,8 +73,8 @@ public class FileServiceImpl implements IFileService {
         if (posp != -1) {
             originalFilename = originalFilename.substring(posp + 1);
         }
-        String filename = number+"-"+originalFilename;
-        File filePath = new File(properties.getImagePath(), filename);
+//        String fileName = number+"-"+originalFilename;
+        File filePath = new File(properties.getImagePath(), originalFilename);
 
         String[] paths = properties.getImagePath().split(StringPool.SLASH);
         String dir = paths[0];
@@ -96,7 +96,7 @@ public class FileServiceImpl implements IFileService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return properties.getImageUrl()+filename;
+        return properties.getImageUrl()+originalFilename;
 
     }
 
