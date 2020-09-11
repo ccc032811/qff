@@ -126,7 +126,7 @@
                     </div>
                 </div>
             </div>
-            <div class="label  label-left" >
+            <div class="label  label-left" shiro:hasPermission="wrapper:add">
                 <div class="label-image">
                     <img data-th-src="@{febs/images/start.png}" class="label-image-style">
                 </div>
@@ -143,7 +143,7 @@
         <div class="layui-card">
             <div class="layui-card-body" >
                 <table class="skip_table" id="opes" >
-                    <tr class="skip-tr" >
+                    <tr class="skip-tr" style="background-color: #87e8de;height: 30px;">
                         <td class="skip-td " ><span >QFF审核</span></td>
                         <td class="skip-td "><span >待审核数量</span></td>
                         <td class="skip-td "><span >跳转地址</span></td>
@@ -195,39 +195,39 @@
                     '                    <td class="skip-td"><a lay-href="/delivery/view">点击跳转</a></td>\n' +
                     '                </tr>')
             }
-            if(counts(num,"conserve")!==0){
-                $("#opes").append('<tr class="skip-tr">\n' +
-                    '                    <td class="skip-td">储存</td>\n' +
-                    '                    <td class="skip-td">'+counts(num,"conserve")+'</td>\n' +
-                    '                    <td class="skip-td"><a lay-href="/conserve/view">点击跳转</a></td>\n' +
-                    '                </tr>')
-            }
-            if(counts(num,"package")!==0){
-                $("#opes").append('<tr class="skip-tr">\n' +
-                    '                    <td class="skip-td">分包</td>\n' +
-                    '                    <td class="skip-td">'+counts(num,"package")+'</td>\n' +
-                    '                    <td class="skip-td"><a lay-href="/package/view">点击跳转</a></td>\n' +
-                    '                </tr>')
-            }
-            if(counts(num,"export")!==0){
-                $("#opes").append('<tr class="skip-tr">\n' +
-                    '                    <td class="skip-td">出库</td>\n' +
-                    '                    <td class="skip-td">'+counts(num,"export")+'</td>\n' +
-                    '                    <td class="skip-td"><a lay-href="/export/view">点击跳转</a></td>\n' +
-                    '                </tr>')
-            }
-            if(counts(num,"wrapper")!==0){
-                $("#opes").append('<tr class="skip-tr">\n' +
-                    '                    <td class="skip-td">其他</td>\n' +
-                    '                    <td class="skip-td">'+counts(num,"wrapper")+'</td>\n' +
-                    '                    <td class="skip-td"><a lay-href="/wrapper/view">点击跳转</a></td>\n' +
-                    '                </tr>')
-            }
             if(counts(num,"refund")!==0){
                 $("#opes").append('<tr class="skip-tr">\n' +
                     '                    <td class="skip-td">退货</td>\n' +
                     '                    <td class="skip-td">'+counts(num,"refund")+'</td>\n' +
                     '                    <td class="skip-td"><a lay-href="/refund/view">点击跳转</a></td>\n' +
+                    '                </tr>')
+            }
+            if(counts(num,"conserve")!==0){
+                $("#opes").append('<tr class="skip-tr">\n' +
+                    '                    <td class="skip-td">储存 · 分包 · 出库</td>\n' +
+                    '                    <td class="skip-td">'+counts(num,"conserve")+'</td>\n' +
+                    '                    <td class="skip-td"><a lay-href="/conserve/view">点击跳转</a></td>\n' +
+                    '                </tr>')
+            }
+            // if(counts(num,"package")!==0){
+            //     $("#opes").append('<tr class="skip-tr">\n' +
+            //         '                    <td class="skip-td">分包</td>\n' +
+            //         '                    <td class="skip-td">'+counts(num,"package")+'</td>\n' +
+            //         '                    <td class="skip-td"><a lay-href="/package/view">点击跳转</a></td>\n' +
+            //         '                </tr>')
+            // }
+            // if(counts(num,"export")!==0){
+            //     $("#opes").append('<tr class="skip-tr">\n' +
+            //         '                    <td class="skip-td">出库</td>\n' +
+            //         '                    <td class="skip-td">'+counts(num,"export")+'</td>\n' +
+            //         '                    <td class="skip-td"><a lay-href="/export/view">点击跳转</a></td>\n' +
+            //         '                </tr>')
+            // }
+            if(counts(num,"wrapper")!==0){
+                $("#opes").append('<tr class="skip-tr">\n' +
+                    '                    <td class="skip-td">其他手工QFF</td>\n' +
+                    '                    <td class="skip-td">'+counts(num,"wrapper")+'</td>\n' +
+                    '                    <td class="skip-td"><a lay-href="/wrapper/view">点击跳转</a></td>\n' +
                     '                </tr>')
             }
             if(counts(num,"recent")!==0){

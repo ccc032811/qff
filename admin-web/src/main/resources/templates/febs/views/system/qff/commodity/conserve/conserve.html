@@ -7,7 +7,7 @@
         position: fixed;
     }
 </style>
-<div class="layui-fluid layui-anim febs-anim" id="fbs-conserve" lay-title="储存QFF" >
+<div class="layui-fluid layui-anim febs-anim" id="fbs-conserve" lay-title="储存 · 分包 · 出库QFF" >
     <div class="layui-row febs-container">
         <div class="layui-col-md12">
             <div class="layui-card">
@@ -239,8 +239,10 @@
 
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="conserve-detail" shiro:hasPermission="conserve:view">查看</a>
     {{#  if(d.status != '3'&& d.isAllow == '1'){}}
+    {{#  if(d.repTime == ''||d.repTime == null){}}
     <a class="layui-btn layui-btn-xs" lay-event="conserve-edit"  shiro:hasPermission="conserve:audit">审核</a>
-    {{#  if(d.repTime != ''&&d.repTime != null){}}
+    {{# }else if(d.repTime != ''&&d.repTime != null){}}
+    <a class="layui-btn layui-btn-xs" lay-event="conserve-edit"  shiro:hasPermission="conserve:audit">确认</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="conserve-alter"  shiro:hasPermission="conserve:alter ">修改</a>
     {{#}}}
     {{#}}}
@@ -271,7 +273,7 @@
             $cleanBtn = $view.find('#conserve-cleanBtn'),
             $searchForm = $view.find('form'),
             tableIns;
-        var stage = '储存';
+        var stage = '其他';
         var reason = "QFF原因";
         var to = {time:new Date()};
 
@@ -333,16 +335,16 @@
                 toolbar: '#conserve-toolbarCheck',
                 defaultToolbar: ['filter','print'],
                 cols: [[
-                    {field: 'number', title: 'QFF编号',align:'center'},
-                    {field: 'kMater', title: '康德乐物料号',align:'center'},
-                    {field: 'rMater', title: '罗氏物料号',align:'center'},
-                    {field: 'rBatch', title: '罗氏批号',align:'center'},
-                    {field: 'quarantine', title: '异常数',align:'center'},
-                    {field: 'initDate', title: '发起日期',align:'center'},
-                    {field: 'repTime', title: '回复日期',align:'center'},
-                    {field: 'rConf', title: '罗氏QA处理意见',align:'center'},
-                    {field: 'reason', title: 'QFF原因',align:'center'},
-                    {title: '处理阶段', templet: '#conserve-status',align:'center'},
+                    {field: 'number', title: 'QFF编号',align:'center',minWidth: 120},
+                    {field: 'kMater', title: '康德乐物料号',align:'center',minWidth: 120},
+                    {field: 'rMater', title: '罗氏物料号',align:'center',minWidth: 120},
+                    {field: 'rBatch', title: '罗氏批号',align:'center',minWidth: 120},
+                    {field: 'quarantine', title: '异常数',align:'center',minWidth: 80},
+                    {field: 'initDate', title: '发起日期',align:'center',minWidth: 120},
+                    {field: 'repTime', title: '回复日期',align:'center',minWidth: 120},
+                    {field: 'rConf', title: '罗氏QA处理意见',align:'center',minWidth: 120},
+                    {field: 'reason', title: 'QFF原因',align:'center',minWidth: 120},
+                    {title: '处理阶段', templet: '#conserve-status',align:'center',minWidth: 120},
                     {title: '操作', toolbar: '#conserve-option',align:'center',width: 200}
                 ]],
                 done:function (res,curr,count) {
@@ -374,30 +376,32 @@
                var layEvent = obj.event;
             if (layEvent === 'conserve-download') {
                 var params = $.extend(getQueryParams(),{stage:stage});
-                layer.open({
-                    id:'conserve-downLoad',
-                    type: 1,
-                    title: '需导出的个数',
-                    shadeClose: false,
-                    btn: '确认',
-                    area:  ['350px','180px'],
-                    content:'<div class="layui-inline" style="left: -15px;margin-top: 25px">\n' +
-                        '                        <label class="layui-form-label" >请输入</label>\n' +
-                        '                        <div class="layui-input-inline">\n' +
-                        '                            <input type="text" id="conserve-count" maxlength="50" autocomplete="off" class="layui-input" lay-verify="required" >\n' +
-                        '                        </div>\n' +
-                        '                    </div>',
-                    yes:function(index, layero){
-                        var count = layero.find('#conserve-count');
+                febs.download(ctx + 'commodity/excel',params, '储存 · 分包 · 出库QFF.xlsx');
 
-                        if(isNumber($(count).val())){
-                            params.pageSize = $(count).val();
-                            febs.download(ctx + 'commodity/excel',params, '养护QFF.xlsx');
-                        }
-
-                        layer.close(index);
-                    }
-                })
+                // layer.open({
+                //     id:'conserve-downLoad',
+                //     type: 1,
+                //     title: '需导出的个数',
+                //     shadeClose: false,
+                //     btn: '确认',
+                //     area:  ['350px','180px'],
+                //     content:'<div class="layui-inline" style="left: -15px;margin-top: 25px">\n' +
+                //         '                        <label class="layui-form-label" >请输入</label>\n' +
+                //         '                        <div class="layui-input-inline">\n' +
+                //         '                            <input type="text" id="conserve-count" maxlength="50" autocomplete="off" class="layui-input" lay-verify="required" >\n' +
+                //         '                        </div>\n' +
+                //         '                    </div>',
+                //     yes:function(index, layero){
+                //         var count = layero.find('#conserve-count');
+                //
+                //         if(isNumber($(count).val())){
+                //             params.pageSize = $(count).val();
+                //             febs.download(ctx + 'commodity/excel',params, '养护QFF.xlsx');
+                //         }
+                //
+                //         layer.close(index);
+                //     }
+                // })
                 // params.pageSize = $view.find(".layui-laypage-limits option:selected").val();
                 // params.pageNum = $view.find(".layui-laypage-em").next().html();
                 // febs.download(ctx + 'commodity/excel',params, '养护QFF.xlsx');

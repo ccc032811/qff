@@ -8,255 +8,199 @@
     }
 
     /* 覆盖样式 */
-    .layui-form-item {
-        margin-bottom: 0px;
+    .layui-form-item ,.layui-form-item .layui-inline{
+        margin-bottom: 0;
     }
     .layui-form-item-rigth{
         border-right: 1px solid #000;
     }
-    .layui-col-sm4,.layui-col-sm6 {
+    .layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-col-sm12 {
         border-left: 1px solid #000;
         border-top: 1px solid #000;
+    }
+    .layui-input-block{
+        border-left: 1px solid #000;
+    }
+    .layui-col-sm4,.layui-col-sm6,.layui-col-sm8 {
         height: 39px;
     }
     .layui-col-sm12{
-        border-left: 1px solid #000;
-        border-top: 1px solid #000;
         height: 100px;
     }
     .layui-form-label {
-        float: left;
-        display: block;
-        padding: 10px 14px;
-        width: 80px;
-        font-weight: 400;
-        line-height: 20px;
         text-align: center;
-        height: 21px;
-        border-right: 1px solid #000;
     }
-    .layui-input-block{
-        height: 39px;
+    .textarea-input {
+        width: 98.4%;
+        resize: none;
+        padding: 7px 10px;
     }
-    .layui-input, .layui-textarea {
-        width: 100%;
+    .remark,.textarea-input{
+        height: 50px;
     }
-    .layui-form-item .layui-inline {
-        margin-bottom: 0px;
+    .textarea-input{
+        border: 0;
     }
 </style>
-<div class="layui-fluid" id="wrapper-detail-show" lay-title = "其他QFF" style="margin-left: 18px">
+
+
+
+<!--有边框-->
+<!--<style>
+.layui-form-item{width: 1200px;}  .layui-form-item-rigth,.layui-textarea,textarea{border-right: 1px solid #000;}
+.layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-form-label,.layui-input-block,.layui-form-item{float: left;height: 48px;}
+.layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-col-sm12{border-top: 1px solid #000;border-left: 1px solid #000;}
+.layui-col-sm4{width: 399px;} .layui-col-sm6{width: 599px;} .layui-col-sm8{width: 799px;} .input-four{width:74.9%;}
+.input-six{width: 83.3%;} .input-eight{width: 87.2%;} .layui-col-sm12{height: 110px;}
+.layui-form-label{text-align: center;width: 100px;font-size: 14px;display: -webkit-inline-flex;margin-top: 12px;}
+.layui-input{border: none;height: 48px;width: 100%;font-size: 14px;border-left: 1px solid #000;}.textarea-class{height: 110px;}
+textarea{width: 1099px;height: 48px;}  .layui-textarea{width: 1099px;height: 110px;}
+.layui-textarea,textarea{border-bottom: 1px solid #000;border-left: 1px solid #000;}
+</style>-->
+
+
+<div class="layui-fluid" id="wrapper-detail-show" lay-title = "其他手工QFF" style="margin-left: 18px">
 
     <form class="layui-form " action="" lay-filter="wrapper-detail-form" id="wrapper-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label" >运输单号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="transport" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input " readonly="readonly">
+                <label class="layui-form-label">QFF编号</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="number"  autocomplete="off" class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">QFF编号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="number" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
+                <label class="layui-form-label">工厂</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="plant"  autocomplete="off" class="layui-input" readonly="readonly">
                 </div>
             </div>
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">工厂</label>
-                <div class="layui-input-block">
-                    <input type="text" name="plant" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">康德乐物料号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="kMater" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">康德乐SAP号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="kBatch" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">罗氏物料号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="rMater" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">是否是危险品</label>
-                <div class="layui-input-block">
-                    <input type="text" id="isDanger" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input " readonly="readonly">
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label">物料描述</label>
-                <div class="layui-input-block">
-                    <input type="text" name="pMater" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">罗氏批号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="rBatch" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">生产日期</label>
-                <div class="layui-input-block">
-                    <input type="text" name="manuDate" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input " readonly="readonly">
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">有效期</label>
-                <div class="layui-input-block">
-                    <input type="text" name="expiryDate" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">异常总数</label>
-                <div class="layui-input-block">
-                    <input type="text" name="quarantine" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">发起日期</label>
-                <div class="layui-input-block">
-                    <input type="text" name="initDate" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input " readonly="readonly">
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">回复日期</label>
-                <div class="layui-input-block">
-                    <input type="text" name="repTime" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">QFF原因</label>
-                <div class="layui-input-block">
-                    <input type="text" name="reason" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input " readonly="readonly">
+                <label class="layui-form-label">康德乐物料号</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="kMater"  autocomplete="off" class="layui-input" readonly="readonly">
                 </div>
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">上报阶段</label>
-                <div class="layui-input-block">
-                    <input type="text" name="stage" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
+                <label class="layui-form-label">康德乐SAP号</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="kBatch"  autocomplete="off" class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">采购来源</label>
-                <div class="layui-input-block">
-                    <input type="text" name="source" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">BA</label>
-                <div class="layui-input-block">
-                    <input type="text" name="ba" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">注册证号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="register" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
+                <label class="layui-form-label">罗氏物料号</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="rMater"  autocomplete="off" class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">产品分类</label>
-                <div class="layui-input-block">
-                    <input type="text" name="classify" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input " readonly="readonly">
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">投诉编号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="compNumber" lay-verify="required" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
+                <label class="layui-form-label">罗氏批号</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="rBatch"  autocomplete="off" class="layui-input" readonly="readonly">
                 </div>
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">Remark箱号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="getRemark" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
+                <label class="layui-form-label">生产日期</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="manuDate"  autocomplete="off" class="layui-input " readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">罗氏意见</label>
-                <div class="layui-input-block">
-                    <input type="text" name="rConf" maxlength="50" autocomplete="off"
-                           class="layui-input" readonly="readonly">
+                <label class="layui-form-label">有效期</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="expiryDate"  autocomplete="off" class="layui-input" readonly="readonly">
                 </div>
             </div>
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">单位</label>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">异常总数</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="quarantine"  autocomplete="off" class="layui-input" readonly="readonly">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">回复日期</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="repTime" autocomplete="off" class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">采购来源</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="source"  autocomplete="off" class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">产品分类</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="classify"  autocomplete="off" class="layui-input " readonly="readonly">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">上报阶段</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="type"  autocomplete="off" class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm8">
+                <label class="layui-form-label">罗氏意见</label>
+                <div class="layui-input-block input-eight">
+                    <input type="text" name="rConf"  autocomplete="off"  class="layui-input" readonly="readonly">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">投诉编号</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="compNumber"  autocomplete="off" class="layui-input " readonly="readonly" >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm8">
+                <label class="layui-form-label">QFF原因</label>
+                <div class="layui-input-block input-eight">
+                    <input type="text" name="reason"  autocomplete="off" class="layui-input input-eight" readonly="readonly" >
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth remark">
+            <div class="layui-inline layui-col-sm12 remark">
+                <label class="layui-form-label"><div style="margin-top: 6px">Remark箱号</div></label>
                 <div class="layui-input-block">
-                    <input type="text" name="unit" maxlength="50" autocomplete="off"
-                           class="layui-input " readonly="readonly" >
+                    <textarea  name="getRemark"  autocomplete="off" class="textarea-input" readonly="readonly"  ></textarea>
                 </div>
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth textarea-class">
             <div class="layui-inline layui-col-sm12">
-                <label class="layui-form-label" style="height: 80px;"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
-                <div class="layui-input-block">
-                    <textarea name="checkResult" readonly
-                              class="layui-textarea"></textarea>
+                <label class="layui-form-label"><div style="margin-top: 20px">仪器工程师检查结果</div></label>
+                <div class="layui-input-block"  style="height: 100px;">
+                    <textarea name="checkResult" class="layui-textarea"  readonly="readonly" ></textarea>
                 </div>
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth textarea-class" >
-            <div class="layui-inline layui-col-sm12" >
-                <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">备注</div></label>
-                <div class="layui-input-block" >
-                    <textarea name="remark"   readonly class="layui-textarea" ></textarea>
+            <div class="layui-inline layui-col-sm12">
+                <label class="layui-form-label"><div style="margin-top: 20px">备注</div></label>
+                <div class="layui-input-block"  style="height: 100px;">
+                    <textarea name="remark"  class="layui-textarea"  readonly="readonly" ></textarea>
                 </div>
 
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth textarea-class" >
-            <div class="layui-inline layui-col-sm12" >
-                <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">变更记录</div></label>
-                <div class="layui-input-block" >
-                    <textarea id="" name="alteration" readonly class="layui-textarea" ></textarea>
+            <div class="layui-inline layui-col-sm12">
+                <label class="layui-form-label"><div style="margin-top: 20px">变更记录</div></label>
+                <div class="layui-input-block"  style="height: 100px;">
+                    <textarea id="" name="alteration"  class="layui-textarea" readonly="readonly" ></textarea>
                 </div>
-
             </div>
         </div>
         <div class="layui-form-item"><div style="border-top: 1px solid #000;margin-top: 1px"></div></div>
@@ -318,7 +262,7 @@
             commodity = [[${commodity}]];
             $view = $('#wrapper-detail-show');
 
-        var type = "其他";
+        var type = "其他手工QFF";
         var to = {time:new Date()};
 
 
@@ -330,31 +274,24 @@
         function initWrapperValue() {
             form.val("wrapper-detail-form", {
                 "id":commodity.id,
-                "transport": commodity.transport,
                 "number": commodity.number,
                 "plant": commodity.plant,
                 "kMater": commodity.kMater,
                 "kBatch": commodity.kBatch,
                 "rMater": commodity.rMater,
-                "isDanger": commodity.isDanger,
-                "pMater": commodity.pMater,
                 "rBatch": commodity.rBatch,
                 "manuDate": commodity.manuDate,
                 "expiryDate": commodity.expiryDate,
                 "quarantine": commodity.quarantine,
-                "unit":commodity.unit,
                 "getRemark": commodity.getRemark,
-                "initDate": commodity.initDate,
                 "rConf": commodity.rConf,
                 "repTime": commodity.repTime,
                 "checkResult": commodity.checkResult,
                 "reason": commodity.reason,
                 "compNumber": commodity.compNumber,
                 "remark": commodity.remark,
-                "ba": commodity.ba,
-                "stage": commodity.stage,
+                "type": commodity.type,
                 "source": commodity.source,
-                "register": commodity.register,
                 "classify": commodity.classify,
                 "images": commodity.images,
                 "alteration":commodity.alteration
@@ -415,14 +352,15 @@
             var newWindow = window.open();
 
             newWindow.document.write("<style>\n" +
-                "    .layui-form-item{float: left;height: 48px;width: 1200px;}  .layui-form-item-rigth{border-right: 1px solid #000;}\n" +
-                "    .layui-col-sm4,.layui-form-label,.layui-input-block{float: left;height: 48px;}\n" +
-                "    .layui-col-sm4{border-top: 1px solid #000;border-left: 1px solid #000;width: 399px;}\n" +
-                "    .layui-form-label{text-align: center;width: 100px;font-size: 14px;display: -webkit-inline-flex;margin-top: 12px;}\n" +
-                "    .layui-input-block {width: 298px;}.textarea-class{height: 110px;}\n" +
-                "    .layui-input{border: none;height: 48px;width: 298px;font-size: 14px;border-left: 1px solid #000;}\n" +
-                "    textarea{width: 1099px;height: 110px;border-bottom: 1px solid #000;border-right: 1px solid #000;border-left: 1px solid #000;}\n" +
-                "    .layui-col-sm12{height: 110px;border-top: 1px solid #000;border-left: 1px solid #000;}\n" +
+                ".layui-form-item{width: 1200px;}  .layui-form-item-rigth,.layui-textarea,textarea{border-right: 1px solid #000;}\n" +
+                ".layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-form-label,.layui-input-block,.layui-form-item{float: left;height: 48px;}\n" +
+                ".layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-col-sm12{border-top: 1px solid #000;border-left: 1px solid #000;}\n" +
+                ".layui-col-sm4{width: 399px;} .layui-col-sm6{width: 599px;} .layui-col-sm8{width: 799px;} .input-four{width:74.9%;}\n" +
+                ".input-six{width: 83.3%;} .input-eight{width: 87.2%;}  .layui-col-sm12{height: 110px;}\n" +
+                ".layui-form-label{text-align: center;width: 100px;font-size: 14px;display: -webkit-inline-flex;margin-top: 12px;}\n" +
+                ".layui-input{border: none;height: 48px;width: 100%;font-size: 14px;border-left: 1px solid #000;}.textarea-class{height: 110px;}\n" +
+                "textarea{width: 1099px;height: 48px;}  .layui-textarea{width: 1099px;height: 110px;}\n" +
+                ".layui-textarea,textarea{border-bottom: 1px solid #000;border-left: 1px solid #000;}\n" +
                 "</style>");
             newWindow.document.write(headstr+printData+footstr);
             newWindow.document.close();

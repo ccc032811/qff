@@ -351,16 +351,16 @@
                 defaultToolbar: ['filter','print'],
                 cols: [[
                     // {type: 'checkbox'},
-                    {field: 'number', title: '编号',align:'center'},
-                    {field: 'kMater', title: '康德乐物料号',align:'center'},
-                    {field: 'rMater', title: '罗氏物料号',align:'center'},
-                    {field: 'rBatch', title: '罗氏批号',align:'center'},
-                    {field: 'quarantine', title: '异常数',align:'center'},
-                    {field: 'initDate', title: '发起日期',align:'center'},
-                    {field: 'repTime', title: '回复日期',align:'center'},
-                    {field: 'rConf', title: '罗氏QA处理意见',align:'center'},
-                    {field: 'reason', title: 'QFF原因',align:'center'},
-                    {title: '处理阶段', templet: '#delivery-status',align:'center'},
+                    {field: 'number', title: '编号',align:'center',minWidth: 120},
+                    {field: 'kMater', title: '康德乐物料号',align:'center',minWidth: 120},
+                    {field: 'rMater', title: '罗氏物料号',align:'center',minWidth: 120},
+                    {field: 'rBatch', title: '罗氏批号',align:'center',minWidth: 120},
+                    {field: 'quarantine', title: '异常数',align:'center',minWidth: 80},
+                    {field: 'initDate', title: '发起日期',align:'center',minWidth: 120},
+                    {field: 'repTime', title: '回复日期',align:'center',minWidth: 120},
+                    {field: 'rConf', title: '罗氏QA处理意见',align:'center',minWidth: 120},
+                    {field: 'reason', title: 'QFF原因',align:'center',minWidth: 120},
+                    {title: '处理阶段', templet: '#delivery-status',align:'center',minWidth: 100},
                     {title: '操作', toolbar: '#delivery-option',align:'center',width: 200}
                 ]],
                 done:function (res,curr,count) {
@@ -391,30 +391,7 @@
             var layEvent = obj.event;
             if (layEvent === 'delivery-download') {
                 var params = $.extend(getQueryParams(),{stage:stage});
-                layer.open({
-                    id:'delivery-downLoad',
-                    type: 1,
-                    title: '需导出的个数',
-                    shadeClose: false,
-                    btn: '确认',
-                    area:  ['350px','180px'],
-                    content:'<div class="layui-inline" style="left: -15px;margin-top: 25px">\n' +
-                        '                        <label class="layui-form-label" >请输入</label>\n' +
-                        '                        <div class="layui-input-inline">\n' +
-                        '                            <input type="text" id="delivery-count" maxlength="50" autocomplete="off" class="layui-input" lay-verify="required" >\n' +
-                        '                        </div>\n' +
-                        '                    </div>',
-                    yes:function(index, layero){
-                        var count = layero.find('#delivery-count');
-
-                        if(isNumber($(count).val())){
-                            params.pageSize = $(count).val();
-                            febs.download(ctx + 'commodity/excel',params, '养护QFF.xlsx');
-                        }
-
-                        layer.close(index);
-                    }
-                })
+                febs.download(ctx + 'commodity/excel',params, '到货QFF.xlsx');
             }
         });
 

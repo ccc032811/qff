@@ -14,7 +14,7 @@
     .layui-form-item-rigth{
         border-right: 1px solid #000;
     }
-    .layui-col-sm4,.layui-col-sm6 {
+    .layui-col-sm4,.layui-col-sm8,.layui-col-sm6 {
         border-left: 1px solid #000;
         border-top: 1px solid #000;
         height: 39px;
@@ -33,10 +33,10 @@
         line-height: 20px;
         text-align: center;
         height: 21px;
-        border-right: 1px solid #000;
     }
     .layui-input-block{
         height: 39px;
+        border-left: 1px solid #000;
     }
     .layui-input, .layui-textarea {
         width: 100%;
@@ -235,7 +235,7 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">单位</label>
                 <div class="layui-input-block">
-                    <input type="text" name="unit" maxlength="50" autocomplete="off"
+                    <input type="text" name="rUnit" maxlength="50" autocomplete="off"
                            class="layui-input " readonly="readonly" >
                 </div>
             </div>
@@ -348,7 +348,6 @@
         var image=[];
         var ba = "BA";
         var stage = "QFF上报阶段";
-        var source = "采购来源";
         var rConf ="罗氏QA处理意见";
         var reason = "QFF原因";
         var type = "到货";
@@ -422,7 +421,7 @@
                 "manuDate": commodity.manuDate,
                 "expiryDate": commodity.expiryDate,
                 "quarantine": commodity.quarantine,
-                "unit":commodity.unit,
+                "unit":commodity.rUnit,
                 "getRemark": commodity.getRemark,
                 "initDate": commodity.initDate,
                 "rConf": commodity.rConf,

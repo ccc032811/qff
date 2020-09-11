@@ -8,6 +8,9 @@
     }
 
 </style>
+
+
+
 <div class="layui-fluid layui-anim febs-anim" id="fbs-refund" lay-title="退货QFF">
     <div class="layui-row febs-container">
         <div class="layui-col-md12">
@@ -317,16 +320,16 @@
                 toolbar: '#refund-toolbarCheck',
                 defaultToolbar: ['filter','print'],
                 cols: [[
-                    {field: 'number', title: 'QFF编号',align:'center'},
-                    {field: 'kMater', title: '康德乐物料号',align:'center'},
-                    {field: 'rMater', title: '罗氏物料号',align:'center'},
-                    {field: 'rBatch', title: '罗氏批号',align:'center'},
-                    {field: 'kBatch', title: '康德乐SAP批次',align:'center'},
-                    {field: 'rBatch', title: '罗氏批号',align:'center'},
-                    {field: 'manuDate', title: '生产日期',align:'center'},
-                    {field: 'rConf', title: '罗氏QA处理意见',align:'center'},
-                    {field: 'reason', title: '退货原因',align:'center'},
-                    {title: '处理阶段', templet: '#refund-status',align:'center'},
+                    {field: 'number', title: 'QFF编号',align:'center',minWidth: 120},
+                    {field: 'kMater', title: '康德乐物料号',align:'center',minWidth: 120},
+                    {field: 'rMater', title: '罗氏物料号',align:'center',minWidth: 120},
+                    {field: 'rBatch', title: '罗氏批号',align:'center',minWidth: 120},
+                    {field: 'kBatch', title: '康德乐SAP批次',align:'center',minWidth: 120},
+                    {field: 'rBatch', title: '罗氏批号',align:'center',minWidth: 120},
+                    {field: 'manuDate', title: '生产日期',align:'center',minWidth: 120},
+                    {field: 'rConf', title: '罗氏QA处理意见',align:'center',minWidth: 120},
+                    {field: 'reason', title: '退货原因',align:'center',minWidth: 120},
+                    {title: '处理阶段', templet: '#refund-status',align:'center',minWidth: 120},
                     {title: '操作', toolbar: '#refund-option',align:'center',width: 200}
                 ]],
                 done:function (res,curr,count) {
@@ -358,31 +361,8 @@
         table.on('toolbar(refundTable)', function(obj){
             var layEvent = obj.event;
             if (layEvent === 'refund-download') {
-                var params = getQueryParams();
-                layer.open({
-                    id:'refund-downLoad',
-                    type: 1,
-                    title: '需导出的个数',
-                    shadeClose: false,
-                    btn: '确认',
-                    area:  ['350px','180px'],
-                    content:'<div class="layui-inline" style="left: -15px;margin-top: 25px">\n' +
-                        '                        <label class="layui-form-label" >请输入</label>\n' +
-                        '                        <div class="layui-input-inline">\n' +
-                        '                            <input type="text" id="refund-count" maxlength="50" autocomplete="off" class="layui-input" lay-verify="required" >\n' +
-                        '                        </div>\n' +
-                        '                    </div>',
-                    yes:function(index, layero){
-                        var count = layero.find('#refund-count');
-
-                        if(isNumber($(count).val())){
-                            params.pageSize = $(count).val();
-                            febs.download(ctx + 'commodity/excel',params, '养护QFF.xlsx');
-                        }
-
-                        layer.close(index);
-                    }
-                })
+                var params = $.extend(getQueryParams(),{stage:stage});
+                febs.download(ctx + 'commodity/excel',params, '退货QFF.xlsx');
             }
         });
 

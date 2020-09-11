@@ -97,29 +97,30 @@ public class StartSoap {
                     commodity.setIsDanger(XmlUtils.getTagContent(s,"<MSTAE>","</MSTAE>"));
                     commodity.setpMater(XmlUtils.getTagContent(s,"<BISMT>","</BISMT>"));
                     commodity.setrBatch(XmlUtils.getTagContent(s,"<LICHN>","</LICHN>"));
-                    commodity.setManuDate(XmlUtils.getTagContent(s,"<HSDAT>","</HSDAT>").replace("-","/"));
-                    commodity.setExpiryDate(XmlUtils.getTagContent(s,"<VFDAT>","</VFDAT>").replace("-","/"));
+                    commodity.setManuDate(XmlUtils.getTagContent(s,"<HSDAT>","</HSDAT>"));
+                    commodity.setExpiryDate(XmlUtils.getTagContent(s,"<VFDAT>","</VFDAT>"));
                     commodity.setQuarantine(XmlUtils.getTagContent(s,"<MGEIG>","</MGEIG>"));
                     commodity.setGetRemark(XmlUtils.getTagContent(s,"<QMTXT>","</QMTXT>"));
-                    commodity.setInitDate(XmlUtils.getTagContent(s,"<ERDAT>","</ERDAT>").replace("-","/"));
+                    commodity.setInitDate(XmlUtils.getTagContent(s,"<ERDAT>","</ERDAT>"));
                     commodity.setClassify(XmlUtils.getTagContent(s,"<ZPROCLAS>","</ZPROCLAS>"));
                     commodity.setRegister(XmlUtils.getTagContent(s,"<REGNO>","</REGNO>"));
                     commodity.setTransport(XmlUtils.getTagContent(s,"<AWBNO>","</AWBNO>"));
                     String stage = XmlUtils.getTagContent(s, "<HERKUNFT>", "</HERKUNFT>");
-                    //TODO  采购来源数据采集
+                    //TODO  采购来源数据采集    单位数据采集
                     commodity.setType(stage);
 //                    commodity.setStage(XmlUtils.getTagContent(s,"<HERKUNFT>","</HERKUNFT>"));
                     if(stage.equals("01")){
                         commodity.setStage(ProcessConstant.DELIVERY_NAME);
-                    }else if(stage.equals("09")){
-                        commodity.setStage(ProcessConstant.CONSERVE_NAME);
-                    }else if(stage.equals("10")||stage.equals("11")){
-                        commodity.setStage(ProcessConstant.EXPORT_NAME);
                     }else if(stage.equals("05")){
                         commodity.setStage(ProcessConstant.REFUND_NAME);
                     } else {
-                        commodity.setStage(ProcessConstant.WRAPPER_NAME);
+                        commodity.setStage(ProcessConstant.CONSERVE_NAME);
                     }
+//                    else if(stage.equals("09")){
+//                        commodity.setStage(ProcessConstant.CONSERVE_NAME);
+//                    }else if(stage.equals("10")||stage.equals("11")){
+//                        commodity.setStage(ProcessConstant.EXPORT_NAME);
+//                    }
                     commodity.setStatus(ProcessConstant.NEW_BUILD);
                     commodity.setAccessory(0);
                     commodity.setCreateTime(parse);

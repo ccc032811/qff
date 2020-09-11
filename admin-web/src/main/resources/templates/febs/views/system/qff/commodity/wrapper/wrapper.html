@@ -7,7 +7,9 @@
         position: fixed;
     }
 </style>
-<div class="layui-fluid layui-anim febs-anim" id="fbs-wrapper" lay-title="其他QFF">
+
+
+<div class="layui-fluid layui-anim febs-anim" id="fbs-wrapper" lay-title="其他手工QFF">
     <div class="layui-row febs-container">
         <div class="layui-col-md12">
             <div class="layui-card">
@@ -73,12 +75,6 @@
                                 <div class="layui-colla-content" style="border:0px solid white">
                                     <div class="layui-form-item ">
                                         <div class="layui-inline  ">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">运输单号</label>
-                                            <div class="layui-input-inline">
-                                                <input type="text" name="transport" maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入运输单号" >
-                                            </div>
-                                        </div>
-                                        <div class="layui-inline  ">
                                             <label class="layui-form-label" style="border-right: 1px solid white;">QFF编号</label>
                                             <div class="layui-input-inline">
                                                 <input type="text" name="number"  maxlength="50" autocomplete="off" class="layui-input " placeholder="请输入QFF编号" >
@@ -97,25 +93,9 @@
                                             </div>
                                         </div>
                                         <div class="layui-inline ">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">物料描述</label>
-                                            <div class="layui-input-inline">
-                                                <input type="text" name="pMater"  maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入药厂物料号" >
-                                            </div>
-                                        </div>
-                                        <div class="layui-inline ">
                                             <label class="layui-form-label" style="border-right: 1px solid white;">罗氏批号</label>
                                             <div class="layui-input-inline">
                                                 <input type="text" name="rBatch" maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入罗氏批号" >
-                                            </div>
-                                        </div>
-                                        <div class="layui-inline  ">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">是否是危险品</label>
-                                            <div class="layui-input-inline">
-                                                <select name="isDanger">
-                                                    <option value=""></option>
-                                                    <option value="01">危险</option>
-                                                    <option value="00">不危险</option>
-                                                </select>
                                             </div>
                                         </div>
                                         <div class="layui-inline  ">
@@ -137,15 +117,17 @@
                                             </div>
                                         </div>
                                         <div class="layui-inline ">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">发起日期</label>
-                                            <div class="layui-input-inline">
-                                                <input type="text" id="wrapper-initDate" name="initDate"  maxlength="50" autocomplete="off" class="layui-input " placeholder="请输入发起日期" >
-                                            </div>
-                                        </div>
-                                        <div class="layui-inline ">
                                             <label class="layui-form-label" style="border-right: 1px solid white;">回复日期</label>
                                             <div class="layui-input-inline">
                                                 <input type="text" id="wrapper-repTime" name="repTime"  maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入回复日期" >
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label "  style="border-right: 1px solid white;">上报阶段</label>
+                                            <div class="layui-input-inline">
+                                                <select name="type" id="stage" lay-verify="required" >
+                                                    <option value="">请选择</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="layui-inline ">
@@ -156,15 +138,19 @@
                                             </div>
                                         </div>
                                         <div class="layui-inline ">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">BA</label>
+                                            <label class="layui-form-label " style="border-right: 1px solid white;">采购来源</label>
                                             <div class="layui-input-inline">
-                                                <input type="text" name="ba"  maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入BA" >
+                                                <select name="source" id="source" lay-verify="required" >
+                                                    <option value="">请选择</option>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="layui-inline ">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">采购来源</label>
-                                            <div class="layui-input-inline">
-                                                <input type="text" name="source"  maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入采购来源" >
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label " style="border-right: 1px solid white;">产品分类</label>
+                                            <div class="layui-input-inline" >
+                                                <select name="classify" id="classify" lay-verify="required" >
+                                                    <option value="">请选择</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="layui-inline  ">
@@ -173,28 +159,10 @@
                                                 <input type="text" name="compNumber"  maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入投诉编号" >
                                             </div>
                                         </div>
-                                        <div class="layui-inline ">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">注册证号</label>
-                                            <div class="layui-input-inline">
-                                                <input type="text" name="register"  maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入注册证号" >
-                                            </div>
-                                        </div>
-                                        <div class="layui-inline ">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">产品分类</label>
-                                            <div class="layui-input-inline">
-                                                <input type="text" name="classify"  maxlength="50" autocomplete="off" class="layui-input " placeholder="请输入产品分类" >
-                                            </div>
-                                        </div>
                                         <div class="layui-inline  ">
                                             <label class="layui-form-label" style="border-right: 1px solid white;">Remark箱号</label>
                                             <div class="layui-input-inline">
                                                 <input type="text" name="getRemark" maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入Remark箱号" >
-                                            </div>
-                                        </div>
-                                        <div class="layui-inline ">
-                                            <label class="layui-form-label" style="border-right: 1px solid white;">罗氏处理意见</label>
-                                            <div class="layui-input-inline">
-                                                <input type="text" name="rConf" maxlength="50" autocomplete="off" class="layui-input" placeholder="请输入罗氏处理意见" >
                                             </div>
                                         </div>
                                     </div>
@@ -236,8 +204,10 @@
 
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="wrapper-detail" shiro:hasPermission="wrapper:view">查看</a>
     {{#  if(d.status != '3'&& d.isAllow == '1'){}}
+    {{#  if(d.repTime == ''||d.repTime == null){}}
     <a class="layui-btn layui-btn-xs" lay-event="wrapper-edit"  shiro:hasPermission="wrapper:audit">审核</a>
-    {{#  if(d.repTime != ''&&d.repTime != null){}}
+    {{# }else if(d.repTime != ''&&d.repTime != null){}}
+    <a class="layui-btn layui-btn-xs" lay-event="wrapper-edit"  shiro:hasPermission="wrapper:audit">确认</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="wrapper-alter"  shiro:hasPermission="wrapper:alter ">修改</a>
     {{#}}}
     {{#}}}
@@ -248,7 +218,7 @@
 </script>
 <script type="text/html" id="wrapper-toolbarCheck">
     <div class="layui-btn-container">
-        <button  class="layui-btn layui-btn-sm" style="background-color: #87e8de;"  lay-event="wrapper-add" >
+        <button  class="layui-btn layui-btn-sm" style="background-color: #87e8de;"  lay-event="wrapper-add"  shiro:hasPermission="wrapper:add">
             <i class="layui-icon">&#xe654;</i> 新增QFF
         </button>
         <button  class="layui-btn layui-btn-sm" lay-event="wrapper-download" shiro:hasPermission="wrapper:down">
@@ -271,7 +241,11 @@
             $cleanBtn = $view.find('#wrapper-cleanBtn'),
             $searchForm = $view.find('form'),
             tableIns;
-        var stage = '其他';
+
+        var type = "QFF上报阶段";
+        var source = "采购来源";
+        var classify = "产品分类";
+        var stage = '其他手工QFF';
         var reason = "QFF原因";
         var to = {time:new Date()};
 
@@ -295,11 +269,7 @@
             ,trigger: 'click'
             ,btns: ['clear']
         });
-        laydate.render({
-            elem: '#wrapper-initDate'
-            ,trigger: 'click'
-            ,btns: ['clear']
-        });
+
         laydate.render({
             elem: '#wrapper-repTime'
             ,trigger: 'click'
@@ -332,16 +302,15 @@
                 toolbar: '#wrapper-toolbarCheck',
                 defaultToolbar: ['filter','print'],
                 cols: [[
-                    {field: 'number', title: '编号',align:'center'},
-                    {field: 'kMater', title: '康德乐物料号',align:'center'},
-                    {field: 'rMater', title: '罗氏物料号',align:'center'},
-                    {field: 'rBatch', title: '罗氏批号',align:'center'},
-                    {field: 'quarantine', title: '异常数',align:'center'},
-                    {field: 'initDate', title: '发起日期',align:'center'},
-                    {field: 'repTime', title: '回复日期',align:'center'},
-                    {field: 'rConf', title: '罗氏QA处理意见',align:'center'},
-                    {field: 'reason', title: 'QFF原因',align:'center'},
-                    {title: '处理阶段', templet: '#wrapper-status',align:'center'},
+                    {field: 'number', title: '编号',align:'center',minWidth: 120},
+                    {field: 'kMater', title: '康德乐物料号',align:'center',minWidth: 120},
+                    {field: 'rMater', title: '罗氏物料号',align:'center',minWidth: 120},
+                    {field: 'rBatch', title: '罗氏批号',align:'center',minWidth: 120},
+                    {field: 'quarantine', title: '异常数',align:'center',minWidth: 80},
+                    {field: 'repTime', title: '回复日期',align:'center',minWidth: 120},
+                    {field: 'rConf', title: '罗氏QA处理意见',align:'center',minWidth: 120},
+                    {field: 'reason', title: 'QFF原因',align:'center',minWidth: 120},
+                    {title: '处理阶段', templet: '#wrapper-status',align:'center',minWidth: 120},
                     {title: '操作', toolbar: '#wrapper-option',align:'center',width: 200}
                 ]],
                 done:function (res,curr,count) {
@@ -351,7 +320,7 @@
             });
         }
 
-        //查询表单事件
+
         $query.on('click', function () {
             tableIns.reload({where: getQueryParams(), page: {curr: 1}});
         });
@@ -372,30 +341,8 @@
             var layEvent = obj.event;
             if (layEvent === 'wrapper-download') {
                 var params = $.extend(getQueryParams(),{stage:stage});
-                layer.open({
-                    id:'wrapper-downLoad',
-                    type: 1,
-                    title: '需导出的个数',
-                    shadeClose: false,
-                    btn: '确认',
-                    area:  ['350px','180px'],
-                    content:'<div class="layui-inline" style="left: -15px;margin-top: 25px">\n' +
-                        '                        <label class="layui-form-label" >请输入</label>\n' +
-                        '                        <div class="layui-input-inline">\n' +
-                        '                            <input type="text" id="wrapper-count" maxlength="50" autocomplete="off" class="layui-input" lay-verify="required" >\n' +
-                        '                        </div>\n' +
-                        '                    </div>',
-                    yes:function(index, layero){
-                        var count = layero.find('#wrapper-count');
+                febs.download(ctx + 'commodity/excel',params, '其他手工QFF.xlsx');
 
-                        if(isNumber($(count).val())){
-                            params.pageSize = $(count).val();
-                            febs.download(ctx + 'commodity/excel',params, '养护QFF.xlsx');
-                        }
-
-                        layer.close(index);
-                    }
-                })
             }
             if (layEvent === 'wrapper-add') {
                 febs.modal.open('新增手工QFF', 'system/qff/commodity/addQff',{
@@ -438,8 +385,7 @@
             }
         });
 
-        function delCommodity(id)
-        {
+        function delCommodity(id) {
             febs.get(ctx + 'commodity/deleteCommodity/' + id,to, function () {
                 febs.alert.success('操作成功');
                 $query.click();
@@ -461,6 +407,42 @@
         });
 
 
+        $.get(ctx +"opinion/getOpinion/"+type,to,function(res){
+            var data=res.data;
+            var dom=$("#stage");
+            var html='<option value=""></option>';
+            $.each(data,function(index,item){
+                html+='<option value="'+item.name+'">'+item.name+'</option>'
+            });
+            dom.html(html);
+            form.render("select");
+        });
+
+
+        $.get(ctx +"opinion/getOpinion/"+classify,to,function(res){
+            var data = res.data;
+            var dom=$("#classify");
+            var html='<option value=""></option>';
+            $.each(data,function(index,item){
+                html+='<option value="'+item.name+'">'+item.name+'</option>'
+            });
+            dom.html(html);
+            form.render("select");
+        });
+
+        $.get(ctx +"opinion/getOpinion/"+source,to,function(res){
+            var data = res.data;
+            var dom=$("#source");
+            var html='<option value=""></option>';
+            $.each(data,function(index,item){
+                html+='<option value="'+item.name+'">'+item.name+'</option>'
+            });
+            dom.html(html);
+            form.render("select");
+        });
+
+
+
         function getQueryParams() {
             var createTimeFrom,
                 createTimeTo,
@@ -474,26 +456,19 @@
                 endTime: createTimeTo,
                 kMater: $searchForm.find('input[name="kMater"]').val().trim(),
                 kBatch: $searchForm.find('input[name="kBatch"]').val().trim(),
-                transport: $searchForm.find('input[name="transport"]').val().trim(),
                 number: $searchForm.find('input[name="number"]').val().trim(),
                 plant: $searchForm.find('input[name="plant"]').val().trim(),
                 rMater: $searchForm.find('input[name="rMater"]').val().trim(),
-                pMater: $searchForm.find('input[name="pMater"]').val().trim(),
                 rBatch: $searchForm.find('input[name="rBatch"]').val().trim(),
-                isDanger: $searchForm.find('select[name="isDanger"]').val(),
                 manuDate: $searchForm.find('input[name="manuDate"]').val().trim(),
                 expiryDate: $searchForm.find('input[name="expiryDate"]').val().trim(),
                 quarantine: $searchForm.find('input[name="quarantine"]').val().trim(),
-                initDate: $searchForm.find('input[name="initDate"]').val().trim(),
                 repTime: $searchForm.find('input[name="repTime"]').val().trim(),
                 reason: $searchForm.find('input[name="reason"]').val().trim(),
-                ba: $searchForm.find("input[name='ba']").val().trim(),
-                source: $searchForm.find("input[name='source']").val().trim(),
+                source: $searchForm.find("select[name='source']").val(),
                 compNumber: $searchForm.find("input[name='compNumber']").val().trim(),
-                register: $searchForm.find("input[name='register']").val().trim(),
-                classify: $searchForm.find("input[name='classify']").val().trim(),
+                classify: $searchForm.find("select[name='classify']").val(),
                 getRemark: $searchForm.find("input[name='getRemark']").val().trim(),
-                rConf: $searchForm.find("input[name='rConf']").val().trim(),
                 status: $searchForm.find("select[name='status']").val(),
                 att: $searchForm.find("select[name='att']").val(),
                 stage: stage,

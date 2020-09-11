@@ -285,16 +285,16 @@
                     time:new Date()
                 },
                 cols: [[
-                    {field: 'number', title: '编号',align:'center'},
-                    {field: 'sponsor', title: '发起人',align:'center'},
-                    {field: 'reqDate', title: '申请日期',align:'center'},
-                    {field: 'materName', title: '物料名称',align:'center'},
-                    {field: 'materCode', title: '物料编号',align:'center'},
-                    {field: 'batch', title: '批号/序列号',align:'center'},
-                    {field: 'quantity', title: '受影响数量',align:'center'},
-                    {field: 'actions', title: '行动',align:'center'},
-                    {field: 'exceptDate', title: '期望完成日期',align:'center'},
-                    {title: '处理阶段', templet: '#roche-status',align:'center'},
+                    {field: 'number', title: '编号',align:'center',minWidth: 120},
+                    {field: 'sponsor', title: '发起人',align:'center',minWidth: 120},
+                    {field: 'reqDate', title: '申请日期',align:'center',minWidth: 120},
+                    {field: 'materName', title: '物料名称',align:'center',minWidth: 120},
+                    {field: 'materCode', title: '物料编号',align:'center',minWidth: 120},
+                    {field: 'batch', title: '批号/序列号',align:'center',minWidth: 120},
+                    {field: 'quantity', title: '受影响数量',align:'center',minWidth: 120},
+                    {field: 'actions', title: '行动',align:'center',minWidth: 120},
+                    {field: 'exceptDate', title: '期望完成日期',align:'center',minWidth: 120},
+                    {title: '处理阶段', templet: '#roche-status',align:'center',minWidth: 120},
                     {title: '操作', toolbar: '#roche-option',align:'center',width: 200}
                 ]],
                 done:function (res,curr,count) {
@@ -325,32 +325,7 @@
             var layEvent = obj.event;
             if (layEvent === 'download') {
                 var params = getQueryParams();
-                layer.open({
-                    id:'roche-downLoad',
-                    type: 1,
-                    title: '需导出的个数',
-                    shadeClose: false,
-                    btn: '确认',
-                    area:  ['350px','180px'],
-                    content:'<div class="layui-inline" style="left: -15px;margin-top: 25px">\n' +
-                        '                        <label class="layui-form-label" >请输入</label>\n' +
-                        '                        <div class="layui-input-inline">\n' +
-                        '                            <input type="text" id="roche-count" maxlength="50" autocomplete="off" class="layui-input" lay-verify="required" >\n' +
-                        '                        </div>\n' +
-                        '                    </div>',
-                    yes:function(index, layero){
-                        var count = layero.find('#roche-count');
-
-                        if(isNumber($(count).val())){
-                            params.pageSize = $(count).val();
-                            febs.download(ctx + 'roche/excel',params, '罗氏内部发起QFF.xlsx');
-                        }
-
-                        layer.close(index);
-                    }
-                })
-
-
+                febs.download(ctx + 'roche/excel',params, '罗氏内部发起QFF.xlsx');
             }
             if (layEvent === 'roche-add') {
                 febs.modal.open('新增', 'system/qff/roche/add' , {

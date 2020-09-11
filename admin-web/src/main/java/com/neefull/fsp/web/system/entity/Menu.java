@@ -48,7 +48,7 @@ public class Menu implements Serializable {
      */
     @TableField("MENU_NAME")
     @NotBlank(message = "{required}")
-    @Size(max = 10, message = "{noMoreThan}")
+    @Size(max = 20, message = "{noMoreThan}")
     @ExcelField(value = "名称")
     private String menuName;
 

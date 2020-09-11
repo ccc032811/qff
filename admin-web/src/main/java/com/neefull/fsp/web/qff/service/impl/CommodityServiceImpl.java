@@ -135,9 +135,7 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     public List<Commodity> getPageConserve(Commodity commodity,User user) {
         List<Commodity> commodityList = null;
         if(commodity.getAtt()!=null&&commodity.getAtt()==1){
-            commodity.setPageNum(1);
-            List<Commodity> commodities = getAttCommodity(commodity, user);
-            commodityList = PageUtils.page(commodities, commodity.getPageSize(), 1);
+            commodityList = getAttCommodity(commodity, user);
         }else {
             commodityList = commodityMapper.getPageConserve(commodity);
         }

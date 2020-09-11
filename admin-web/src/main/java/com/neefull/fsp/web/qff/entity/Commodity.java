@@ -24,7 +24,7 @@ import java.util.Map;
  */
 
 @TableName(value = "qff_commodity")
-@Excel("到货养护分包出库QFF")
+@Excel("Sheet")
 public class Commodity implements Serializable {
 
 
@@ -110,9 +110,15 @@ public class Commodity implements Serializable {
     /**
      * unit  单位
      */
-    @TableField("unit")
+    @TableField("k_unit")
+    private String kUnit;
+
+    /**
+     * unit  单位
+     */
+    @TableField("r_unit")
     @ExcelField(value = "单位")
-    private String unit;
+    private String rUnit;
     /**
      *  Remark箱号/备注
      */
@@ -171,13 +177,12 @@ public class Commodity implements Serializable {
      *  QFF 上报阶段
      */
     @TableField("stage")
-    @ExcelField(value = "名称")
+    @ExcelField(value = "上报阶段")
     private String stage;
     /**
      *  检验单类型
      */
     @TableField("type")
-    @ExcelField(value = "检验单类型")
     private String type;
     /**
      *  采购来源
@@ -372,12 +377,20 @@ public class Commodity implements Serializable {
         this.quarantine = quarantine;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getkUnit() {
+        return kUnit;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setkUnit(String kUnit) {
+        this.kUnit = kUnit;
+    }
+
+    public String getrUnit() {
+        return rUnit;
+    }
+
+    public void setrUnit(String rUnit) {
+        this.rUnit = rUnit;
     }
 
     public String getGetRemark() {

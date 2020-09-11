@@ -322,11 +322,13 @@ public class ProcessServiceImpl implements IProcessService {
                             names.add("delivery");
                         }else if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
                             names.add("conserve");
-                        }else if(commodity.getStage().equals(ProcessConstant.PACKAGE_NAME)){
-                            names.add("package");
-                        }else if(commodity.getStage().equals(ProcessConstant.EXPORT_NAME)){
-                            names.add("export");
-                        }else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
+                        }
+//                        else if(commodity.getStage().equals(ProcessConstant.PACKAGE_NAME)){
+//                            names.add("package");
+//                        }else if(commodity.getStage().equals(ProcessConstant.EXPORT_NAME)){
+//                            names.add("export");
+//                        }
+                        else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
                             names.add("wrapper");
                         }else if(commodity.getStage().equals(ProcessConstant.REFUND_NAME)){
                             names.add("refund");
@@ -528,12 +530,14 @@ public class ProcessServiceImpl implements IProcessService {
                         if(commodity.getStage().equals(ProcessConstant.DELIVERY_NAME)){
                             names.add(ProcessConstant.DELIVERY_NAME);
                         }else if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
-                            names.add(ProcessConstant.CONSERVE_NAME);
-                        }else if(commodity.getStage().equals(ProcessConstant.PACKAGE_NAME)) {
-                            names.add(ProcessConstant.PACKAGE_NAME);
-                        }else if(commodity.getStage().equals(ProcessConstant.EXPORT_NAME)){
-                            names.add(ProcessConstant.EXPORT_NAME);
-                        }else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
+                            names.add(ProcessConstant.STORE_PACKAGE_EXPORT);
+                        }
+//                        else if(commodity.getStage().equals(ProcessConstant.PACKAGE_NAME)) {
+//                            names.add(ProcessConstant.PACKAGE_NAME);
+//                        }else if(commodity.getStage().equals(ProcessConstant.EXPORT_NAME)){
+//                            names.add(ProcessConstant.EXPORT_NAME);
+//                        }
+                        else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
                             names.add(ProcessConstant.WRAPPER_NAME);
                         }else if(commodity.getStage().equals(ProcessConstant.REFUND_NAME)){
                             names.add(ProcessConstant.REFUND_NAME);
@@ -552,8 +556,10 @@ public class ProcessServiceImpl implements IProcessService {
         String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
         commodity.setRepTime(date);
         Commodity oldCommodity = commodityService.queryCommodityById(commodity.getId());
-        if(!commodity.getBa().equals(oldCommodity.getBa())){
-            alteration.append("BA:" +date+ " 由 "+oldCommodity.getBa()+" 修改为 "+commodity.getBa()+"  。 ");
+        if(!commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
+            if(!commodity.getBa().equals(oldCommodity.getBa())){
+                alteration.append("BA:" +date+ " 由 "+oldCommodity.getBa()+" 修改为 "+commodity.getBa()+"  。 ");
+            }
         }
         if(!commodity.getReason().equals(oldCommodity.getReason())){
             alteration.append("QFF原因:" +date+ " 由 "+oldCommodity.getReason()+" 修改为 "+commodity.getReason()+"  。 ");

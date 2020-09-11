@@ -14,7 +14,7 @@
     .layui-form-item-rigth{
         border-right: 1px solid #000;
     }
-    .layui-col-sm4,.layui-col-sm6 {
+    .layui-col-sm4,.layui-col-sm8,.layui-col-sm6 {
         border-left: 1px solid #000;
         border-top: 1px solid #000;
         height: 39px;
@@ -33,10 +33,10 @@
         line-height: 20px;
         text-align: center;
         height: 21px;
-        border-right: 1px solid #000;
     }
     .layui-input-block{
         height: 39px;
+        border-left: 1px solid #000;
     }
     .layui-input, .layui-textarea {
         width: 100%;
@@ -196,7 +196,7 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">箱号/备注</label>
                 <div class="layui-input-block">
-                    <input type="text" name="getRemark"  maxlength="50" autocomplete="off"
+                    <input type="text" name="getRemark"  maxlength="200" autocomplete="off"
                            class="layui-input " readonly="readonly">
                 </div>
             </div>
@@ -212,7 +212,7 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">单位</label>
                 <div class="layui-input-block">
-                    <input type="text" name="unit" maxlength="50" autocomplete="off"
+                    <input type="text" name="rUnit" maxlength="50" autocomplete="off"
                            class="layui-input " readonly="readonly" >
                 </div>
             </div>
@@ -230,7 +230,7 @@
             <div class="layui-inline layui-col-sm12" >
                 <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">备注</div></label>
                 <div class="layui-input-block" >
-                    <textarea id="refund-remark" name="remark"  placeholder="请输入"
+                    <textarea id="refund-remark" name="remark"  maxlength="200" placeholder="请输入"
                               class="layui-textarea" ></textarea>
                 </div>
             </div>
@@ -328,7 +328,6 @@
         var images = [];
         var image = [];
         var ba = "BA";
-        var source = "采购来源";
         var rConf ="罗氏QA处理意见";
         var reason = "退货原因";
         var type = "退货";
@@ -399,7 +398,7 @@
                 "manuDate": commodity.manuDate,
                 "expiryDate": commodity.expiryDate,
                 "quarantine": commodity.quarantine,
-                "unit":commodity.unit,
+                "unit":commodity.rUnit,
                 "getRemark": commodity.getRemark,
                 "initDate": commodity.initDate,
                 "rConf": commodity.rConf,
@@ -624,21 +623,6 @@
             });
         });
 
-
-        $.get(ctx +"opinion/getOpinion/"+source,to,function(res){
-            var data=res.data;
-            var dom=$("#refund_search_source");
-            var html='<option value=""></option>';
-            $.each(data,function(index,item){
-                if(item.name === commodity.source){
-                    html+='<option selected value="'+item.name+'">'+item.name+'</option>'
-                }else {
-                    html+='<option value="'+item.name+'">'+item.name+'</option>'
-                }
-            });
-            dom.html(html);
-            form.render("select");
-        });
 
 
     });

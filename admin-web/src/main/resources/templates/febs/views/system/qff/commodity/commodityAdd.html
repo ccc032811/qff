@@ -8,67 +8,54 @@
     }
 
     /* 覆盖样式 */
-    .layui-form-item {
+    .layui-form-item,.layui-form-item .layui-inline{
          margin-bottom: 0px;
      }
     .layui-form-item-rigth{
         border-right: 1px solid #000;
     }
-    .layui-col-sm4  , .layui-col-sm12{
+    .layui-col-sm4 ,.layui-col-sm12{
         border-left: 1px solid #000;
         border-top: 1px solid #000;
         height: 39px;
     }
-
     .layui-form-label {
-        float: left;
-        display: block;
         padding: 10px 14px;
-        width: 80px;
-        font-weight: 400;
-        line-height: 20px;
         text-align: center;
-        height: 21px;
         border-right: 1px solid #000;
     }
     .layui-input-block{
         height: 39px;
     }
-    .layui-input {
-        width: 100%;
-    }
-    .layui-form-item .layui-inline {
-        margin-bottom: 0px;
-    }
-
-
 </style>
 <div class="layui-fluid" id="commodity-detail" lay-title = "储存QFF" style="margin-left: 18px">
 
     <form class="layui-form " action="" lay-filter="commodity-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm4 ">
+            <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label">QFF编号</label>
                 <div class="layui-input-block">
                     <input type="text" name="number" id="number"  maxlength="50" autocomplete="off"
                            class="layui-input " lay-verify="required" placeholder="请输入">
                 </div>
             </div>
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">工厂</label>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">工厂</label>
                 <div class="layui-input-block">
                     <select name="plant" id="plant" lay-verify="required" >
                         <option value="">请选择</option>
                     </select>
                 </div>
             </div>
-            <div class="layui-inline layui-col-sm4 ">
-                <label class="layui-form-label ">康德乐物料号</label>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">康德乐物料号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="kMater"  lay-verify="required" maxlength="50" autocomplete="off" list="kMater-list" class="layui-input" placeholder="请输入" >
-                    <div style="overflow: auto; height: 30px";>
-                        <datalist id="kMater-list" style="display:none;"></datalist>
-                    </div>
+                    <input type="text" name="kMater"  lay-verify="required" maxlength="50" autocomplete="off"
+                           list="kMater-list" class="layui-input" placeholder="请输入" >
+                    <datalist id="kMater-list">
+                        <option value="见附件"></option>
+                        <option value="N/A"></option>
+                    </datalist>
                 </div>
             </div>
         </div>
@@ -76,28 +63,34 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">康德乐SAP号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="kBatch"  lay-verify="required" maxlength="50" autocomplete="off" list="kBatch-list" class="layui-input" placeholder="请输入" >
-                    <div style="overflow: auto; height: 30px";>
-                        <datalist id="kBatch-list" style="display:none;"></datalist>
-                    </div>
+                    <input type="text" name="kBatch"  lay-verify="required" maxlength="50" autocomplete="off"
+                           list="kBatch-list" class="layui-input" placeholder="请输入" >
+                    <datalist id="kBatch-list">
+                        <option value="见附件"></option>
+                        <option value="N/A"></option>
+                    </datalist>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">罗氏物料号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="rMater"  lay-verify="required" maxlength="50" autocomplete="off" list="rMater-list" class="layui-input" placeholder="请输入" >
-                    <div style="overflow: auto; height: 30px";>
-                        <datalist id="rMater-list" style="display:none;"></datalist>
-                    </div>
+                    <input type="text" name="rMater"  lay-verify="required" maxlength="50" autocomplete="off"
+                           list="rMater-list" class="layui-input" placeholder="请输入" >
+                    <datalist id="rMater-list" >
+                        <option value="见附件"></option>
+                        <option value="N/A"></option>
+                    </datalist>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">罗氏批号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="rBatch"  lay-verify="required" maxlength="50" autocomplete="off" list="rBatch-list" class="layui-input" placeholder="请输入" >
-                    <div style="overflow: auto; height: 30px";>
-                        <datalist id="rBatch-list" style="display:none;"></datalist>
-                    </div>
+                    <input type="text" name="rBatch"  lay-verify="required" maxlength="50" autocomplete="off"
+                           list="rBatch-list" class="layui-input" placeholder="请输入" >
+                    <datalist id="rBatch-list" >
+                        <option value="见附件"></option>
+                        <option value="N/A"></option>
+                    </datalist>
                 </div>
             </div>
         </div>
@@ -105,28 +98,30 @@
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">生产日期</label>
                 <div class="layui-input-block">
-                    <input type="text" name="manuDate"  lay-verify="required" maxlength="50" autocomplete="off" list="manuDate-list"
-                           class="layui-input" placeholder="请输入  例如：1990-01-01" >
-                    <div style="overflow: auto; height: 30px";>
-                        <datalist id="manuDate-list" style="display:none;"></datalist>
-                    </div>
+                    <input type="text" name="manuDate"  lay-verify="required" maxlength="50" autocomplete="off"
+                           list="manuDate-list" class="layui-input" placeholder="请输入  例如：1990-01-01" >
+                    <datalist id="manuDate-list" >
+                        <option value="见附件"></option>
+                        <option value="N/A"></option>
+                    </datalist>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">有效期</label>
                 <div class="layui-input-block">
-                    <input type="text" name="expiryDate"  lay-verify="required" maxlength="50" autocomplete="off" list="expiryDate-list"
-                           class="layui-input" placeholder="请输入  例如：1990-01-01" >
-                    <div style="overflow: auto; height: 30px";>
-                        <datalist id="expiryDate-list" style="display:none;"></datalist>
-                    </div>
+                    <input type="text" name="expiryDate"  lay-verify="required" maxlength="50" autocomplete="off"
+                           list="expiryDate-list" class="layui-input" placeholder="请输入  例如：1990-01-01" >
+                    <datalist id="expiryDate-list">
+                        <option value="见附件"></option>
+                        <option value="N/A"></option>
+                    </datalist>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">异常总数</label>
                 <div class="layui-input-block">
                     <input type="text" name="quarantine"  maxlength="50" autocomplete="off"
-                           class="layui-input " lay-verify="required">
+                           class="layui-input " lay-verify="required"  placeholder="请输入">
                 </div>
             </div>
         </div>
@@ -134,7 +129,7 @@
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">上报阶段</label>
                 <div class="layui-input-block">
-                    <select name="stage" id="stage" lay-verify="required" >
+                    <select name="type" id="stage-add" lay-verify="required" >
                         <option value="">请选择</option>
                     </select>
                 </div>
@@ -142,25 +137,25 @@
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">采购来源</label>
                 <div class="layui-input-block">
-                    <select name="source" id="source" lay-verify="required" >
+                    <select name="source" id="source-add" lay-verify="required" >
                         <option value="">请选择</option>
                     </select>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">产品分类</label>
-                <div class="layui-input-block" >
-                    <select name="classify" id="classify" lay-verify="required" >
+                <label class="layui-form-label">产品分类</label>
+                <div class="layui-input-block">
+                    <select name="classify" id="classify-add" lay-verify="required" >
                         <option value="">请选择</option>
                     </select>
                 </div>
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm12 ">
+            <div class="layui-inline layui-col-sm12">
                 <label class="layui-form-label ">Remark箱号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="getRemark" maxlength="50" autocomplete="off"
+                    <input type="text" name="getRemark" maxlength="200" autocomplete="off"
                            class="layui-input " lay-verify="required" placeholder="请输入">
                 </div>
             </div>
@@ -211,11 +206,11 @@
 
         var imageList = '';
         var images = [];
+        var stageQFF = '其他手工QFF';
         var plant = "Plant工厂";
         var stage = "QFF上报阶段";
         var source = "采购来源";
         var classify = "产品分类";
-        var other = "其他字典";
         var to = {time:new Date()};
 
 
@@ -306,10 +301,11 @@
                 imageList+=images[i]+",";
             }
             data.field.images = imageList;
+            data.field.stage = stageQFF;
             $('#commodity-submit-control').attr("style","display:none;");
             febs.post(ctx + 'commodity/commit', data.field , function (data) {
                 layer.closeAll();
-                $('#fbs-commodity').find('#commodity-query').click();
+                $('#fbs-wrapper').find('#wrapper-query').click();
                 febs.alert.success('数据修改成功');
             });
             return false;
@@ -318,7 +314,7 @@
 
         $.get(ctx +"opinion/getOpinion/"+classify,to,function(res){
             var data = res.data;
-            var dom=$("#classify");
+            var dom=$("#classify-add");
             var html='<option value=""></option>';
             $.each(data,function(index,item){
                 html+='<option value="'+item.name+'">'+item.name+'</option>'
@@ -329,7 +325,7 @@
 
         $.get(ctx +"opinion/getOpinion/"+source,to,function(res){
             var data = res.data;
-            var dom=$("#source");
+            var dom=$("#source-add");
             var html='<option value=""></option>';
             $.each(data,function(index,item){
                 html+='<option value="'+item.name+'">'+item.name+'</option>'
@@ -351,7 +347,7 @@
 
         $.get(ctx +"opinion/getOpinion/"+stage,to,function(res){
             var data=res.data;
-            var dom=$("#stage");
+            var dom=$("#stage-add");
             var html='<option value=""></option>';
             $.each(data,function(index,item){
                 html+='<option value="'+item.name+'">'+item.name+'</option>'
@@ -359,20 +355,6 @@
             dom.html(html);
             form.render("select");
         });
-
-
-        $.get(ctx +"opinion/getOpinion/"+other,to,function(res){
-            var data = res.data;
-            $.each(data,function(index,item){
-                $("#kMater-list").append('<option value="'+item.name+'"></option>');
-                $("#kBatch-list").append('<option value="'+item.name+'"></option>');
-                $("#rMater-list").append('<option value="'+item.name+'"></option>');
-                $("#rBatch-list").append('<option value="'+item.name+'"></option>');
-                $("#manuDate-list").append('<option value="'+item.name+'"></option>');
-                $("#expiryDate-list").append('<option value="'+item.name+'"></option>');
-            });
-        });
-
 
 
     });

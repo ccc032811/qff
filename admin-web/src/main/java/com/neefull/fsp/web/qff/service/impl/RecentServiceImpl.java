@@ -108,17 +108,11 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
     @Override
     public List<Recent> getRecentExcelImportPage(Recent recent,User user) {
         List<Recent> recentList = null;
-        List<RecentExcelImport> excelImports = null;
         if(recent.getAtt()!=null&&recent.getAtt()==1){
-            recent.setPageNum(1);
-            List<Recent> commodities = getAttRecent(recent, user);
-            recentList = PageUtils.page(commodities, recent.getPageSize(), 1);
+            recentList = getAttRecent(recent, user);
         }else {
             recentList = recentMapper.getPageConserve(recent);
         }
-
-
-
         return recentList;
     }
 

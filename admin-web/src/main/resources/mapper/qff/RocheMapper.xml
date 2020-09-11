@@ -99,16 +99,14 @@
             and date_format(create_time,'%Y-%m-%d') between  #{startTime} and  #{endTime}
         </if>
         <choose>
-            <when test="status == '2'">
-                and status = 2
+            <when test="status != ''">
+                and status = #{status}
             </when>
             <otherwise>
                 and status != 4
             </otherwise>
         </choose>
         order by create_time desc
-        <if test="pageNum == null " >
-            limit  #{pageSize}
-        </if>
+
     </select>
 </mapper>

@@ -257,15 +257,15 @@
                     time:new Date()
                 },
                 cols: [[
-                    {field: 'kMater', title: '康德乐物料号',align:'center'},
-                    {field: 'rMater', title: '罗氏物料号',align:'center'},
-                    {field: 'name', title: '产品名称',align:'center'},
-                    {field: 'useLife', title: '有效期',align:'center'},
-                    {field: 'batch', title: '批号',align:'center'},
-                    {field: 'sapBatch', title: 'SAP 批次',align:'center'},
-                    {field: 'factory', title: '工厂',align:'center'},
-                    {field: 'wareHouse', title: '库位',align:'center'},
-                    {title: '处理阶段', templet: '#recent-status',align:'center'},
+                    {field: 'kMater', title: '康德乐物料号',align:'center',minWidth: 120},
+                    {field: 'rMater', title: '罗氏物料号',align:'center',minWidth: 120},
+                    {field: 'name', title: '产品名称',align:'center',minWidth: 120},
+                    {field: 'useLife', title: '有效期',align:'center',minWidth: 120},
+                    {field: 'batch', title: '批号',align:'center',minWidth: 120},
+                    {field: 'sapBatch', title: 'SAP 批次',align:'center',minWidth: 120},
+                    {field: 'factory', title: '工厂',align:'center',minWidth: 120},
+                    {field: 'wareHouse', title: '库位',align:'center',minWidth: 120},
+                    {title: '处理阶段', templet: '#recent-status',align:'center',minWidth: 120},
                     {title: '操作', toolbar: '#recent-option',align:'center',width: 200}
                 ]],
                 done:function (res,curr,count) {
@@ -322,31 +322,7 @@
             var layEvent = obj.event;
             if (layEvent === 'recent-download') {
                 var params =getQueryParams();
-                layer.open({
-                    id:'recent-downLoad',
-                    type: 1,
-                    title: '需导出的个数',
-                    shadeClose: false,
-                    btn: '确认',
-                    area:  ['350px','180px'],
-                    content:'<div class="layui-inline" style="left: -15px;margin-top: 25px">\n' +
-                        '                        <label class="layui-form-label" >请输入</label>\n' +
-                        '                        <div class="layui-input-inline">\n' +
-                        '                            <input type="text" id="recent-count" maxlength="50" autocomplete="off" class="layui-input" lay-verify="required" >\n' +
-                        '                        </div>\n' +
-                        '                    </div>',
-                    yes:function(index, layero){
-                        var count = layero.find('#recent-count');
-
-                        if(isNumber($(count).val())){
-                            params.pageSize = $(count).val();
-                            febs.download(ctx + 'recent/excel',params, '近效期QFF.xlsx');
-                        }
-
-                        layer.close(index);
-                    }
-                })
-
+                febs.download(ctx + 'recent/excel',params, '近效期QFF.xlsx');
             }
             if (layEvent === 'template-download'){
                 febs.download(ctx + 'file/template', null, 'Excel导入模板.xlsx');

@@ -103,9 +103,7 @@ public class RocheServiceImpl extends ServiceImpl<RocheMapper, Roche> implements
 
         List<Roche> rocheList = null;
         if(roche.getAtt()!=null&&roche.getAtt()==1){
-            roche.setPageNum(1);
-            List<Roche> attRoche = getAttRoche(roche, user);
-            rocheList = PageUtils.page(attRoche,roche.getPageSize(),1);
+            rocheList = getAttRoche(roche, user);
         }else {
             rocheList = rocheMapper.getPageConserve(roche);
         }

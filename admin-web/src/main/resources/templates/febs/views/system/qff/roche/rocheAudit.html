@@ -41,7 +41,7 @@
     .layui-form-item-rigth{
         border-right: 1px solid #000;
     }
-    .layui-col-sm4 {
+    .layui-col-sm4,.layui-col-sm8,.layui-col-sm6 {
         border-left: 1px solid #000;
         border-top: 1px solid #000;
         height: 39px;
@@ -49,7 +49,7 @@
     .layui-col-sm12{
         border-left: 1px solid #000;
         border-top: 1px solid #000;
-
+        height: 100px;
     }
     .layui-form-label {
         float: left;
@@ -60,10 +60,10 @@
         line-height: 20px;
         text-align: center;
         height: 21px;
-        border-right: 1px solid #000;
     }
     .layui-input-block{
         height: 39px;
+        border-left: 1px solid #000;
     }
     .layui-input, .layui-textarea {
         width: 100%;
@@ -75,13 +75,6 @@
 <div class="layui-fluid" id="roche-detail" lay-title = "罗氏内部发起QFF" style="margin-left: 18px">
     <form class="layui-form " action="" lay-filter="roche-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
-            <!--<div class="layui-inline layui-col-sm4 ">-->
-                <!--<label class="layui-form-label ">运输单号</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="transport"  maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input "  readonly="readonly" >-->
-                <!--</div>-->
-            <!--</div>-->
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">NO编号</label>
                 <div class="layui-input-block">
@@ -107,10 +100,10 @@
         <div class="layui-form-item layui-form-item-rigth">
 
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label " id="reason-show">原因</label>
+                <label class="layui-form-label ">批号/序列号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="reason" id="reason" maxlength="50" autocomplete="off"
-                           class="layui-input"   >
+                    <input type="text" name="batch"  maxlength="50" autocomplete="off"
+                           class="layui-input"  readonly="readonly" >
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
@@ -129,19 +122,18 @@
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
-
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label ">批号/序列号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="batch"  maxlength="50" autocomplete="off"
-                           class="layui-input"  readonly="readonly" >
-                </div>
-            </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">受影响数量</label>
                 <div class="layui-input-block">
                     <input type="text" name="quantity"  maxlength="50" autocomplete="off"
                            class="layui-input"  readonly="readonly" >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4" >
+                <label class="layui-form-label ">单位</label>
+                <div class="layui-input-block">
+                    <input type="text" name="unit" maxlength="50" autocomplete="off"
+                           class="layui-input " readonly="readonly" >
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4 ">
@@ -176,13 +168,12 @@
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth" >
-            <div class="layui-inline layui-col-sm12" >
-                <label class="layui-form-label ">单位</label>
+            <div class="layui-inline layui-col-sm12">
+                <label class="layui-form-label " id="reason-show">原因</label>
                 <div class="layui-input-block">
-                    <input type="text" name="unit" maxlength="50" autocomplete="off"
-                           class="layui-input " readonly="readonly" >
+                    <input type="text" name="reason" id="reason" maxlength="50" autocomplete="off"
+                           class="layui-input"   >
                 </div>
-
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth" >
