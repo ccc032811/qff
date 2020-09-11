@@ -1,285 +1,285 @@
-<!--<style>-->
-    <!--#test-detail {-->
-        <!--padding: 20px 25px 25px 0;-->
-    <!--}-->
+<style>
+    #test-detail {
+        padding: 20px 25px 25px 0;
+    }
 
-    <!--#test-detail .layui-treeSelect .ztree li a, .ztree li span {-->
-        <!--margin: 0 0 2px 3px !important;-->
-    <!--}-->
+    #test-detail .layui-treeSelect .ztree li a, .ztree li span {
+        margin: 0 0 2px 3px !important;
+    }
 
-    <!--/* 覆盖样式 */-->
-    <!--.layui-form-item {-->
-        <!--margin-bottom: 0px;-->
-    <!--}-->
-    <!--.layui-form-item-rigth{-->
-        <!--border-right: 1px solid #000;-->
-    <!--}-->
-    <!--.layui-col-sm4,.layui-col-sm6 {-->
-        <!--border-left: 1px solid #000;-->
-        <!--border-top: 1px solid #000;-->
-        <!--height: 39px;-->
-    <!--}-->
-    <!--.layui-col-sm12{-->
-        <!--border-left: 1px solid #000;-->
-        <!--border-top: 1px solid #000;-->
-        <!--height: 100px;-->
-    <!--}-->
-    <!--.layui-form-label {-->
-        <!--float: left;-->
-        <!--display: block;-->
-        <!--padding: 10px 14px;-->
-        <!--width: 80px;-->
-        <!--font-weight: 400;-->
-        <!--line-height: 20px;-->
-        <!--text-align: center;-->
-        <!--height: 21px;-->
-        <!--border-right: 1px solid #000;-->
-    <!--}-->
-    <!--.layui-input-block{-->
-        <!--height: 39px;-->
-    <!--}-->
-    <!--.layui-input, .layui-textarea {-->
-        <!--width: 100%;-->
-    <!--}-->
-    <!--.layui-form-item .layui-inline {-->
-        <!--margin-bottom: 0px;-->
-    <!--}-->
-<!--</style>-->
-<!--<div class="layui-fluid" id="test-detail" lay-title = "养护QFF" style="margin-left: 18px">-->
-    <!--<form class="layui-form " action="" lay-filter="conserve-detail-form">-->
-        <!--<div class="layui-form-item layui-form-item-rigth">-->
-            <!--<div class="layui-inline layui-col-sm4 ">-->
-                <!--<label class="layui-form-label" >运输单号</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="transport" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " >-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layui-inline layui-col-sm4 ">-->
-                <!--<label class="layui-form-label">QFF编号</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="number" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " >-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layui-inline layui-col-sm4 ">-->
-                <!--<label class="layui-form-label ">工厂</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="plant" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " >-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="layui-form-item layui-form-item-rigth">-->
-            <!--<div class="layui-inline layui-col-sm4 ">-->
-                <!--<label class="layui-form-label ">康德乐物料号</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="kMater" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " >-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layui-inline layui-col-sm4 ">-->
-                <!--<label class="layui-form-label ">康德乐SAP号</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="kBatch" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input ">-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layui-inline layui-col-sm4 ">-->
-                <!--<label class="layui-form-label ">罗氏物料号</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="rMater" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " >-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="layui-form-item layui-form-item-rigth">-->
-            <!--<div class="layui-inline layui-col-sm4 ">-->
-                <!--<label class="layui-form-label ">是否是危险品</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="isDanger" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " >-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layui-inline layui-col-sm4">-->
-                <!--<label class="layui-form-label ">药厂物料号</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="pMater" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " >-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layui-inline layui-col-sm4">-->
-                <!--<label class="layui-form-label ">罗氏批号</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="rBatch" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " >-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="layui-form-item layui-form-item-rigth">-->
-            <!--<div class="layui-inline layui-col-sm4 ">-->
-                <!--<label class="layui-form-label ">生产日期</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" id="demo-manuDate" name="manuDate" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " >-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layui-inline layui-col-sm4">-->
-                <!--<label class="layui-form-label ">有效期</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" id="demo-expiryDate" name="expiryDate" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " >-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layui-inline layui-col-sm4">-->
-                <!--<label class="layui-form-label ">异常总数</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="quarantine" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " >-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="layui-form-item layui-form-item-rigth">-->
-            <!--<div class="layui-inline layui-col-sm4 ">-->
-                <!--<label class="layui-form-label ">发起日期</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" id="demo-initDate" name="initDate" lay-verify="required" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " >-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layui-inline layui-col-sm4">-->
-                <!--<label class="layui-form-label ">回复日期</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" id="demo-repTime" name="repTime"  maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input " readonly>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layui-inline layui-col-sm4">-->
-                <!--<label class="layui-form-label ">上报阶段</label>-->
-                <!--<div class="layui-input-block" id="stage">-->
-                      <!--<select name="stage" id="search_stage" lay-verify="required" >-->
-                          <!--<option value="">请选择</option>-->
-                      <!--</select>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="layui-form-item layui-form-item-rigth">-->
-            <!--<div class="layui-inline layui-col-sm4 ">-->
-                <!--<label class="layui-form-label ">Remark箱号</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="getRemark" maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input "  >-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layui-inline layui-col-sm4">-->
-                <!--<label class="layui-form-label ">注册证号</label>-->
-                <!--<div class="layui-input-block">-->
-                    <!--<input type="text" name="register"  maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input" >-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="layui-inline layui-col-sm4">-->
-                <!--<label class="layui-form-label ">产品分类</label>-->
-                <!--<div class="layui-input-block" id="classify">-->
-                    <!--<input type="text" name="classify"  maxlength="50" autocomplete="off"-->
-                           <!--class="layui-input" >-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="layui-form-item"><div style="border-top: 1px solid #000;margin-top: 1px"></div></div>-->
+    /* 覆盖样式 */
+    .layui-form-item {
+        margin-bottom: 0px;
+    }
+    .layui-form-item-rigth{
+        border-right: 1px solid #000;
+    }
+    .layui-col-sm4,.layui-col-sm6 {
+        border-left: 1px solid #000;
+        border-top: 1px solid #000;
+        height: 39px;
+    }
+    .layui-col-sm12{
+        border-left: 1px solid #000;
+        border-top: 1px solid #000;
+        height: 100px;
+    }
+    .layui-form-label {
+        float: left;
+        display: block;
+        padding: 10px 14px;
+        width: 80px;
+        font-weight: 400;
+        line-height: 20px;
+        text-align: center;
+        height: 21px;
+        border-right: 1px solid #000;
+    }
+    .layui-input-block{
+        height: 39px;
+    }
+    .layui-input, .layui-textarea {
+        width: 100%;
+    }
+    .layui-form-item .layui-inline {
+        margin-bottom: 0px;
+    }
+</style>
+<div class="layui-fluid" id="test-detail" lay-title = "养护QFF" style="margin-left: 18px">
+    <form class="layui-form " action="" lay-filter="conserve-detail-form">
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label" >运输单号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="transport" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input " >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label">QFF编号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="number" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input " >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">工厂</label>
+                <div class="layui-input-block">
+                    <input type="text" name="plant" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input " >
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">康德乐物料号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="kMater" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input " >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">康德乐SAP号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="kBatch" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input ">
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">罗氏物料号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="rMater" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input " >
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">是否是危险品</label>
+                <div class="layui-input-block">
+                    <input type="text" name="isDanger" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input " >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">药厂物料号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pMater" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input " >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">罗氏批号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="rBatch" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input " >
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">生产日期</label>
+                <div class="layui-input-block">
+                    <input type="text" id="demo-manuDate" name="manuDate" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input " >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">有效期</label>
+                <div class="layui-input-block">
+                    <input type="text" id="demo-expiryDate" name="expiryDate" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input " >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">异常总数</label>
+                <div class="layui-input-block">
+                    <input type="text" name="quarantine" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input " >
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">发起日期</label>
+                <div class="layui-input-block">
+                    <input type="text" id="demo-initDate" name="initDate" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input " >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">回复日期</label>
+                <div class="layui-input-block">
+                    <input type="text" id="demo-repTime" name="repTime"  maxlength="50" autocomplete="off"
+                           class="layui-input " readonly>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">上报阶段</label>
+                <div class="layui-input-block" id="stage">
+                      <select name="stage" id="search_stage" lay-verify="required" >
+                          <option value="">请选择</option>
+                      </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4 ">
+                <label class="layui-form-label ">Remark箱号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="getRemark" maxlength="50" autocomplete="off"
+                           class="layui-input "  >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">注册证号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="register"  maxlength="50" autocomplete="off"
+                           class="layui-input" >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label ">产品分类</label>
+                <div class="layui-input-block" id="classify">
+                    <input type="text" name="classify"  maxlength="50" autocomplete="off"
+                           class="layui-input" >
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item"><div style="border-top: 1px solid #000;margin-top: 1px"></div></div>
 
-        <!--<div class="layui-form-item febs-hide">-->
-            <!--<div  style="margin-top: 75px;margin-left: 40%; " >-->
-                <!--<a class="layui-btn" lay-submit="" lay-filter="commit-form-submit" id="commit" ></a>-->
-                <!--<a class="layui-btn" lay-submit="" lay-filter="rollback-form-submit" id="rollback" ></a>-->
-            <!--</div>-->
-            <!--<br>-->
-            <!--<div style="float: right">-->
-                <!--<input style="border:0;" name="id" type="hidden">-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</form>-->
-    <!--<div class="layui-form-item">-->
-        <!--<div  style="margin-top: 75px;margin-left: 40%;" >-->
-            <!--<button class="layui-btn"  id="ccommit" >提交</button>-->
-            <!--<button class="layui-btn"  id="crollback" >提交退货</button>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
+        <div class="layui-form-item febs-hide">
+            <div  style="margin-top: 75px;margin-left: 40%; " >
+                <a class="layui-btn" lay-submit="" lay-filter="commit-form-submit" id="commit" ></a>
+                <a class="layui-btn" lay-submit="" lay-filter="rollback-form-submit" id="rollback" ></a>
+            </div>
+            <br>
+            <div style="float: right">
+                <input style="border:0;" name="id" type="hidden">
+            </div>
+        </div>
+    </form>
+    <div class="layui-form-item">
+        <div  style="margin-top: 75px;margin-left: 40%;" >
+            <button class="layui-btn"  id="ccommit" >提交</button>
+            <button class="layui-btn"  id="crollback" >提交退货</button>
+        </div>
+    </div>
+</div>
 
-<!--<script data-th-inline="javascript">-->
-    <!--layui.use(['febs', 'form','layer','laydate'], function () {-->
-        <!--var $ = layui.$,-->
-            <!--febs = layui.febs,-->
-            <!--layer = layui.layer,-->
-            <!--form = layui.form,-->
-            <!--$view = $('#test-detail'),-->
+<script data-th-inline="javascript">
+    layui.use(['febs', 'form','layer','laydate'], function () {
+        var $ = layui.$,
+            febs = layui.febs,
+            layer = layui.layer,
+            form = layui.form,
+            $view = $('#test-detail'),
 
-            <!--laydate = layui.laydate;-->
+            laydate = layui.laydate;
 
-        <!--var stage = "QFF上报阶段";-->
-        <!--var to = {time:new Date()};-->
+        var stage = "QFF上报阶段";
+        var to = {time:new Date()};
 
-        <!--laydate.render({-->
-            <!--elem: '#demo-initDate',-->
-            <!--trigger: 'click'-->
-            <!--,showBottom: false-->
-        <!--});-->
+        laydate.render({
+            elem: '#demo-initDate',
+            trigger: 'click'
+            ,showBottom: false
+        });
 
-        <!--laydate.render({-->
-            <!--elem: '#demo-manuDate',-->
-            <!--trigger: 'click'-->
-            <!--,showBottom: false-->
-        <!--});-->
+        laydate.render({
+            elem: '#demo-manuDate',
+            trigger: 'click'
+            ,showBottom: false
+        });
 
-        <!--laydate.render({-->
-            <!--elem: '#demo-expiryDate',-->
-            <!--trigger: 'click'-->
-            <!--,showBottom: false-->
-        <!--});-->
+        laydate.render({
+            elem: '#demo-expiryDate',
+            trigger: 'click'
+            ,showBottom: false
+        });
 
-        <!--form.render();-->
+        form.render();
 
-        <!--$view.on('click', '#ccommit', function () {-->
-            <!--$view.find('#commit').trigger('click');-->
-        <!--});-->
+        $view.on('click', '#ccommit', function () {
+            $view.find('#commit').trigger('click');
+        });
 
-        <!--$view.on('click', '#crollback', function () {-->
-            <!--$view.find('#rollback').trigger('click');-->
-        <!--});-->
-        <!--//提交更新-->
-        <!--form.on('submit(commit-form-submit)', function (data) {-->
+        $view.on('click', '#crollback', function () {
+            $view.find('#rollback').trigger('click');
+        });
+        //提交更新
+        form.on('submit(commit-form-submit)', function (data) {
 
-            <!--febs.post(ctx + 'commodity/commit', data.field , function (data) {-->
-                <!--if(data.code ===200){-->
-                    <!--layer.closeAll();-->
-                    <!--febs.alert.success('提交申请成功');-->
-                <!--}-->
-            <!--});-->
-            <!--return false;-->
-        <!--});-->
+            febs.post(ctx + 'commodity/commit', data.field , function (data) {
+                if(data.code ===200){
+                    layer.closeAll();
+                    febs.alert.success('提交申请成功');
+                }
+            });
+            return false;
+        });
 
-        <!--form.on('submit(rollback-form-submit)', function (data) {-->
-            <!--febs.post(ctx + 'commodity/commit', data.field , function (data) {-->
-                <!--if(data.code ===200) {-->
-                    <!--layer.closeAll();-->
-                    <!--febs.alert.success('提交申请成功');-->
-                <!--}-->
-            <!--});-->
-            <!--return false;-->
-        <!--});-->
+        form.on('submit(rollback-form-submit)', function (data) {
+            febs.post(ctx + 'commodity/commit', data.field , function (data) {
+                if(data.code ===200) {
+                    layer.closeAll();
+                    febs.alert.success('提交申请成功');
+                }
+            });
+            return false;
+        });
 
-        <!--$.get(ctx +"opinion/getOpinion/"+stage,to,function(res){-->
-            <!--var data=res.data;-->
-            <!--var dom=$("#search_stage");-->
-            <!--var html='<option value=""></option>';-->
-            <!--$.each(data,function(index,item){-->
-                <!--html+='<option value="'+item.name+'">'+item.name+'</option>'-->
-            <!--});-->
-            <!--dom.html(html);-->
-            <!--form.render("select");-->
-        <!--});-->
+        $.get(ctx +"opinion/getOpinion/"+stage,to,function(res){
+            var data=res.data;
+            var dom=$("#search_stage");
+            var html='<option value=""></option>';
+            $.each(data,function(index,item){
+                html+='<option value="'+item.name+'">'+item.name+'</option>'
+            });
+            dom.html(html);
+            form.render("select");
+        });
 
 
-    <!--});-->
-<!--</script>-->
+    });
+</script>

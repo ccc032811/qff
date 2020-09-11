@@ -42,11 +42,14 @@ public class ViewController extends BaseController {
     //***********************************************新增***********************************************************
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/addQff")
-    public String commodityDemo(){
+    public String commodityAdd(){
         return FebsUtil.view("system/qff/commodity/commodityAdd");
     }
 
-
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/textDemo")
+    public String commodityDemo(){
+        return FebsUtil.view("system/qff/other/commodityDemo");
+    }
     //***************************************************到货*****************************************************
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "delivery/view")

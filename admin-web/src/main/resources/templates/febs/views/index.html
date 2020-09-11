@@ -136,6 +136,16 @@
                     </div>
                 </div>
             </div>
+            <div class="label  label-left" >
+                <div class="label-image">
+
+                </div>
+                <div class="qff-start">
+                    <div class="site-demo-button  qff-start-text">
+                        <button  onclick="textDemo()" class="qff-start-button"><a style="color: #00A1DD"><h2>创建测试使用</h2></a></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -292,6 +302,13 @@
         window.addQff = function () {
             febs.modal.open('新增手工QFF', 'system/qff/commodity/addQff',{
                 area: [$(window).width() <= 750 ? '90%' : '70%',$(window).height() <= 750 ? '90%' : '60%']
+            });
+        };
+
+
+        window.textDemo = function () {
+            febs.modal.open('测试', 'system/qff/commodity/textDemo',{
+                area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '50%']
             });
         }
 

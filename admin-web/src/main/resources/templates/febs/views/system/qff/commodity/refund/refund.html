@@ -225,8 +225,10 @@
 
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="refund-detail" shiro:hasPermission="refund:view">查看</a>
     {{#  if(d.status != '3'&& d.isAllow == '1'){}}
+    {{#  if(d.repTime == ''||d.repTime == null){}}
     <a class="layui-btn layui-btn-xs" lay-event="refund-edit"  shiro:hasPermission="refund:audit">审核</a>
-    {{#  if(d.repTime != ''&&d.repTime != null){}}
+    {{# }else if(d.repTime != ''&&d.repTime != null){}}
+    <a class="layui-btn layui-btn-xs" lay-event="refund-edit"  shiro:hasPermission="refund:audit">确认</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-alter"  shiro:hasPermission="refund:alter ">修改</a>
     {{#}}}
     {{#}}}

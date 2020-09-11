@@ -237,13 +237,15 @@
 
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delivery-detail" shiro:hasPermission="delivery:view">查看</a>
     {{#  if(d.status != '3'&& d.isAllow == '1'){}}
-        <a class="layui-btn layui-btn-xs" lay-event="delivery-edit"  shiro:hasPermission="delivery:audit">审核</a>
-        {{#  if(d.repTime != ''&&d.repTime != null){}}
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delivery-alter"  shiro:hasPermission="delivery:alter ">修改</a>
-        {{#}}}
+    {{#  if(d.repTime == ''||d.repTime == null){}}
+    <a class="layui-btn layui-btn-xs" lay-event="delivery-edit"  shiro:hasPermission="delivery:audit">审核</a>
+    {{# }else if(d.repTime != ''&&d.repTime != null){}}
+    <a class="layui-btn layui-btn-xs" lay-event="delivery-edit"  shiro:hasPermission="delivery:audit">确认</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delivery-alter"  shiro:hasPermission="delivery:alter ">修改</a>
+    {{#}}}
     {{#}}}
     {{#  if(d.status != '3'){}}
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delivery-del" shiro:hasPermission="delivery:del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delivery-del" shiro:hasPermission="delivery:del">删除</a>
     {{#}}}
 
 
