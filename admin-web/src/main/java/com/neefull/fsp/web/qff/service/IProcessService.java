@@ -19,6 +19,8 @@ public interface IProcessService  {
      */
     void commitProcess(Object object, User user);
 
+    void  startProcess(Commodity commodity);
+
     /**找出能审核的人的集合
      * @param object
      * @return
@@ -29,7 +31,7 @@ public interface IProcessService  {
      * @param object
      * @param user
      */
-    void agreeCurrentProcess(Object object, User user);
+//    void agreeCurrentProcess(Object object, User user,String firstCommit);
 
     /**查询任务的执行流程
      * @param object

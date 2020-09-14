@@ -159,6 +159,10 @@
                 <div class="layui-input-block" id="stage">
                       <select name="stage" id="search_stage" lay-verify="required" >
                           <option value="">请选择</option>
+                          <option value="到货">到货</option>
+                          <option value="退货">退货</option>
+                          <option value="其他">储存 · 分包 · 出库</option>
+                          <option value="其他手工QFF">其他手工QFF</option>
                       </select>
                 </div>
             </div>
@@ -191,7 +195,6 @@
         <div class="layui-form-item febs-hide">
             <div  style="margin-top: 75px;margin-left: 40%; " >
                 <a class="layui-btn" lay-submit="" lay-filter="commit-form-submit" id="commit" ></a>
-                <a class="layui-btn" lay-submit="" lay-filter="rollback-form-submit" id="rollback" ></a>
             </div>
             <br>
             <div style="float: right">
@@ -202,7 +205,6 @@
     <div class="layui-form-item">
         <div  style="margin-top: 75px;margin-left: 40%;" >
             <button class="layui-btn"  id="ccommit" >提交</button>
-            <button class="layui-btn"  id="crollback" >提交退货</button>
         </div>
     </div>
 </div>
@@ -214,10 +216,9 @@
             layer = layui.layer,
             form = layui.form,
             $view = $('#test-detail'),
-
             laydate = layui.laydate;
 
-        var stage = "QFF上报阶段";
+
         var to = {time:new Date()};
 
         laydate.render({
@@ -244,9 +245,7 @@
             $view.find('#commit').trigger('click');
         });
 
-        $view.on('click', '#crollback', function () {
-            $view.find('#rollback').trigger('click');
-        });
+
         //提交更新
         form.on('submit(commit-form-submit)', function (data) {
 
@@ -259,26 +258,7 @@
             return false;
         });
 
-        form.on('submit(rollback-form-submit)', function (data) {
-            febs.post(ctx + 'commodity/commit', data.field , function (data) {
-                if(data.code ===200) {
-                    layer.closeAll();
-                    febs.alert.success('提交申请成功');
-                }
-            });
-            return false;
-        });
-
-        $.get(ctx +"opinion/getOpinion/"+stage,to,function(res){
-            var data=res.data;
-            var dom=$("#search_stage");
-            var html='<option value=""></option>';
-            $.each(data,function(index,item){
-                html+='<option value="'+item.name+'">'+item.name+'</option>'
-            });
-            dom.html(html);
-            form.render("select");
-        });
+       
 
 
     });

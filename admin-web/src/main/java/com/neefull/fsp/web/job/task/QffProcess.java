@@ -107,7 +107,7 @@ public class QffProcess extends BaseController {
 
         if (CollectionUtils.isNotEmpty(commodityEmail)) {
             for (Commodity commodity : commodityEmail) {
-                processService.commitProcess(commodity, new User());
+                processService.startProcess(commodity);
                 commodityService.updateCommodityStatus(commodity.getId(), ProcessConstant.UNDER_REVIEW);
             }
         }

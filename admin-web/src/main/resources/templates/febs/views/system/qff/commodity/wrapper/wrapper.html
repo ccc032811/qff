@@ -339,15 +339,14 @@
 
         table.on('toolbar(wrapperTable)', function(obj){
             var layEvent = obj.event;
-            if (layEvent === 'wrapper-download') {
-                var params = $.extend(getQueryParams(),{stage:stage});
-                febs.download(ctx + 'commodity/excel',params, '其他手工QFF.xlsx');
-
-            }
             if (layEvent === 'wrapper-add') {
                 febs.modal.open('新增手工QFF', 'system/qff/commodity/addQff',{
                     area: [$(window).width() <= 750 ? '90%' : '70%',$(window).height() <= 750 ? '90%' : '60%']
                 });
+            }
+            if (layEvent === 'wrapper-download') {
+                var params = $.extend(getQueryParams(),{stage:stage});
+                febs.download(ctx + 'commodity/excel',params, '其他手工QFF.xlsx');
             }
         });
 

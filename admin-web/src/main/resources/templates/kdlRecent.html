@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,30 +10,22 @@
     <span>您有待处理罗氏QFF如下，谢谢。</span><br>
     <table style="width: 100%; border-collapse: collapse; border-top:1px solid #eee; font-size:14px; table-layout: fixed;">
         <tr  style=" background: #fafafa; color: #333; border: 1px solid #eee;">
-            <td style="border-right:1px solid #eee;text-align: center">康德乐物料号</td>
-            <td style="border-right:1px solid #eee;text-align: center">罗氏物料号</td>
-            <td style="border-right:1px solid #eee;text-align: center">产品物料号</td>
-            <td style="border-right:1px solid #eee;text-align: center">有效期</td>
-            <td style="border-right:1px solid #eee;text-align: center">批号</td>
-            <td style="border-right:1px solid #eee;text-align: center">SAP批次</td>
+            <td style="border-right:1px solid #eee;text-align: center">开始时间</td>
             <td style="border-right:1px solid #eee;text-align: center">工厂</td>
-            <td style="border-right:1px solid #eee;text-align: center">库位</td>
-            <td style="border-right:1px solid #eee;text-align: center">数量</td>
-            <td style="border-right:1px solid #eee;text-align: center">罗氏处理意见</td>
-            <td style="text-align: center">变更记录</td>
+            <td style="border-right:1px solid #eee;text-align: center">产品信息</td>
+            <td style="border-right:1px solid #eee;text-align: center">总数量</td>
+            <td style="border-right:1px solid #eee;text-align: center">罗氏QA处理意见</td>
+            <td style="border-right:1px solid #eee;text-align: center">回复日期</td>
+            <td style="border-right:1px solid #eee;text-align: center">变更记录</td>
         </tr>
         <p th:each="recent:${list}">
             <tr style=" background: #fafafa; color: #333; border-bottom: 1px solid #eee;">
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.kMater}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.rMater}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.name}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.useLife}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.batch}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.sapBatch}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.startDate}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.factory}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.wareHouse}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.message}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.number}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.rConf}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.repDate}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;border-right:1px solid #eee;text-align: center" th:text="${recent.alteration}"></td>
             </tr>
         </p>

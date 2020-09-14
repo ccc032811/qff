@@ -7,33 +7,15 @@
 
 
     <select id="getRecentPage" resultType="com.neefull.fsp.web.qff.entity.Recent">
-        select * from qff_recent where 1=1
-        <if test="recent.kMater!=null and recent.kMater!=''">
-            and k_mater like concat('%',#{recent.kMater},'%')
-        </if>
-        <if test="recent.batch!=null and recent.batch!=''">
-            and batch like concat('%',#{recent.batch},'%')
-        </if>
-        <if test="recent.transport!=null and recent.transport!=''">
-            and transport like concat('%',#{recent.transport},'%')
-        </if>
-        <if test="recent.rMater!=null and recent.rMater!=''">
-            and r_mater like concat('%',#{recent.rMater},'%')
-        </if>
-        <if test="recent.name!=null and recent.name!=''">
-            and name like concat('%',#{recent.name},'%')
-        </if>
-        <if test="recent.useLife!=null and recent.useLife!=''">
-            and use_life like concat('%',#{recent.useLife},'%')
-        </if>
-        <if test="recent.sapBatch!=null and recent.sapBatch!=''">
-            and sap_batch like concat('%',#{recent.sapBatch},'%')
+        select * from qff_recent where stage = #{recent.stage}
+        <if test="recent.startDate!=null and recent.startDate!=''">
+            and start_date like concat('%',#{recent.startDate},'%')
         </if>
         <if test="recent.factory!=null and recent.factory!=''">
             and factory like concat('%',#{recent.factory},'%')
         </if>
-        <if test="recent.wareHouse!=null and recent.wareHouse!=''">
-            and ware_house like concat('%',#{recent.wareHouse},'%')
+        <if test="recent.message!=null and recent.message!=''">
+            and message like concat('%',#{recent.message},'%')
         </if>
         <if test="recent.number!=null and recent.number!=''">
             and number like concat('%',#{recent.number},'%')
@@ -58,33 +40,15 @@
     order by create_time desc
     </select>
     <select id="getPageConserve" resultType="com.neefull.fsp.web.qff.entity.Recent">
-        select * from qff_recent where 1=1
-        <if test="kMater!=null and kMater!=''">
-            and k_mater like concat('%',#{kMater},'%')
-        </if>
-        <if test="batch!=null and batch!=''">
-            and batch like concat('%',#{batch},'%')
-        </if>
-        <if test="transport!=null and transport!=''">
-            and transport like concat('%',#{transport},'%')
-        </if>
-        <if test="rMater!=null and rMater!=''">
-            and r_mater like concat('%',#{rMater},'%')
-        </if>
-        <if test="name!=null and name!=''">
-            and name like concat('%',#{name},'%')
-        </if>
-        <if test="useLife!=null and useLife!=''">
-            and use_life like concat('%',#{useLife},'%')
-        </if>
-        <if test="sapBatch!=null and sapBatch!=''">
-            and sap_batch like concat('%',#{sapBatch},'%')
+        select * from qff_recent where stage = #{stage}
+        <if test="startDate!=null and startDate!=''">
+            and startDate like concat('%',#{startDate},'%')
         </if>
         <if test="factory!=null and factory!=''">
             and factory like concat('%',#{factory},'%')
         </if>
-        <if test="wareHouse!=null and wareHouse!=''">
-            and ware_house like concat('%',#{wareHouse},'%')
+        <if test="message!=null and message!=''">
+            and message like concat('%',#{message},'%')
         </if>
         <if test="number!=null and number!=''">
             and number like concat('%',#{number},'%')
@@ -99,7 +63,7 @@
             and date_format(create_time,'%Y-%m-%d')  between  #{startTime} and  #{endTime}
         </if>
         <choose>
-            <when test="status != ''">
+            <when test="status != '' and status!=null ">
                 and status = #{status}
             </when>
             <otherwise>
@@ -107,6 +71,5 @@
             </otherwise>
         </choose>
         order by create_time desc
-
     </select>
 </mapper>

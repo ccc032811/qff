@@ -41,15 +41,11 @@ public class ViewController extends BaseController {
 
     //***********************************************新增***********************************************************
 
-    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/addQff")
-    public String commodityAdd(){
-        return FebsUtil.view("system/qff/commodity/commodityAdd");
-    }
-
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/textDemo")
     public String commodityDemo(){
         return FebsUtil.view("system/qff/other/commodityDemo");
     }
+
     //***************************************************到货*****************************************************
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "delivery/view")
@@ -117,9 +113,12 @@ public class ViewController extends BaseController {
         return FebsUtil.view("system/qff/commodity/conserve/conserveAudit");
     }
 
-
-
     //***************************************************其他*****************************************************
+
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/addQff")
+    public String commodityAdd(){
+        return FebsUtil.view("system/qff/commodity/wrapper/wrapperAdd");
+    }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "wrapper/view")
     @RequiresPermissions("wrapper:view")
@@ -156,6 +155,7 @@ public class ViewController extends BaseController {
 
     //***********************************************退货***********************************************************
 
+
     @GetMapping(FebsConstant.VIEW_PREFIX + "/refund/view")
     @RequiresPermissions("refund:view")
     public String showRefund(){
@@ -190,6 +190,11 @@ public class ViewController extends BaseController {
 
 
     //***************************************************近效期*****************************************************
+
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/recent/addRecent")
+    public String recentAdd(){
+        return FebsUtil.view("system/qff/recent/recentAdd");
+    }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "recent/view")
     @RequiresPermissions("recent:view")
@@ -260,6 +265,46 @@ public class ViewController extends BaseController {
         model.addAttribute("rocheShow", isShow);
 
         return FebsUtil.view("system/qff/roche/rocheAudit");
+    }
+
+    //***********************************************国际到货超温，无温度计***********************************************************
+
+
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/temperature/addTemperature")
+    public String temperatureAdd(){
+        return FebsUtil.view("system/qff/temperature/temperatureAdd");
+    }
+
+    @GetMapping(FebsConstant.VIEW_PREFIX + "temperature/view")
+    @RequiresPermissions("temperature:view")
+    public String showTemperature(){
+        return FebsUtil.view("system/qff/temperature/temperature");
+    }
+
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/temperature/temperatureShow/{id}")
+    @RequiresPermissions("temperature:view")
+    public String getTemperatureShow(@PathVariable Integer id, Model model){
+        Recent recent = recentService.queryRecentById(id);
+        model.addAttribute("temperature",recent);
+        return FebsUtil.view("system/qff/temperature/temperatureShow");
+    }
+
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/temperature/temperatureAudit/{id}")
+    @RequiresPermissions("temperature:view")
+    public String getTemperatureAudit(@PathVariable Integer id, Model model){
+        Recent recent = recentService.queryRecentById(id);
+        model.addAttribute("temperature",recent);
+        return FebsUtil.view("system/qff/temperature/temperatureAudit");
+    }
+
+    @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/temperature/temperatureAlter/{id}/{isShow}")
+    @RequiresPermissions("temperature:view")
+    public String getTemperatureAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
+        Recent recent = recentService.queryRecentById(id);
+        model.addAttribute("temperature", recent);
+        model.addAttribute("temperatureShow", isShow);
+
+        return FebsUtil.view("system/qff/temperature/temperatureAudit");
     }
 
     //***********************************************字典管理***********************************************************

@@ -15,6 +15,7 @@ import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -68,7 +69,7 @@ public class RecentController extends BaseController {
      */
     @Qff("更新近效期QFF")
     @PostMapping("/edit")
-    @RequiresPermissions("recent:audit")
+    @RequiresPermissions(value = {"recent:audit","temperature:audit"},logical = Logical.OR)
     public FebsResponse editRecent(Recent recent) throws FebsException {
         try {
             recentService.editRecent(recent);
@@ -92,7 +93,7 @@ public class RecentController extends BaseController {
      * @return
      */
     @GetMapping("/list")
-    @RequiresPermissions("recent:view")
+    @RequiresPermissions(value = {"recent:view","temperature:view"},logical = Logical.OR)
     public FebsResponse getRecentPage(Recent recent) throws FebsException {
         try {
             IPage<Recent> pageInfo = recentService.getRecentPage(recent,getCurrentUser());
@@ -112,7 +113,7 @@ public class RecentController extends BaseController {
      */
     @Qff("删除近效期QFF")
     @GetMapping("/deleteRecent/{id}")
-    @RequiresPermissions("recent:del")
+    @RequiresPermissions(value = {"recent:del","temperature:del"},logical = Logical.OR)
     public FebsResponse updateRecentStatus(@PathVariable Integer id) throws FebsException {
         try {
             Recent recent = new Recent();
@@ -133,7 +134,7 @@ public class RecentController extends BaseController {
      * @throws FebsException
      */
     @GetMapping("/queryRecent/{id}")
-    @RequiresPermissions("recent:view")
+    @RequiresPermissions(value = {"recent:view","temperature:view"},logical = Logical.OR)
     public FebsResponse queryRecentById(@PathVariable Integer id) throws FebsException {
         try {
             Recent recent = recentService.queryRecentById(id);
@@ -176,7 +177,7 @@ public class RecentController extends BaseController {
      */
     @Qff("提交近效期QFF流程")
     @PostMapping("/commit")
-    @RequiresPermissions("recent:audit")
+    @RequiresPermissions(value = {"recent:audit","temperature:audit"},logical = Logical.OR)
     public FebsResponse commitProcess(Recent recent) throws FebsException {
         try {
             User user = getCurrentUser();
@@ -196,13 +197,14 @@ public class RecentController extends BaseController {
      */
     @Qff("同意近效期QFF任务")
     @PostMapping("/agree")
-    @RequiresPermissions("recent:audit")
+    @RequiresPermissions(value = {"recent:audit","temperature:audit"},logical = Logical.OR)
     public FebsResponse agreeCurrentProcess(Recent recent) throws FebsException {
         try {
             User user = getCurrentUser();
             List<String> group = processService.getGroupId(recent);
             if(group.contains(user.getUsername())){
-                processService.agreeCurrentProcess(recent,user);
+//                processService.agreeCurrentProcess(recent,user,"1");
+                processService.commitProcess(recent,user);
             }else {
                 throw new FebsException("当前无权限或改数据已审核");
             }
@@ -219,18 +221,10 @@ public class RecentController extends BaseController {
      * @param response
      */
     @GetMapping("excel")
-    @RequiresPermissions("recent:down")
+    @RequiresPermissions(value = {"recent:down","temperature:down"},logical = Logical.OR)
     public void download(Recent recent, HttpServletResponse response) throws FebsException {
         try {
             List<Recent> recentList = recentService.getRecentExcelImportPage(recent,getCurrentUser());
-            for (Recent rec : recentList) {
-                if(rec.getUseLife()!=null){
-                    rec.setUseLife(rec.getUseLife().replace("-","/"));
-                }
-                if(rec.getRepDate()!=null){
-                    rec.setRepDate(rec.getRepDate().replace("-","/"));
-                }
-            }
             ExcelKit.$Export(Recent.class, response).downXlsx(recentList, false);
         } catch (Exception e) {
             String message = "导出近效期QFFexcel失败";

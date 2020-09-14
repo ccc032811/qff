@@ -19,8 +19,5 @@ public interface IFileService {
     String uploadImage(MultipartFile file,String number);
 
 
-    /**解析excel
-     * @param file
-     */
-    void resolverExcel(MultipartFile file, User user);
+
 }

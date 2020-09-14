@@ -107,6 +107,17 @@ public class RocheServiceImpl extends ServiceImpl<RocheMapper, Roche> implements
         }else {
             rocheList = rocheMapper.getPageConserve(roche);
         }
+        for (Roche roc : rocheList) {
+            if(roc.getReqDate()!=null){
+                roc.setReqDate(roc.getReqDate().replace("-","/"));
+            }
+            if(roc.getExceptDate()!=null){
+                roc.setExceptDate(roc.getExceptDate().replace("-","/"));
+            }
+            if(roc.getCompleteDate()!=null){
+                roc.setCompleteDate(roc.getCompleteDate().replace("-","/"));
+            }
+        }
         return rocheList;
     }
 

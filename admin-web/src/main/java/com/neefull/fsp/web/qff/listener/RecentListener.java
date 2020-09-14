@@ -80,14 +80,14 @@ public class RecentListener implements JavaDelegate {
             }
         }
         Recent recent = recentService.queryRecentById(Integer.parseInt(starId));
-//        List<Attachment> attachments = (List<Attachment>) execution.getVariable("list");
+        List<Attachment> attachments = (List<Attachment>) execution.getVariable("list");
 
         Map<String,String> files = new HashMap<>();
-//        if(CollectionUtils.isNotEmpty(attachments)){
-//            for (Attachment attachment : attachments) {
-//                files.put(attachment.getRemark(),properties.getImagePath()+attachment.getRemark()+ StringPool.DOT+attachment.getAttachType());
-//            }
-//        }
+        if(CollectionUtils.isNotEmpty(attachments)){
+            for (Attachment attachment : attachments) {
+                files.put(attachment.getRemark()+ StringPool.DOT + attachment.getAttachType(),properties.getImagePath()+attachment.getRemark()+ StringPool.DOT+attachment.getAttachType());
+            }
+        }
 //        Map<String,String> map = new HashMap<>();
 //        String url = templateProperties.getConserveDownLoadPath()+ recent.getNumber()+".pdf";
 //        template.createPdf(map,templateProperties.getConserveTemplatePath(),templateProperties.getConserveDownLoadPath(),url);

@@ -202,7 +202,8 @@ public class RocheController extends BaseController {
             User user = getCurrentUser();
             List<String> group = processService.getGroupId(roche);
             if(group.contains(user.getUsername())){
-                processService.agreeCurrentProcess(roche,user);
+                processService.commitProcess(roche,user);
+//                processService.agreeCurrentProcess(roche,user,null);
             }else {
                 throw new FebsException("当前无权限或改数据已审核");
             }
@@ -223,17 +224,7 @@ public class RocheController extends BaseController {
     public void download(Roche roche, HttpServletResponse response) throws FebsException {
         try {
             List<Roche> rocheList = rocheService.getRocheExcelPage(roche,getCurrentUser());
-            for (Roche roc : rocheList) {
-                if(roc.getReqDate()!=null){
-                    roc.setReqDate(roc.getReqDate().replace("-","/"));
-                }
-                if(roc.getExceptDate()!=null){
-                    roc.setExceptDate(roc.getExceptDate().replace("-","/"));
-                }
-                if(roc.getCompleteDate()!=null){
-                    roc.setCompleteDate(roc.getCompleteDate().replace("-","/"));
-                }
-            }
+
             ExcelKit.$Export(Roche.class, response).downXlsx(rocheList, false);
         } catch (Exception e) {
             String message = "导出罗氏内部QFFexcel失败";

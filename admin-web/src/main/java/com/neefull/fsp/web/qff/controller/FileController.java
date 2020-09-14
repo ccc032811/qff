@@ -147,7 +147,6 @@ public class FileController extends BaseController {
             log.error(message,e);
             throw new FebsException(message);
         }
-
     }
 
 
@@ -231,48 +230,29 @@ public class FileController extends BaseController {
         }
     }
 
-    /**解析exexl
-     * @param file
-     * @return
-     * @throws FebsException
-     */
-    @Qff("解析近效期QFF")
-    @PostMapping("/resolver")
-    @RequiresPermissions("recent:import")
-    public FebsResponse resolverExcel(@RequestParam("file") MultipartFile file) throws FebsException {
 
-        try {
-            fileService.resolverExcel(file,getCurrentUser());
-            return new FebsResponse().success();
-        } catch (Exception e) {
-            String message = "解析失败";
-            log.error(message,e);
-            throw new FebsException(message);
-        }
 
-    }
-
-    /**
-     * 下载 Excel导入模板
-     */
-    @GetMapping("template")
-    @RequiresPermissions("recent:template")
-    public void generateImportTemplate(HttpServletResponse response) {
-        try {
-            ClassPathResource pathResource = new ClassPathResource("/templates/excel/近效期产品清单模板.xlsx");
-            InputStream inputStream = pathResource.getInputStream();
-            Workbook wb = WorkbookFactory.create(inputStream);
-            response.reset();
-            response.setContentType("multipart/form-data");
-            response.setHeader("Content-Disposition", "attachment; filename=" + new String("近效期产品清单模板".getBytes("UTF-8"), "iso8859-1") + ".xlsx");
-            wb.write(response.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidFormatException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    /**
+//     * 下载 Excel导入模板
+//     */
+//    @GetMapping("template")
+//    @RequiresPermissions("recent:template")
+//    public void generateImportTemplate(HttpServletResponse response) {
+//        try {
+//            ClassPathResource pathResource = new ClassPathResource("/templates/excel/近效期产品清单模板.xlsx");
+//            InputStream inputStream = pathResource.getInputStream();
+//            Workbook wb = WorkbookFactory.create(inputStream);
+//            response.reset();
+//            response.setContentType("multipart/form-data");
+//            response.setHeader("Content-Disposition", "attachment; filename=" + new String("近效期产品清单模板".getBytes("UTF-8"), "iso8859-1") + ".xlsx");
+//            wb.write(response.getOutputStream());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (InvalidFormatException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
 
 }

@@ -99,7 +99,7 @@
             and date_format(create_time,'%Y-%m-%d') between  #{startTime} and  #{endTime}
         </if>
         <choose>
-            <when test="status != ''">
+            <when test="status != ''and status!=null">
                 and status = #{status}
             </when>
             <otherwise>

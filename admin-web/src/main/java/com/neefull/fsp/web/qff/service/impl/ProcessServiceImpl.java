@@ -1,5 +1,6 @@
 package com.neefull.fsp.web.qff.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.neefull.fsp.web.qff.config.ProcessInstanceProperties;
 import com.neefull.fsp.web.qff.config.SendMailProperties;
 import com.neefull.fsp.web.qff.entity.*;
@@ -71,44 +72,331 @@ public class ProcessServiceImpl implements IProcessService {
     @Transactional
     public void commitProcess(Object object, User user) {
 
+        List<Attachment> attachments = new ArrayList<>();
+
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
+            String businessKey = getBusinessKey(commodity);
 
             if(commodity.getId()==null){
                 commodityService.addCommodity(commodity);
+
+                startProcess(commodity);
+
+                if(StringUtils.isNotEmpty(commodity.getImages())){
+                    addOrEditFiles(commodity, user);
+                }
+            }else {
+                editCommodity(commodity);
+
+                if(StringUtils.isNotEmpty(commodity.getImages())){
+                    attachments = addOrEditFiles(commodity, user);
+                }
+
+                agreeProcess(businessKey,user,attachments);
+                if(queryProcessInstance(businessKey)==null){
+                    commodityService.updateCommodityStatus(commodity.getId(),ProcessConstant.HAS_FINISHED);
+                }
             }
 
-            String businessKey = getBusinessKey(commodity);
-            //启动流程
-            startProcess(properties.getCommodityProcess(),businessKey);
 
-            currentProcess(commodity,user,"1");
-            //更改状态审核中
-            commodityService.updateCommodityStatus(commodity.getId(), ProcessConstant.UNDER_REVIEW);
 
         }else if(object instanceof Recent){
             Recent recent = (Recent) object;
-            if(recent.getId()==null){
-                recentService.addRecent(recent);
-            }else {
-                recentService.editRecent(recent);
-            }
-            String businessKey = getBusinessKey(recent);
-            startProcess(properties.getRecentProcess(),businessKey);
-            agreeCurrentProcess(recent,user);
 
-            recentService.updateRecentStatus(recent.getId(), ProcessConstant.UNDER_REVIEW);
+            Map<String,String> files = new HashMap<>();
+            String businessKey = getBusinessKey(recent);
+
+            if(recent.getId()==null){
+                recent.setStartDate(DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
+                recentService.addRecent(recent);
+
+                if(StringUtils.isNotEmpty(recent.getImages())){
+                    attachments = addOrEditFiles(recent, user);
+                    for (Attachment attachment : attachments) {
+                        files.put(attachment.getRemark()+ StringPool.DOT + attachment.getAttachType(),
+                                properties.getImagePath() + attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
+                    }
+                }
+
+                businessKey = getBusinessKey(recent);
+                startProcess(properties.getRecentProcess(),businessKey);
+
+                Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
+                taskService.setAssignee(task.getId(),"康德乐发起申请");
+                taskService.complete(task.getId());
+
+                recentService.updateRecentStatus(recent.getId(), ProcessConstant.UNDER_REVIEW);
+
+                String[] rocheMails = getEmails(86);
+                List<Recent> recentList =new ArrayList<>();
+                recentList.add(recent);
+
+                Context context = new Context();
+                context.setVariable("list",recentList);
+                String text = templateEngine.process("rocheRecent", context);
+
+                MailUtils.sendMail(text,mailProperties,rocheMails,files);
+            }else {
+                editCommodity(recent);
+
+                if(StringUtils.isNotEmpty(recent.getImages())){
+                    attachments = addOrEditFiles(recent, user);
+                }
+                agreeProcess(businessKey,user,attachments);
+                if(queryProcessInstance(businessKey)==null){
+                    recentService.updateRecentStatus(recent.getId(),ProcessConstant.HAS_FINISHED);
+                }
+            }
+
         }else if(object instanceof Roche){
             Roche roche = (Roche) object;
-            rocheService.addRoche(roche);
-
             String businessKey = getBusinessKey(roche);
-            startProcess(properties.getRocheProcess(),businessKey);
-            agreeCurrentProcess(roche,user);
-            //更改状态审核中
-            rocheService.updateRocheStatus(roche.getId(), ProcessConstant.UNDER_REVIEW);
+
+            if(roche.getId()==null){
+                rocheService.addRoche(roche);
+
+                if(StringUtils.isNotEmpty(roche.getImages())){
+                    attachments = addOrEditFiles(roche, user);
+                }
+
+                startProcess(properties.getRocheProcess(),businessKey);
+
+                Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
+                taskService.setAssignee(task.getId(),"罗氏发起申请");
+                taskService.complete(task.getId());
+
+                rocheService.updateRocheStatus(roche.getId(), ProcessConstant.UNDER_REVIEW);
+            }else {
+                rocheService.editRoche(roche);
+
+                if(StringUtils.isNotEmpty(roche.getImages())){
+                    attachments = addOrEditFiles(roche, user);
+                }
+
+                agreeProcess(businessKey,user,attachments);
+                if(queryProcessInstance(businessKey)==null){
+                    rocheService.updateRocheStatus(roche.getId(),ProcessConstant.HAS_FINISHED);
+                    // 发送邮件
+                    Map<String,String> files = new HashMap<>();
+                    String[] rocheMails = getEmails(86);
+                    String[] kdlMails = getEmails(87);
+                    String[] mails = new String[rocheMails.length+kdlMails.length];
+                    System.arraycopy(rocheMails,0,mails,0,rocheMails.length);
+                    System.arraycopy(kdlMails,0,mails,rocheMails.length,kdlMails.length);
+
+
+                    List<Roche> rocheList =new ArrayList<>();
+                    rocheList.add(roche);
+
+                    Context context = new Context();
+                    context.setVariable("list",rocheList);
+                    String text = templateEngine.process("rocheRoche", context);
+
+                    //发送带附件的邮件
+                    MailUtils.sendMail(text,mailProperties,mails,files);
+
+                }
+            }
+
+
         }
     }
+
+    @Transactional
+    @Override
+    public void startProcess(Commodity commodity){
+        String businessKey = getBusinessKey(commodity);
+        startProcess(properties.getCommodityProcess(),businessKey);
+
+        Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
+        taskService.setAssignee(task.getId(),"康德乐发起申请");
+        taskService.complete(task.getId());
+
+        commodityService.updateCommodityStatus(commodity.getId(), ProcessConstant.UNDER_REVIEW);
+    }
+
+
+    @Transactional
+    protected void agreeProcess(String businessKey,User user,List<Attachment> attachments){
+        Map<String,Object> map = new HashMap<>();
+        map.put("list",attachments);
+        List<Task> list = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
+        if(CollectionUtils.isNotEmpty(list)){
+            for (Task task : list) {
+                Set taskCandidate = getTaskCandidate(task.getId());
+                if(taskCandidate.contains(user.getUsername())){
+                    taskService.claim(task.getId(),user.getUsername());
+                    taskService.complete(task.getId(),map);
+                }
+            }
+        }
+    }
+
+
+    @Transactional
+    protected void editCommodity(Object object){
+
+        if(object instanceof Commodity) {
+            Commodity commodity = (Commodity) object;
+            String businessKey = getBusinessKey(commodity);
+            Boolean editTime = editTime(businessKey);
+            if (editTime) {
+                commodity.setRepTime(DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+            }
+            commodityService.editCommodity(commodity);
+        }else if(object instanceof Recent){
+            Recent recent = (Recent) object;
+            String businessKey = getBusinessKey(recent);
+            Boolean editTime = editTime(businessKey);
+            if (editTime) {
+                recent.setRepDate(DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+            }
+            recentService.editRecent(recent);
+        }
+    }
+
+    private Boolean editTime(String businessKey){
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceBusinessKey(businessKey).singleResult();
+        String activityId = processInstance.getActivityId();
+        return activityId.equals(ProcessConstant.THREE_STEP);
+    }
+
+
+//    @Override
+//    @Transactional
+//    public void agreeCurrentProcess(Object object, User user,String firstCommit) {
+//
+//        List<Attachment> attachments = new ArrayList<>();
+//        //设置更新的时间
+//        if(object instanceof Commodity){
+//            Commodity commodity = (Commodity) object;
+//
+//            String businessKey = getBusinessKey(commodity);
+//            if(StringUtils.isNotEmpty(commodity.getImages())){
+//                attachments = addOrEditFiles(commodity, user);
+//            }
+//            if(StringUtils.isNotEmpty(firstCommit)){
+//                editCommodity(commodity);
+//                ProcessInstance processInstance = getNewProcessInstance(businessKey, user,attachments);
+//                if(processInstance==null){
+//                    commodityService.updateCommodityStatus(commodity.getId(),ProcessConstant.HAS_FINISHED);
+//                }
+//            }else {
+//                firstCommit(businessKey,user,attachments);
+//            }
+//
+//
+//        }else if(object instanceof Recent){
+//            Recent recent = (Recent) object;
+//            if(StringUtils.isNotEmpty(firstCommit)){
+//                recent.setRepDate(DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
+//                recentService.editRecent(recent);
+//            }
+//
+//
+//            String businessKey = getBusinessKey(recent);
+//            if(StringUtils.isNotEmpty(recent.getImages())){
+//                attachments = addOrEditFiles(recent, user);
+//            }
+//            ProcessInstance processInstance = getNewProcessInstance(businessKey, user,attachments);
+//            if(processInstance==null){
+//                recentService.updateRecentStatus(recent.getId(),ProcessConstant.HAS_FINISHED);
+//            }
+//
+//        }else if(object instanceof Roche){
+//            Roche roche = (Roche) object;
+//            rocheService.editRoche(roche);
+//
+//            String businessKey = getBusinessKey(roche);
+//            ProcessInstance processInstance = getNewProcessInstance(businessKey, user,attachments);
+//            if(processInstance==null){
+//                rocheService.updateRocheStatus(roche.getId(),ProcessConstant.HAS_FINISHED);
+//                // 发送邮件
+//                Map<String,String> files = new HashMap<>();
+//                String[] rocheMails = getEmails(86);
+//                String[] kdlMails = getEmails(87);
+//                String[] mails = new String[rocheMails.length+kdlMails.length];
+//                System.arraycopy(rocheMails,0,mails,0,rocheMails.length);
+//                System.arraycopy(kdlMails,0,mails,rocheMails.length,kdlMails.length);
+//
+//
+//                List<Roche> list =new ArrayList<>();
+//                list.add(roche);
+//
+//                Context context = new Context();
+//                context.setVariable("list",list);
+//                String text = templateEngine.process("rocheRoche", context);
+//
+//                //发送带附件的邮件
+//                MailUtils.sendMail(text,mailProperties,mails,files);
+//
+//            }
+//        }
+//    }
+//
+//
+//    @Transactional
+//    protected ProcessInstance firstCommit(String businessKey,User user,List<Attachment> attachments){
+//        Map<String,Object> map = new HashMap<>();
+//        map.put("list",attachments);
+//        Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
+//
+//        commitSet(task,user);
+//        return  queryProcessInstance(businessKey);
+//    }
+//
+//
+//
+//    @Transactional
+//    protected void commitSet(Task task,User user){
+//        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
+//        String activityId = processInstance.getActivityId();
+//        if(activityId.equals(ProcessConstant.SIX_STEP)){
+//            taskService.setAssignee(task.getId(),"康德乐已提交");
+//        }else if(activityId.equals(ProcessConstant.FIVE_STEP)){
+//            taskService.setAssignee(task.getId(),"罗氏已提交");
+//        }else {
+//            taskService.claim(task.getId(),user.getUsername());
+//        }
+//        taskService.complete(task.getId());
+//    }
+//
+//
+//
+//    @Transactional
+//    protected ProcessInstance getNewProcessInstance(String businessKey,User user,List<Attachment> attachments){
+//        Map<String,Object> map = new HashMap<>();
+//        map.put("list",attachments);
+//        List<Task> list = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
+//        if(CollectionUtils.isNotEmpty(list)){
+//            for (Task task : list) {
+//                Set taskCandidate = getTaskCandidate(task.getId());
+//                if(taskCandidate.contains(user.getUsername())){
+//                    commitSet(task,user);
+//                }
+//            }
+//        }
+//        return  queryProcessInstance(businessKey);
+//    }
+
+
+
+    private Set getTaskCandidate(String taskId){
+        Set<String> user = new HashSet<String>();
+        List<IdentityLink> identityLinksForTask = taskService.getIdentityLinksForTask(taskId);
+        if(CollectionUtils.isNotEmpty(identityLinksForTask)){
+            for (IdentityLink identityLink : identityLinksForTask) {
+                if(identityLink.getUserId()!=null){
+                    user.add(identityLink.getUserId());
+                }
+            }
+        }
+        return user;
+    }
+
+
+
 
     @Transactional
     protected void startProcess(String definitionKey,String businessKey){
@@ -139,141 +427,29 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
 
-    @Transactional
-    public void  currentProcess(Commodity commodity,User user,String commit){
-        List<Attachment> attachments = null;
-        String businessKey = getBusinessKey(commodity);
-
-        if(StringUtils.isNotEmpty(commodity.getImages())){
-            attachments = addOrEditFiles(commodity, user);
-        }
-        if(commit!=null){
-            firstCommit(businessKey,user,attachments);
-        }else {
-            ProcessInstance processInstance = getNewProcessInstance(businessKey, user,attachments);
-            if(processInstance==null){
-                commodityService.updateCommodityStatus(commodity.getId(),ProcessConstant.HAS_FINISHED);
-            }
-        }
-
-
-    }
-
-
-    @Override
-    @Transactional
-    public void agreeCurrentProcess(Object object, User user) {
-        //设置更新的时间
-        if(object instanceof Commodity){
-            Commodity commodity = (Commodity) object;
-            editCommodity(commodity);
-
-            currentProcess(commodity,user,null);
-
-        }else if(object instanceof Recent){
-            Recent recent = (Recent) object;
-            recentService.editRecent(recent);
-            List<Attachment> attachments = null;
-            String businessKey = getBusinessKey(recent);
-            if(StringUtils.isNotEmpty(recent.getImages())){
-                attachments = addOrEditFiles(recent, user);
-            }
-            ProcessInstance processInstance = getNewProcessInstance(businessKey, user,attachments);
-            if(processInstance==null){
-                recentService.updateRecentStatus(recent.getId(),ProcessConstant.HAS_FINISHED);
-            }
-
-        }else if(object instanceof Roche){
-            Roche roche = (Roche) object;
-            rocheService.editRoche(roche);
-            List<Attachment> attachments = null;
-            if(StringUtils.isNotEmpty(roche.getImages())){
-                attachments = addOrEditFiles(roche, user);
-            }
-            String businessKey = getBusinessKey(roche);
-            ProcessInstance processInstance = getNewProcessInstance(businessKey, user,attachments);
-            if(processInstance==null){
-                rocheService.updateRocheStatus(roche.getId(),ProcessConstant.HAS_FINISHED);
-                // 发送邮件
-                Map<String,String> files = new HashMap<>();
-                String[] rocheMails = getEmails(86);
-                String[] kdlMails = getEmails(87);
-                String[] mails = new String[rocheMails.length+kdlMails.length];
-                System.arraycopy(rocheMails,0,mails,0,rocheMails.length);
-                System.arraycopy(kdlMails,0,mails,rocheMails.length,kdlMails.length);
-
-
-                List<Roche> list =new ArrayList<>();
-                list.add(roche);
-
-                Context context = new Context();
-                context.setVariable("list",list);
-                String text = templateEngine.process("rocheRoche", context);
-
-                //发送带附件的邮件
-                MailUtils.sendMail(text,mailProperties,mails,files);
-
-            }
-        }
-    }
-
-    @Transactional
-    protected ProcessInstance firstCommit(String businessKey,User user,List<Attachment> attachments){
-        Map<String,Object> map = new HashMap<>();
-        map.put("list",attachments);
-        Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
-
-        commitSet(task,user);
-        return  queryProcessInstance(businessKey);
-    }
+//    @Transactional
+//    public void  currentProcess(Commodity commodity,User user,String commit){
+//        List<Attachment> attachments = null;
+//        String businessKey = getBusinessKey(commodity);
+//
+//        if(StringUtils.isNotEmpty(commodity.getImages())){
+//            attachments = addOrEditFiles(commodity, user);
+//        }
+//        if(commit!=null){
+//            firstCommit(businessKey,user,attachments);
+//        }else {
+//            ProcessInstance processInstance = getNewProcessInstance(businessKey, user,attachments);
+//            if(processInstance==null){
+//                commodityService.updateCommodityStatus(commodity.getId(),ProcessConstant.HAS_FINISHED);
+//            }
+//        }
+//
+//
+//    }
 
 
 
-    @Transactional
-    protected void commitSet(Task task,User user){
-        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
-        String activityId = processInstance.getActivityId();
-        if(activityId.equals(ProcessConstant.SIX_STEP)){
-            taskService.setAssignee(task.getId(),"康德乐已提交");
-        }else if(activityId.equals(ProcessConstant.FIVE_STEP)){
-            taskService.setAssignee(task.getId(),"罗氏已提交");
-        }else {
-            taskService.claim(task.getId(),user.getUsername());
-        }
-        taskService.complete(task.getId());
-    }
 
-
-
-    @Transactional
-    protected ProcessInstance getNewProcessInstance(String businessKey,User user,List<Attachment> attachments){
-        Map<String,Object> map = new HashMap<>();
-        map.put("list",attachments);
-        List<Task> list = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
-        if(CollectionUtils.isNotEmpty(list)){
-            for (Task task : list) {
-                Set taskCandidate = getTaskCandidate(task.getId());
-                if(taskCandidate.contains(user.getUsername())){
-
-                    commitSet(task,user);
-                }
-            }
-        }
-        return  queryProcessInstance(businessKey);
-    }
-
-    private Set getTaskCandidate(String taskId){
-        Set user = new HashSet();
-        List<IdentityLink> identityLinksForTask = taskService.getIdentityLinksForTask(taskId);
-        if(CollectionUtils.isNotEmpty(identityLinksForTask)){
-            for (IdentityLink identityLink : identityLinksForTask) {
-                if(identityLink.getUserId()!=null){
-                    user.add(identityLink.getUserId());
-                }
-            }
-        }
-        return user;
-    }
 
 
     @Override
@@ -299,7 +475,8 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
     private List<HistoricTaskInstance> queryHistoryList(String businessKey){
-        return historyService.createHistoricTaskInstanceQuery().processInstanceBusinessKey(businessKey).orderByHistoricTaskInstanceEndTime().asc().list();
+        return historyService.createHistoricTaskInstanceQuery().processInstanceBusinessKey(businessKey)
+                .orderByHistoricTaskInstanceEndTime().asc().list();
     }
 
 
@@ -311,7 +488,13 @@ public class ProcessServiceImpl implements IProcessService {
             for (Task task : list) {
                 ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
                 if(processInstance.getBusinessKey().startsWith("Recent")){
-                    names.add("recent");
+                    String id = processInstance.getBusinessKey().split("\\:")[1];
+                    Recent recent = recentService.queryRecentById(Integer.parseInt(id));
+                    if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
+                        names.add("recent");
+                    }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
+                        names.add("temperature");
+                    }
                 }else if(processInstance.getBusinessKey().startsWith("Roche")) {
                     names.add("roche");
                 }else {
@@ -345,6 +528,7 @@ public class ProcessServiceImpl implements IProcessService {
         return taskService.createTaskQuery().taskCandidateUser(name).list();
     }
 
+
     @Override
     @Transactional
     public void deleteInstance(Object object) {
@@ -356,6 +540,7 @@ public class ProcessServiceImpl implements IProcessService {
         }
         delete(processInstance);
     }
+
 
     @Transactional
     public void  deleteAtt(Object object){
@@ -520,7 +705,13 @@ public class ProcessServiceImpl implements IProcessService {
             for (Task task : list) {
                 ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
                 if(processInstance.getBusinessKey().startsWith("Recent")){
-                    names.add(ProcessConstant.RECENT_NAME);
+                    String id = processInstance.getBusinessKey().split("\\:")[1];
+                    Recent recent = recentService.queryRecentById(Integer.parseInt(id));
+                    if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
+                        names.add(ProcessConstant.RECENT_NAME);
+                    }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
+                        names.add(ProcessConstant.TEMPERATURE_NAME);
+                    }
                 }else if(processInstance.getBusinessKey().startsWith("Roche")) {
                     names.add(ProcessConstant.ROCHE_NAME);
                 }else {
@@ -606,15 +797,15 @@ public class ProcessServiceImpl implements IProcessService {
     @Override
     @Transactional
     public void alterRecent(Recent recent, User currentUser) {
+        List<Attachment> attachments = new ArrayList<>();
+        Map<String,String> files = new HashMap<>();
+
         StringBuffer alteration = new StringBuffer();
         String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
         recent.setRepDate(date);
         Recent oldRecent = recentService.queryRecentById(recent.getId());
         if(!recent.getrConf().equals(oldRecent.getrConf())){
             alteration.append("罗氏处理意见:" +date+ " 由 "+oldRecent.getrConf()+" 修改为 "+recent.getrConf()+"  。 ");
-        }
-        if(!recent.getRepDate().equals(oldRecent.getRepDate())){
-            alteration.append("回复日期:" +date+ " 由 "+oldRecent.getRepDate()+" 修改为 "+recent.getRepDate()+"  。 ");
         }
         if(StringUtils.isNotEmpty(oldRecent.getAlteration())) {
             recent.setAlteration(oldRecent.getAlteration() + "  " + alteration.toString());
@@ -623,14 +814,17 @@ public class ProcessServiceImpl implements IProcessService {
         }
         recentService.editRecent(recent);
         if(StringUtils.isNotEmpty(recent.getImages())){
-            addOrEditFiles(recent,currentUser);
+            attachments = addOrEditFiles(recent, currentUser);
+            for (Attachment attachment : attachments) {
+                files.put(attachment.getRemark()+ StringPool.DOT + attachment.getAttachType(),
+                        properties.getImagePath() + attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
+            }
         }
         String[] mails = getEmails(87);
 
         List<Recent> list =new ArrayList<>();
         recent.setAlteration(alteration.toString());
         list.add(recent);
-        Map<String,String> files = new HashMap<>();
 
         Context context = new Context();
         context.setVariable("list",list);
@@ -710,7 +904,7 @@ public class ProcessServiceImpl implements IProcessService {
             list = saveAttachment(commodity.getNumber(),commodity.getStage(), commodity.getImages(),user);
         } else if (object instanceof Recent) {
             Recent recent = (Recent) object;
-            list = saveAttachment(String.valueOf(recent.getId()),ProcessConstant.RECENT_NAME,recent.getImages(),user);
+            list = saveAttachment(String.valueOf(recent.getId()),recent.getStage(),recent.getImages(),user);
         } else if (object instanceof Roche) {
             Roche roche = (Roche) object;
             list = saveAttachment(String.valueOf(roche.getId()),ProcessConstant.ROCHE_NAME,roche.getImages(),user);
@@ -743,17 +937,7 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
 
-    @Transactional
-    protected void editCommodity(Commodity commodity){
-        String businessKey = getBusinessKey(commodity);
-        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceBusinessKey(businessKey).singleResult();
-        String activityId = processInstance.getActivityId();
-        if(activityId.equals(ProcessConstant.THREE_STEP)){
-            String format = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
-            commodity.setRepTime(format);
-        }
-        commodityService.editCommodity(commodity);
-    }
+
 
     private String[] getEmails(Integer id){
         List<User> userList = userService.findUserByRoleId(id);
@@ -781,13 +965,20 @@ public class ProcessServiceImpl implements IProcessService {
         String businessKey = "";
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;
-            businessKey = Commodity.class.getSimpleName()+":"+commodity.getId();
+            if(commodity.getId()!=null) {
+                businessKey = Commodity.class.getSimpleName() + ":" + commodity.getId();
+            }
         }else if(object instanceof Recent){
             Recent recent = (Recent) object;
-            businessKey = Recent.class.getSimpleName()+":"+recent.getId();
+            if(recent.getId()!=null) {
+                businessKey = Recent.class.getSimpleName() + ":" + recent.getId();
+            }
         }else if(object instanceof Roche) {
             Roche roche = (Roche) object;
-            businessKey = Roche.class.getSimpleName() + ":" + roche.getId();
+            if(roche.getId()!=null){
+                businessKey = Roche.class.getSimpleName() + ":" + roche.getId();
+            }
+
         }
         return businessKey;
     }

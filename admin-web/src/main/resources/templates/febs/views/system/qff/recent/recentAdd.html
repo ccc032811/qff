@@ -1,0 +1,235 @@
+<style>
+    #recent-detail-add {
+        padding: 20px 25px 25px 0;
+    }
+
+    #recent-detail-add .layui-treeSelect .ztree li a, .ztree li span {
+        margin: 0 0 2px 3px !important;
+    }
+
+    /* 覆盖样式 */
+    .layui-form-item ,.layui-form-item .layui-inline{
+        margin-bottom: 0;
+    }
+    .layui-form-item-rigth{
+        border-left: 1px solid #000;
+    }
+    .layui-input-block{
+        border-left: 1px solid #000;
+        border-right: 1px solid #000;
+        border-top: 1px solid #000;
+    }
+    .layui-col-sm4 {
+        height: 39px;
+    }
+    .layui-form-label {
+        border-top: 1px solid #000;
+        text-align: center;
+    }
+</style>
+<div class="layui-fluid" id="recent-detail-add" lay-title = "新增近效期" style="margin-left: 18px">
+
+    <form class="layui-form " action="" lay-filter="recent-detail-form-add">
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">工厂</label>
+                <div class="layui-input-block">
+                    <select name="factory" id="factory" lay-verify="required" >
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">总数量</label>
+                <div class="layui-input-block">
+                    <input type="text" name="number"  lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input" placeholder="请输入" >
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+
+            <div class="layui-inline layui-col-sm12">
+                <label class="layui-form-label">产品信息</label>
+                <div class="layui-input-block">
+                    <input type="text" name="message"  lay-verify="required" maxlength="50" autocomplete="off"
+                           list="expiryDate-list" class="layui-input" placeholder="请输入" >
+                    <datalist id="expiryDate-list">
+                        <option value="见附件"></option>
+                        <option value="N/A"></option>
+                    </datalist>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item"><div style="border-top: 1px solid #000;margin-top: 1px"></div></div>
+        <div class="layui-form-item" style="border: 0;padding-top: 20px">
+            <div class="layui-upload">
+                <div id="recent-upload-image-add">
+                    <img data-th-src="@{febs/images/image_add.png}" width="70px" height="70px" id="recent-chose-add">
+                </div>
+                <div class="layui-upload-list">
+                    <table class="layui-table">
+                        <thead>
+                        <tr><th>文件名</th>
+                            <th>类型</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr></thead>
+                        <tbody id="recent-List-add"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item febs-hide">
+            <div  style="margin-top: 75px;text-align: center;" >
+                <button class="layui-btn" lay-submit="" lay-filter="recent-form-submit-add" id="recent-submit-add" ></button>
+            </div>
+        </div>
+    </form>
+    <div class="layui-form-item">
+        <div  style="margin-top: 75px;text-align: center;" >
+            <button class="layui-btn" id="recent-submit-control-add">提交</button>
+        </div>
+    </div>
+</div>
+
+
+<script data-th-inline="javascript">
+    layui.use(['febs', 'form','upload','layer','laydate'], function () {
+        var $ = layui.$,
+            febs = layui.febs,
+            layer = layui.layer,
+            form = layui.form,
+            laydate = layui.laydate,
+            upload = layui.upload,
+            $view = $('#recent-detail-add'),
+            $searchFrom = $view.find("form");
+
+
+        var imageList = '';
+        var images = [];
+        var stage = "近效期";
+        var plant = "Plant工厂";
+        var to = {time:new Date()};
+
+
+        laydate.render({
+            elem: '#startDate'
+            ,trigger: 'click'
+            ,btns: ['clear']
+        });
+
+        form.render();
+
+
+        var uploadInst = upload.render({
+            elem: '#recent-chose-add'
+            ,url: ctx+ 'file/uploadImage'
+            ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
+            ,multiple: true
+            ,auto: false
+            ,data: {
+                number: function () {
+                    return $("#number").val();
+                }
+            }
+            ,size: 1020*10
+            ,before: function(obj){
+                layer.load();
+            }
+            ,choose: function(obj){
+                var flag = true;
+                var num =  $("#number").val();
+
+                obj.preview(function (index,file,result) {
+                    for (var i =images.length-1 ; i>=0 ;i--){
+                        if(images[i]===file.name){
+                            flag = false;
+                        }
+                    }
+                    if(flag){
+                        obj.upload(index, file);
+                    }else {
+                        febs.alert.error("不能重复上传");
+                    }
+                });
+            }
+            ,done: function(res,index){
+                layer.closeAll('loading');
+                if(res.code === 200){ //上传成功
+                    var url = res.data.substring(res.data.lastIndexOf("/")+1);
+                    var type = url.substring(url.lastIndexOf(".")+1,url.length);
+                    var name = url.substring(0,url.lastIndexOf("."));
+
+                    var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
+                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
+                    images.push(url);
+                    tr.find('.file-delete').on('click', function(){
+                        tr.remove();
+                        deleteImage(url);
+                        removeImages(images,url);
+                    });
+                    $('#recent-List-add').append(tr);
+                    febs.alert.success('上传成功');
+                }
+            }
+        });
+
+
+
+        function removeImages(imageList,url) {
+            for (var i =imageList.length-1 ; i>=0 ;i--){
+                if(imageList[i]===url){
+                    delete imageList[i];
+                }
+            }
+        }
+
+
+        function deleteImage(url){
+            febs.get(ctx + "file/deleteImage/"+url ,to, function (res) {
+                if(res.code === 200) {
+                    febs.alert.success('删除成功');
+                }
+            })
+        }
+
+
+        $view.on('click', '#recent-submit-control-add', function () {
+            $view.find('#recent-submit-add').trigger('click');
+        });
+
+
+        form.on('submit(recent-form-submit-add)', function (data) {
+
+            for (var i = 0; i<=images.length-1;i++){
+                if(images[i]!== undefined)
+                    imageList+=images[i]+",";
+            }
+            data.field.images = imageList;
+            data.field.stage = stage;
+            $('#recent-submit-control-add').attr("style","display:none;");
+            febs.post(ctx + 'recent/commit', data.field , function (data) {
+                layer.closeAll();
+                $('#fbs-recent').find('#recent-query').click();
+                febs.alert.success('数据修改成功');
+            });
+            return false;
+        });
+
+
+        $.get(ctx +"opinion/getOpinion/"+plant,to,function(res){
+            var data = res.data;
+            var dom=$("#factory");
+            var html='<option value=""></option>';
+            $.each(data,function(index,item){
+                html+='<option value="'+item.name+'">'+item.name+'</option>'
+            });
+            dom.html(html);
+            form.render("select");
+        });
+
+
+
+    });
+</script>

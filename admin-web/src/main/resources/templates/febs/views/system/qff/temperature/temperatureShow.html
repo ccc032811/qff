@@ -1,9 +1,9 @@
 <style>
-    #recent-detail-show {
+    #temperature-detail-show {
         padding: 20px 25px 25px 0;
     }
 
-    #recent-detail .layui-treeSelect .ztree li a, .ztree li span {
+    #temperature-detail .layui-treeSelect .ztree li a, .ztree li span {
         margin: 0 0 2px 3px !important;
     }
 
@@ -14,14 +14,14 @@
     .layui-form-item-rigth{
         border-right: 1px solid #000;
     }
-    .layui-col-sm4,.layui-col-sm8,.layui-col-sm12 {
+    .layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-col-sm12 {
         border-left: 1px solid #000;
         border-top: 1px solid #000;
     }
     .layui-input-block{
         border-left: 1px solid #000;
     }
-    .layui-col-sm4,.layui-col-sm8 {
+    .layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-col-sm12 {
         height: 39px;
     }
     .remark{
@@ -31,9 +31,9 @@
         text-align: center;
     }
 </style>
-<div class="layui-fluid" id="recent-detail-show" lay-title = "近效期QFF" style="margin-left: 18px">
+<div class="layui-fluid" id="temperature-detail-show" lay-title = "近效期QFF" style="margin-left: 18px">
 
-    <form class="layui-form " action="" lay-filter="recent-detail-form" id="recent-detail-form">
+    <form class="layui-form " action="" lay-filter="temperature-detail-form" id="temperature-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label">开始时间</label>
@@ -42,15 +42,15 @@
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label">工厂</label>
-                <div class="layui-input-block">
-                    <input type="text" name="factory" autocomplete="off" class="layui-input" readonly>
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label">总数量</label>
                 <div class="layui-input-block">
                     <input type="text" name="number" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">回复日期</label>
+                <div class="layui-input-block">
+                    <input type="text" name="repDate"  class="layui-input" autocomplete="off" readonly>
                 </div>
             </div>
         </div>
@@ -62,17 +62,13 @@
                     <input type="text" name="message" autocomplete="off" class="layui-input" readonly>
                 </div>
             </div>
+
         </div>
         <div class="layui-form-item layui-form-item-rigth" >
-            <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label">回复日期</label>
-                <div class="layui-input-block">
-                    <input type="text" name="repDate"  class="layui-input" autocomplete="off" readonly>
-                </div>
-            </div>
-            <div class="layui-inline layui-col-sm8">
-                <label class="layui-form-label" id="rConf-recent">罗氏意见</label>
-                <div class="layui-input-block" id="recent-rConf">
+
+            <div class="layui-inline layui-col-sm12">
+                <label class="layui-form-label" id="rConf-temperature">罗氏意见</label>
+                <div class="layui-input-block" id="temperature-rConf">
                     <input type="text" name="rConf"  autocomplete="off" class="layui-input" readonly >
 
                 </div>
@@ -90,7 +86,7 @@
     </form>
     <div class="layui-form-item" style="border: 0;padding-top: 20px">
         <div class="layui-upload">
-            <div id="recent-upload-image-show">
+            <div id="temperature-upload-image-show">
 
             </div>
             <div class="layui-upload-list">
@@ -101,7 +97,7 @@
                         <th>状态</th>
                         <th>操作</th>
                     </tr></thead>
-                    <tbody id="recent-List-show"></tbody>
+                    <tbody id="temperature-List-show"></tbody>
                 </table>
             </div>
         </div>
@@ -132,7 +128,7 @@
     </div>
     <div class="layui-form-item">
         <div  style="margin-top: 75px;text-align: center;" >
-            <button class="layui-btn" id="recent-print" >打印</button>
+            <button class="layui-btn" id="temperature-print" >打印</button>
         </div>
     </div>
 </div>
@@ -142,18 +138,18 @@
         var $ = layui.$,
             layer = layui.layer,
             form = layui.form,
-            recent = [[${recent}]];
-            $view = $('#recent-detail-show');
+            recent = [[${temperature}]];
+            $view = $('#temperature-detail-show');
         var type = "近效期";
         var to = {time:new Date()};
 
         form.render();
 
-        initRecentValue();
+        initTemperatureValue();
 
 
-        function initRecentValue() {
-            form.val("recent-detail-form", {
+        function initTemperatureValue() {
+            form.val("temperature-detail-form", {
                 "id":recent.id,
                 "startDate": recent.startDate,
                 "factory": recent.factory,
@@ -172,10 +168,10 @@
                 var type =url.substring(url.lastIndexOf(".")+1,url.length);
                 var name =url.substring(0,url.lastIndexOf("."));
 
-                $('#recent-List-show').append('<tr ><td style="width: 65%">' + name
+                $('#temperature-List-show').append('<tr ><td style="width: 65%">' + name
                     + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
-                    '<td style="width: 15%"><button class="layui-btn layui-btn-xs" type="button" id="recent-upload-show-' + index + '">下载</button></td></tr>');
-                $view.find('#recent-upload-show-'+index ).on('click',function () {
+                    '<td style="width: 15%"><button class="layui-btn layui-btn-xs" type="button" id="temperature-upload-show-' + index + '">下载</button></td></tr>');
+                $view.find('#temperature-upload-show-'+index ).on('click',function () {
                     window.location.href=ctx +"file/uploadFile/"+url;
                 })
             })
@@ -210,14 +206,14 @@
         });
 
 
-        $view.on('click', '#recent-print', function () {
+        $view.on('click', '#temperature-print', function () {
 
             bindData();
 
             var headstr = "<html><head><title></title></head><body>";
             var footstr = "</body></html>";
 
-            var printData = document.getElementById("recent-detail-form").innerHTML;
+            var printData = document.getElementById("temperature-detail-form").innerHTML;
             var newWindow = window.open();
 
             newWindow.document.write("<style>\n" +

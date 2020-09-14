@@ -7,21 +7,15 @@
         position: fixed;
     }
 </style>
-<div class="layui-fluid layui-anim febs-anim" id="fbs-recent" lay-title="近效期QFF">
+<div class="layui-fluid layui-anim febs-anim" id="fbs-temperature" lay-title="国际到货超温，无温度计">
     <div class="layui-row febs-container">
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body febs-table-full">
-                    <form class="layui-form layui-table-form" lay-filter="recent-table-form" style="margin-top: 15px" >
+                    <form class="layui-form layui-table-form" lay-filter="temperature-table-form" style="margin-top: 15px" >
                         <div class="layui-row">
                             <div class="layui-col-md12">
                                 <div class="layui-form-item" style="margin-left: 15px;">
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label"  style="border-right: 1px solid white;">工厂</label>
-                                        <div class="layui-input-inline">
-                                            <input type="text" name="factory" autocomplete="off" class="layui-input">
-                                        </div>
-                                    </div>
                                     <div class="layui-inline">
                                         <label class="layui-form-label"  style="border-right: 1px solid white;">产品信息</label>
                                         <div class="layui-input-inline">
@@ -31,7 +25,7 @@
                                     <div class="layui-inline">
                                         <label class="layui-form-label"  style="border-right: 1px solid white;">日期区间</label>
                                         <div class="layui-input-inline">
-                                            <input type="text" name="searchTime" id="recent-searchTime" class="layui-input" placeholder="请选择时间">
+                                            <input type="text" name="searchTime" id="temperature-searchTime" class="layui-input" placeholder="请选择时间">
                                         </div>
                                     </div>
                                     <div class="layui-inline">
@@ -55,12 +49,12 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div id="recent-check" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%">
+                                    <div id="temperature-check" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%">
                                         <!--<div id="recent-check" class="layui-form-item" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;">-->
-                                            <div class="layui-btn layui-btn-normal layui-btn-sm"  id="recent-query" >
+                                            <div class="layui-btn layui-btn-normal layui-btn-sm"  id="temperature-query" >
                                                 <i class="layui-icon">&#xe848;</i>
                                             </div>
-                                            <div class="layui-btn layui-btn-danger layui-btn-sm " id="recent-reset" >
+                                            <div class="layui-btn layui-btn-danger layui-btn-sm " id="temperature-reset" >
                                                 <i class="layui-icon">&#xe79b;</i>
                                             </div>
                                         <!--</div>-->
@@ -69,13 +63,13 @@
                             </div>
                         </div>
                     </form>
-                    <table lay-filter="recentTable" lay-data="{id: 'recentTable'}"></table>
+                    <table lay-filter="temperatureTable" lay-data="{id: 'temperatureTable'}"></table>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script type="text/html" id="recent-status">
+<script type="text/html" id="temperature-status">
     {{# if(d.status == '1'){d.status = '新建'}}
     <span class="layui-badge febs-tag-volcano">{{ d.status }}</span>
     {{# } else if(d.status == '2'){d.status = '审核中'}}
@@ -86,28 +80,28 @@
     <span class="layui-badge febs-tag-orange">{{ d.status }}</span>
     {{# } }}
 </script>
-<script type="text/html" id="recent-option">
+<script type="text/html" id="temperature-option">
 
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="temperature-detail" shiro:hasPermission="temperature:view">查看</a>
     {{#  if(d.status != '3'&& d.isAllow == '1'){}}
     {{#  if(d.repDate == ''||d.repDate == null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="recent-edit"  shiro:hasPermission="recent:audit">审核</a>
+    <a class="layui-btn layui-btn-xs" lay-event="temperature-edit"  shiro:hasPermission="temperature:audit">审核</a>
     {{# }else if(d.repDate != ''&&d.repDate != null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="recent-edit"  shiro:hasPermission="recent:audit">确认</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-alter"  shiro:hasPermission="recent:alter ">修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="temperature-edit"  shiro:hasPermission="temperature:audit">确认</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="temperature-alter"  shiro:hasPermission="temperature:alter ">修改</a>
     {{#}}}
     {{#}}}
     {{#  if(d.status != '3'){}}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-del" shiro:hasPermission="recent:del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="temperature-del" shiro:hasPermission="temperature:del">删除</a>
     {{#}}}
 
 </script>
-<script type="text/html" id="recent-toolbarCheck">
+<script type="text/html" id="temperature-toolbarCheck">
     <div class="layui-btn-container">
-        <button  class="layui-btn layui-btn-sm" style="background-color: #87e8de;"  lay-event="recent-add" shiro:hasPermission="recent:add">
+        <button  class="layui-btn layui-btn-sm" style="background-color: #87e8de;"  lay-event="temperature-add" shiro:hasPermission="temperature:add">
             <i class="layui-icon">&#xe654;</i> 新增近效期
         </button>
-        <button class="layui-btn layui-btn-sm" lay-event="recent-download" shiro:hasPermission="recent:down">
+        <button class="layui-btn layui-btn-sm" lay-event="temperature-download" shiro:hasPermission="temperature:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
         </button>
     </div>
@@ -119,23 +113,24 @@
             febs = layui.febs,
             form = layui.form,
             table = layui.table,
-            $view = $('#fbs-recent'),
-            $query = $view.find('#recent-query'),
-            $reset = $view.find('#recent-reset'),
-            $queryBtn = $view.find('#recent-queryBtn'),
-            $cleanBtn = $view.find('#recent-cleanBtn'),
+            $view = $('#fbs-temperature'),
+            $query = $view.find('#temperature-query'),
+            $reset = $view.find('#temperature-reset'),
+            $queryBtn = $view.find('#temperature-queryBtn'),
+            $cleanBtn = $view.find('#temperature-cleanBtn'),
             $searchForm = $view.find('form'),
             tableIns;
 
         var to = {time:new Date()};
-        var stage = "近效期";
+        var stage = "国际到货超温，无温度计";
+
 
         form.render();
 
         initTable();
 
         laydate.render({
-            elem: '#recent-searchTime'
+            elem: '#temperature-searchTime'
             ,range: true
         });
 
@@ -144,9 +139,9 @@
             tableIns = febs.table.init({
                 elem: $view.find('table'),
                 height: 455,
-                id: 'recentTable',
+                id: 'temperatureTable',
                 url: ctx + 'recent/list',
-                toolbar: '#recent-toolbarCheck',
+                toolbar: '#temperature-toolbarCheck',
                 defaultToolbar: ['filter','print'],
                 where:{
                     stage:stage,
@@ -154,42 +149,17 @@
                 },
                 cols: [[
                     {field: 'startDate', title: '开始时间',align:'center',minWidth: 120},
-                    {field: 'factory', title: '工厂',align:'center',minWidth: 100},
                     {field: 'message', title: '产品信息',align:'center',minWidth: 200},
                     {field: 'number', title: '总数量',align:'center',minWidth: 100},
                     {field: 'rConf', title: '罗氏QA处理意见',align:'center',minWidth: 200},
                     {field: 'repDate', title: '回复日期',align:'center',minWidth: 120},
-                    {title: '处理阶段', templet: '#recent-status',align:'center',minWidth: 120},
-                    {title: '操作', toolbar: '#recent-option',align:'center',width: 200}
+                    {title: '处理阶段', templet: '#temperature-status',align:'center',minWidth: 120},
+                    {title: '操作', toolbar: '#temperature-option',align:'center',width: 200}
                 ]],
                 done:function (res,curr,count) {
                     $(".layui-table-header .layui-table thead tr th").css("border","1px solid white").css("background-color","#E8E8E8");
                     $(".layui-table-body .layui-table-col-special .layui-table-cell .layui-btn").css("float","left").css("margin-top","4px");
-                    //
-                    // var tableId= this.id;
-                    // var tableElem = this.elem;
-                    // var tableViewElem = tableElem.next();
-                    // upload.render({
-                    //     elem:tableViewElem.find('#recent-upload')
-                    //     ,url: ctx+'file/resolver'
-                    //     ,exts: 'xlsx|xls'
-                    //     ,multiple: false
-                    //     ,auto: true
-                    //     ,size: 1024*5 //kb
-                    //     ,before: function(obj){
-                    //         layer.load();
-                    //     }
-                    //     ,done:function (res) {
-                    //         if(res.code ===200){
-                    //             layer.closeAll('loading');
-                    //             febs.alert.success('操作成功');
-                    //             $query.click();
-                    //         }else if(res.code ===500){
-                    //             layer.closeAll('loading');
-                    //             febs.alert.success('解析失败');
-                    //         }
-                    //     }
-                    // })
+
                 }
             });
         }
@@ -212,14 +182,14 @@
         });
 
 
-        table.on('toolbar(recentTable)', function(obj){
+        table.on('toolbar(temperatureTable)', function(obj){
             var layEvent = obj.event;
-            if (layEvent === 'recent-add') {
-                febs.modal.open('新增近效期', 'system/qff/recent/addRecent',{
+            if (layEvent === 'temperature-add') {
+                febs.modal.open('新增近效期', 'system/qff/temperature/addTemperature',{
                     area:  [$(window).width() <= 750 ? '60%' : '55%',$(window).width() <= 750 ? '60%' : '55%']
                 });
             }
-            if (layEvent === 'recent-download') {
+            if (layEvent === 'temperature-download') {
                 var params =getQueryParams();
                 febs.download(ctx + 'recent/excel',params, '近效期QFF.xlsx');
             }
@@ -236,26 +206,26 @@
         }
 
 
-        table.on('tool(recentTable)', function (obj) {
+        table.on('tool(temperatureTable)', function (obj) {
             var data = obj.data,
                 layEvent = obj.event;
-            if (layEvent === 'recent-detail') {
-                febs.modal.open('具体信息', 'system/qff/recent/recentShow/' + data.id, {
+            if (layEvent === 'temperature-detail') {
+                febs.modal.open('具体信息', 'system/qff/temperature/temperatureShow/' + data.id, {
                     area:  [$(window).width() <= 750 ? '60%' : '55%',$(window).width() <= 750 ? '60%' : '55%']
                 });
             }
-            if (layEvent === 'recent-edit') {
-                febs.modal.open('审核', 'system/qff/recent/recentAudit/' + data.id, {
+            if (layEvent === 'temperature-edit') {
+                febs.modal.open('审核', 'system/qff/temperature/temperatureAudit/' + data.id, {
                     area:  [$(window).width() <= 750 ? '60%' : '55%',$(window).width() <= 750 ? '60%' : '55%']
                 });
             }
-            if (layEvent === 'recent-del') {
+            if (layEvent === 'temperature-del') {
                 febs.modal.confirm('删除该条数据','确定删除该条数据？', function () {
                     delRecent(data.id);
                 });
             }
-            if (layEvent === 'recent-alter') {
-                febs.modal.open('修改', 'system/qff/recent/recentAlter/' + data.id+"/"+"1", {
+            if (layEvent === 'temperature-alter') {
+                febs.modal.open('修改', 'system/qff/temperature/temperatureAlter/' + data.id+"/"+"1", {
                     area:  [$(window).width() <= 750 ? '60%' : '55%',$(window).width() <= 750 ? '60%' : '55%']
                 });
             }
@@ -271,12 +241,11 @@
 
         }
 
-        table.on('sort(recentTable)', function (obj) {
+        table.on('sort(temperatureTable)', function (obj) {
             tableIns.reload({
                 where: $.extend(getQueryParams())
             });
         });
-
 
 
         function getQueryParams() {
@@ -290,7 +259,6 @@
             return {
                 startTime: createTimeFrom,
                 endTime: createTimeTo,
-                factory: $searchForm.find('input[name="factory"]').val().trim(),
                 message: $searchForm.find('input[name="message"]').val().trim(),
                 att: $searchForm.find("select[name='att']").val(),
                 stage: stage,

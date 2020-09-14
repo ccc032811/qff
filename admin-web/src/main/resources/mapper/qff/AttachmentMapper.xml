@@ -5,9 +5,9 @@
     <update id="updateStatusById"  >
         update qff_attachment set enable = #{status} where id= #{id}
     </update>
-    <update id="updateStatusByNumberAndType">
-        update qff_attachment set status  = 1  where  qff_id = #{number} and  qff_type = #{typt}
-    </update>
+    <delete id="updateStatusByNumberAndType">
+        delete from qff_attachment  where  qff_id = #{number} and  qff_type = #{typt}
+    </delete>
     <delete id="deleteAttacheByNumberAndStage">
         delete from qff_attachment where  qff_id = #{number} and  qff_type = #{stage}  and remark = #{url}
     </delete>

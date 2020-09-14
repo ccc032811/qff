@@ -51,5 +51,7 @@ public class ProcessConstant {
 
     public static final String WRAPPER_NAME = "其他手工QFF";
 
+    public static final String TEMPERATURE_NAME = "国际到货超温，无温度计";
+
 
 }

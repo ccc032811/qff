@@ -55,7 +55,7 @@ public class AcquireSoapMessage extends BaseController {
         }
 
         String toTime = DateFormatUtils.format(new Date(), "HH:mm:ss");
-        Boolean before = false;
+        boolean before = false;
         try {
             before = simpleDateFormat.parse(seacheDate.split(" ")[1]).getTime() < simpleDateFormat.parse(BEFORE_TIME).getTime();
         } catch (ParseException e) {
@@ -70,12 +70,10 @@ public class AcquireSoapMessage extends BaseController {
             if(StringUtils.isNotEmpty(lastDate)&&lastDate.startsWith(date)){
                 startTime = lastDate.split(" ")[1];
             }
-            String endTime = END_TIME;
-            startSoap.getMessage(date,startTime,endTime,"");
+            startSoap.getMessage(date,startTime,END_TIME,"");
 
         }else {
             startSoap.getMessage(seacheDate.split(" ")[0],fromTime,toTime,"");
-
         }
     }
 

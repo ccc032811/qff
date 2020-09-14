@@ -4,21 +4,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.neefull.fsp.web.qff.entity.*;
-import com.neefull.fsp.web.qff.mapper.RecentExcelImportMapper;
 import com.neefull.fsp.web.qff.mapper.RecentMapper;
 import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.qff.service.IRecentService;
 import com.neefull.fsp.web.qff.utils.PageUtils;
 import com.neefull.fsp.web.system.entity.User;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +33,6 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
     private RecentMapper recentMapper;
     @Autowired
     private IProcessService processService;
-    @Autowired
-    private RecentExcelImportMapper recentExcelImportMapper;
 
     @Override
     @Transactional
@@ -112,6 +106,14 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
             recentList = getAttRecent(recent, user);
         }else {
             recentList = recentMapper.getPageConserve(recent);
+        }
+        for (Recent rec : recentList) {
+            if(rec.getStartDate()!=null){
+                rec.setStartDate(rec.getStartDate().replace("-","/"));
+            }
+            if(rec.getRepDate()!=null){
+                rec.setRepDate(rec.getRepDate().replace("-","/"));
+            }
         }
         return recentList;
     }

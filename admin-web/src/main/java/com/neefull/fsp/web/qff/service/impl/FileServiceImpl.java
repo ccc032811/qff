@@ -100,168 +100,116 @@ public class FileServiceImpl implements IFileService {
 
     }
 
-    @Override
-    @Transactional
-    public void resolverExcel(MultipartFile file, User user) {
-
-        List<Recent> list = new ArrayList<>();
-        List<Integer> errorList = new ArrayList();
-
-        if (file.isEmpty()) {
-            log.error("当前文件为空");
-        }
-        try {
-            ExcelKit.$Import(RecentResolver.class).readXlsx(file.getInputStream(), new ExcelReadHandler<RecentResolver>() {
-                @Override
-                public void onSuccess(int sheetIndex, int rowIndex, RecentResolver entity) {
-                    if(rowIndex > SELECT_NUMBER){
-                        Recent recent = new Recent();
-                        if(entity!=null){
-                            if(entity.getkMater().equals("康德乐物料号")||entity.getrMater().equals("罗氏物料号")) {
-                                return;
-                            }else {
-                                if(entity.getkMater().equals("$EMPTY_CELL$")&&entity.getrMater().equals("$EMPTY_CELL$")&&entity.getName().equals("$EMPTY_CELL$")) {
-                                    return;
-                                }else {
-                                    if(!entity.getkMater().equals("$EMPTY_CELL$")){
-                                        recent.setkMater(entity.getkMater());
-                                    }else {
-                                        recent.setkMater("");
-                                    }
-                                    if(!entity.getrMater().equals("$EMPTY_CELL$")){
-                                        recent.setrMater(entity.getrMater());
-                                    }else {
-                                        recent.setrMater("");
-                                    }
-                                    if(!entity.getName().equals("$EMPTY_CELL$")){
-                                        recent.setName(entity.getName());
-                                    }else {
-                                        recent.setName("");
-                                    }
-                                    if(!entity.getUseLife().equals("$EMPTY_CELL$")){
-                                        recent.setUseLife(entity.getUseLife());
-                                    }else {
-                                        recent.setUseLife("");
-                                    }
-                                    if(!entity.getBatch().equals("$EMPTY_CELL$")){
-                                        recent.setBatch(entity.getBatch());
-                                    }else {
-                                        recent.setBatch("");
-                                    }
-                                    if(!entity.getSapBatch().equals("$EMPTY_CELL$")){
-                                        recent.setSapBatch(entity.getSapBatch());
-                                    }else {
-                                        recent.setSapBatch("");
-                                    }
-                                    if(!entity.getFactory().equals("$EMPTY_CELL$")){
-                                        recent.setFactory(entity.getFactory());
-                                    }else {
-                                        recent.setFactory("");
-                                    }
-                                    if(!entity.getWareHouse().equals("$EMPTY_CELL$")){
-                                        recent.setWareHouse(entity.getWareHouse());
-                                    }else {
-                                        recent.setWareHouse("");
-                                    }
-                                    if(!entity.getNumber().equals("$EMPTY_CELL$")){
-                                        recent.setNumber(entity.getNumber());
-                                    }else {
-                                        recent.setNumber("");
-                                    }
-                                }
-                            }
-
-                        }
-                        list.add(recent);
-                    }
-                }
-                @Override
-                public void onError(int sheetIndex, int rowIndex, List<ExcelErrorField> errorFields) {
-                    errorList.add(rowIndex+1);
-                }
-            });
-        } catch (IOException e) {
-            log.error("导入文件失败,原因为：{}",e.getMessage());
-        }
-
-        if(CollectionUtils.isNotEmpty(list)){
-            for (Recent recent : list) {
-                processService.commitProcess(recent,user);
-            }
-        }
-
-        if(CollectionUtils.isNotEmpty(errorList)){
-            String count = "";
-            for (int i=0;i<=errorList.size()-1;i++) {
-                if(i==errorList.size()-1){
-                    count+=errorList.get(i)+"行";
-                }
-                count+=errorList.get(i) +"行 ,";
-            }
-            log.info("导入失败数据,失败行数"+count);
-        }
-        //发送邮件
-        Context context = new Context();
-        context.setVariable("list",list);
-        String text = templateEngine.process("rocheRecent", context);
-
-        String[] emails = getEmails(86);
-        sendMail(text,emails);
-    }
-
-
-    @Transactional
-    public  void sendMail(String text,String[] emails) {
-
-        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost(mailProperties.getHost());
-        javaMailSender.setDefaultEncoding(mailProperties.getCharset());
-        javaMailSender.setProtocol(mailProperties.getProtocol());
-        javaMailSender.setPort(Integer.parseInt(mailProperties.getPort()));
-        javaMailSender.setUsername(mailProperties.getUsername());//发送者的邮箱
-        javaMailSender.setPassword(mailProperties.getPassword());//发送者的密码
-
-        Properties prop = new Properties();
-        prop.setProperty("mail.smtp.auth", mailProperties.getAuth());
-//        prop.setProperty("mail.smtp.timeout", mailProperties.getTimeout());
-//        try {
-//            MailSSLSocketFactory sf = new MailSSLSocketFactory();
-//            sf.setTrustAllHosts(true);
-//            prop.put("mail.smtp.ssl.enable", true);
-//            prop.put("mail.smtp.ssl.socketFactory", sf);
-//        } catch (
-//                GeneralSecurityException e) {
-//            e.printStackTrace();
+//    @Override
+//    @Transactional
+//    public void resolverExcel(MultipartFile file, User user) {
+//
+//        List<Recent> list = new ArrayList<>();
+//        List<Integer> errorList = new ArrayList();
+//
+//        if (file.isEmpty()) {
+//            log.error("当前文件为空");
 //        }
-        javaMailSender.setJavaMailProperties(prop);
+//        try {
+//            ExcelKit.$Import(RecentResolver.class).readXlsx(file.getInputStream(), new ExcelReadHandler<RecentResolver>() {
+//                @Override
+//                public void onSuccess(int sheetIndex, int rowIndex, RecentResolver entity) {
+//                    if(rowIndex > SELECT_NUMBER){
+//                        Recent recent = new Recent();
+//                        if(entity!=null){
+//                            if(entity.getkMater().equals("康德乐物料号")||entity.getrMater().equals("罗氏物料号")) {
+//                                return;
+//                            }else {
+//                                if(entity.getkMater().equals("$EMPTY_CELL$")&&entity.getrMater().equals("$EMPTY_CELL$")&&entity.getName().equals("$EMPTY_CELL$")) {
+//                                    return;
+//                                }else {
+//                                    if(!entity.getkMater().equals("$EMPTY_CELL$")){
+//                                        recent.setkMater(entity.getkMater());
+//                                    }else {
+//                                        recent.setkMater("");
+//                                    }
+//                                    if(!entity.getrMater().equals("$EMPTY_CELL$")){
+//                                        recent.setrMater(entity.getrMater());
+//                                    }else {
+//                                        recent.setrMater("");
+//                                    }
+//                                    if(!entity.getName().equals("$EMPTY_CELL$")){
+//                                        recent.setName(entity.getName());
+//                                    }else {
+//                                        recent.setName("");
+//                                    }
+//                                    if(!entity.getUseLife().equals("$EMPTY_CELL$")){
+//                                        recent.setUseLife(entity.getUseLife());
+//                                    }else {
+//                                        recent.setUseLife("");
+//                                    }
+//                                    if(!entity.getBatch().equals("$EMPTY_CELL$")){
+//                                        recent.setBatch(entity.getBatch());
+//                                    }else {
+//                                        recent.setBatch("");
+//                                    }
+//                                    if(!entity.getSapBatch().equals("$EMPTY_CELL$")){
+//                                        recent.setSapBatch(entity.getSapBatch());
+//                                    }else {
+//                                        recent.setSapBatch("");
+//                                    }
+//                                    if(!entity.getFactory().equals("$EMPTY_CELL$")){
+//                                        recent.setFactory(entity.getFactory());
+//                                    }else {
+//                                        recent.setFactory("");
+//                                    }
+//                                    if(!entity.getWareHouse().equals("$EMPTY_CELL$")){
+//                                        recent.setWareHouse(entity.getWareHouse());
+//                                    }else {
+//                                        recent.setWareHouse("");
+//                                    }
+//                                    if(!entity.getNumber().equals("$EMPTY_CELL$")){
+//                                        recent.setNumber(entity.getNumber());
+//                                    }else {
+//                                        recent.setNumber("");
+//                                    }
+//                                }
+//                            }
+//
+//                        }
+//                        list.add(recent);
+//                    }
+//                }
+//                @Override
+//                public void onError(int sheetIndex, int rowIndex, List<ExcelErrorField> errorFields) {
+//                    errorList.add(rowIndex+1);
+//                }
+//            });
+//        } catch (IOException e) {
+//            log.error("导入文件失败,原因为：{}",e.getMessage());
+//        }
+//
+//        if(CollectionUtils.isNotEmpty(list)){
+//            for (Recent recent : list) {
+//                processService.commitProcess(recent,user);
+//            }
+//        }
+//
+//        if(CollectionUtils.isNotEmpty(errorList)){
+//            String count = "";
+//            for (int i=0;i<=errorList.size()-1;i++) {
+//                if(i==errorList.size()-1){
+//                    count+=errorList.get(i)+"行";
+//                }
+//                count+=errorList.get(i) +"行 ,";
+//            }
+//            log.info("导入失败数据,失败行数"+count);
+//        }
+//        //发送邮件
+//        Context context = new Context();
+//        context.setVariable("list",list);
+//        String text = templateEngine.process("rocheRecent", context);
+//
+//        String[] emails = getEmails(86);
+//        sendMail(text,emails);
+//    }
+//
 
-        MimeMessageHelper mimeMessageHelper = null;
-        try {
-            mimeMessageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);
-            mimeMessageHelper.setFrom(mailProperties.getUsername());//发送的邮箱地址
-            mimeMessageHelper.setTo(emails);//接收的邮箱地址
-//            mimeMessageHelper.setTo("wangpei_it@163.com");//接收的邮箱地址
-//            mimeMessageHelper.setCc("");//抄送者的邮箱地址
-            mimeMessageHelper.setSubject("您当前需要处理的文件");//邮件名称
-            mimeMessageHelper.setText(text,true);//邮箱文字内容
-
-        } catch (
-                MessagingException e) {
-            e.printStackTrace();
-        }
-
-        javaMailSender.send(mimeMessageHelper.getMimeMessage());
-    }
 
 
-    public String[] getEmails(Integer id){
-        List<User> userList = userService.findUserByRoleId(id);
-        List<String> userMails = new ArrayList<>();
-        for (User user : userList) {
-            if(StringUtils.isNotEmpty(user.getEmail())&&user.getAccept()==1) {
-                userMails.add(user.getEmail());
-            }
-        }
-        return userMails.toArray(new String[0]);
-    }
 }

@@ -108,65 +108,16 @@ public class Commodity implements Serializable {
     @ExcelField(value = "异常总数")
     private String quarantine;
     /**
-     * unit  单位
+     * unit  康德乐单位
      */
     @TableField("k_unit")
     private String kUnit;
-
     /**
-     * unit  单位
+     * unit  罗氏单位
      */
     @TableField("r_unit")
     @ExcelField(value = "单位")
     private String rUnit;
-    /**
-     *  Remark箱号/备注
-     */
-    @TableField("get_remark")
-    @ExcelField(value = "Remark箱号/备注")
-    private String getRemark;
-    /**
-     *  QFF 发起日期
-     */
-    @TableField("init_date")
-    @ExcelField(value = "发起日期")
-    private String initDate;
-    /**
-     *  RD QA confirmation 罗氏QA处理意见
-     */
-    @TableField("r_conf")
-    @ExcelField(value = "罗氏QA处理意见")
-    private String rConf;
-    /**
-     *  Time of repley 回复日期
-     */
-    @TableField("rep_time")
-    @ExcelField(value = "回复日期")
-    private String repTime;
-    /**
-     *  仪器工程师检查结果
-     */
-    @TableField("check_result")
-    @ExcelField(value = "仪器工程师检查结果")
-    private String checkResult;
-    /**
-     *  QFF 退货原因
-     */
-    @TableField("reason")
-    @ExcelField(value = "QFF原因")
-    private String reason;
-    /**
-     *  投诉编号
-     */
-    @TableField("comp_number")
-    @ExcelField(value = "投诉编号")
-    private String compNumber;
-    /**
-     *  备注
-     */
-    @TableField("remark")
-    @ExcelField(value = "备注")
-    private String remark;
     /**
      *  BA
      */
@@ -179,11 +130,6 @@ public class Commodity implements Serializable {
     @TableField("stage")
     @ExcelField(value = "上报阶段")
     private String stage;
-    /**
-     *  检验单类型
-     */
-    @TableField("type")
-    private String type;
     /**
      *  采购来源
      */
@@ -203,12 +149,64 @@ public class Commodity implements Serializable {
     @ExcelField(value = "产品分类")
     private String classify;
     /**
+     *  Remark箱号/备注
+     */
+    @TableField("get_remark")
+    @ExcelField(value = "Remark箱号/备注")
+    private String getRemark;
+    /**
+     *  QFF 发起日期
+     */
+    @TableField("init_date")
+    @ExcelField(value = "发起日期")
+    private String initDate;
+    /**
+     *  Time of repley 回复日期
+     */
+    @TableField("rep_time")
+    @ExcelField(value = "回复日期")
+    private String repTime;
+    /**
+     *  投诉编号
+     */
+    @TableField("comp_number")
+    @ExcelField(value = "投诉编号")
+    private String compNumber;
+    /**
+     *  QFF 退货原因
+     */
+    @TableField("reason")
+    @ExcelField(value = "QFF原因")
+    private String reason;
+    /**
+     *  RD QA confirmation 罗氏QA处理意见
+     */
+    @TableField("r_conf")
+    @ExcelField(value = "罗氏QA处理意见")
+    private String rConf;
+    /**
+     *  仪器工程师检查结果
+     */
+    @TableField("check_result")
+    @ExcelField(value = "仪器工程师检查结果")
+    private String checkResult;
+    /**
+     *  备注
+     */
+    @TableField("remark")
+    @ExcelField(value = "备注")
+    private String remark;
+    /**
+     *  系统接收的类型
+     */
+    @TableField("type")
+    private String type;
+    /**
      *  变更记录
      */
     @TableField("alteration")
     @ExcelField(value = "变更记录")
     private String alteration;
-
     /**
      *  状态码  1新建  2 审核中 3 完结  4异常
      */
@@ -219,7 +217,6 @@ public class Commodity implements Serializable {
      */
     @TableField("accessory")
     private Integer accessory;
-
     /**
      *  创建日期
      */

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.neefull.fsp.web.qff.entity.Commodity;
+import com.neefull.fsp.web.qff.entity.OtherCommodity;
 import com.neefull.fsp.web.qff.mapper.CommodityMapper;
 import com.neefull.fsp.web.qff.service.ICommodityService;
 import com.neefull.fsp.web.qff.service.IProcessService;
@@ -138,6 +139,22 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
             commodityList = getAttCommodity(commodity, user);
         }else {
             commodityList = commodityMapper.getPageConserve(commodity);
+        }
+        if(CollectionUtils.isNotEmpty(commodityList)){
+            for (Commodity com : commodityList) {
+                if(com.getManuDate()!=null){
+                    com.setManuDate(com.getManuDate().replace("-","/"));
+                }
+                if(com.getExpiryDate()!=null){
+                    com.setExpiryDate(com.getExpiryDate().replace("-","/"));
+                }
+                if(com.getInitDate()!=null){
+                    com.setInitDate(com.getInitDate().replace("-","/"));
+                }
+                if(com.getRepTime()!=null){
+                    com.setRepTime(com.getRepTime().replace("-","/"));
+                }
+            }
         }
         return commodityList;
 

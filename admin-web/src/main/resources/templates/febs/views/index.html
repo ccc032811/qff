@@ -148,7 +148,6 @@
             </div>
         </div>
     </div>
-
     <div class="layui-col-md6 layui-col-sm6 layui-col-xs6 febs-hide"  style="margin-left: 15px;margin-top: 15px"  id="opes-show">
         <div class="layui-card">
             <div class="layui-card-body" >
@@ -162,8 +161,6 @@
             </div>
         </div>
     </div>
-
-
 </div>
 
 
@@ -252,6 +249,13 @@
                     '                    <td class="skip-td">罗氏发起</td>\n' +
                     '                    <td class="skip-td">'+counts(num,"roche")+'</td>\n' +
                     '                    <td class="skip-td"><a lay-href="/roche/view">点击跳转</a></td>\n' +
+                    '                </tr>')
+            }
+            if(counts(num,"temperature")!==0){
+                $("#opes").append('<tr class="skip-tr">\n' +
+                    '                    <td class="skip-td">国际到货超温，无温度计</td>\n' +
+                    '                    <td class="skip-td">'+counts(num,"temperature")+'</td>\n' +
+                    '                    <td class="skip-td"><a lay-href="/temperature/view">点击跳转</a></td>\n' +
                     '                </tr>')
             }
 

@@ -7,6 +7,7 @@ import com.neefull.fsp.web.common.entity.FebsResponse;
 import com.neefull.fsp.web.common.exception.FebsException;
 import com.neefull.fsp.web.qff.aspect.Qff;
 import com.neefull.fsp.web.qff.entity.Commodity;
+import com.neefull.fsp.web.qff.entity.OtherCommodity;
 import com.neefull.fsp.web.qff.entity.ProcessHistory;
 import com.neefull.fsp.web.qff.service.ICommodityService;
 import com.neefull.fsp.web.qff.service.IProcessService;
@@ -19,12 +20,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -152,7 +155,7 @@ public class CommodityController extends BaseController {
     }
 
     /**查询QFF流程
-     * @param commodity
+     * @param id
      * @return
      */
     @GetMapping("/queryHistory/{id}")
@@ -208,7 +211,8 @@ public class CommodityController extends BaseController {
             User user = getCurrentUser();
             List<String> group = processService.getGroupId(commodity);
             if(group.contains(user.getUsername())){
-                processService.agreeCurrentProcess(commodity,user);
+//                processService.agreeCurrentProcess(commodity,user,"1");
+                processService.commitProcess(commodity,user);
             }else {
                 throw new FebsException("当前无权限或改数据已审核");
             }
@@ -229,22 +233,18 @@ public class CommodityController extends BaseController {
     public void download(Commodity commodity, HttpServletResponse response) throws FebsException {
         try {
             List<Commodity> commodityList = commodityService.getPageConserve(commodity,getCurrentUser());
-            for (Commodity com : commodityList) {
-                if(com.getManuDate()!=null){
-                    com.setManuDate(com.getManuDate().replace("-","/"));
+            if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)&&CollectionUtils.isNotEmpty(commodityList)){
+                List<OtherCommodity> otherCommodityList = new ArrayList<>();
+                for (Commodity com : commodityList) {
+                    OtherCommodity otherCommodity = new OtherCommodity();
+                    BeanUtils.copyProperties(com,otherCommodity);
+                    otherCommodityList.add(otherCommodity);
                 }
-                if(com.getExpiryDate()!=null){
-                    com.setExpiryDate(com.getExpiryDate().replace("-","/"));
-                }
-                if(com.getInitDate()!=null){
-                    com.setInitDate(com.getInitDate().replace("-","/"));
-                }
-                if(com.getRepTime()!=null){
-                    com.setRepTime(com.getRepTime().replace("-","/"));
-                }
-
+                ExcelKit.$Export(OtherCommodity.class, response).downXlsx(otherCommodityList, false);
+            }else {
+                ExcelKit.$Export(Commodity.class, response).downXlsx(commodityList, false);
             }
-            ExcelKit.$Export(Commodity.class, response).downXlsx(commodityList, false);
+
         } catch (Exception e) {
             String message = "导出QFF excel失败";
             log.error(message,e);

@@ -28,53 +28,17 @@ import java.util.Date;
 public class Recent implements Serializable {
     private static final long serialVersionUID = -6883719899970874252L;
 
-
     /**
      *  主键id
      */
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
     /**
-     *  运输单号
+     *  开始时间
      */
-    @TableField("transport")
-    private String transport;
-    /**
-     *  康德乐物料号
-     */
-    @TableField("k_mater")
-    @ExcelField(value = "康德乐物料号")
-    private String kMater;
-    /**
-     *  罗氏物料号
-     */
-    @TableField("r_mater")
-    @ExcelField(value = "罗氏物料号")
-    private String rMater;
-    /**
-     *  产品名称
-     */
-    @TableField("name")
-    @ExcelField(value = "产品名称")
-    private String name;
-    /**
-     *  有效期
-     */
-    @TableField("use_life")
-    @ExcelField(value = "有效期")
-    private String useLife;
-    /**
-     *  批号
-     */
-    @TableField("batch")
-    @ExcelField(value = "批号")
-    private String batch;
-    /**
-     *  SAP 批次
-     */
-    @TableField("sap_batch")
-    @ExcelField(value = "SAP批次")
-    private String sapBatch;
+    @TableField("start_date")
+    @ExcelField(value = "开始时间")
+    private String startDate;
     /**
      *  工厂
      */
@@ -82,23 +46,17 @@ public class Recent implements Serializable {
     @ExcelField(value = "工厂")
     private String factory;
     /**
-     *  库位
+     *  产品信息
      */
-    @TableField("ware_house")
-    @ExcelField(value = "库位")
-    private String wareHouse;
+    @TableField("message")
+    @ExcelField(value = "产品信息")
+    private String message;
     /**
      *  数量
      */
     @TableField("number")
-    @ExcelField(value = "数量")
+    @ExcelField(value = "总数量")
     private String number;
-    /**
-     * unit  单位
-     */
-    @TableField("unit")
-    @ExcelField(value = "单位")
-    private String unit;
     /**
      *  罗氏QA处理意见
      */
@@ -111,6 +69,11 @@ public class Recent implements Serializable {
     @TableField("rep_date")
     @ExcelField(value = "回复日期")
     private String repDate;
+    /**
+     *  回复日期
+     */
+    @TableField("stage")
+    private String stage;
     /**
      *  变更记录
      */
@@ -170,9 +133,7 @@ public class Recent implements Serializable {
 
     @TableField(exist = false)
     private Integer att;
-
-
-
+    
 
     public Integer getId() {
         return id;
@@ -182,60 +143,12 @@ public class Recent implements Serializable {
         this.id = id;
     }
 
-    public String getTransport() {
-        return transport;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setTransport(String transport) {
-        this.transport = transport;
-    }
-
-    public String getkMater() {
-        return kMater;
-    }
-
-    public void setkMater(String kMater) {
-        this.kMater = kMater;
-    }
-
-    public String getrMater() {
-        return rMater;
-    }
-
-    public void setrMater(String rMater) {
-        this.rMater = rMater;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUseLife() {
-        return useLife;
-    }
-
-    public void setUseLife(String useLife) {
-        this.useLife = useLife;
-    }
-
-    public String getBatch() {
-        return batch;
-    }
-
-    public void setBatch(String batch) {
-        this.batch = batch;
-    }
-
-    public String getSapBatch() {
-        return sapBatch;
-    }
-
-    public void setSapBatch(String sapBatch) {
-        this.sapBatch = sapBatch;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 
     public String getFactory() {
@@ -246,12 +159,12 @@ public class Recent implements Serializable {
         this.factory = factory;
     }
 
-    public String getWareHouse() {
-        return wareHouse;
+    public String getMessage() {
+        return message;
     }
 
-    public void setWareHouse(String wareHouse) {
-        this.wareHouse = wareHouse;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getNumber() {
@@ -260,14 +173,6 @@ public class Recent implements Serializable {
 
     public void setNumber(String number) {
         this.number = number;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
     }
 
     public String getrConf() {
@@ -284,6 +189,14 @@ public class Recent implements Serializable {
 
     public void setRepDate(String repDate) {
         this.repDate = repDate;
+    }
+
+    public String getStage() {
+        return stage;
+    }
+
+    public void setStage(String stage) {
+        this.stage = stage;
     }
 
     public String getAlteration() {
