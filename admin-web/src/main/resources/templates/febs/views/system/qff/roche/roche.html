@@ -178,8 +178,8 @@
 
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
     {{#  if(d.isAllow == '1'&&d.status != '3'){}}
+    <a class="layui-btn layui-btn-xs" lay-event="roche-edit"  shiro:hasPermission="roche:audit">确认</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-alter"  shiro:hasPermission="roche:alter" >修改</a>
-    <a class="layui-btn layui-btn-xs" lay-event="roche-edit"  shiro:hasPermission="roche:audit">审核</a>
     {{#}}}
     {{#  if(d.status != '3'){}}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-del" shiro:hasPermission="roche:del">删除</a>

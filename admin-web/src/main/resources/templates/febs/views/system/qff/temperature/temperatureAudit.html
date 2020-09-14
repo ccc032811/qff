@@ -94,6 +94,7 @@
                     <table class="layui-table">
                         <thead>
                         <tr><th>文件名</th>
+                            <th>上传时间</th>
                             <th>类型</th>
                             <th>状态</th>
                             <th>操作</th>
@@ -250,7 +251,7 @@
                     var type = url.substring(url.lastIndexOf(".")+1,url.length);
                     var name = url.substring(0,url.lastIndexOf("."));
 
-                    var tr = $(['<tr id="upload-' + index + '"><td style="width: 65%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
+                    var tr = $(['<tr id="upload-' + index + '"><td style="width: 50%">' + name + '</td><td style="width: 15%"></td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
                     '<td style="width: 15%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
                     images.push(url);
                     image.push(url);
@@ -287,31 +288,39 @@
         $.get(ctx +"file/findImages/"+recent.id +"/"+type,to,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
-                var url = item.substring(item.lastIndexOf("/")+1);
-                var form =url.substring(url.lastIndexOf(".")+1,url.length);
-                var name =url.substring(0,url.lastIndexOf("."));
-                images.push(url);
 
-                $('#temperature-List').append('<tr id="temperature-file-'+ index + '" ><td style="width: 65%">' + name + '</td><td style="width: 10%">' + form + '</td><td style="width: 10%">可下载</td>' +
-                    '<td style="width: 15%"><button class="layui-btn layui-btn-xs " type="button" id="temperature-upload-' + index + '" >下载</button>' +
-                    '                       <button class="layui-btn layui-btn-xs layui-btn-danger" type="button" id="temperature-del-'+ index + '">删除</button></td></tr>');
+                var name = item.remark+"."+item.attachType;
+                images.push(name);
+                if(item.source === 1){
+                    $('#temperature-List').append('<tr id="temperature-file-'+ index + '" ><td style="width: 50%">' + item.remark + '</td>' +
+                        '<td style="width: 15%">' + item.createTime + '</td><td style="width: 10%">' + item.attachType + '</td>' +
+                        '<td style="width: 10%">可下载</td><td style="width: 15%">' +
+                        '<button class="layui-btn layui-btn-xs " type="button" id="temperature-upload-' + index + '" >下载</button></td></tr>');
+                }else {
+                    $('#temperature-List').append('<tr id="temperature-file-'+ index + '" ><td style="width: 50%">' + item.remark + '</td>' +
+                        '<td style="width: 15%">' + item.createTime + '</td><td style="width: 10%">' + item.attachType + '</td>' +
+                        '<td style="width: 10%">可下载</td><td style="width: 15%">' +
+                        '<button class="layui-btn layui-btn-xs " type="button" id="temperature-upload-' + index + '" >下载</button>' +
+                        '<button class="layui-btn layui-btn-xs layui-btn-danger" type="button" id="temperature-del-'+ index + '">删除</button></td></tr>');
+                }
+
                 $view.find('#temperature-upload-'+index ).on('click',function () {
                     // window.open(ctx +"file/uploadFile/"+item)
-                    window.location.href=ctx +"file/uploadFile/"+url;
+                    window.location.href=ctx +"file/uploadFile/"+name;
                 });
                 $view.find('#temperature-del-'+index).on('click',function () {
 
                     febs.modal.confirm('删除该条数据','确定删除该条数据？该删除不可逆！', function () {
-                        febs.get(ctx + "file/removeImage/"+url+'/'+recent.id+'/'+type,to, function (res) {
+                        febs.get(ctx + "file/removeImage/"+name+'/'+recent.id+'/'+type,to, function (res) {
                             if(res.code === 200) {
-                                removeImages(images,url);
+                                removeImages(images,name);
                                 $('#temperature-file-'+index).remove();
                                 febs.alert.success('删除成功');
                             }
                         })
                     });
-
                 });
+
             })
         });
 
@@ -361,10 +370,7 @@
 
 
         form.on('submit(temperature-form-submit)', function (data) {
-            if (febs.nativeEqual(data.field, recent)) {
-                febs.alert.warn('数据未作任何修改！');
-                return false;
-            }
+
             for (var i = 0; i<=image.length-1;i++){
                 if(image[i]!== undefined)
                     imageList+=image[i]+",";

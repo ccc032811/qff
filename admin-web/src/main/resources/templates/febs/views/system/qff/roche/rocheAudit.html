@@ -35,41 +35,23 @@
     }
 
     /* 覆盖样式 */
-    .layui-form-item {
-        margin-bottom: 0px;
+    .layui-form-item ,.layui-form-item .layui-inline{
+        margin-bottom: 0;
     }
     .layui-form-item-rigth{
-        border-right: 1px solid #000;
-    }
-    .layui-col-sm4,.layui-col-sm8,.layui-col-sm6 {
         border-left: 1px solid #000;
-        border-top: 1px solid #000;
-        height: 39px;
-    }
-    .layui-col-sm12{
-        border-left: 1px solid #000;
-        border-top: 1px solid #000;
-        height: 100px;
-    }
-    .layui-form-label {
-        float: left;
-        display: block;
-        padding: 10px 14px;
-        width: 80px;
-        font-weight: 400;
-        line-height: 20px;
-        text-align: center;
-        height: 21px;
     }
     .layui-input-block{
-        height: 39px;
         border-left: 1px solid #000;
+        border-right: 1px solid #000;
+        border-top: 1px solid #000;
     }
-    .layui-input, .layui-textarea {
-        width: 100%;
+    .layui-col-sm4 {
+        height: 39px;
     }
-    .layui-form-item .layui-inline {
-        margin-bottom: 0px;
+    .layui-form-label {
+        border-top: 1px solid #000;
+        text-align: center;
     }
 </style>
 <div class="layui-fluid" id="roche-detail" lay-title = "罗氏内部发起QFF" style="margin-left: 18px">
@@ -205,6 +187,7 @@
                     <table class="layui-table">
                         <thead>
                         <tr><th>文件名</th>
+                            <th>上传时间</th>
                             <th>类型</th>
                             <th>状态</th>
                             <th>操作</th>
@@ -371,7 +354,8 @@
                     var type = url.substring(url.lastIndexOf(".")+1,url.length);
                     var name = url.substring(0,url.lastIndexOf("."));
 
-                    var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
+                    var tr = $(['<tr id="upload-' + index + '"><td style="width: 50%">' + name + '</td><td style="width: 15%"></td>' +
+                    '<td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
                     '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
                     images.push(url);
                     image.push(url);
@@ -411,31 +395,39 @@
         $.get(ctx +"file/findImages/"+roche.id+"/"+type,to,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
-                var url = item.substring(item.lastIndexOf("/")+1);
-                var form =url.substring(url.lastIndexOf(".")+1,url.length);
-                var name =url.substring(0,url.lastIndexOf("."));
-                images.push(url);
 
-                $('#roche-List').append('<tr id="roche-file-'+ index + '" ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + form + '</td><td style="width: 10%">可下载</td>' +
-                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs " type="button" id="roche-upload-' + index + '" >下载</button>' +
-                    '                       <button class="layui-btn layui-btn-xs layui-btn-danger" type="button" id="roche-del-'+ index + '">删除</button></td></tr>');
+                var name = item.remark+"."+item.attachType;
+                images.push(name);
+                if(item.source === 1){
+                    $('#roche-List').append('<tr id="roche-file-'+ index + '" ><td style="width: 50%">' + item.remark + '</td>' +
+                        '<td style="width: 15%">' + item.createTime + '</td><td style="width: 10%">' + item.attachType + '</td>' +
+                        '<td style="width: 10%">可下载</td><td style="width: 15%">' +
+                        '<button class="layui-btn layui-btn-xs " type="button" id="roche-upload-' + index + '" >下载</button></td></tr>');
+                }else {
+                    $('#roche-List').append('<tr id="roche-file-'+ index + '" ><td style="width: 50%">' + item.remark + '</td>' +
+                        '<td style="width: 15%">' + item.createTime + '</td><td style="width: 10%">' + item.attachType + '</td>' +
+                        '<td style="width: 10%">可下载</td><td style="width: 15%">' +
+                        '<button class="layui-btn layui-btn-xs " type="button" id="roche-upload-' + index + '" >下载</button>' +
+                        '<button class="layui-btn layui-btn-xs layui-btn-danger" type="button" id="roche-del-'+ index + '">删除</button></td></tr>');
+                }
+
                 $view.find('#roche-upload-'+index ).on('click',function () {
                     // window.open(ctx +"file/uploadFile/"+item)
-                    window.location.href=ctx +"file/uploadFile/"+url;
+                    window.location.href=ctx +"file/uploadFile/"+name;
                 });
                 $view.find('#roche-del-'+index).on('click',function () {
 
                     febs.modal.confirm('删除该条数据','确定删除该条数据？该删除不可逆！', function () {
-                        febs.get(ctx + "file/removeImage/"+url+'/'+roche.id+'/'+type,to, function (res) {
+                        febs.get(ctx + "file/removeImage/"+name+'/'+roche.id+'/'+type,to, function (res) {
                             if(res.code === 200) {
-                                removeImages(images,url);
+                                removeImages(images,name);
                                 $('#roche-file-'+index).remove();
                                 febs.alert.success('删除成功');
                             }
                         })
                     });
-
                 });
+
             })
         });
 

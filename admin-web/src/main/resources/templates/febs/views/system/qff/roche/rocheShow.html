@@ -36,41 +36,23 @@
 
 
     /* 覆盖样式 */
-    .layui-form-item {
-        margin-bottom: 0px;
+    .layui-form-item ,.layui-form-item .layui-inline{
+        margin-bottom: 0;
     }
     .layui-form-item-rigth{
-        border-right: 1px solid #000;
-    }
-    .layui-col-sm4,.layui-col-sm8,.layui-col-sm6 {
         border-left: 1px solid #000;
-        border-top: 1px solid #000;
-        height: 39px;
-    }
-    .layui-col-sm12{
-        border-left: 1px solid #000;
-        border-top: 1px solid #000;
-        height: 100px;
-    }
-    .layui-form-label {
-        float: left;
-        display: block;
-        padding: 10px 14px;
-        width: 80px;
-        font-weight: 400;
-        line-height: 20px;
-        text-align: center;
-        height: 21px;
     }
     .layui-input-block{
-        height: 39px;
         border-left: 1px solid #000;
+        border-right: 1px solid #000;
+        border-top: 1px solid #000;
     }
-    .layui-input, .layui-textarea {
-        width: 100%;
+    .layui-col-sm4 {
+        height: 39px;
     }
-    .layui-form-item .layui-inline {
-        margin-bottom: 0px;
+    .layui-form-label {
+        border-top: 1px solid #000;
+        text-align: center;
     }
 </style>
 <div class="layui-fluid" id="roche-detail-show" lay-title = "罗氏内部发起QFF" style="margin-left: 18px">
@@ -209,6 +191,7 @@
                 <table class="layui-table">
                     <thead>
                     <tr><th>文件名</th>
+                        <th>上传时间</th>
                         <th>类型</th>
                         <th>状态</th>
                         <th>操作</th>
@@ -286,15 +269,14 @@
         $.get(ctx +"file/findImages/"+roche.id+"/"+type,to,function (res) {
             var data = res.data;
             $.each(data,function (index, item) {
-                var url = item.substring(item.lastIndexOf("/")+1);
-                var type =url.substring(url.lastIndexOf(".")+1,url.length);
-                var name =url.substring(0,url.lastIndexOf("."));
-                $('#roche-List-show').append('<tr ><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">可下载</td>' +
-                    '<td style="width: 10%"><button class="layui-btn layui-btn-xs" type="button" id="roche-upload-show-' + index + '">下载</button></td></tr>');
-                $view.find('#roche-upload-show-'+index ).on('click',function () {
-                    window.location.href=ctx +"file/uploadFile/"+url;
-                })
 
+                var name = item.remark+"."+item.attachType;
+                $('#roche-List-show').append('<tr ><td style="width: 50%">' + item.remark
+                    + '</td><td style="width: 15%">' + item.createTime + '</td><td style="width: 10%">' + item.attachType  + '</td><td style="width: 10%">可下载</td>' +
+                    '<td style="width: 15%"><button class="layui-btn layui-btn-xs" type="button" id="roche-upload-show-' + index + '">下载</button></td></tr>');
+                $view.find('#roche-upload-show-'+index ).on('click',function () {
+                    window.location.href=ctx +"file/uploadFile/"+name;
+                });
             })
         });
 

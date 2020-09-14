@@ -804,7 +804,9 @@ public class ProcessServiceImpl implements IProcessService {
         String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
         recent.setRepDate(date);
         Recent oldRecent = recentService.queryRecentById(recent.getId());
-        if(!recent.getrConf().equals(oldRecent.getrConf())){
+        if(!recent.getrConf().equals(oldRecent.getrConf())&&recent.getStage().equals(ProcessConstant.RECENT_NAME)){
+            alteration.append("罗氏处理意见:" +date+ " 由 "+oldRecent.getrConf()+" 修改为 "+recent.getrConf()+"  。 ");
+        }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
             alteration.append("罗氏处理意见:" +date+ " 由 "+oldRecent.getrConf()+" 修改为 "+recent.getrConf()+"  。 ");
         }
         if(StringUtils.isNotEmpty(oldRecent.getAlteration())) {

@@ -145,7 +145,8 @@
                     var type = url.substring(url.lastIndexOf(".")+1,url.length);
                     var name = url.substring(0,url.lastIndexOf("."));
 
-                    var tr = $(['<tr id="upload-' + index + '"><td style="width: 70%">' + name + '</td><td style="width: 10%">' + type + '</td><td style="width: 10%">上传成功</td>' +
+                    var tr = $(['<tr id="upload-' + index + '"><td style="width: 50%">' + name + '</td><td style="width: 10%">' + type + '</td>' +
+                    '<td style="width: 10%">上传成功</td>' +
                     '<td style="width: 10%"><button class="layui-btn layui-btn-xs layui-btn-danger file-delete" type="button">删除</button></td></tr>'].join(''));
                     images.push(url);
                     tr.find('.file-delete').on('click', function(){
