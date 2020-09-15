@@ -17,6 +17,12 @@
                             <div class="layui-col-md12">
                                 <div class="layui-form-item" style="margin-left: 15px;">
                                     <div class="layui-inline">
+                                        <label class="layui-form-label"  style="border-right: 1px solid white;">QFF编号</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="number" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
                                         <label class="layui-form-label"  style="border-right: 1px solid white;">产品信息</label>
                                         <div class="layui-input-inline">
                                             <input type="text" name="message" autocomplete="off" class="layui-input">
@@ -149,8 +155,10 @@
                 },
                 cols: [[
                     {field: 'startDate', title: '开始时间',align:'center',minWidth: 120},
-                    {field: 'message', title: '产品信息',align:'center',minWidth: 200},
-                    {field: 'number', title: '总数量',align:'center',minWidth: 100},
+                    {field: 'number', title: 'QFF编号',align:'center',minWidth: 120},
+                    {field: 'remark', title: '事件描述',align:'center',minWidth: 200},
+                    {field: 'message', title: '产品信息',align:'center',minWidth: 120},
+                    {field: 'count', title: '总数量',align:'center',minWidth: 100},
                     {field: 'rConf', title: '罗氏QA处理意见',align:'center',minWidth: 200},
                     {field: 'repDate', title: '回复日期',align:'center',minWidth: 120},
                     {title: '处理阶段', templet: '#temperature-status',align:'center',minWidth: 120},
@@ -260,6 +268,7 @@
                 startTime: createTimeFrom,
                 endTime: createTimeTo,
                 message: $searchForm.find('input[name="message"]').val().trim(),
+                message: $searchForm.find('input[name="number"]').val().trim(),
                 att: $searchForm.find("select[name='att']").val(),
                 stage: stage,
                 invalidate_ie_cache: new Date()

@@ -10,9 +10,12 @@ import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
 import org.activiti.engine.HistoryService;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
@@ -65,6 +68,8 @@ public class ProcessServiceImpl implements IProcessService {
     private SendMailProperties mailProperties;
     @Autowired
     private TemplateEngine templateEngine;
+    @Autowired
+    private RepositoryService repositoryService;
 
 
 
@@ -134,7 +139,13 @@ public class ProcessServiceImpl implements IProcessService {
 
                 Context context = new Context();
                 context.setVariable("list",recentList);
-                String text = templateEngine.process("rocheRecent", context);
+                String text = "";
+                if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
+                    text = templateEngine.process("rocheRecent", context);
+
+                }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
+                    text = templateEngine.process("rocheTemperature", context);
+                }
 
                 MailUtils.sendMail(text,mailProperties,rocheMails,files);
             }else {
@@ -159,7 +170,7 @@ public class ProcessServiceImpl implements IProcessService {
                 if(StringUtils.isNotEmpty(roche.getImages())){
                     attachments = addOrEditFiles(roche, user);
                 }
-
+                businessKey = getBusinessKey(roche);
                 startProcess(properties.getRocheProcess(),businessKey);
 
                 Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
@@ -257,130 +268,10 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
     private Boolean editTime(String businessKey){
-        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceBusinessKey(businessKey).singleResult();
+        ProcessInstance processInstance = queryProcessInstance(businessKey);
         String activityId = processInstance.getActivityId();
         return activityId.equals(ProcessConstant.THREE_STEP);
     }
-
-
-//    @Override
-//    @Transactional
-//    public void agreeCurrentProcess(Object object, User user,String firstCommit) {
-//
-//        List<Attachment> attachments = new ArrayList<>();
-//        //设置更新的时间
-//        if(object instanceof Commodity){
-//            Commodity commodity = (Commodity) object;
-//
-//            String businessKey = getBusinessKey(commodity);
-//            if(StringUtils.isNotEmpty(commodity.getImages())){
-//                attachments = addOrEditFiles(commodity, user);
-//            }
-//            if(StringUtils.isNotEmpty(firstCommit)){
-//                editCommodity(commodity);
-//                ProcessInstance processInstance = getNewProcessInstance(businessKey, user,attachments);
-//                if(processInstance==null){
-//                    commodityService.updateCommodityStatus(commodity.getId(),ProcessConstant.HAS_FINISHED);
-//                }
-//            }else {
-//                firstCommit(businessKey,user,attachments);
-//            }
-//
-//
-//        }else if(object instanceof Recent){
-//            Recent recent = (Recent) object;
-//            if(StringUtils.isNotEmpty(firstCommit)){
-//                recent.setRepDate(DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
-//                recentService.editRecent(recent);
-//            }
-//
-//
-//            String businessKey = getBusinessKey(recent);
-//            if(StringUtils.isNotEmpty(recent.getImages())){
-//                attachments = addOrEditFiles(recent, user);
-//            }
-//            ProcessInstance processInstance = getNewProcessInstance(businessKey, user,attachments);
-//            if(processInstance==null){
-//                recentService.updateRecentStatus(recent.getId(),ProcessConstant.HAS_FINISHED);
-//            }
-//
-//        }else if(object instanceof Roche){
-//            Roche roche = (Roche) object;
-//            rocheService.editRoche(roche);
-//
-//            String businessKey = getBusinessKey(roche);
-//            ProcessInstance processInstance = getNewProcessInstance(businessKey, user,attachments);
-//            if(processInstance==null){
-//                rocheService.updateRocheStatus(roche.getId(),ProcessConstant.HAS_FINISHED);
-//                // 发送邮件
-//                Map<String,String> files = new HashMap<>();
-//                String[] rocheMails = getEmails(86);
-//                String[] kdlMails = getEmails(87);
-//                String[] mails = new String[rocheMails.length+kdlMails.length];
-//                System.arraycopy(rocheMails,0,mails,0,rocheMails.length);
-//                System.arraycopy(kdlMails,0,mails,rocheMails.length,kdlMails.length);
-//
-//
-//                List<Roche> list =new ArrayList<>();
-//                list.add(roche);
-//
-//                Context context = new Context();
-//                context.setVariable("list",list);
-//                String text = templateEngine.process("rocheRoche", context);
-//
-//                //发送带附件的邮件
-//                MailUtils.sendMail(text,mailProperties,mails,files);
-//
-//            }
-//        }
-//    }
-//
-//
-//    @Transactional
-//    protected ProcessInstance firstCommit(String businessKey,User user,List<Attachment> attachments){
-//        Map<String,Object> map = new HashMap<>();
-//        map.put("list",attachments);
-//        Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
-//
-//        commitSet(task,user);
-//        return  queryProcessInstance(businessKey);
-//    }
-//
-//
-//
-//    @Transactional
-//    protected void commitSet(Task task,User user){
-//        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
-//        String activityId = processInstance.getActivityId();
-//        if(activityId.equals(ProcessConstant.SIX_STEP)){
-//            taskService.setAssignee(task.getId(),"康德乐已提交");
-//        }else if(activityId.equals(ProcessConstant.FIVE_STEP)){
-//            taskService.setAssignee(task.getId(),"罗氏已提交");
-//        }else {
-//            taskService.claim(task.getId(),user.getUsername());
-//        }
-//        taskService.complete(task.getId());
-//    }
-//
-//
-//
-//    @Transactional
-//    protected ProcessInstance getNewProcessInstance(String businessKey,User user,List<Attachment> attachments){
-//        Map<String,Object> map = new HashMap<>();
-//        map.put("list",attachments);
-//        List<Task> list = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
-//        if(CollectionUtils.isNotEmpty(list)){
-//            for (Task task : list) {
-//                Set taskCandidate = getTaskCandidate(task.getId());
-//                if(taskCandidate.contains(user.getUsername())){
-//                    commitSet(task,user);
-//                }
-//            }
-//        }
-//        return  queryProcessInstance(businessKey);
-//    }
-
-
 
     private Set getTaskCandidate(String taskId){
         Set<String> user = new HashSet<String>();
@@ -394,8 +285,6 @@ public class ProcessServiceImpl implements IProcessService {
         }
         return user;
     }
-
-
 
 
     @Transactional
@@ -425,31 +314,6 @@ public class ProcessServiceImpl implements IProcessService {
         }
         return list;
     }
-
-
-//    @Transactional
-//    public void  currentProcess(Commodity commodity,User user,String commit){
-//        List<Attachment> attachments = null;
-//        String businessKey = getBusinessKey(commodity);
-//
-//        if(StringUtils.isNotEmpty(commodity.getImages())){
-//            attachments = addOrEditFiles(commodity, user);
-//        }
-//        if(commit!=null){
-//            firstCommit(businessKey,user,attachments);
-//        }else {
-//            ProcessInstance processInstance = getNewProcessInstance(businessKey, user,attachments);
-//            if(processInstance==null){
-//                commodityService.updateCommodityStatus(commodity.getId(),ProcessConstant.HAS_FINISHED);
-//            }
-//        }
-//
-//
-//    }
-
-
-
-
 
 
     @Override
@@ -586,38 +450,75 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
 
+    private ProcessDefinitionEntity getProcessDefinitionEntity(String processDefinitionId){
+        return (ProcessDefinitionEntity) repositoryService.getProcessDefinition(processDefinitionId);
+    }
+
+
+    private Boolean getHistoricTaskInstance(String processInstanceId,String process){
+        boolean complete = true;
+        List<HistoricActivityInstance> list = historyService
+                .createHistoricActivityInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .list();
+        if(CollectionUtils.isNotEmpty(list)){
+            for (HistoricActivityInstance his : list) {
+                if(his.getActivityId().equals(process)){
+                    if(StringUtils.isNotEmpty(his.getAssignee())){
+                        complete = false;
+                    }
+                }
+            }
+        }
+        return complete;
+
+    }
+
+
     @Override
     @Transactional
     public void addProcessCommit(User user) {
         List<Task> list = deleteProcessUser(user);
-        String[] split = user.getRoleId().split(",");
-        for (String s : split) {
-            if(s.equals("87")){
-                if(CollectionUtils.isNotEmpty(list)){
-                    for (Task task : list) {
-                        ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-                        String activityId = processInstance.getActivityId();
-                        String processDefinitionKey = processInstance.getProcessDefinitionKey();
-                        if(activityId.equals(ProcessConstant.FOUR_STEP)&&processDefinitionKey.equals(properties.getCommodityProcess())){
-                            taskService.addCandidateUser(task.getId(),user.getUsername());
-                        }else if(activityId.equals(ProcessConstant.FOUR_STEP)&&processDefinitionKey.equals(properties.getRecentProcess())){
-                            taskService.addCandidateUser(task.getId(),user.getUsername());
-                        }else if(activityId.equals(ProcessConstant.THREE_STEP)&&processDefinitionKey.equals(properties.getRocheProcess())){
-                            taskService.addCandidateUser(task.getId(),user.getUsername());
-                        }
+        String roleId = user.getRoleId();
+        if(roleId.contains("87")){
+            if(CollectionUtils.isNotEmpty(list)){
+                for (Task task : list) {
+
+                    ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+                    String processDefinitionKey = processInstance.getProcessDefinitionKey();
+
+                    if(processDefinitionKey.equals(properties.getCommodityProcess())
+                            &&task.getTaskDefinitionKey().equals(ProcessConstant.FOUR_STEP)){
+                        taskService.addCandidateUser(task.getId(), user.getUsername());
+
+                    }else if(processDefinitionKey.equals(properties.getRecentProcess())
+                            &&task.getTaskDefinitionKey().equals(ProcessConstant.FOUR_STEP)){
+                        taskService.addCandidateUser(task.getId(),user.getUsername());
+                    }else if(processDefinitionKey.equals(properties.getRocheProcess())
+                            &&task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)){
+                        taskService.addCandidateUser(task.getId(),user.getUsername());
                     }
                 }
-            }else if(s.equals("86")){
-                if(CollectionUtils.isNotEmpty(list)){
-                    for (Task task : list) {
-                        ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-                        String activityId = processInstance.getActivityId();
-                        String processDefinitionKey = processInstance.getProcessDefinitionKey();
-                        if(activityId.equals(ProcessConstant.THREE_STEP)&&processDefinitionKey.equals(properties.getCommodityProcess())){
-                            taskService.addCandidateUser(task.getId(),user.getUsername());
-                        }else if(activityId.equals(ProcessConstant.THREE_STEP)&&processDefinitionKey.equals(properties.getRecentProcess())){
-                            taskService.addCandidateUser(task.getId(),user.getUsername());
+            }
+        }else if(roleId.contains("86")){
+            if(CollectionUtils.isNotEmpty(list)){
+                for (Task task : list) {
+                    ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+                    String processDefinitionKey = processInstance.getProcessDefinitionKey();
+
+                    if(processDefinitionKey.equals(properties.getCommodityProcess())) {
+                        if (task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)
+                                ||task.getTaskDefinitionKey().equals(ProcessConstant.TWELVE_STEP)){
+                            taskService.addCandidateUser(task.getId(), user.getUsername());
                         }
+                    }else if(processDefinitionKey.equals(properties.getRecentProcess())) {
+                        if(task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)
+                                ||task.getTaskDefinitionKey().equals(ProcessConstant.EIGHT_STEP)){
+                            taskService.addCandidateUser(task.getId(), user.getUsername());
+                        }
+                    }else if(task.getTaskDefinitionKey().equals(ProcessConstant.SIX_STEP)
+                            &&processDefinitionKey.equals(properties.getRocheProcess())){
+                        taskService.addCandidateUser(task.getId(),user.getUsername());
                     }
                 }
             }
@@ -626,9 +527,6 @@ public class ProcessServiceImpl implements IProcessService {
 
 
 
-    private ProcessInstance getProcessInstanceById(String processInstanceId){
-        return  runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-    }
 
 
     @Override
@@ -830,7 +728,13 @@ public class ProcessServiceImpl implements IProcessService {
 
         Context context = new Context();
         context.setVariable("list",list);
-        String text = templateEngine.process("kdlRecent", context);
+        String text = "";
+        if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
+            text = templateEngine.process("kdlRecent", context);
+
+        }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
+            text = templateEngine.process("kdlTemperature", context);
+        }
 
         //发送带附件的邮件
         MailUtils.sendMail(text,mailProperties,mails,files);
@@ -885,6 +789,10 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
 
+    private ProcessInstance getProcessInstanceById(String processInstanceId){
+        return  runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    }
+
     private ProcessInstance queryProcessInstance(String businessKey){
         return runtimeService.createProcessInstanceQuery().processInstanceBusinessKey(businessKey).singleResult();
 
@@ -937,8 +845,6 @@ public class ProcessServiceImpl implements IProcessService {
         }
         return list;
     }
-
-
 
 
     private String[] getEmails(Integer id){

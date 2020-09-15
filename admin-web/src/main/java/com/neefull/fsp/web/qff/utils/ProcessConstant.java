@@ -29,9 +29,11 @@ public class ProcessConstant {
 
     public static final String FOUR_STEP = "_4";
 
-    public static final String FIVE_STEP = "_5";
-
     public static final String SIX_STEP = "_6";
+
+    public static final String EIGHT_STEP = "_8";
+
+    public static final String TWELVE_STEP = "_12";
 
     public static final String ROCHE_NAME = "罗氏内部发起";
 

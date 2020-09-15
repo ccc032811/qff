@@ -7,19 +7,21 @@
 <body>
     <span >Dear Partner，</span><br>
     <br>
-    <span >您有待处理QFF如下，请登录系统查看处理，谢谢。</span><br>
+    <span >您有待国际到货超温，无温度计如下，请登录系统查看处理，谢谢。</span><br>
     <span >统一供应链门户：<a href="https://qff.shaphar.com">https://qff.shaphar.com</a> </span>
-    <table  style="width: 100%; border-collapse: collapse; border-top:1px solid #eee; font-size:14px; table-layout: fixed;">
-        <tr style=" background: #fafafa; color: #333; border: 1px solid #eee;">
+    <table style="width: 100%; border-collapse: collapse; border-top:1px solid #eee; font-size:14px; table-layout: fixed;">
+        <tr  style=" background: #fafafa; color: #333; border: 1px solid #eee;">
             <td style="border-right:1px solid #eee;text-align: center">开始时间</td>
-            <td style="border-right:1px solid #eee;text-align: center">工厂</td>
+            <td style="border-right:1px solid #eee;text-align: center">QFF编号 </td>
+            <td style="border-right:1px solid #eee;text-align: center">事件描述</td>
             <td style="border-right:1px solid #eee;text-align: center">产品信息</td>
             <td style="border-right:1px solid #eee;text-align: center">总数量</td>
         </tr>
         <p th:each="recent:${list}">
             <tr style=" background: #fafafa; color: #333; border-bottom: 1px solid #eee;">
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.startDate}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.factory}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.number}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.remark}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.message}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${recent.count}"></td>
             </tr>

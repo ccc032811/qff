@@ -8,6 +8,12 @@
 
     <select id="getRecentPage" resultType="com.neefull.fsp.web.qff.entity.Recent">
         select * from qff_recent where stage = #{recent.stage}
+        <if test="recent.number!=null and recent.number!=''">
+            and number like concat('%',#{recent.number},'%')
+        </if>
+        <if test="recent.remark!=null and recent.remark!=''">
+            and remark like concat('%',#{recent.remark},'%')
+        </if>
         <if test="recent.startDate!=null and recent.startDate!=''">
             and start_date like concat('%',#{recent.startDate},'%')
         </if>
@@ -17,8 +23,8 @@
         <if test="recent.message!=null and recent.message!=''">
             and message like concat('%',#{recent.message},'%')
         </if>
-        <if test="recent.number!=null and recent.number!=''">
-            and number like concat('%',#{recent.number},'%')
+        <if test="recent.count!=null and recent.count!=''">
+            and count like concat('%',#{recent.count},'%')
         </if>
         <if test="recent.rConf!=null and recent.rConf!=''">
             and r_conf like concat('%',#{recent.rConf},'%')
@@ -41,6 +47,12 @@
     </select>
     <select id="getPageConserve" resultType="com.neefull.fsp.web.qff.entity.Recent">
         select * from qff_recent where stage = #{stage}
+        <if test="number!=null and number!=''">
+            and number like concat('%',#{number},'%')
+        </if>
+        <if test="remark!=null and remark!=''">
+            and remark like concat('%',#{remark},'%')
+        </if>
         <if test="startDate!=null and startDate!=''">
             and startDate like concat('%',#{startDate},'%')
         </if>
@@ -50,8 +62,8 @@
         <if test="message!=null and message!=''">
             and message like concat('%',#{message},'%')
         </if>
-        <if test="number!=null and number!=''">
-            and number like concat('%',#{number},'%')
+        <if test="count!=null and count!=''">
+            and count like concat('%',#{count},'%')
         </if>
         <if test="rConf!=null and rConf!=''">
             and r_conf like concat('%',#{rConf},'%')

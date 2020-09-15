@@ -12,22 +12,18 @@
         margin-bottom: 0;
     }
     .layui-form-item-rigth{
-        border-right: 1px solid #000;
-    }
-    .layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-col-sm12 {
         border-left: 1px solid #000;
-        border-top: 1px solid #000;
     }
     .layui-input-block{
         border-left: 1px solid #000;
+        border-right: 1px solid #000;
+        border-top: 1px solid #000;
     }
-    .layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-col-sm12 {
+    .layui-col-sm4 {
         height: 39px;
     }
-    .remark{
-        height: 100px;
-    }
     .layui-form-label {
+        border-top: 1px solid #000;
         text-align: center;
     }
 </style>
@@ -42,9 +38,17 @@
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label">总数量</label>
+                <label class="layui-form-label">QFF编号</label>
                 <div class="layui-input-block">
                     <input type="text" name="number" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">总数量</label>
+                <div class="layui-input-block">
+                    <input type="text" name="count" autocomplete="off" class="layui-input" readonly>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
@@ -53,13 +57,19 @@
                     <input type="text" name="repDate"  class="layui-input" autocomplete="off" readonly>
                 </div>
             </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">产品信息</label>
+                <div class="layui-input-block">
+                    <input type="text" name="message" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
 
             <div class="layui-inline layui-col-sm12">
-                <label class="layui-form-label">产品信息</label>
+                <label class="layui-form-label">事件描述</label>
                 <div class="layui-input-block">
-                    <input type="text" name="message" autocomplete="off" class="layui-input" readonly>
+                    <input type="text" name="remark" autocomplete="off" class="layui-input" readonly>
                 </div>
             </div>
 
@@ -207,9 +217,11 @@
             form.val("temperature-detail-form", {
                 "id":recent.id,
                 "startDate": recent.startDate,
+                "number": recent.number,
+                "remark": recent.remark,
                 "factory": recent.factory,
                 "message": recent.message,
-                "number": recent.number,
+                "count": recent.count,
                 "rConf": recent.rConf,
                 "repDate": recent.repDate,
                 "stage": recent.stage,

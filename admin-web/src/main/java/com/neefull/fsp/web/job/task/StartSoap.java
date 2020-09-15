@@ -95,7 +95,7 @@ public class StartSoap {
                     commodity.setkBatch(XmlUtils.getTagContent(s,"<CHARG>","</CHARG>"));
                     commodity.setrMater(XmlUtils.getTagContent(s,"<IDNLF>","</IDNLF>"));
                     commodity.setIsDanger(XmlUtils.getTagContent(s,"<MSTAE>","</MSTAE>"));
-                    commodity.setpMater(XmlUtils.getTagContent(s,"<BISMT>","</BISMT>"));
+                    commodity.setpMater(XmlUtils.getTagContent(s,"<MAKTX>","</MAKTX>"));
                     commodity.setrBatch(XmlUtils.getTagContent(s,"<LICHN>","</LICHN>"));
                     commodity.setManuDate(XmlUtils.getTagContent(s,"<HSDAT>","</HSDAT>"));
                     commodity.setExpiryDate(XmlUtils.getTagContent(s,"<VFDAT>","</VFDAT>"));
@@ -105,8 +105,12 @@ public class StartSoap {
                     commodity.setClassify(XmlUtils.getTagContent(s,"<ZPROCLAS>","</ZPROCLAS>"));
                     commodity.setRegister(XmlUtils.getTagContent(s,"<REGNO>","</REGNO>"));
                     commodity.setTransport(XmlUtils.getTagContent(s,"<AWBNO>","</AWBNO>"));
+                    commodity.setSource(XmlUtils.getTagContent(s,"<ZIMP_LOC>","</ZIMP_LOC>"));
+                    commodity.setkUnit(XmlUtils.getTagContent(s,"<MEINS>","</MEINS>"));
+                    commodity.setrUnit(XmlUtils.getTagContent(s,"<PRIN_UNIT>","</PRIN_UNIT>"));
+                    commodity.setSource(XmlUtils.getTagContent(s,"<ZIMP_LOC>","</ZIMP_LOC>"));
+
                     String stage = XmlUtils.getTagContent(s, "<HERKUNFT>", "</HERKUNFT>");
-                    //TODO  采购来源数据采集    单位数据采集
                     commodity.setType(stage);
 //                    commodity.setStage(XmlUtils.getTagContent(s,"<HERKUNFT>","</HERKUNFT>"));
                     if(stage.equals("01")){
@@ -125,89 +129,73 @@ public class StartSoap {
                     commodity.setAccessory(0);
                     commodity.setCreateTime(parse);
 
-                    //判断该条数据是否记录
+
                     Commodity isCommodity = commodityService.queryCommodityByNumber(commodity.getNumber());
                     if(isCommodity ==null){
-                        //没有改记录就直接添加
+
                         commodityList.add(commodity);
                     }else {
-//                        //对变化的字段进行记录
-//                        boolean rstart = false;
-
                         StringBuilder alteration = new StringBuilder();
 
                         if(!commodity.getPlant().equals(isCommodity.getPlant())){
                             alteration.append("Plant工厂:" +date+ " 由 "+isCommodity.getPlant()+" 变更为 "+commodity.getPlant()+" 。");
-//                            rstart = true;
                         }
                         if(!commodity.getkMater().equals(isCommodity.getkMater())){
                             alteration.append("KDLMaterial物料:" +date+ " 由 "+isCommodity.getkMater()+" 变更为 "+commodity.getkMater()+" 。");
-//                            rstart = true;
                         }
                         if(!commodity.getkBatch().equals(isCommodity.getkBatch())){
                             alteration.append("康德乐SAP批次:" +date+ " 由 "+isCommodity.getkBatch()+" 变更为 "+commodity.getkBatch()+" 。");
-//                            rstart = true;
                         }
                         if(!commodity.getrMater().equals(isCommodity.getrMater())){
                             alteration.append("罗氏物料号:" +date+ " 由 "+isCommodity.getrMater()+" 变更为 "+commodity.getrMater()+" 。");
-//                            rstart = true;
                         }
                         if(!commodity.getpMater().equals(isCommodity.getpMater())){
                             alteration.append("物料描述:" +date+ " 由 "+isCommodity.getpMater()+" 变更为 "+commodity.getpMater()+" 。");
-//                            rstart = true;
                         }
                         if(!commodity.getrBatch().equals(isCommodity.getrBatch())){
                             alteration.append("罗氏批号:" +date+ " 由 "+isCommodity.getrBatch()+" 变更为 "+commodity.getrBatch()+" 。");
-//                            rstart = true;
                         }
                         if(!commodity.getManuDate().equals(isCommodity.getManuDate())){
                             alteration.append("生产日期:" +date+ " 由 "+isCommodity.getManuDate()+" 变更为 "+commodity.getManuDate()+" 。");
-//                            rstart = true;
                         }
                         if(!commodity.getExpiryDate().equals(isCommodity.getExpiryDate())){
                             alteration.append("有效期:" +date+ " 由 "+isCommodity.getExpiryDate()+" 变更为 "+commodity.getExpiryDate()+" 。");
-//                            rstart = true;
                         }
                         if(!commodity.getQuarantine().equals(isCommodity.getQuarantine())){
                             alteration.append("异常总数:" +date+ " 由 "+isCommodity.getQuarantine()+" 变更为 "+commodity.getQuarantine()+" 。");
-//                            rstart = true;
                         }
                         if(!commodity.getGetRemark().equals(isCommodity.getGetRemark())){
                             alteration.append("Remark箱号:" +date+ " 由 "+isCommodity.getGetRemark()+" 变更为 "+commodity.getGetRemark()+" 。");
-//                            rstart = true;
                         }
                         if(!commodity.getClassify().equals(isCommodity.getClassify())){
                             alteration.append("产品分类:" +date+ " 由 "+isCommodity.getClassify()+" 变更为 "+commodity.getClassify()+" 。");
-//                            rstart = true;
                         }
                         if(!commodity.getRegister().equals(isCommodity.getRegister())){
                             alteration.append("注册证号:" +date+ " 由 "+isCommodity.getRegister()+" 变更为 "+commodity.getRegister()+" 。");
-//                            rstart = true;
                         }
-//                        if(isCommodity.getStatus()==4){
-//                            rstart = true;
-//                        }
-//                        if(rstart){
+                        if(!commodity.getSource().equals(isCommodity.getSource())){
+                            alteration.append("采购来源:" +date+ " 由 "+isCommodity.getSource()+" 变更为 "+commodity.getSource()+" 。");
+                        }
 
-                            //判断流程中是否存在
-                            Boolean isExist = processService.queryProcessByKey(isCommodity);
-                            if(isExist){
-                                processService.deleteInstance(isCommodity);
+
+
+                        Boolean isExist = processService.queryProcessByKey(isCommodity);
+                        if(isExist){
+                            processService.deleteInstance(isCommodity);
+                        }
+                        //有变更，删除原来的数据
+                        commodityService.deleteCommodityById(isCommodity.getId());
+                        if(!isExist) {
+                            attachmentService.deleteByNumber(isCommodity.getNumber(), isCommodity.getStage());
+                        }
+                        if(StringUtils.isNotEmpty(isCommodity.getAlteration())){
+                            commodity.setAlteration(isCommodity.getAlteration()+"  "+alteration.toString());
+                        }else {
+                            if(StringUtils.isNotEmpty(alteration.toString())) {
+                                commodity.setAlteration(alteration.toString());
                             }
-                            //有变更，删除原来的数据
-                            commodityService.deleteCommodityById(isCommodity.getId());
-                            if(!isExist) {
-                                attachmentService.deleteByNumber(isCommodity.getNumber(), isCommodity.getStage());
-                            }
-                            if(StringUtils.isNotEmpty(isCommodity.getAlteration())){
-                                commodity.setAlteration(isCommodity.getAlteration()+"  "+alteration.toString());
-                            }else {
-                                if(StringUtils.isNotEmpty(alteration.toString())) {
-                                    commodity.setAlteration(alteration.toString());
-                                }
-                            }
-                            commodityList.add(commodity);
-//                        }
+                        }
+                        commodityList.add(commodity);
                     }
                 }
             }

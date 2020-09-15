@@ -32,15 +32,20 @@
     <form class="layui-form " action="" lay-filter="temperature-detail-form-add">
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label">总数量</label>
+                <label class="layui-form-label">QFF编号</label>
                 <div class="layui-input-block">
                     <input type="text" name="number"  lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input" placeholder="请输入" >
                 </div>
             </div>
-        </div>
-        <div class="layui-form-item layui-form-item-rigth">
-            <div class="layui-inline layui-col-sm12">
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">总数量</label>
+                <div class="layui-input-block">
+                    <input type="text" name="count"  lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input" placeholder="请输入" >
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label">产品信息</label>
                 <div class="layui-input-block">
                     <input type="text" name="message"  lay-verify="required" maxlength="50" autocomplete="off"
@@ -49,6 +54,14 @@
                         <option value="见附件"></option>
                         <option value="N/A"></option>
                     </datalist>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm12">
+                <label class="layui-form-label">事件描述</label>
+                <div class="layui-input-block">
+                    <input type="text" name="remark"  lay-verify="required" maxlength="200" autocomplete="off" class="layui-input" placeholder="请输入" >
                 </div>
             </div>
         </div>
@@ -159,7 +172,6 @@
                 }
             }
         });
-
 
 
         function removeImages(imageList,url) {

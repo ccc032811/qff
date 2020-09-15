@@ -36,6 +36,18 @@ public class Recent implements Serializable {
     /**
      *  开始时间
      */
+    @TableField("number")
+    @ExcelField(value = "QFF编号")
+    private String number;
+    /**
+     *  开始时间
+     */
+    @TableField("remark")
+    @ExcelField(value = "事件描述")
+    private String remark;
+    /**
+     *  开始时间
+     */
     @TableField("start_date")
     @ExcelField(value = "开始时间")
     private String startDate;
@@ -54,9 +66,9 @@ public class Recent implements Serializable {
     /**
      *  数量
      */
-    @TableField("number")
+    @TableField("count")
     @ExcelField(value = "总数量")
-    private String number;
+    private String count;
     /**
      *  罗氏QA处理意见
      */
@@ -70,7 +82,7 @@ public class Recent implements Serializable {
     @ExcelField(value = "回复日期")
     private String repDate;
     /**
-     *  回复日期
+     *  类型
      */
     @TableField("stage")
     private String stage;
@@ -143,6 +155,22 @@ public class Recent implements Serializable {
         this.id = id;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public String getStartDate() {
         return startDate;
     }
@@ -167,12 +195,12 @@ public class Recent implements Serializable {
         this.message = message;
     }
 
-    public String getNumber() {
-        return number;
+    public String getCount() {
+        return count;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setCount(String count) {
+        this.count = count;
     }
 
     public String getrConf() {

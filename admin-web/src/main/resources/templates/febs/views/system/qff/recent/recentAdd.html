@@ -42,7 +42,7 @@
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label">总数量</label>
                 <div class="layui-input-block">
-                    <input type="text" name="number"  lay-verify="required" maxlength="50" autocomplete="off"
+                    <input type="text" name="count"  lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input" placeholder="请输入" >
                 </div>
             </div>
@@ -139,7 +139,6 @@
             }
             ,choose: function(obj){
                 var flag = true;
-                var num =  $("#number").val();
 
                 obj.preview(function (index,file,result) {
                     for (var i =images.length-1 ; i>=0 ;i--){

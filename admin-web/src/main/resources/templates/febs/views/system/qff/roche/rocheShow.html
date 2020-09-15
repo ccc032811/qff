@@ -55,27 +55,31 @@
         text-align: center;
     }
 </style>
+
+
+
+
 <div class="layui-fluid" id="roche-detail-show" lay-title = "罗氏内部发起QFF" style="margin-left: 18px">
 
     <form class="layui-form " action="" lay-filter="roche-detail-form" id="roche-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">NO编号</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="number" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">发起人</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="sponsor" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label ">申请日期</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="reqDate" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input " readonly="readonly">
                 </div>
@@ -85,21 +89,21 @@
 
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">批号/序列号</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="batch" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">物料名称</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="materName" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label " >物料编号</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="materCode" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input " readonly="readonly">
                 </div>
@@ -109,21 +113,21 @@
 
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">受影响数量</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="quantity" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">单位</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="unit"  maxlength="50" autocomplete="off"
                            class="layui-input" >
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label " style="min-height: 40px;">行动</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="actions" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input " readonly="readonly">
                 </div>
@@ -133,21 +137,21 @@
 
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">期望日期</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="exceptDate" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">实际日期</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="completeDate" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4 ">
                 <label class="layui-form-label " >后续行动</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="follow" lay-verify="required" maxlength="50" autocomplete="off"
                            class="layui-input " readonly="readonly">
                 </div>
@@ -156,28 +160,26 @@
         <div class="layui-form-item layui-form-item-rigth" >
             <div class="layui-inline layui-col-sm12" >
                 <label class="layui-form-label ">原因</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-twelve">
                     <input type="text" name="reason" maxlength="50" autocomplete="off"
                            class="layui-input "  >
                 </div>
             </div>
         </div>
-        <div class="layui-form-item layui-form-item-rigth textarea-class" >
-            <div class="layui-inline layui-col-sm12" >
-                <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">备注</div></label>
-                <div class="layui-input-block" >
+        <div class="layui-form-item layui-form-item-rigth textarea-class">
+            <div class="layui-inline layui-col-sm12">
+                <label class="layui-form-label" style="height: 80px;"><div style="margin-top: 20px">备注</div></label>
+                <div class="layui-input-block">
                     <textarea name="remark" lay-verify="required" placeholder="请输入" readonly class="layui-textarea" ></textarea>
                 </div>
-
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth textarea-class" >
             <div class="layui-inline layui-col-sm12" >
-                <label class="layui-form-label " style="height: 80px;"><div style="margin-top: 20px">变更记录</div></label>
-                <div class="layui-input-block" >
+                <label class="layui-form-label" style="height: 80px;"><div style="margin-top: 20px">变更记录</div></label>
+                <div class="layui-input-block">
                     <textarea id="" name="alteration" readonly class="layui-textarea" ></textarea>
                 </div>
-
             </div>
         </div>
         <div class="layui-form-item"><div style="border-top: 1px solid #000;margin-top: 1px"></div></div>
@@ -315,14 +317,15 @@
             var newWindow = window.open();
 
             newWindow.document.write("<style>\n" +
-                "    .layui-form-item{float: left;height: 48px;width: 1200px;}  .layui-form-item-rigth{border-right: 1px solid #000;}\n" +
-                "    .layui-col-sm4,.layui-form-label,.layui-input-block{float: left;height: 48px;}\n" +
-                "    .layui-col-sm4{border-top: 1px solid #000;border-left: 1px solid #000;width: 399px;}\n" +
-                "    .layui-form-label{text-align: center;width: 100px;font-size: 14px;display: -webkit-inline-flex;margin-top: 12px;}\n" +
-                "    .layui-input-block {width: 298px;}.textarea-class{height: 110px;}\n" +
-                "    .layui-input{border: none;height: 48px;width: 298px;font-size: 14px;border-left: 1px solid #000;}\n" +
-                "    textarea{width: 1099px;height: 110px;border-bottom: 1px solid #000;border-right: 1px solid #000;border-left: 1px solid #000;}\n" +
-                "    .layui-col-sm12{height: 110px;border-top: 1px solid #000;border-left: 1px solid #000;}\n" +
+                ".layui-form-item{width: 1200px;}  .layui-form-item-rigth,.layui-textarea,textarea{border-right: 1px solid #000;}\n" +
+                ".layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-form-label,.layui-input-block,.layui-form-item{float: left;height: 48px;}\n" +
+                ".layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-col-sm12{border-top: 1px solid #000;border-left: 1px solid #000;}\n" +
+                ".layui-col-sm4{width: 399px;} .layui-col-sm6{width: 599px;} .layui-col-sm8{width: 799px;} .input-four{width:74.9%;}\n" +
+                ".input-six{width: 83.3%;} .input-eight{width: 87.2%;}.input-twelve{width: 91.6%} .layui-col-sm12{height: 110px;}\n" +
+                ".layui-form-label{text-align: center;width: 100px;font-size: 14px;display: -webkit-inline-flex;margin-top: 12px;}\n" +
+                ".layui-input{border: none;height: 48px;width: 100%;font-size: 14px;border-left: 1px solid #000;}.textarea-class{height: 110px;}\n" +
+                "textarea{width: 1099px;height: 48px;}  .layui-textarea{width: 1099px;height: 110px;}\n" +
+                ".layui-textarea,textarea{border-bottom: 1px solid #000;border-left: 1px solid #000;}\n" +
                 "</style>");
             newWindow.document.write(headstr+printData+footstr);
             newWindow.document.close();

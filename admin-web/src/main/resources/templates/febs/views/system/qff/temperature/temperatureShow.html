@@ -12,54 +12,67 @@
         margin-bottom: 0;
     }
     .layui-form-item-rigth{
-        border-right: 1px solid #000;
-    }
-    .layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-col-sm12 {
         border-left: 1px solid #000;
-        border-top: 1px solid #000;
     }
     .layui-input-block{
         border-left: 1px solid #000;
+        border-right: 1px solid #000;
+        border-top: 1px solid #000;
     }
-    .layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-col-sm12 {
+    .layui-col-sm4 {
         height: 39px;
     }
-    .remark{
-        height: 100px;
-    }
     .layui-form-label {
+        border-top: 1px solid #000;
         text-align: center;
     }
 </style>
+
+
+
 <div class="layui-fluid" id="temperature-detail-show" lay-title = "近效期QFF" style="margin-left: 18px">
 
     <form class="layui-form " action="" lay-filter="temperature-detail-form" id="temperature-detail-form">
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label">开始时间</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="startDate" autocomplete="off" class="layui-input" readonly>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
-                <label class="layui-form-label">总数量</label>
-                <div class="layui-input-block">
+                <label class="layui-form-label">QFF编号</label>
+                <div class="layui-input-block input-four">
                     <input type="text" name="number" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth">
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">总数量</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="count" autocomplete="off" class="layui-input" readonly>
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label">回复日期</label>
-                <div class="layui-input-block">
+                <div class="layui-input-block input-four">
                     <input type="text" name="repDate"  class="layui-input" autocomplete="off" readonly>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-sm4">
+                <label class="layui-form-label">产品信息</label>
+                <div class="layui-input-block input-four">
+                    <input type="text" name="message" autocomplete="off" class="layui-input" readonly>
                 </div>
             </div>
         </div>
         <div class="layui-form-item layui-form-item-rigth">
 
             <div class="layui-inline layui-col-sm12">
-                <label class="layui-form-label">产品信息</label>
-                <div class="layui-input-block">
-                    <input type="text" name="message" autocomplete="off" class="layui-input" readonly>
+                <label class="layui-form-label">事件描述</label>
+                <div class="layui-input-block input-twelve">
+                    <input type="text" name="remark" autocomplete="off" class="layui-input" readonly>
                 </div>
             </div>
 
@@ -68,14 +81,13 @@
 
             <div class="layui-inline layui-col-sm12">
                 <label class="layui-form-label" id="rConf-temperature">罗氏意见</label>
-                <div class="layui-input-block" id="temperature-rConf">
+                <div class="layui-input-block input-twelve" id="temperature-rConf">
                     <input type="text" name="rConf"  autocomplete="off" class="layui-input" readonly >
-
                 </div>
             </div>
         </div>
-        <div class="layui-form-item layui-form-item-rigth remark">
-            <div class="layui-inline layui-col-sm12 remark">
+        <div class="layui-form-item layui-form-item-rigth remark textarea-class">
+            <div class="layui-inline layui-col-sm12 remark textarea-class">
                 <label class="layui-form-label" style="height: 80px;"><div style="margin-top: 20px">变更记录</div></label>
                 <div class="layui-input-block">
                     <textarea name="alteration" readonly class="layui-textarea"></textarea>
@@ -155,9 +167,11 @@
             form.val("temperature-detail-form", {
                 "id":recent.id,
                 "startDate": recent.startDate,
+                "number": recent.number,
+                "startDate": recent.startDate,
                 "factory": recent.factory,
                 "message": recent.message,
-                "number": recent.number,
+                "count": recent.count,
                 "rConf": recent.rConf,
                 "repDate": recent.repDate,
                 "alteration":recent.alteration
@@ -218,14 +232,15 @@
             var newWindow = window.open();
 
             newWindow.document.write("<style>\n" +
-                "    .layui-form-item{float: left;height: 48px;width: 1200px;}  .layui-form-item-rigth{border-right: 1px solid #000;}\n" +
-                "    .layui-col-sm4,.layui-form-label,.layui-input-block{float: left;height: 48px;}\n" +
-                "    .layui-col-sm4{border-top: 1px solid #000;border-left: 1px solid #000;width: 399px;}\n" +
-                "    .layui-form-label{text-align: center;width: 100px;font-size: 14px;display: -webkit-inline-flex;margin-top: 12px;}\n" +
-                "    .layui-input-block {width: 298px;}.textarea-class{height: 110px;}\n" +
-                "    .layui-input{border: none;height: 48px;width: 298px;font-size: 14px;border-left: 1px solid #000;}\n" +
-                "    textarea{width: 1099px;height: 110px;border-bottom: 1px solid #000;border-right: 1px solid #000;border-left: 1px solid #000;}\n" +
-                "    .layui-col-sm12{height: 110px;border-top: 1px solid #000;border-left: 1px solid #000;}\n" +
+                ".layui-form-item{width: 1200px;}  .layui-form-item-rigth,.layui-textarea,textarea{border-right: 1px solid #000;}\n" +
+                ".layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-form-label,.layui-input-block,.layui-form-item{float: left;height: 48px;}\n" +
+                ".layui-col-sm4,.layui-col-sm6,.layui-col-sm8,.layui-col-sm12{border-top: 1px solid #000;border-left: 1px solid #000;}\n" +
+                ".layui-col-sm4{width: 399px;} .layui-col-sm6{width: 599px;} .layui-col-sm8{width: 799px;} .input-four{width:74.9%;}\n" +
+                ".input-six{width: 83.3%;} .input-eight{width: 87.2%;}.input-twelve{width: 91.6%} .layui-col-sm12{height: 110px;}\n" +
+                ".layui-form-label{text-align: center;width: 100px;font-size: 14px;display: -webkit-inline-flex;margin-top: 12px;}\n" +
+                ".layui-input{border: none;height: 48px;width: 100%;font-size: 14px;border-left: 1px solid #000;}.textarea-class{height: 110px;}\n" +
+                "textarea{width: 1099px;height: 48px;}  .layui-textarea{width: 1099px;height: 110px;}\n" +
+                ".layui-textarea,textarea{border-bottom: 1px solid #000;border-left: 1px solid #000;}\n" +
                 "</style>");
             newWindow.document.write(headstr+printData+footstr);
             newWindow.document.close();
