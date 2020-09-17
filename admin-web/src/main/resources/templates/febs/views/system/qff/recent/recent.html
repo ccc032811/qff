@@ -104,7 +104,7 @@
 </script>
 <script type="text/html" id="recent-toolbarCheck">
     <div class="layui-btn-container">
-        <button  class="layui-btn layui-btn-sm" style="background-color: #87e8de;"  lay-event="recent-add" shiro:hasPermission="recent:add">
+        <button  class="layui-btn layui-btn-sm layui-btn-success"  lay-event="recent-add" shiro:hasPermission="recent:add">
             <i class="layui-icon">&#xe654;</i> 新增近效期
         </button>
         <button class="layui-btn layui-btn-sm" lay-event="recent-download" shiro:hasPermission="recent:down">
@@ -241,12 +241,12 @@
                 layEvent = obj.event;
             if (layEvent === 'recent-detail') {
                 febs.modal.open('具体信息', 'system/qff/recent/recentShow/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '60%' : '55%',$(window).width() <= 750 ? '60%' : '55%']
+                    area:  [$(window).width() <= 750 ? '70%' : '60%',$(window).width() <= 750 ? '70%' : '60%']
                 });
             }
             if (layEvent === 'recent-edit') {
                 febs.modal.open('审核', 'system/qff/recent/recentAudit/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '60%' : '55%',$(window).width() <= 750 ? '60%' : '55%']
+                    area:  [$(window).width() <= 750 ? '70%' : '60%',$(window).width() <= 750 ? '70%' : '60%']
                 });
             }
             if (layEvent === 'recent-del') {
@@ -256,7 +256,7 @@
             }
             if (layEvent === 'recent-alter') {
                 febs.modal.open('修改', 'system/qff/recent/recentAlter/' + data.id+"/"+"1", {
-                    area:  [$(window).width() <= 750 ? '60%' : '55%',$(window).width() <= 750 ? '60%' : '55%']
+                    area:  [$(window).width() <= 750 ? '70%' : '60%',$(window).width() <= 750 ? '70%' : '60%']
                 });
             }
 

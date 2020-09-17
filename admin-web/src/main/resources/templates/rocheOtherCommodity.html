@@ -2,60 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>康德乐</title>
+    <title>罗氏</title>
 </head>
 <body>
-    <span >Dear KDL colleague，</span><br>
+    <span>Dear Partner，</span><br>
     <br>
-    <span>您有待处理罗氏QFF如下，谢谢。</span><br>
-    <table  style="width: 100%; border-collapse: collapse; border-top:1px solid #eee; font-size:14px; table-layout: fixed;">
+    <span>您有待处理QFF如下，请登录系统查看处理，谢谢。</span><br>
+    <span>统一供应链门户：<a href="https://qff.shaphar.com">https://qff.shaphar.com</a> </span>
+    <table style="width: 100%; border-collapse: collapse; border-top:1px solid #eee; font-size:14px; table-layout: fixed;">
         <tr style=" background: #fafafa; color: #333; border: 1px solid #eee;">
-            <td style="border-right:1px solid #eee;text-align: center">运输单号</td>
             <td style="border-right:1px solid #eee;text-align: center">QFF编号</td>
             <td style="border-right:1px solid #eee;text-align: center">Plant工厂</td>
             <td style="border-right:1px solid #eee;text-align: center">KDL Material物料</td>
             <td style="border-right:1px solid #eee;text-align: center">康德乐SAP 批次</td>
             <td style="border-right:1px solid #eee;text-align: center">罗氏物料号</td>
-            <td style="border-right:1px solid #eee;text-align: center">物料描述</td>
             <td style="border-right:1px solid #eee;text-align: center">罗氏批号</td>
             <td style="border-right:1px solid #eee;text-align: center">生产日期</td>
             <td style="border-right:1px solid #eee;text-align: center">有效期</td>
             <td style="border-right:1px solid #eee;text-align: center">异常总数</td>
-            <td style="border-right:1px solid #eee;text-align: center">Remark箱号/备注</td>
-            <td style="border-right:1px solid #eee;text-align: center">罗氏处理意见</td>
-            <td style="text-align: center">变更记录</td>
+            <td style="text-align: center">Remark箱号/备注</td>
+            <td style="text-align: center">QFF类型</td>
         </tr>
         <p th:each="commodity:${list}">
-            <tr  style=" background: #fafafa; color: #333; border-bottom: 1px solid #eee;">
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.transport}"></td>
+            <tr style=" background: #fafafa; color: #333; border-bottom: 1px solid #eee;">
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.number}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.plant}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.kMater}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.kBatch}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.rMater}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.pMater}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.rBatch}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.manuDate}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.expiryDate}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.quarantine}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.getRemark}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.rConf}"></td>
-                <td style="word-wrap:break-word;border-left:1px solid #eee;border-right:1px solid #eee;text-align: center" th:text="${commodity.alteration}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;border-right:1px solid #eee;text-align: center" th:text="${commodity.getRemark}"></td>
+                <td style="word-wrap:break-word;border-left:1px solid #eee;border-right:1px solid #eee;text-align: center" th:text="${commodity.stage}"></td>
             </tr>
         </p>
-
     </table>
-    <br>
-    <span>更多详细信息可登录系统查看，统一供应链门户：<a href="https://qff.shaphar.com">https://qff.shaphar.com</a> </span>
+
 </body>
 <style>
-    /*td{*/
-        /*border:solid 1px #000;*/
-        /*text-align: center;*/
-    /*}*/
-    /*tr {*/
-        /*border:solid 1px #000;*/
-    /*}*/
+
     span{
         font-size: 20px;
         font-family: "宋体";

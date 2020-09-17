@@ -248,56 +248,7 @@ p{
 }
 
 
-.timeline-main-line{
-	width: 90%;
-	height: 50px;
-	margin-left: -9%
-}
-.timeline-item-start{
-	width: 25%;
-	height: 50px;
-	float:left;
-}
 
-.timeline-item{
-	width: 25%;
-	height: 50px;
-	float:left;
-	border-bottom: 3px solid #CBCBCB;
-}
-.timeline-item-start{
-	width: 25%;
-	height: 50px;
-	float:left;
-}
-
-.timeline-item-cricle{
-	width: 25px;
-	height: 20px;
-	border-radius: 80%;
-	background-color: #CBCBCB;
-	position: relative;
-	top: 22px;
-	left: 95%;
-	text-align: center;
-	color: #fff;
-}
-.timeline-item-timestamp{
-	width: 100px;
-	height: 20px;
-	color: #000;
-	position: relative;
-	top: 10px;
-	left:  95%;
-}
-.timeline-item-name{
-	width: 50%;
-	height: 20px;
-	color: #000;
-	position: relative;
-	top: 40px;
-	left:  95%;
-}
 
 
 input[type=checkbox]{

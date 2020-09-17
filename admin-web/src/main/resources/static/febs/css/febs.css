@@ -4047,26 +4047,45 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 
 .timeline-main-line{
     width: 90%;
-    height: 50px;
     margin-left:-9%
 }
 .timeline-item-start{
     width: 25%;
-    height: 50px;
     float:left;
 }
 
 .timeline-item{
     width: 25%;
-    height: 50px;
     float:left;
     border-bottom: 3px solid #CBCBCB;
 }
-.timeline-item-start{
+.timeline-item-second{
     width: 25%;
-    height: 50px;
     float:left;
+    border-bottom: 3px solid #CBCBCB;
 }
+.timeline-item-three{
+    width: 25%;
+    float:left;
+
+}
+.timeline-item-up{
+    width: 99%;
+    float:left;
+    height: 60px;
+    border-top: 3px solid #CBCBCB;
+    border-left: 3px solid #CBCBCB;
+    border-right: 3px solid #CBCBCB;
+}
+.timeline-item-down{
+    width: 99%;
+    float:left;
+    height: 60px;
+    border-left: 3px solid #CBCBCB;
+    border-right: 3px solid #CBCBCB;
+    border-bottom: 3px solid #CBCBCB;
+}
+
 
 .timeline-item-cricle{
     width: 25px;
@@ -4074,7 +4093,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     border-radius: 80%;
     background-color: #CBCBCB;
     position: relative;
-    top: 22px;
+    top: 32px;
     left: 95%;
     text-align: center;
     color: #fff;
@@ -4084,14 +4103,14 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     height: 20px;
     color: #000;
     position: relative;
-    top: 10px;
-    left:  95%;
+    top: 20px;
+    left:  105%;
 }
 .timeline-item-name{
     width: 70%;
     height: 20px;
     color: #000;
     position: relative;
-    top: 40px;
-    left:  95%;
+    top: 46px;
+    left:  105%;
 }

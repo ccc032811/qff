@@ -17,6 +17,7 @@ import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.tomcat.jni.Proc;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,11 +125,13 @@ public class QffProcess extends BaseController {
             List<User> userList = userService.findUserByRoleId(86);
             List<String> userMails = new ArrayList<>();
             for (User user : userList) {
-                userMails.add(user.getEmail());
+                if(StringUtils.isNotEmpty(user.getEmail())&&user.getAccept().equals("1")&&user.getStatus().equals("1")) {
+                    userMails.add(user.getEmail());
+                }
             }
             String[] mails = userMails.toArray(new String[0]);
 
-            //发送邮件
+
             MailUtils.sendMail(text, mailProperties, mails, files);
         }
 

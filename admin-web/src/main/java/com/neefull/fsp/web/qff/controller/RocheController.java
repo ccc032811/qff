@@ -155,13 +155,13 @@ public class RocheController extends BaseController {
         Roche roche = new Roche();
         roche.setId(id);
         try {
-            List<ProcessHistory> list = processService.queryHistory(roche);
+            Map<String, ProcessHistory> map = processService.queryHistory(roche);
             Roche roc = rocheService.queryRocheById(id);
-            if(list.size()>=1){
-                ProcessHistory processHistory = list.get(0);
+            if(map.size()>=1){
+                ProcessHistory processHistory = map.get(0);
                 processHistory.setDate(DateFormatUtils.format(roc.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
             }
-            return new FebsResponse().success().data(list);
+            return new FebsResponse().success().data(map);
         } catch (Exception e) {
             String message = "查询罗氏内部QFF流程失败";
             log.error(message,e);

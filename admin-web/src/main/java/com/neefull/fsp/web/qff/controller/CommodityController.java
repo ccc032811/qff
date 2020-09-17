@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *新增到货养护包装QFF
@@ -73,7 +74,7 @@ public class CommodityController extends BaseController {
      */
     @Qff("更新QFF")
     @PostMapping("/edit")
-    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","conserve:audit","package:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","wrapper:audit"},logical = Logical.OR)
     public FebsResponse editCommodity(Commodity commodity) throws FebsException {
         try {
             commodityService.editCommodity(commodity);
@@ -101,7 +102,7 @@ public class CommodityController extends BaseController {
      * @return
      */
     @GetMapping("/list")
-    @RequiresPermissions(value = {"delivery:view","recent:view","refund:view","conserve:view","conserve:view","package:view"},logical = Logical.OR)
+    @RequiresPermissions(value = {"delivery:view","recent:view","refund:view","conserve:view","wrapper:view"},logical = Logical.OR)
     public FebsResponse getCommodityPage(Commodity commodity) throws FebsException {
         try {
             IPage<Commodity> pageInfo = commodityService.getCommodityPage(commodity,getCurrentUser());
@@ -121,7 +122,7 @@ public class CommodityController extends BaseController {
      */
     @Qff("删除QFF")
     @GetMapping("/deleteCommodity/{id}")
-    @RequiresPermissions(value = {"delivery:del","recent:del","refund:del","conserve:del","conserve:del","package:del"},logical = Logical.OR)
+    @RequiresPermissions(value = {"delivery:del","recent:del","refund:del","conserve:del","wrapper:del"},logical = Logical.OR)
     public FebsResponse updateCommodityStatus(@PathVariable Integer id) throws FebsException {
         try {
             Commodity commodity = new Commodity();
@@ -163,13 +164,13 @@ public class CommodityController extends BaseController {
         Commodity commodity = new Commodity();
         commodity.setId(id);
         try {
-            List<ProcessHistory> list = processService.queryHistory(commodity);
+            Map<String, ProcessHistory> map = processService.queryHistory(commodity);
             Commodity commod= commodityService.queryCommodityById(id);
-            if(list.size()>=2){
-                ProcessHistory processHistory = list.get(1);
+            if(map.size()>=2){
+                ProcessHistory processHistory = map.get(ProcessConstant.THREE_STEP);
                 processHistory.setDate(commod.getRepTime());
             }
-            return new FebsResponse().success().data(list);
+            return new FebsResponse().success().data(map);
         } catch (Exception e) {
             String message = "查询QFF流程";
             log.error(message,e);
@@ -184,7 +185,7 @@ public class CommodityController extends BaseController {
      */
     @Qff("提交QFF流程")
     @PostMapping("/commit")
-    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","conserve:audit","package:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","wrapper:audit"},logical = Logical.OR)
     public FebsResponse commitProcess(Commodity commodity) throws FebsException {
 
         try {
@@ -205,7 +206,7 @@ public class CommodityController extends BaseController {
      */
     @Qff("同意当前QFF任务")
     @PostMapping("/agree")
-    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","conserve:audit","package:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","wrapper:audit"},logical = Logical.OR)
     public FebsResponse agreeCurrentProcess(Commodity commodity) throws FebsException {
         try {
             User user = getCurrentUser();
@@ -229,7 +230,7 @@ public class CommodityController extends BaseController {
      * @param response
      */
     @GetMapping("excel")
-    @RequiresPermissions(value = {"delivery:down","recent:down","refund:down","conserve:down","conserve:down","package:down"},logical = Logical.OR)
+    @RequiresPermissions(value = {"delivery:down","recent:down","refund:down","conserve:down","wrapper:down"},logical = Logical.OR)
     public void download(Commodity commodity, HttpServletResponse response) throws FebsException {
         try {
             List<Commodity> commodityList = commodityService.getPageConserve(commodity,getCurrentUser());

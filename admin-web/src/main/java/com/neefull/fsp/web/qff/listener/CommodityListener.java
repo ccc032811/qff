@@ -105,7 +105,12 @@ public class CommodityListener extends BaseController implements JavaDelegate{
 
         Context context = new Context();
         context.setVariable("list",list);
-        String text = templateEngine.process("kdlCommodity", context);
+        String text = "";
+        if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
+            text= templateEngine.process("kdlOtherCommodity", context);
+        }else {
+            text= templateEngine.process("kdlCommodity", context);
+        }
 
         //发送带附件的邮件
         MailUtils.sendMail(text,mailProperties,mails,files);
@@ -116,7 +121,7 @@ public class CommodityListener extends BaseController implements JavaDelegate{
         List<User> userList = userService.findUserByRoleId(id);
         List<String> userMails = new ArrayList<>();
         for (User user : userList) {
-            if(StringUtils.isNotEmpty(user.getEmail())&&user.getAccept()==1) {
+            if(StringUtils.isNotEmpty(user.getEmail())&&user.getAccept().equals("1")&&user.getStatus().equals("1")) {
                 userMails.add(user.getEmail());
             }
         }

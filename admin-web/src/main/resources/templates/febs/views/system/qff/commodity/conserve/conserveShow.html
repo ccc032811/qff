@@ -262,51 +262,34 @@
             </div>
         </div>
     </div>
-    <!--<div class="layui-form-item" style="margin-top: 30px;height: 120px">-->
-        <!--<div class="timeline-main-line" id="conserve-process-show">-->
-            <!--<div class="timeline-item-start">-->
-                <!--<div class="timeline-item-timestamp" id="time-first"></div>-->
-                <!--<div class="timeline-item-cricle" id="cricle-first">1</div>-->
-                <!--<div class="timeline-item-name" id="name-first">康德乐创建</div>-->
-            <!--</div>-->
-            <!--<div class="timeline-item" id="item-second">-->
-                <!--<div class="timeline-item-timestamp" id="time-second"></div>-->
-                <!--<div class="timeline-item-cricle" id="cricle-second">2</div>-->
-                <!--<div class="timeline-item-name" id="name-second">罗氏审批</div>-->
-            <!--</div>-->
-            <!--<div class="timeline-item" id="item-three">-->
-                <!--<div class="timeline-item-timestamp" id="time-three"></div>-->
-                <!--<div class="timeline-item-cricle" id="cricle-three">3</div>-->
-                <!--<div class="timeline-item-name" id="name-three">待确认</div>-->
-            <!--</div>-->
-            <!--<div class="timeline-item" id="item-four">-->
-                <!--<div class="timeline-item-timestamp" id="time-four"></div>-->
-                <!--<div class="timeline-item-cricle" id="cricle-four">4</div>-->
-                <!--<div class="timeline-item-name" id="name-four">待确认</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-    <div class="layui-form-item" style="margin-top: 30px;height: 120px">
+    <div class="layui-form-item" style="margin-top: 60px">
         <div class="timeline-main-line" id="conserve-process-show">
             <div class="timeline-item-start">
                 <div class="timeline-item-timestamp" id="time-first"></div>
                 <div class="timeline-item-cricle" id="cricle-first">1</div>
                 <div class="timeline-item-name" id="name-first">康德乐创建</div>
             </div>
-            <div class="timeline-item" id="item-second">
+            <div class="timeline-item-second" id="item-second">
                 <div class="timeline-item-timestamp" id="time-second"></div>
                 <div class="timeline-item-cricle" id="cricle-second">2</div>
                 <div class="timeline-item-name" id="name-second">罗氏审批</div>
             </div>
-            <div class="timeline-item" id="item-three">
-                <div class="timeline-item-timestamp" id="time-three"></div>
-                <div class="timeline-item-cricle" id="cricle-three">3</div>
-                <div class="timeline-item-name" id="name-three">待确认</div>
+            <div class="timeline-item-three" id="item-three">
+                <div class="timeline-item-up" id="three-up">
+                    <div class="timeline-item-timestamp" style="margin-top: -63px;" id="time-up"></div>
+                    <div class="timeline-item-cricle"  id="cricle-up">3</div>
+                    <div class="timeline-item-name" id="name-up">康德乐确认</div>
+                </div>
+                <div class="timeline-item-down" id="three-down">
+                    <div class="timeline-item-timestamp" id="time-down"></div>
+                    <div class="timeline-item-cricle" id="cricle-down">3</div>
+                    <div class="timeline-item-name" id="name-down">罗氏确认</div>
+                </div>
             </div>
             <div class="timeline-item" id="item-four">
                 <div class="timeline-item-timestamp" id="time-four"></div>
                 <div class="timeline-item-cricle" id="cricle-four">4</div>
-                <div class="timeline-item-name" id="name-four">待确认</div>
+                <div class="timeline-item-name" id="name-four">流程结束</div>
             </div>
         </div>
     </div>
@@ -383,29 +366,36 @@
 
         $.get(ctx + "commodity/queryHistory/"+commodity.id,to ,function (res) {
             var data = res.data;
-            if(data[0]!=null&&data[0].date !=null){
-                $("#time-first").html(data[0].date);
-                $("#name-first").html(data[0].name);
+            if(data["_6"]!=null&&data["_6"].date !=null){
+                $("#time-first").html(data["_6"].date);
+                $("#name-first").html(data["_6"].name);
                 $("#cricle-first").attr("style","background-color: #3DCCA6");
                 $("#item-second").attr("style","border-bottom: 3px solid #3DCCA6;");
             }
-            if(data[1]!=null&&data[1].date !=null){
-                $("#time-second").html(data[1].date);
-                $("#name-second").html(data[1].name);
+            if(data["_3"]!=null&&data["_3"].date !=null){
+                $("#time-second").html(data["_3"].date);
+                $("#name-second").html(data["_3"].name);
                 $("#cricle-second").attr("style","background-color: #3DCCA6");
-                $("#item-three").attr("style","border-bottom: 3px solid #3DCCA6;");
+                $("#three-up").attr("style","border-left: 3px solid #3DCCA6;border-top: 3px solid #3DCCA6;");
+                $("#three-down").attr("style","border-left: 3px solid #3DCCA6;border-bottom: 3px solid #3DCCA6;");
             }
-            if(data[2]!=null&&data[2].date !=null){
-                $("#time-three").html(data[2].date);
-                $("#name-three").html(data[2].name);
-                $("#cricle-three").attr("style","background-color: #3DCCA6");
+            if(data["_4"]!=null&&data["_4"].date !=null){
+                $("#time-up").html(data["_4"].date);
+                $("#name-up").html(data["_4"].name);
+                $("#cricle-up").attr("style","background-color: #3DCCA6");
+                $("#three-up").attr("style","border-right: 3px solid #3DCCA6;border-left: 3px solid #3DCCA6;border-top: 3px solid #3DCCA6;");
+            }
+            if(data["_12"]!=null&&data["_12"].date !=null){
+                $("#time-down").html(data["_12"].date);
+                $("#name-down").html(data["_12"].name);
+                $("#cricle-down").attr("style","background-color: #3DCCA6");
+                $("#three-down").attr("style","border-right: 3px solid #3DCCA6;border-left: 3px solid #3DCCA6;border-bottom: 3px solid #3DCCA6;");
+            }
+            if(data["_12"]!=null&&data["_12"].date !=null&&data["_4"]!=null&&data["_4"].date !=null){
                 $("#item-four").attr("style","border-bottom: 3px solid #3DCCA6;");
-            }
-            if(data[3]!=null&&data[3].date !=null){
-                $("#time-four").html(data[3].date);
-                $("#name-four").html(data[3].name);
                 $("#cricle-four").attr("style","background-color: #3DCCA6");
             }
+
 
         });
 

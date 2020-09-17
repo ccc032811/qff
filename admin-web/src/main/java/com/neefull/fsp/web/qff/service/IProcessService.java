@@ -6,6 +6,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: chengchengchu
@@ -37,7 +38,7 @@ public interface IProcessService  {
      * @param object
      * @return
      */
-    List<ProcessHistory> queryHistory(Object object);
+    Map<String,ProcessHistory> queryHistory(Object object);
 
     /**查询当前需要完成的任务
      * @param name

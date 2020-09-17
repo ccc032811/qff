@@ -168,7 +168,7 @@ public class User implements Serializable {
      * 是否接收邮件
      */
     @TableField("ACCEPT")
-    private Integer accept;
+    private String accept;
 
 
     /**

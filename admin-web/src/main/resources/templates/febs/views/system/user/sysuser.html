@@ -217,6 +217,9 @@
                 elem: $view.find('table'),
                 id: 'userTable',
                 url: ctx + 'sysUser/list',
+                where:{
+                    time:new Date()
+                },
                 toolbar: '#toolbarCheck',     //开启头部工具栏
                 defaultToolbar: ['filter','print'],   //显示默认的三个工具，需要哪个写哪个的单词'filter','exports','print'
                 cols: [[

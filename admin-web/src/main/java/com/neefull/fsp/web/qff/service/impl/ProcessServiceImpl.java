@@ -91,6 +91,21 @@ public class ProcessServiceImpl implements IProcessService {
                 if(StringUtils.isNotEmpty(commodity.getImages())){
                     addOrEditFiles(commodity, user);
                 }
+                if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
+                    Map<String, String> files = new HashMap<>();
+                    String[] rocheMails = getEmails(86);
+
+                    List<Commodity> commodityList = new ArrayList<>();
+                    commodityList.add(commodity);
+
+                    Context context = new Context();
+                    context.setVariable("list", commodityList);
+                    String text = templateEngine.process("rocheOtherCommodity", context);
+
+                    //发送带附件的邮件
+                    MailUtils.sendMail(text, mailProperties, rocheMails, files);
+                }
+
             }else {
                 editCommodity(commodity);
 
@@ -103,8 +118,6 @@ public class ProcessServiceImpl implements IProcessService {
                     commodityService.updateCommodityStatus(commodity.getId(),ProcessConstant.HAS_FINISHED);
                 }
             }
-
-
 
         }else if(object instanceof Recent){
             Recent recent = (Recent) object;
@@ -317,8 +330,8 @@ public class ProcessServiceImpl implements IProcessService {
 
 
     @Override
-    public List<ProcessHistory> queryHistory(Object object) {
-        List<ProcessHistory> list = new ArrayList<>();
+    public  Map<String,ProcessHistory> queryHistory(Object object) {
+        Map<String,ProcessHistory> map = new HashMap<>();
 
         String businessKey = getBusinessKey(object);
 
@@ -331,11 +344,15 @@ public class ProcessServiceImpl implements IProcessService {
                     ProcessHistory processHistory = new  ProcessHistory();
                     processHistory.setName(taskInstance.getAssignee());
                     processHistory.setDate(DateFormatUtils.format(taskInstance.getEndTime(),"yyyy-MM-dd HH:mm:ss"));
-                    list.add(processHistory);
+                    map.put(taskInstance.getTaskDefinitionKey(),processHistory);
                 }
             }
         }
-        return list;
+
+
+
+
+        return map;
     }
 
     private List<HistoricTaskInstance> queryHistoryList(String businessKey){
@@ -851,7 +868,7 @@ public class ProcessServiceImpl implements IProcessService {
         List<User> userList = userService.findUserByRoleId(id);
         List<String> userMails = new ArrayList<>();
         for (User user : userList) {
-            if(StringUtils.isNotEmpty(user.getEmail())&&user.getAccept()==1) {
+            if(StringUtils.isNotEmpty(user.getEmail())&&user.getAccept().equals("1")&&user.getStatus().equals("1")) {
                 userMails.add(user.getEmail());
             }
         }

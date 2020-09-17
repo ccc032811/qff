@@ -104,8 +104,8 @@
 </script>
 <script type="text/html" id="temperature-toolbarCheck">
     <div class="layui-btn-container">
-        <button  class="layui-btn layui-btn-sm" style="background-color: #87e8de;"  lay-event="temperature-add" shiro:hasPermission="temperature:add">
-            <i class="layui-icon">&#xe654;</i> 新增近效期
+        <button  class="layui-btn layui-btn-sm layui-btn-success" lay-event="temperature-add" shiro:hasPermission="temperature:add">
+            <i class="layui-icon">&#xe654;</i>  新增国际到货超温，无温度计
         </button>
         <button class="layui-btn layui-btn-sm" lay-event="temperature-download" shiro:hasPermission="temperature:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
@@ -219,12 +219,12 @@
                 layEvent = obj.event;
             if (layEvent === 'temperature-detail') {
                 febs.modal.open('具体信息', 'system/qff/temperature/temperatureShow/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '60%' : '55%',$(window).width() <= 750 ? '60%' : '55%']
+                    area:  [$(window).width() <= 750 ? '70%' : '60%',$(window).width() <= 750 ? '70%' : '60%']
                 });
             }
             if (layEvent === 'temperature-edit') {
                 febs.modal.open('审核', 'system/qff/temperature/temperatureAudit/' + data.id, {
-                    area:  [$(window).width() <= 750 ? '60%' : '55%',$(window).width() <= 750 ? '60%' : '55%']
+                    area:  [$(window).width() <= 750 ? '70%' : '60%',$(window).width() <= 750 ? '70%' : '60%']
                 });
             }
             if (layEvent === 'temperature-del') {
@@ -234,7 +234,7 @@
             }
             if (layEvent === 'temperature-alter') {
                 febs.modal.open('修改', 'system/qff/temperature/temperatureAlter/' + data.id+"/"+"1", {
-                    area:  [$(window).width() <= 750 ? '60%' : '55%',$(window).width() <= 750 ? '60%' : '55%']
+                    area:  [$(window).width() <= 750 ? '70%' : '60%',$(window).width() <= 750 ? '70%' : '60%']
                 });
             }
 

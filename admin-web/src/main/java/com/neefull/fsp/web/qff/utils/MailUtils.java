@@ -25,7 +25,9 @@ import java.util.*;
  * @Date: 2020/1/8  15:01
  */
 
+
 public class MailUtils {
+
 
     public static void sendMail(String text, SendMailProperties mailProperties, String[] mails, Map<String,String> files ) {
 
@@ -34,8 +36,8 @@ public class MailUtils {
         javaMailSender.setDefaultEncoding(mailProperties.getCharset());
         javaMailSender.setProtocol(mailProperties.getProtocol());
         javaMailSender.setPort(Integer.parseInt(mailProperties.getPort()));
-        javaMailSender.setUsername(mailProperties.getUsername());//发送者的邮箱
-        javaMailSender.setPassword(mailProperties.getPassword());//发送者的密码
+        javaMailSender.setUsername(mailProperties.getUsername());
+        javaMailSender.setPassword(mailProperties.getPassword());
 
         Properties prop = new Properties();
         prop.setProperty("mail.smtp.auth", mailProperties.getAuth());
@@ -54,12 +56,12 @@ public class MailUtils {
         MimeMessageHelper mimeMessageHelper = null;
         try {
             mimeMessageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);
-            mimeMessageHelper.setFrom(mailProperties.getUsername());//发送的邮箱地址
-            mimeMessageHelper.setTo(mails);//接收的邮箱地址
-//            mimeMessageHelper.setTo("wangpei_it@163.com");//接收的邮箱地址
+            mimeMessageHelper.setFrom(mailProperties.getUsername());
+            mimeMessageHelper.setTo(mails);
+//            mimeMessageHelper.setTo("920685135@qq.com");//接收的邮箱地址
 //            mimeMessageHelper.setCc("");//抄送者的邮箱地址
-            mimeMessageHelper.setSubject("您当前需要处理的文件");//邮件名称
-            mimeMessageHelper.setText(text,true);//邮箱文字内容
+            mimeMessageHelper.setSubject("您当前需要处理的文件");
+            mimeMessageHelper.setText(text,true);
             if(!files.isEmpty()){
                 Set<String> strings = files.keySet();
                 for (String string : strings) {
@@ -73,6 +75,8 @@ public class MailUtils {
         }
         javaMailSender.send(mimeMessageHelper.getMimeMessage());
     }
+
+
 
 }
 

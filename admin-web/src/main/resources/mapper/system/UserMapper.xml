@@ -8,6 +8,7 @@
         u.email,
         u.mobile,
         u.status,
+        u.accept,
         u.create_time createTime,
         u.ssex sex,
         u.dept_id deptId,
@@ -59,6 +60,7 @@
         u.email,
         u.mobile,
         u.status,
+        u.accept,
         u.create_time createTime,
         u.ssex sex,
         u.dept_id deptId,
@@ -128,6 +130,7 @@
         u.mobile,
         u.password,
         u.status,
+        u.accept,
         u.create_time createTime,
         u.ssex sex,
         u.dept_id deptId,
@@ -173,6 +176,7 @@
             u.email,
             u.mobile,
             u.status,
+            u.accept,
             u.create_time createTime,
             u.ssex sex,
             u.dept_id deptId,
@@ -195,9 +199,9 @@
     </select>
 
     <insert id="saveReturnPrimaryKey" useGeneratedKeys="true" keyProperty="userId" parameterType="com.neefull.fsp.web.system.entity.User">
-        insert into qff_user(user_id,username,password,dept_id,email,mobile,status,create_time,modify_time,ssex,is_tab,
+        insert into qff_user(user_id,username,password,dept_id,email,mobile,status,create_time,modify_time,ssex,is_tab,accept,
         theme,avatar,user_type,auth_status,card_status)
-        VALUES (#{userId},#{username},#{password},#{deptId},#{email},#{mobile},#{status},NOW(),NOW(),#{sex},
+        VALUES (#{userId},#{username},#{password},#{deptId},#{email},#{mobile},#{status},NOW(),NOW(),#{sex},#{accept},
         #{isTab},#{theme},#{avatar},#{userType},#{authStatus},#{cardStatus})
     </insert>
 </mapper>

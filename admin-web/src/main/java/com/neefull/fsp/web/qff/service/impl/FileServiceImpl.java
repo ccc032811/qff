@@ -71,7 +71,7 @@ public class FileServiceImpl implements IFileService {
         int winp = originalFilename.lastIndexOf("\\");
         int posp = (winp > unixp ? winp : unixp);
         if (posp != -1) {
-            originalFilename = originalFilename.substring(posp + 1);
+            originalFilename = originalFilename.substring(posp + 1).replace(" ","");
         }
 //        String fileName = number+"-"+originalFilename;
         File filePath = new File(properties.getImagePath(), originalFilename);

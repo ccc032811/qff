@@ -156,13 +156,13 @@ public class RecentController extends BaseController {
         Recent recent = new Recent();
         recent.setId(id);
         try {
-            List<ProcessHistory> list = processService.queryHistory(recent);
+            Map<String, ProcessHistory> map = processService.queryHistory(recent);
             Recent rec = recentService.queryRecentById(id);
-            if(list.size()>=2){
-                ProcessHistory processHistory = list.get(1);
+            if(map.size()>=2){
+                ProcessHistory processHistory = map.get(ProcessConstant.THREE_STEP);
                 processHistory.setDate(rec.getRepDate());
             }
-            return new FebsResponse().success().data(list);
+            return new FebsResponse().success().data(map);
         } catch (Exception e) {
             String message = "查询近效期QFF流程失败";
             log.error(message,e);
