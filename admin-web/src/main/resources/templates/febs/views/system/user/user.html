@@ -103,15 +103,15 @@
     <span>{{d.userType}}</span>
 </script>
 <script type="text/html" id="user-option">
-    <span shiro:lacksPermission="user:view,user:update,user:delete">
+    <span shiro:lacksPermission="qff:user:view,qff:user:update,qff:user:delete">
         <span class="layui-badge-dot febs-bg-orange"></span> 无权限
     </span>
-    <a lay-event="detail" shiro:hasPermission="user:view"><i
+    <a lay-event="detail" shiro:hasPermission="qff:user:view"><i
             class="layui-icon febs-edit-area febs-green">&#xe7a5;</i></a>
-    <a lay-event="edit" shiro:hasPermission="user:update"><i
+    <a lay-event="edit" shiro:hasPermission="qff:user:update"><i
             class="layui-icon febs-edit-area febs-blue">&#xe7a4;</i></a>
     {{# if(d.authStatus != '2'){d.authStatus = '实名'}}
-    <a lay-event="examine" shiro:hasPermission="user:examine"><i
+    <a lay-event="examine" shiro:hasPermission="qff:user:examine"><i
             class="layui-icon  febs-edit-area febs-blue">&#xe63c;</i></a>
     {{# } }}
 </script>

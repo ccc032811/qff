@@ -4047,70 +4047,97 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 
 .timeline-main-line{
     width: 90%;
-    margin-left:-9%
+    margin-left:-7%
 }
-.timeline-item-start{
+.timeline-item-start,.timeline-item,.timeline-item-second,.timeline-item-three{
     width: 25%;
     float:left;
 }
 
-.timeline-item{
-    width: 25%;
-    float:left;
+.timeline-item,.timeline-item-second,.timeline-item-down,.timeline-item-left,.timeline-item-right-down{
     border-bottom: 3px solid #CBCBCB;
 }
-.timeline-item-second{
-    width: 25%;
-    float:left;
-    border-bottom: 3px solid #CBCBCB;
+.timeline-item-up,.timeline-item-down{
+    border-left: 3px solid #CBCBCB;
+    border-right: 3px solid #CBCBCB;
 }
-.timeline-item-three{
-    width: 25%;
-    float:left;
 
-}
-.timeline-item-up{
-    width: 99%;
-    float:left;
-    height: 60px;
+.timeline-item-up,.timeline-item-left,.timeline-item-right-up{
     border-top: 3px solid #CBCBCB;
-    border-left: 3px solid #CBCBCB;
-    border-right: 3px solid #CBCBCB;
+
 }
-.timeline-item-down{
+.timeline-item-up,.timeline-item-down{
     width: 99%;
     float:left;
     height: 60px;
-    border-left: 3px solid #CBCBCB;
-    border-right: 3px solid #CBCBCB;
-    border-bottom: 3px solid #CBCBCB;
 }
-
-
-.timeline-item-cricle{
+#item-second {
+    height: 60px;
+}
+#time-up{
+    margin-top: -63px;
+}
+.timeline-item-left,.timeline-item-right{
+    width: 48.9%;
+    height: 120px;
+    float: left;
+}
+.timeline-item-left{
+    border-left: 3px solid #CBCBCB;
+}
+.timeline-item-right-up,.timeline-item-right-down{
+    border-right: 3px solid #CBCBCB;
+}
+.timeline-item-cricle,.timeline-item-cricle-right{
     width: 25px;
     height: 20px;
     border-radius: 80%;
     background-color: #CBCBCB;
     position: relative;
-    top: 32px;
-    left: 95%;
     text-align: center;
     color: #fff;
 }
-.timeline-item-timestamp{
-    width: 70%;
+.timeline-item-cricle{
+    top: 32px;
+    left: 95%;
+}
+
+.timeline-item-cricle-right{
+    top: 95px;
+    left: 95%;
+}
+
+.timeline-item-timestamp,.timeline-item-timestamp-right{
+    width: 100%;
     height: 20px;
     color: #000;
     position: relative;
+}
+.timeline-item-timestamp{
     top: 20px;
     left:  105%;
 }
-.timeline-item-name{
+.timeline-item-timestamp-right{
+    top: 70px;
+    left: 106%;
+}
+.timeline-item-name, .timeline-item-name-right{
     width: 70%;
     height: 20px;
     color: #000;
     position: relative;
+}
+.timeline-item-name{
     top: 46px;
     left:  105%;
+}
+
+.timeline-item-name-right{
+    top: 103px;
+    left: 106%;
+}
+.timeline-item-right-up,.timeline-item-right-down{
+    width: 100%;
+    float: left;
+    height: 60px;
 }

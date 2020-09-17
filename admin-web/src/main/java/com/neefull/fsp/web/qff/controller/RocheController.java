@@ -67,7 +67,7 @@ public class RocheController extends BaseController {
      */
     @Qff("更新罗氏内部发起QFF")
     @PostMapping("/edit")
-    @RequiresPermissions("roche:audit")
+    @RequiresPermissions("qff:roche:audit")
     public FebsResponse editRoche(Roche roche) throws FebsException {
         try {
             rocheService.editRoche(roche);
@@ -92,7 +92,7 @@ public class RocheController extends BaseController {
      * @return
      */
     @GetMapping("/list")
-    @RequiresPermissions("roche:view")
+    @RequiresPermissions("qff:roche:view")
     public FebsResponse getRochePage(Roche roche) throws FebsException {
         try {
             IPage<Roche> pageInfo = rocheService.getRochePage(roche,getCurrentUser());
@@ -112,7 +112,7 @@ public class RocheController extends BaseController {
      */
     @Qff("删除罗氏内部QFF")
     @GetMapping("/deleteRoche/{id}")
-    @RequiresPermissions("roche:del")
+    @RequiresPermissions("qff:roche:del")
     public FebsResponse updateRocheStatus(@PathVariable Integer id) throws FebsException {
         try {
             Roche roche = new Roche();
@@ -133,7 +133,7 @@ public class RocheController extends BaseController {
      * @throws FebsException
      */
     @GetMapping("/queryRoche")
-    @RequiresPermissions("roche:view")
+    @RequiresPermissions("qff:roche:view")
     public FebsResponse queryRocheById(Integer id) throws FebsException {
         try {
             Roche roche = rocheService.queryRocheById(id);
@@ -158,7 +158,7 @@ public class RocheController extends BaseController {
             Map<String, ProcessHistory> map = processService.queryHistory(roche);
             Roche roc = rocheService.queryRocheById(id);
             if(map.size()>=1){
-                ProcessHistory processHistory = map.get(0);
+                ProcessHistory processHistory = map.get(ProcessConstant.FIVE_STEP);
                 processHistory.setDate(DateFormatUtils.format(roc.getCreateTime(),"yyyy-MM-dd HH:mm:ss"));
             }
             return new FebsResponse().success().data(map);
@@ -176,7 +176,7 @@ public class RocheController extends BaseController {
      */
     @Qff("提交罗氏内部QFF流程")
     @PostMapping("/commit")
-    @RequiresPermissions("roche:audit")
+    @RequiresPermissions("qff:roche:audit")
     public FebsResponse commitProcess(Roche roche) throws FebsException {
         try {
             User user = getCurrentUser();
@@ -196,7 +196,7 @@ public class RocheController extends BaseController {
      */
     @Qff("同意罗氏内部QFF任务")
     @PostMapping("/agree")
-    @RequiresPermissions("roche:audit")
+    @RequiresPermissions("qff:roche:audit")
     public FebsResponse agreeCurrentProcess(Roche roche) throws FebsException {
         try {
             User user = getCurrentUser();
@@ -220,7 +220,7 @@ public class RocheController extends BaseController {
      * @param response
      */
     @GetMapping("excel")
-    @RequiresPermissions("roche:down")
+    @RequiresPermissions("qff:roche:down")
     public void download(Roche roche, HttpServletResponse response) throws FebsException {
         try {
             List<Roche> rocheList = rocheService.getRocheExcelPage(roche,getCurrentUser());

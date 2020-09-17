@@ -26,7 +26,7 @@ public class SessionController {
     private ISessionService sessionService;
 
     @GetMapping("list")
-    @RequiresPermissions("online:view")
+    @RequiresPermissions("qff:online:view")
     public FebsResponse list(String username) {
         List<ActiveUser> list = sessionService.list(username);
         Map<String, Object> data = new HashMap<>();
@@ -36,7 +36,7 @@ public class SessionController {
     }
 
     @GetMapping("delete/{id}")
-    @RequiresPermissions("user:kickout")
+    @RequiresPermissions("qff:user:kickout")
     public FebsResponse forceLogout(@PathVariable String id) {
         sessionService.forceLogout(id);
         return new FebsResponse().success();

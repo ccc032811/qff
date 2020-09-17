@@ -223,23 +223,23 @@
 </script>
 <script type="text/html" id="refund-option">
 
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="refund-detail" shiro:hasPermission="refund:view">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="refund-detail" shiro:hasPermission="qff:refund:view">查看</a>
     {{#  if(d.status != '3'&& d.isAllow == '1'){}}
     {{#  if(d.repTime == ''||d.repTime == null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="refund-edit"  shiro:hasPermission="refund:audit">审核</a>
+    <a class="layui-btn layui-btn-xs" lay-event="refund-edit"  shiro:hasPermission="qff:refund:audit">审核</a>
     {{# }else if(d.repTime != ''&&d.repTime != null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="refund-edit"  shiro:hasPermission="refund:audit">确认</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-alter"  shiro:hasPermission="refund:alter ">修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="refund-edit"  shiro:hasPermission="qff:refund:audit">确认</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-alter"  shiro:hasPermission="qff:refund:alter ">修改</a>
     {{#}}}
     {{#}}}
     {{#  if(d.status != '3'){}}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-del" shiro:hasPermission="refund:del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-del" shiro:hasPermission="qff:refund:del">删除</a>
     {{#}}}
 
 </script>
 <script type="text/html" id="refund-toolbarCheck">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="refund-download" shiro:hasPermission="refund:down">
+        <button class="layui-btn layui-btn-sm" lay-event="refund-download" shiro:hasPermission="qff:refund:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
         </button>
     </div>

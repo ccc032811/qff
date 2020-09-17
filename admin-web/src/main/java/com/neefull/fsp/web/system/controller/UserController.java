@@ -55,7 +55,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("list")
-    @RequiresPermissions("user:view")
+    @RequiresPermissions("qff:user:view")
     public FebsResponse userList(User user, QueryRequest request) {
         Map<String, Object> dataTable = getDataTable(this.userService.findUserDetail(user, request));
         return new FebsResponse().success().data(dataTable);
@@ -68,7 +68,7 @@ public class UserController extends BaseController {
 
     @Log("新增用户")
     @PostMapping
-    @RequiresPermissions("user:add")
+    @RequiresPermissions("qff:user:add")
     public FebsResponse addUser(@Valid User user) throws FebsException {
         try {
             this.userService.createUser(user);
@@ -82,7 +82,7 @@ public class UserController extends BaseController {
 
     @Log("删除用户")
     @GetMapping("delete/{userIds}")
-    @RequiresPermissions("user:delete")
+    @RequiresPermissions("qff:user:delete")
     public FebsResponse deleteUsers(@NotBlank(message = "{required}") @PathVariable String userIds) throws FebsException {
         try {
             String[] ids = userIds.split(StringPool.COMMA);
@@ -97,7 +97,7 @@ public class UserController extends BaseController {
 
     @Log("修改用户")
     @PostMapping("update")
-    @RequiresPermissions("user:update")
+    @RequiresPermissions("qff:user:update")
     public FebsResponse updateUser(@Valid User user) throws FebsException {
         try {
             if (user.getUserId() == null)
@@ -114,7 +114,7 @@ public class UserController extends BaseController {
 
     @Log("审核用户")
     @GetMapping("examine/{userIds}")
-    @RequiresPermissions("user:examine")
+    @RequiresPermissions("qff:user:examine")
     public FebsResponse examineUsers(@NotBlank(message = "{required}") @PathVariable String userIds) throws FebsException {
         try {
             String[] ids = userIds.split(StringPool.COMMA);
@@ -127,7 +127,7 @@ public class UserController extends BaseController {
         }
     }
     @PostMapping("password/reset/{usernames}")
-    @RequiresPermissions("user:password:reset")
+    @RequiresPermissions("qff:user:password:reset")
     public FebsResponse resetPassword(@NotBlank(message = "{required}") @PathVariable String usernames) throws FebsException {
         try {
             String[] usernameArr = usernames.split(StringPool.COMMA);
@@ -199,7 +199,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("excel")
-    @RequiresPermissions("user:export")
+    @RequiresPermissions("qff:user:export")
     public void export(QueryRequest queryRequest, User user, HttpServletResponse response) throws FebsException {
         try {
             List<User> users = this.userService.findUserDetail(user, queryRequest).getRecords();

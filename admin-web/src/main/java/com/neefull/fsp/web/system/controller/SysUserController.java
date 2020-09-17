@@ -47,7 +47,7 @@ public class SysUserController extends BaseController {
     }
 
     @GetMapping("list")
-    @RequiresPermissions("sysuser:view")
+    @RequiresPermissions("qff:sysuser:view")
     public FebsResponse userList(User user, QueryRequest request) {
         Map<String, Object> dataTable = getDataTable(this.userService.findSysUserDetail(user, request));
         return new FebsResponse().success().data(dataTable);
@@ -55,7 +55,7 @@ public class SysUserController extends BaseController {
 
     @Log("新增用户")
     @PostMapping
-    @RequiresPermissions("sysuser:add")
+    @RequiresPermissions("qff:sysuser:add")
     public FebsResponse addUser(@Valid User user) throws FebsException {
         try {
             this.userService.createUser(user);
@@ -69,7 +69,7 @@ public class SysUserController extends BaseController {
 
     @Log("删除用户")
     @GetMapping("delete/{userIds}")
-    @RequiresPermissions("sysuser:delete")
+    @RequiresPermissions("qff:sysuser:delete")
     public FebsResponse deleteUsers(@NotBlank(message = "{required}") @PathVariable String userIds) throws FebsException {
         try {
             String[] ids = userIds.split(StringPool.COMMA);
@@ -84,7 +84,7 @@ public class SysUserController extends BaseController {
 
     @Log("修改用户")
     @PostMapping("update")
-    @RequiresPermissions("sysuser:update")
+    @RequiresPermissions("qff:sysuser:update")
     public FebsResponse updateUser(@Valid User user) throws FebsException {
         try {
             if (user.getUserId() == null)
@@ -99,7 +99,7 @@ public class SysUserController extends BaseController {
     }
 
     @PostMapping("password/reset/{usernames}")
-    @RequiresPermissions("sysuser:password:reset")
+    @RequiresPermissions("qff:sysuser:password:reset")
     public FebsResponse resetPassword(@NotBlank(message = "{required}") @PathVariable String usernames) throws FebsException {
         try {
             String[] usernameArr = usernames.split(StringPool.COMMA);
@@ -171,7 +171,7 @@ public class SysUserController extends BaseController {
     }
 
     @GetMapping("excel")
-    @RequiresPermissions("sysuser:export")
+    @RequiresPermissions("qff:sysuser:export")
     public void export(QueryRequest queryRequest, User user, HttpServletResponse response) throws FebsException {
         try {
             List<User> users = this.userService.findSysUserDetail(user, queryRequest).getRecords();

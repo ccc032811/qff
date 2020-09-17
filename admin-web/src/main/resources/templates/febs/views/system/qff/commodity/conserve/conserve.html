@@ -237,23 +237,23 @@
 </script>
 <script type="text/html" id="conserve-option">
 
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="conserve-detail" shiro:hasPermission="conserve:view">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="conserve-detail" shiro:hasPermission="qff:conserve:view">查看</a>
     {{#  if(d.status != '3'&& d.isAllow == '1'){}}
     {{#  if(d.repTime == ''||d.repTime == null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="conserve-edit"  shiro:hasPermission="conserve:audit">审核</a>
+    <a class="layui-btn layui-btn-xs" lay-event="conserve-edit"  shiro:hasPermission="qff:conserve:audit">审核</a>
     {{# }else if(d.repTime != ''&&d.repTime != null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="conserve-edit"  shiro:hasPermission="conserve:audit">确认</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="conserve-alter"  shiro:hasPermission="conserve:alter ">修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="conserve-edit"  shiro:hasPermission="qff:conserve:audit">确认</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="conserve-alter"  shiro:hasPermission="qff:conserve:alter ">修改</a>
     {{#}}}
     {{#}}}
     {{#  if(d.status != '3'){}}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="conserve-del" shiro:hasPermission="conserve:del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="conserve-del" shiro:hasPermission="qff:conserve:del">删除</a>
     {{#}}}
 
 </script>
 <script type="text/html" id="conserve-toolbarCheck">
     <div class="layui-btn-container">
-        <button  class="layui-btn layui-btn-sm " lay-event="conserve-download" shiro:hasPermission="conserve:down">
+        <button  class="layui-btn layui-btn-sm " lay-event="conserve-download" shiro:hasPermission="qff:conserve:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
         </button>
     </div>

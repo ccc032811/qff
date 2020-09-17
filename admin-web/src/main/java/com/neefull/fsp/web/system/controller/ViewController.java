@@ -95,59 +95,59 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/user")
-    @RequiresPermissions("user:view")
+    @RequiresPermissions("qff:user:view")
     public String systemUser() {
         return FebsUtil.view("system/user/user");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/user/add")
-    @RequiresPermissions("user:add")
+    @RequiresPermissions("qff:user:add")
     public String systemUserAdd() {
         return FebsUtil.view("system/user/userAdd");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/user/detail/{username}")
-    @RequiresPermissions("user:view")
+    @RequiresPermissions("qff:user:view")
     public String systemUserDetail(@PathVariable String username, Model model) {
         resolveUserModel(username, model, true);
         return FebsUtil.view("system/user/userDetail");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/user/update/{username}")
-    @RequiresPermissions("user:update")
+    @RequiresPermissions("qff:user:update")
     public String systemUserUpdate(@PathVariable String username, Model model) {
         resolveUserModel(username, model, false);
         return FebsUtil.view("system/user/userUpdate");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/sendMessage")
-    @RequiresPermissions("message:send")
+    @RequiresPermissions("qff:message:send")
     public String sendMessage() {
         return FebsUtil.view("system/message/sendMessage");
     }
 
     //**************************************用户管理模块 start *********************************************
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/sysUser")
-    @RequiresPermissions("sysuser:view")
+    @RequiresPermissions("qff:sysuser:view")
     public String sysUser() {
         return FebsUtil.view("system/user/sysuser");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/sysUser/add")
-    @RequiresPermissions("sysuser:add")
+    @RequiresPermissions("qff:sysuser:add")
     public String sysUserAdd() {
         return FebsUtil.view("system/user/sysuserAdd");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/sysUser/detail/{username}")
-    @RequiresPermissions("sysuser:view")
+    @RequiresPermissions("qff:sysuser:view")
     public String sysUserDetail(@PathVariable String username, Model model) {
         resolveSysUserModel(username, model, true);
         return FebsUtil.view("system/user/sysuserDetail");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/sysUser/update/{username}")
-    @RequiresPermissions("sysuser:update")
+    @RequiresPermissions("qff:sysuser:update")
     public String sysUserUpdate(@PathVariable String username, Model model) {
         resolveSysUserModel(username, model, false);
         return FebsUtil.view("system/user/sysuserUpdate");
@@ -155,19 +155,19 @@ public class ViewController extends BaseController {
     //**************************************用户管理模块 end *********************************************
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/role")
-    @RequiresPermissions("role:view")
+    @RequiresPermissions("qff:role:view")
     public String systemRole() {
         return FebsUtil.view("system/role/role");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/menu")
-    @RequiresPermissions("menu:view")
+    @RequiresPermissions("qff:menu:view")
     public String systemMenu() {
         return FebsUtil.view("system/menu/menu");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/dept")
-    @RequiresPermissions("dept:view")
+    @RequiresPermissions("qff:dept:view")
     public String systemDept() {
         return FebsUtil.view("system/dept/dept");
     }

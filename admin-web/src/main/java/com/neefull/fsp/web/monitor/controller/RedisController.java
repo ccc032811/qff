@@ -26,13 +26,13 @@ public class RedisController {
     private IRedisService redisService;
 
     @RequestMapping("keysSize")
-    @RequiresPermissions("redis:view")
+    @RequiresPermissions("qff:redis:view")
     public Map<String, Object> getKeysSize() throws RedisConnectException {
         return redisService.getKeysSize();
     }
 
     @RequestMapping("memoryInfo")
-    @RequiresPermissions("redis:view")
+    @RequiresPermissions("qff:redis:view")
     public Map<String, Object> getMemoryInfo() throws RedisConnectException {
         return redisService.getMemoryInfo();
     }

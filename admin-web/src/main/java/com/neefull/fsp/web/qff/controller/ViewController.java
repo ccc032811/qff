@@ -49,13 +49,13 @@ public class ViewController extends BaseController {
     //***************************************************到货*****************************************************
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "delivery/view")
-    @RequiresPermissions("delivery:view")
+    @RequiresPermissions("qff:delivery:view")
     public String showDelivery(){
         return FebsUtil.view("system/qff/commodity/delivery/delivery");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/deliveryShow/{id}")
-    @RequiresPermissions("delivery:view")
+    @RequiresPermissions("qff:delivery:view")
     public String getDeliveryShow(@PathVariable Integer id, Model model){
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
@@ -63,7 +63,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/deliveryAudit/{id}")
-    @RequiresPermissions("delivery:view")
+    @RequiresPermissions("qff:delivery:view")
     public String getDeliveryAudit(@PathVariable Integer id, Model model){
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
@@ -71,7 +71,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/deliveryAlter/{id}/{isShow}")
-    @RequiresPermissions("delivery:view")
+    @RequiresPermissions("qff:delivery:view")
     public String getDeliveryAlter(@PathVariable Integer id,@PathVariable String isShow, Model model){
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
@@ -82,13 +82,13 @@ public class ViewController extends BaseController {
     //******************************************储存 · 分包 · 出库******************************************
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "conserve/view")
-    @RequiresPermissions("conserve:view")
+    @RequiresPermissions("qff:conserve:view")
     public String showConserve(){
         return FebsUtil.view("system/qff/commodity/conserve/conserve");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/conserveShow/{id}")
-    @RequiresPermissions("conserve:view")
+    @RequiresPermissions("qff:conserve:view")
     public String getConserveShow(@PathVariable Integer id, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
@@ -96,7 +96,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/conserveAudit/{id}")
-    @RequiresPermissions("conserve:view")
+    @RequiresPermissions("qff:conserve:view")
     public String getConserveAudit(@PathVariable Integer id, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
@@ -104,7 +104,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/conserveAlter/{id}/{isShow}")
-    @RequiresPermissions("conserve:view")
+    @RequiresPermissions("qff:conserve:view")
     public String getConserveAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
@@ -121,13 +121,13 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "wrapper/view")
-    @RequiresPermissions("wrapper:view")
+    @RequiresPermissions("qff:wrapper:view")
     public String showWrapper(){
         return FebsUtil.view("system/qff/commodity/wrapper/wrapper");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/wrapperShow/{id}")
-    @RequiresPermissions("wrapper:view")
+    @RequiresPermissions("qff:wrapper:view")
     public String getWrapperShow(@PathVariable Integer id, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
@@ -135,7 +135,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/wrapperAudit/{id}")
-    @RequiresPermissions("wrapper:view")
+    @RequiresPermissions("qff:wrapper:view")
     public String getWrapperAudit(@PathVariable Integer id, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
@@ -143,7 +143,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/commodity/wrapperAlter/{id}/{isShow}")
-    @RequiresPermissions("wrapper:view")
+    @RequiresPermissions("qff:wrapper:view")
     public String getWrapperAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
@@ -157,13 +157,13 @@ public class ViewController extends BaseController {
 
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "/refund/view")
-    @RequiresPermissions("refund:view")
+    @RequiresPermissions("qff:refund:view")
     public String showRefund(){
         return FebsUtil.view("system/qff/commodity/refund/refund");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/refund/refundShow/{id}")
-    @RequiresPermissions("refund:view")
+    @RequiresPermissions("qff:refund:view")
     public String getRefundShow(@PathVariable Integer id, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
@@ -171,7 +171,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/refund/refundAudit/{id}")
-    @RequiresPermissions("refund:view")
+    @RequiresPermissions("qff:refund:view")
     public String getRefundAudit(@PathVariable Integer id, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
@@ -179,7 +179,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/refund/refundAlter/{id}/{isShow}")
-    @RequiresPermissions("refund:view")
+    @RequiresPermissions("qff:refund:view")
     public String getRefundAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
         Commodity commodity = conserveService.queryCommodityById(id);
         model.addAttribute("commodity", commodity);
@@ -197,13 +197,13 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "recent/view")
-    @RequiresPermissions("recent:view")
+    @RequiresPermissions("qff:recent:view")
     public String showRecent(){
         return FebsUtil.view("system/qff/recent/recent");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/recent/recentShow/{id}")
-    @RequiresPermissions("recent:view")
+    @RequiresPermissions("qff:recent:view")
     public String getRecentShow(@PathVariable Integer id, Model model){
         Recent recent = recentService.queryRecentById(id);
         model.addAttribute("recent",recent);
@@ -211,7 +211,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/recent/recentAudit/{id}")
-    @RequiresPermissions("recent:view")
+    @RequiresPermissions("qff:recent:view")
     public String getRecentAudit(@PathVariable Integer id, Model model){
         Recent recent = recentService.queryRecentById(id);
         model.addAttribute("recent",recent);
@@ -219,7 +219,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/recent/recentAlter/{id}/{isShow}")
-    @RequiresPermissions("recent:view")
+    @RequiresPermissions("qff:recent:view")
     public String getRecentAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
         Recent recent = recentService.queryRecentById(id);
         model.addAttribute("recent", recent);
@@ -231,7 +231,7 @@ public class ViewController extends BaseController {
     //***********************************************罗氏内部发起***********************************************************
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "roche/view")
-    @RequiresPermissions("roche:view")
+    @RequiresPermissions("qff:roche:view")
     public String showRoche(){
         return FebsUtil.view("system/qff/roche/roche");
     }
@@ -242,7 +242,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/roche/rocheShow/{id}")
-    @RequiresPermissions("roche:view")
+    @RequiresPermissions("qff:roche:view")
     public String getRocheShow(@PathVariable Integer id, Model model) {
         Roche roche = rocheService.queryRocheById(id);
         model.addAttribute("roche", roche);
@@ -250,7 +250,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/roche/rocheAudit/{id}")
-    @RequiresPermissions("roche:view")
+    @RequiresPermissions("qff:roche:view")
     public String getRocheAudit(@PathVariable Integer id, Model model) {
         Roche roche = rocheService.queryRocheById(id);
         model.addAttribute("roche", roche);
@@ -258,7 +258,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/roche/rocheAlter/{id}/{isShow}")
-    @RequiresPermissions("roche:view")
+    @RequiresPermissions("qff:roche:view")
     public String getRocheAudit(@PathVariable Integer id,@PathVariable String isShow, Model model) {
         Roche roche = rocheService.queryRocheById(id);
         model.addAttribute("roche", roche);
@@ -276,13 +276,13 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "temperature/view")
-    @RequiresPermissions("temperature:view")
+    @RequiresPermissions("qff:temperature:view")
     public String showTemperature(){
         return FebsUtil.view("system/qff/temperature/temperature");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/temperature/temperatureShow/{id}")
-    @RequiresPermissions("temperature:view")
+    @RequiresPermissions("qff:temperature:view")
     public String getTemperatureShow(@PathVariable Integer id, Model model){
         Recent recent = recentService.queryRecentById(id);
         model.addAttribute("temperature",recent);
@@ -290,7 +290,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/temperature/temperatureAudit/{id}")
-    @RequiresPermissions("temperature:view")
+    @RequiresPermissions("qff:temperature:view")
     public String getTemperatureAudit(@PathVariable Integer id, Model model){
         Recent recent = recentService.queryRecentById(id);
         model.addAttribute("temperature",recent);
@@ -298,7 +298,7 @@ public class ViewController extends BaseController {
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/qff/temperature/temperatureAlter/{id}/{isShow}")
-    @RequiresPermissions("temperature:view")
+    @RequiresPermissions("qff:temperature:view")
     public String getTemperatureAlter(@PathVariable Integer id,@PathVariable String isShow, Model model) {
         Recent recent = recentService.queryRecentById(id);
         model.addAttribute("temperature", recent);

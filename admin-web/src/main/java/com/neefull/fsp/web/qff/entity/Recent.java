@@ -34,16 +34,14 @@ public class Recent implements Serializable {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
     /**
-     *  开始时间
+     *  QFF编号
      */
     @TableField("number")
-    @ExcelField(value = "QFF编号")
     private String number;
     /**
-     *  开始时间
+     *  事件描述
      */
     @TableField("remark")
-    @ExcelField(value = "事件描述")
     private String remark;
     /**
      *  开始时间

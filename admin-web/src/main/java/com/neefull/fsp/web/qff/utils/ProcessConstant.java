@@ -29,6 +29,8 @@ public class ProcessConstant {
 
     public static final String FOUR_STEP = "_4";
 
+    public static final String FIVE_STEP = "_5";
+
     public static final String SIX_STEP = "_6";
 
     public static final String EIGHT_STEP = "_8";

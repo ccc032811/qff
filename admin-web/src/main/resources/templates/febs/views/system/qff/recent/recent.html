@@ -88,26 +88,26 @@
 </script>
 <script type="text/html" id="recent-option">
 
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="recent:view">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="recent-detail" shiro:hasPermission="qff:recent:view">查看</a>
     {{#  if(d.status != '3'&& d.isAllow == '1'){}}
     {{#  if(d.repDate == ''||d.repDate == null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="recent-edit"  shiro:hasPermission="recent:audit">审核</a>
+    <a class="layui-btn layui-btn-xs" lay-event="recent-edit"  shiro:hasPermission="qff:recent:audit">审核</a>
     {{# }else if(d.repDate != ''&&d.repDate != null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="recent-edit"  shiro:hasPermission="recent:audit">确认</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-alter"  shiro:hasPermission="recent:alter ">修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="recent-edit"  shiro:hasPermission="qff:recent:audit">确认</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-alter"  shiro:hasPermission="qff:recent:alter ">修改</a>
     {{#}}}
     {{#}}}
     {{#  if(d.status != '3'){}}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-del" shiro:hasPermission="recent:del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="recent-del" shiro:hasPermission="qff:recent:del">删除</a>
     {{#}}}
 
 </script>
 <script type="text/html" id="recent-toolbarCheck">
     <div class="layui-btn-container">
-        <button  class="layui-btn layui-btn-sm layui-btn-success"  lay-event="recent-add" shiro:hasPermission="recent:add">
+        <button  class="layui-btn layui-btn-sm layui-btn-success"  lay-event="recent-add" shiro:hasPermission="qff:recent:add">
             <i class="layui-icon">&#xe654;</i> 新增近效期
         </button>
-        <button class="layui-btn layui-btn-sm" lay-event="recent-download" shiro:hasPermission="recent:down">
+        <button class="layui-btn layui-btn-sm" lay-event="recent-download" shiro:hasPermission="qff:recent:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
         </button>
     </div>

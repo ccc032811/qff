@@ -42,7 +42,7 @@ public class EximportController extends BaseController {
     private IEximportService eximportService;
 
     @GetMapping
-    @RequiresPermissions("others:eximport:view")
+    @RequiresPermissions("qff:others:eximport:view")
     public FebsResponse findEximports(QueryRequest request) {
         Map<String, Object> dataTable = getDataTable(eximportService.findEximports(request, null));
         return new FebsResponse().success().data(dataTable);
@@ -52,7 +52,7 @@ public class EximportController extends BaseController {
      * 生成 Excel导入模板
      */
     @GetMapping("template")
-    @RequiresPermissions("eximport:template")
+    @RequiresPermissions("qff:eximport:template")
     public void generateImportTemplate(HttpServletResponse response) {
         // 构建数据
         List<Eximport> list = new ArrayList<>();
@@ -71,7 +71,7 @@ public class EximportController extends BaseController {
      * 导入Excel数据，并批量插入 T_EXIMPORT表
      */
     @PostMapping("import")
-    @RequiresPermissions("eximport:import")
+    @RequiresPermissions("qff:eximport:import")
     public FebsResponse importExcels(MultipartFile file) throws FebsException {
         try {
             if (file.isEmpty()) {
@@ -117,7 +117,7 @@ public class EximportController extends BaseController {
     }
 
     @GetMapping("excel")
-    @RequiresPermissions("eximport:export")
+    @RequiresPermissions("qff:eximport:export")
     public void export(QueryRequest queryRequest, Eximport eximport, HttpServletResponse response) throws FebsException {
         try {
             List<Eximport> eximports = this.eximportService.findEximports(queryRequest, eximport).getRecords();

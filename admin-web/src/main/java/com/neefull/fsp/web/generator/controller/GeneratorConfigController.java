@@ -29,14 +29,14 @@ public class GeneratorConfigController extends BaseController {
     private IGeneratorConfigService generatorConfigService;
 
     @GetMapping
-    @RequiresPermissions("generator:configure:view")
+    @RequiresPermissions("qff:generator:configure:view")
     public FebsResponse getGeneratorConfig() {
         return new FebsResponse().success().data(generatorConfigService.findGeneratorConfig());
     }
 
     @Log("修改GeneratorConfig")
     @PostMapping("update")
-    @RequiresPermissions("generator:configure:update")
+    @RequiresPermissions("qff:generator:configure:update")
     public FebsResponse updateGeneratorConfig(@Valid GeneratorConfig generatorConfig) throws FebsException {
         try {
             if (StringUtils.isBlank(generatorConfig.getId()))

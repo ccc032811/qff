@@ -82,14 +82,14 @@
     <span>{{ sex.title }}</span>
 </script>
 <script type="text/html" id="user-option">
-    <span shiro:lacksPermission="user:view,user:update,user:delete">
+    <span shiro:lacksPermission="qff:user:view,qff:user:update,qff:user:delete">
         <span class="layui-badge-dot febs-bg-orange"></span> 无权限
     </span>
-    <a lay-event="detail" shiro:hasPermission="sysuser:view"><i
+    <a lay-event="detail" shiro:hasPermission="qff:sysuser:view"><i
             class="layui-icon febs-edit-area febs-green">&#xe7a5;</i></a>
-    <a lay-event="edit" shiro:hasPermission="sysuser:update"><i
+    <a lay-event="edit" shiro:hasPermission="qff:sysuser:update"><i
             class="layui-icon febs-edit-area febs-blue">&#xe7a4;</i></a>
-    <a lay-event="del" shiro:hasPermission="sysuser:delete"><i
+    <a lay-event="del" shiro:hasPermission="qff:sysuser:delete"><i
             class="layui-icon febs-edit-area febs-red">&#xe7f9;</i></a>
 </script>
 <!--头部工具栏-->

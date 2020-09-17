@@ -37,7 +37,7 @@ public class FebsActuatorController {
     private FebsActuatorHelper actuatorHelper;
 
     @GetMapping("httptrace")
-    @RequiresPermissions("httptrace:view")
+    @RequiresPermissions("qff:httptrace:view")
     public FebsResponse httpTraces(String method, String url) throws FebsException {
         try {
             FebsHttpTraceDescriptor traces = httpTraceEndpoint.traces();

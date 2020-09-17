@@ -35,7 +35,7 @@ public class QffLogController extends BaseController {
      * @return
      */
     @GetMapping("/list")
-    @RequiresPermissions("qffLog:view")
+    @RequiresPermissions("qff:qffLog:view")
     public FebsResponse queryLogs(QffLog qffLog) throws FebsException {
         try {
             IPage<QffLog> qffLogPage = qffLogService.queryLogs(qffLog);

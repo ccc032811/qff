@@ -39,7 +39,7 @@
                                     <i class="layui-icon">&#xe79b;</i>
                                 </div>
                                 <div class="layui-btn layui-btn-sm layui-btn-primary table-action action-more"
-                                     shiro:hasAnyPermissions="job:log:delete,job:log:export">
+                                     shiro:hasAnyPermissions="qff:job:log:delete,qff:job:log:export">
                                     <i class="layui-icon">&#xe875;</i>
                                 </div>
                             </div>
@@ -74,10 +74,10 @@
     <span class="layui-badge febs-tag-{{status.color}}">{{ status.title }}</span>
 </script>
 <script type="text/html" id="jobLog-option">
-    <span shiro:lacksPermission="job:log:delete">
+    <span shiro:lacksPermission="qff:job:log:delete">
         <span class="layui-badge-dot febs-bg-orange"></span> 无权限
     </span>
-    <a lay-event="del" shiro:hasPermission="job:log:delete"><i
+    <a lay-event="del" shiro:hasPermission="qff:job:log:delete"><i
             class="layui-icon febs-edit-area febs-red">&#xe7f9;</i></a>
 </script>
 <script data-th-inline="none" type="text/javascript">
@@ -125,11 +125,11 @@
             options: [{
                 name: 'delete',
                 title: '删除日志',
-                perms: 'job:log:delete'
+                perms: 'qff:job:log:delete'
             }, {
                 name: 'export',
                 title: '导出Excel',
-                perms: 'job:log:export'
+                perms: 'qff:job:log:export'
             }]
         });
 

@@ -17,11 +17,13 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -69,7 +71,7 @@ public class RecentController extends BaseController {
      */
     @Qff("更新近效期QFF")
     @PostMapping("/edit")
-    @RequiresPermissions(value = {"recent:audit","temperature:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"qff:recent:audit","qff:temperature:audit"},logical = Logical.OR)
     public FebsResponse editRecent(Recent recent) throws FebsException {
         try {
             recentService.editRecent(recent);
@@ -93,7 +95,7 @@ public class RecentController extends BaseController {
      * @return
      */
     @GetMapping("/list")
-    @RequiresPermissions(value = {"recent:view","temperature:view"},logical = Logical.OR)
+    @RequiresPermissions(value = {"qff:recent:view","qff:temperature:view"},logical = Logical.OR)
     public FebsResponse getRecentPage(Recent recent) throws FebsException {
         try {
             IPage<Recent> pageInfo = recentService.getRecentPage(recent,getCurrentUser());
@@ -113,7 +115,7 @@ public class RecentController extends BaseController {
      */
     @Qff("删除近效期QFF")
     @GetMapping("/deleteRecent/{id}")
-    @RequiresPermissions(value = {"recent:del","temperature:del"},logical = Logical.OR)
+    @RequiresPermissions(value = {"qff:recent:del","qff:temperature:del"},logical = Logical.OR)
     public FebsResponse updateRecentStatus(@PathVariable Integer id) throws FebsException {
         try {
             Recent recent = new Recent();
@@ -134,7 +136,7 @@ public class RecentController extends BaseController {
      * @throws FebsException
      */
     @GetMapping("/queryRecent/{id}")
-    @RequiresPermissions(value = {"recent:view","temperature:view"},logical = Logical.OR)
+    @RequiresPermissions(value = {"qff:recent:view","qff:temperature:view"},logical = Logical.OR)
     public FebsResponse queryRecentById(@PathVariable Integer id) throws FebsException {
         try {
             Recent recent = recentService.queryRecentById(id);
@@ -177,7 +179,7 @@ public class RecentController extends BaseController {
      */
     @Qff("提交近效期QFF流程")
     @PostMapping("/commit")
-    @RequiresPermissions(value = {"recent:audit","temperature:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"qff:recent:audit","qff:temperature:audit"},logical = Logical.OR)
     public FebsResponse commitProcess(Recent recent) throws FebsException {
         try {
             User user = getCurrentUser();
@@ -197,7 +199,7 @@ public class RecentController extends BaseController {
      */
     @Qff("同意近效期QFF任务")
     @PostMapping("/agree")
-    @RequiresPermissions(value = {"recent:audit","temperature:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"qff:recent:audit","qff:temperature:audit"},logical = Logical.OR)
     public FebsResponse agreeCurrentProcess(Recent recent) throws FebsException {
         try {
             User user = getCurrentUser();
@@ -221,11 +223,21 @@ public class RecentController extends BaseController {
      * @param response
      */
     @GetMapping("excel")
-    @RequiresPermissions(value = {"recent:down","temperature:down"},logical = Logical.OR)
+    @RequiresPermissions(value = {"qff:recent:down","qff:temperature:down"},logical = Logical.OR)
     public void download(Recent recent, HttpServletResponse response) throws FebsException {
         try {
             List<Recent> recentList = recentService.getRecentExcelImportPage(recent,getCurrentUser());
-            ExcelKit.$Export(Recent.class, response).downXlsx(recentList, false);
+            if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
+                ExcelKit.$Export(Recent.class, response).downXlsx(recentList, false);
+            }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
+                List<Temperature> temperatures = new ArrayList<>();
+                for (Recent rec : recentList) {
+                    Temperature temperature = new Temperature();
+                    BeanUtils.copyProperties(rec,temperature);
+                    temperatures.add(temperature);
+                }
+                ExcelKit.$Export(Temperature.class, response).downXlsx(temperatures, false);
+            }
         } catch (Exception e) {
             String message = "导出近效期QFFexcel失败";
             log.error(message,e);

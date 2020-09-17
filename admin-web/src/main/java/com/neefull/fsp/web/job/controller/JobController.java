@@ -37,7 +37,7 @@ public class JobController extends BaseController {
     private IJobService jobService;
 
     @GetMapping
-    @RequiresPermissions("job:view")
+    @RequiresPermissions("qff:job:view")
     public FebsResponse jobList(QueryRequest request, Job job) {
         Map<String, Object> dataTable = getDataTable(this.jobService.findJobs(request, job));
         return new FebsResponse().success().data(dataTable);
@@ -54,7 +54,7 @@ public class JobController extends BaseController {
 
     @Log("新增定时任务")
     @PostMapping
-    @RequiresPermissions("job:add")
+    @RequiresPermissions("qff:job:add")
     public FebsResponse addJob(@Valid Job job) throws FebsException {
         try {
             this.jobService.createJob(job);
@@ -68,7 +68,7 @@ public class JobController extends BaseController {
 
     @Log("删除定时任务")
     @GetMapping("delete/{jobIds}")
-    @RequiresPermissions("job:delete")
+    @RequiresPermissions("qff:job:delete")
     public FebsResponse deleteJob(@NotBlank(message = "{required}") @PathVariable String jobIds) throws FebsException {
         try {
             String[] ids = jobIds.split(StringPool.COMMA);
@@ -114,7 +114,7 @@ public class JobController extends BaseController {
 
 
     @Log("执行定时任务")
-    @RequiresPermissions("job:run")
+    @RequiresPermissions("qff:job:run")
     @GetMapping("run/{jobIds}")
     public FebsResponse runJob(@NotBlank(message = "{required}") @PathVariable String jobIds) throws FebsException {
         try {
@@ -143,7 +143,7 @@ public class JobController extends BaseController {
 
     @Log("恢复定时任务")
     @GetMapping("resume/{jobIds}")
-    @RequiresPermissions("job:resume")
+    @RequiresPermissions("qff:job:resume")
     public FebsResponse resumeJob(@NotBlank(message = "{required}") @PathVariable String jobIds) throws FebsException {
         try {
             this.jobService.resume(jobIds);
@@ -156,7 +156,7 @@ public class JobController extends BaseController {
     }
 
     @GetMapping("excel")
-    @RequiresPermissions("job:export")
+    @RequiresPermissions("qff:job:export")
     public void export(QueryRequest request, Job job, HttpServletResponse response) throws FebsException {
         try {
             List<Job> jobs = this.jobService.findJobs(request, job).getRecords();

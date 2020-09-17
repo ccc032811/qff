@@ -23,7 +23,7 @@
                                     <i class="layui-icon">&#xe79b;</i>
                                 </div>
                                 <div class="layui-btn layui-btn-sm layui-btn-primary table-action action-more"
-                                     shiro:hasAnyPermissions="opinion:add">
+                                     shiro:hasAnyPermissions="qff:opinion:add">
                                     <i class="layui-icon">&#xe875;</i>
                                 </div>
                             </div>
@@ -145,15 +145,15 @@
             options: [{
                 name: 'add',
                 title: '新增',
-                perms: 'opinion:add'
+                perms: 'qff:opinion:add'
             }, {
                 name: 'delete',
                 title: '删除',
-                perms: 'opinion:del'
+                perms: 'qff:opinion:del'
             }, {
                 name: 'export',
                 title: '导出Excel',
-                perms: 'opinion:exp'
+                perms: 'qff:opinion:exp'
             }]
         });
 

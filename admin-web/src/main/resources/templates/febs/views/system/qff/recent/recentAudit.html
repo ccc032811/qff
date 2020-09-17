@@ -140,7 +140,7 @@
             </div>
         </div>
         <div class="layui-form-item febs-hide">
-            <div  style="margin-top: 75px;text-align: center;" shiro:hasPermission="recent:audit">
+            <div  style="margin-top: 75px;text-align: center;" shiro:hasPermission="qff:recent:audit">
                 <button class="layui-btn" lay-submit="" lay-filter="recent-form-submit" id="submit" ></button>
             </div>
             <br>
@@ -154,8 +154,8 @@
     </form>
     <div class="layui-form-item">
         <div  style="margin-top: 75px;text-align: center;" >
-            <button class="layui-btn"  id="recent-submit" shiro:hasPermission="recent:audit">提交</button>
-            <button class="layui-btn"  id="recent-alter" shiro:hasPermission="recent:alter">修改</button>
+            <button class="layui-btn"  id="recent-submit" shiro:hasPermission="qff:recent:audit">提交</button>
+            <button class="layui-btn"  id="recent-alter" shiro:hasPermission="qff:recent:alter">修改</button>
         </div>
     </div>
 </div>
@@ -358,13 +358,13 @@
                 $("#cricle-up").attr("style","background-color: #3DCCA6");
                 $("#three-up").attr("style","border-right: 3px solid #3DCCA6;border-left: 3px solid #3DCCA6;border-top: 3px solid #3DCCA6;");
             }
-            if(data["_12"]!=null&&data["_12"].date !=null){
-                $("#time-down").html(data["_12"].date);
-                $("#name-down").html(data["_12"].name);
+            if(data["_8"]!=null&&data["_8"].date !=null){
+                $("#time-down").html(data["_8"].date);
+                $("#name-down").html(data["_8"].name);
                 $("#cricle-down").attr("style","background-color: #3DCCA6");
                 $("#three-down").attr("style","border-right: 3px solid #3DCCA6;border-left: 3px solid #3DCCA6;border-bottom: 3px solid #3DCCA6;");
             }
-            if(data["_12"]!=null&&data["_12"].date !=null&&data["_4"]!=null&&data["_4"].date !=null){
+            if(data["_8"]!=null&&data["_8"].date !=null&&data["_4"]!=null&&data["_4"].date !=null){
                 $("#item-four").attr("style","border-bottom: 3px solid #3DCCA6;");
                 $("#cricle-four").attr("style","background-color: #3DCCA6");
             }

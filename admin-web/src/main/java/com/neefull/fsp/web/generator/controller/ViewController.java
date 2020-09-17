@@ -22,13 +22,13 @@ public class ViewController {
     private IGeneratorConfigService generatorConfigService;
 
     @GetMapping("generator")
-    @RequiresPermissions("generator:view")
+    @RequiresPermissions("qff:generator:view")
     public String generator() {
         return FebsUtil.view("generator/generator");
     }
 
     @GetMapping("configure")
-    @RequiresPermissions("generator:configure:view")
+    @RequiresPermissions("qff:generator:configure:view")
     public String generatorConfigure(Model model) {
         GeneratorConfig generatorConfig = generatorConfigService.findGeneratorConfig();
         model.addAttribute("config", generatorConfig);
