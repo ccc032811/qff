@@ -29,6 +29,7 @@ import java.util.*;
 public class MailUtils {
 
 
+
     public static void sendMail(String text, SendMailProperties mailProperties, String[] mails, Map<String,String> files ) {
 
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();

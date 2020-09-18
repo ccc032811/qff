@@ -47,8 +47,6 @@ import java.util.*;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class FileServiceImpl implements IFileService {
 
-    private static final Integer SELECT_NUMBER =2;
-
 
     @Autowired
     private IProcessService processService;
@@ -66,12 +64,13 @@ public class FileServiceImpl implements IFileService {
     @Transactional
     public String uploadImage(MultipartFile file,String number) {
 
-        String originalFilename = file.getOriginalFilename();
+        String originalFilename = file.getOriginalFilename().replace(" ","");
+
         int unixp = originalFilename.lastIndexOf("/");
         int winp = originalFilename.lastIndexOf("\\");
         int posp = (winp > unixp ? winp : unixp);
         if (posp != -1) {
-            originalFilename = originalFilename.substring(posp + 1).replace(" ","");
+            originalFilename = originalFilename.substring(posp + 1);
         }
 //        String fileName = number+"-"+originalFilename;
         File filePath = new File(properties.getImagePath(), originalFilename);

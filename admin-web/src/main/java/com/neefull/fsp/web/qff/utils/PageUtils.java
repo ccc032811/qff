@@ -2,6 +2,10 @@ package com.neefull.fsp.web.qff.utils;
 
 
 
+
+
+import org.apache.poi.ss.formula.functions.T;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +15,8 @@ import java.util.List;
  */
 public class PageUtils {
 
-
-    public  static  List page(List applyList, int pageSize, int currentPage) {
-        List currentPageList = new ArrayList<>();
+    public  static <T>  List<T> page(List<T> applyList, int pageSize, int currentPage) {
+        List<T> currentPageList = new ArrayList<>();
         if (applyList != null && applyList.size() > 0) {
             int currIdx = (currentPage > 1 ? (currentPage - 1) * pageSize : 0);
             for (int i = 0; i < pageSize && i < applyList.size() - currIdx; i++) {

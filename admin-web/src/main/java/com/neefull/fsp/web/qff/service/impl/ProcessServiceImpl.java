@@ -348,10 +348,6 @@ public class ProcessServiceImpl implements IProcessService {
                 }
             }
         }
-
-
-
-
         return map;
     }
 
@@ -464,31 +460,6 @@ public class ProcessServiceImpl implements IProcessService {
             }
         }
         return list;
-    }
-
-
-    private ProcessDefinitionEntity getProcessDefinitionEntity(String processDefinitionId){
-        return (ProcessDefinitionEntity) repositoryService.getProcessDefinition(processDefinitionId);
-    }
-
-
-    private Boolean getHistoricTaskInstance(String processInstanceId,String process){
-        boolean complete = true;
-        List<HistoricActivityInstance> list = historyService
-                .createHistoricActivityInstanceQuery()
-                .processInstanceId(processInstanceId)
-                .list();
-        if(CollectionUtils.isNotEmpty(list)){
-            for (HistoricActivityInstance his : list) {
-                if(his.getActivityId().equals(process)){
-                    if(StringUtils.isNotEmpty(his.getAssignee())){
-                        complete = false;
-                    }
-                }
-            }
-        }
-        return complete;
-
     }
 
 
@@ -614,45 +585,32 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Override
     public List<String> findPrcessName(String username) {
-        List<Task> list = queryTaskByUserName(username);
-        Set<String> names = new HashSet<>();
-        if(CollectionUtils.isNotEmpty(list)){
-            for (Task task : list) {
-                ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-                if(processInstance.getBusinessKey().startsWith("Recent")){
-                    String id = processInstance.getBusinessKey().split("\\:")[1];
-                    Recent recent = recentService.queryRecentById(Integer.parseInt(id));
-                    if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
-                        names.add(ProcessConstant.RECENT_NAME);
-                    }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
-                        names.add(ProcessConstant.TEMPERATURE_NAME);
-                    }
-                }else if(processInstance.getBusinessKey().startsWith("Roche")) {
-                    names.add(ProcessConstant.ROCHE_NAME);
-                }else {
-                    String id = processInstance.getBusinessKey().split("\\:")[1];
-                    Commodity commodity = commodityService.queryCommodityById(Integer.parseInt(id));
-                    if(commodity!=null){
-                        if(commodity.getStage().equals(ProcessConstant.DELIVERY_NAME)){
-                            names.add(ProcessConstant.DELIVERY_NAME);
-                        }else if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
-                            names.add(ProcessConstant.STORE_PACKAGE_EXPORT);
-                        }
-//                        else if(commodity.getStage().equals(ProcessConstant.PACKAGE_NAME)) {
-//                            names.add(ProcessConstant.PACKAGE_NAME);
-//                        }else if(commodity.getStage().equals(ProcessConstant.EXPORT_NAME)){
-//                            names.add(ProcessConstant.EXPORT_NAME);
-//                        }
-                        else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
-                            names.add(ProcessConstant.WRAPPER_NAME);
-                        }else if(commodity.getStage().equals(ProcessConstant.REFUND_NAME)){
-                            names.add(ProcessConstant.REFUND_NAME);
-                        }
-                    }
-                }
-            }
+        List<String> stringList = findTask(username);
+        List<String> menuName = new ArrayList<>();
+        if(stringList.contains("recent")){
+            menuName.add(ProcessConstant.RECENT_NAME);
         }
-        return new ArrayList<>(names);
+        if(stringList.contains("temperature")){
+            menuName.add(ProcessConstant.TEMPERATURE_NAME);
+        }
+        if(stringList.contains("roche")){
+            menuName.add(ProcessConstant.ROCHE_NAME);
+        }
+        if(stringList.contains("delivery")){
+            menuName.add(ProcessConstant.DELIVERY_NAME);
+        }
+        if(stringList.contains("conserve")){
+            menuName.add(ProcessConstant.STORE_PACKAGE_EXPORT);
+        }
+        if(stringList.contains("wrapper")){
+            menuName.add(ProcessConstant.WRAPPER_NAME);
+        }
+        if(stringList.contains("refund")){
+            menuName.add(ProcessConstant.REFUND_NAME);
+        }
+
+        return menuName;
+
     }
 
     @Override
@@ -692,6 +650,8 @@ public class ProcessServiceImpl implements IProcessService {
         if(StringUtils.isNotEmpty(commodity.getImages())){
             addOrEditFiles(commodity,currentUser);
         }
+
+
         String[] mails = getEmails(87);
 
         List<Commodity> list =new ArrayList<>();
