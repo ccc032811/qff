@@ -227,8 +227,8 @@ public class StartSoap {
                                     attachment.setQffType(commodity.getStage());
                                     attachment.setAttachType(split[1]);
                                     attachment.setRemark(split[0]);
-                                    attachment.setSource(1);
                                     attachment.setEnable(0);
+                                    attachment.setVest("SAP-ESB");
                                     attachmentMap.put(attachment.getRemark(),attachment);
                                     commodity.setAccessory(commodity.getAccessory()+1);
                                 }

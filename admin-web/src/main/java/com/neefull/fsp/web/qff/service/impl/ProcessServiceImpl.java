@@ -808,7 +808,6 @@ public class ProcessServiceImpl implements IProcessService {
                 Attachment attachment = new Attachment();
                 attachment.setQffId(id);
                 attachment.setQffType(type);
-                attachment.setSource(2);
                 attachment.setEnable(1);
                 attachment.setVest(user.getUsername());
                 attachment.setAttachType(file.substring(file.lastIndexOf(".")+1 ,file.length()));

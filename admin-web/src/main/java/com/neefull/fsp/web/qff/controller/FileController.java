@@ -158,7 +158,10 @@ public class FileController extends BaseController {
     @Qff("上传文件")
     @PostMapping("/uploadImage")
     public FebsResponse uploadImage(MultipartFile file, String number) throws FebsException {
-
+        String originalFilename = file.getOriginalFilename();
+        if(StringUtils.isEmpty(originalFilename)){
+            throw new FebsException("文件名不能为空");
+        }
         try {
             String url  = fileService.uploadImage(file,number);
             return new FebsResponse().success().data(url);

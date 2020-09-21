@@ -56,11 +56,6 @@ public class Attachment implements Serializable {
     @TableField("remark")
     private String remark;
     /**
-     * 文件来源   1sap获取的文件   2 本系统上传的文件
-     */
-    @TableField("source")
-    private Integer source;
-    /**
      * 区分是谁上传的
      */
     @TableField("vest")
@@ -133,14 +128,6 @@ public class Attachment implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public Integer getSource() {
-        return source;
-    }
-
-    public void setSource(Integer source) {
-        this.source = source;
     }
 
     public String getVest() {
