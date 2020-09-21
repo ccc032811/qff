@@ -382,17 +382,18 @@
 
                 var name = item.remark+"."+item.attachType;
                 images.push(name);
-                if(item.source === 1){
-                    $('#roche-List').append('<tr id="roche-file-'+ index + '" ><td style="width: 50%">' + item.remark + '</td>' +
-                        '<td style="width: 15%">' + item.createTime + '</td><td style="width: 10%">' + item.attachType + '</td>' +
-                        '<td style="width: 10%">可下载</td><td style="width: 15%">' +
-                        '<button class="layui-btn layui-btn-xs " type="button" id="roche-upload-' + index + '" >下载</button></td></tr>');
-                }else {
+                if(currentUser.username === item.vest){
                     $('#roche-List').append('<tr id="roche-file-'+ index + '" ><td style="width: 50%">' + item.remark + '</td>' +
                         '<td style="width: 15%">' + item.createTime + '</td><td style="width: 10%">' + item.attachType + '</td>' +
                         '<td style="width: 10%">可下载</td><td style="width: 15%">' +
                         '<button class="layui-btn layui-btn-xs " type="button" id="roche-upload-' + index + '" >下载</button>' +
                         '<button class="layui-btn layui-btn-xs layui-btn-danger" type="button" id="roche-del-'+ index + '">删除</button></td></tr>');
+
+                }else {
+                    $('#roche-List').append('<tr id="roche-file-'+ index + '" ><td style="width: 50%">' + item.remark + '</td>' +
+                        '<td style="width: 15%">' + item.createTime + '</td><td style="width: 10%">' + item.attachType + '</td>' +
+                        '<td style="width: 10%">可下载</td><td style="width: 15%">' +
+                        '<button class="layui-btn layui-btn-xs " type="button" id="roche-upload-' + index + '" >下载</button></td></tr>');
                 }
 
                 $view.find('#roche-upload-'+index ).on('click',function () {

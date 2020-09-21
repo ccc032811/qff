@@ -33,11 +33,6 @@ public class AttachmentServiceImpl  extends ServiceImpl<AttachmentMapper, Attach
         return attachmentMapper.selectByNumberAndType(number,type);
     }
 
-    @Override
-    @Transactional
-    public void updateStatusById(Integer id, Integer status) {
-        attachmentMapper.updateStatusById(id,status);
-    }
 
     @Override
     @Transactional

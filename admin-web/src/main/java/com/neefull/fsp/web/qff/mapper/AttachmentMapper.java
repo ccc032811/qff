@@ -15,8 +15,6 @@ import java.util.List;
 public interface AttachmentMapper extends BaseMapper<Attachment> {
 
 
-    void updateStatusById(@Param("id") Integer id,@Param("status") Integer status);
-
     List<Attachment> selectByNumberAndType(@Param("number") String number, @Param("type") String type);
 
     void updateStatusByNumberAndType(@Param("number") String number, @Param("typt") String typt);

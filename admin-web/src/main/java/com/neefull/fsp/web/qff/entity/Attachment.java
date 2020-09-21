@@ -71,11 +71,6 @@ public class Attachment implements Serializable {
     @TableField("enable")
     private Integer enable;
     /**
-     * 状态  1表示删除
-     */
-    @TableField("status")
-    private Integer status;
-    /**
      *  创建日期
      */
     @TableField("create_time")
@@ -162,14 +157,6 @@ public class Attachment implements Serializable {
 
     public void setEnable(Integer enable) {
         this.enable = enable;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     public Date getCreateTime() {

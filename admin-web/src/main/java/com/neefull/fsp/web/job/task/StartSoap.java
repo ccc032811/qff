@@ -229,7 +229,6 @@ public class StartSoap {
                                     attachment.setRemark(split[0]);
                                     attachment.setSource(1);
                                     attachment.setEnable(0);
-                                    attachment.setStatus(0);
                                     attachmentMap.put(attachment.getRemark(),attachment);
                                     commodity.setAccessory(commodity.getAccessory()+1);
                                 }

@@ -205,7 +205,6 @@ public class RecentController extends BaseController {
             User user = getCurrentUser();
             List<String> group = processService.getGroupId(recent);
             if(group.contains(user.getUsername())){
-//                processService.agreeCurrentProcess(recent,user,"1");
                 processService.commitProcess(recent,user);
             }else {
                 throw new FebsException("当前无权限或改数据已审核");

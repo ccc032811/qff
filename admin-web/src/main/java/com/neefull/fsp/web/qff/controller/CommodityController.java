@@ -212,7 +212,6 @@ public class CommodityController extends BaseController {
             User user = getCurrentUser();
             List<String> group = processService.getGroupId(commodity);
             if(group.contains(user.getUsername())){
-//                processService.agreeCurrentProcess(commodity,user,"1");
                 processService.commitProcess(commodity,user);
             }else {
                 throw new FebsException("当前无权限或改数据已审核");

@@ -169,7 +169,7 @@
         </div>
         <div class="layui-form-item layui-form-item-rigth">
             <div class="layui-inline layui-col-sm6">
-                <label class="layui-form-label" id="reason-refund">退货原因</label>
+                <label class="layui-form-label" id="reasons-refund">退货原因</label>
                 <div class="layui-input-block" id="refund-reasons">
                     <select name="reason" id="refund_search_reason" lay-verify="required">
                         <option value="">请选择</option>
@@ -331,7 +331,7 @@
                 $('#refund-stage').append(' <input type="text" name="stage"  maxlength="50" autocomplete="off"\n' +
                     '                           class="layui-input " readonly="readonly">');
                 $('#rConf-refund').addClass("febs-form-item-require");
-                $('#reason-refund').addClass("febs-form-item-require");
+                $('#reasons-refund').addClass("febs-form-item-require");
 
             }
             if(commodity.isDanger === '01'){
@@ -476,17 +476,18 @@
             $.each(data,function (index, item) {
                 var name = item.remark+"."+item.attachType;
                 images.push(name);
-                if(item.source === 1){
-                    $('#refund-List').append('<tr id="refund-file-'+ index + '" ><td style="width: 50%">' + item.remark + '</td>' +
-                        '<td style="width: 15%">' + item.createTime + '</td><td style="width: 10%">' + item.attachType + '</td>' +
-                        '<td style="width: 10%">可下载</td><td style="width: 15%">' +
-                        '<button class="layui-btn layui-btn-xs " type="button" id="refund-upload-' + index + '" >下载</button></td></tr>');
-                }else {
+                if(currentUser.username === item.vest){
                     $('#refund-List').append('<tr id="refund-file-'+ index + '" ><td style="width: 50%">' + item.remark + '</td>' +
                         '<td style="width: 15%">' + item.createTime + '</td><td style="width: 10%">' + item.attachType + '</td>' +
                         '<td style="width: 10%">可下载</td><td style="width: 15%">' +
                         '<button class="layui-btn layui-btn-xs " type="button" id="refund-upload-' + index + '" >下载</button>' +
                         '<button class="layui-btn layui-btn-xs layui-btn-danger" type="button" id="refund-del-'+ index + '">删除</button></td></tr>');
+                }else {
+                    $('#refund-List').append('<tr id="refund-file-'+ index + '" ><td style="width: 50%">' + item.remark + '</td>' +
+                        '<td style="width: 15%">' + item.createTime + '</td><td style="width: 10%">' + item.attachType + '</td>' +
+                        '<td style="width: 10%">可下载</td><td style="width: 15%">' +
+                        '<button class="layui-btn layui-btn-xs " type="button" id="refund-upload-' + index + '" >下载</button></td></tr>');
+
                 }
 
                 $view.find('#refund-upload-'+index ).on('click',function () {

@@ -17,12 +17,6 @@ public interface IAttachmentService extends IService<Attachment> {
      */
     List<Attachment> selectAttsByQffId(String number,String type);
 
-    /**更新附件状态
-     * @param id
-     * @param status
-     */
-    void updateStatusById(Integer id, Integer status);
-
     /**新增
      * @param attachment
      */
