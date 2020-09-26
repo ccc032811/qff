@@ -71,7 +71,7 @@ public class RecentController extends BaseController {
      */
     @Qff("更新近效期QFF")
     @PostMapping("/edit")
-    @RequiresPermissions(value = {"qff:recent:audit","qff:temperature:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"recent:audit","temperature:audit"},logical = Logical.OR)
     public FebsResponse editRecent(Recent recent) throws FebsException {
         try {
             recentService.editRecent(recent);
@@ -95,7 +95,7 @@ public class RecentController extends BaseController {
      * @return
      */
     @GetMapping("/list")
-    @RequiresPermissions(value = {"qff:recent:view","qff:temperature:view"},logical = Logical.OR)
+    @RequiresPermissions(value = {"recent:view","temperature:view"},logical = Logical.OR)
     public FebsResponse getRecentPage(Recent recent) throws FebsException {
         try {
             IPage<Recent> pageInfo = recentService.getRecentPage(recent,getCurrentUser());
@@ -115,7 +115,7 @@ public class RecentController extends BaseController {
      */
     @Qff("删除近效期QFF")
     @GetMapping("/deleteRecent/{id}")
-    @RequiresPermissions(value = {"qff:recent:del","qff:temperature:del"},logical = Logical.OR)
+    @RequiresPermissions(value = {"recent:del","temperature:del"},logical = Logical.OR)
     public FebsResponse updateRecentStatus(@PathVariable Integer id) throws FebsException {
         try {
             Recent recent = new Recent();
@@ -136,7 +136,7 @@ public class RecentController extends BaseController {
      * @throws FebsException
      */
     @GetMapping("/queryRecent/{id}")
-    @RequiresPermissions(value = {"qff:recent:view","qff:temperature:view"},logical = Logical.OR)
+    @RequiresPermissions(value = {"recent:view","temperature:view"},logical = Logical.OR)
     public FebsResponse queryRecentById(@PathVariable Integer id) throws FebsException {
         try {
             Recent recent = recentService.queryRecentById(id);
@@ -179,7 +179,7 @@ public class RecentController extends BaseController {
      */
     @Qff("提交近效期QFF流程")
     @PostMapping("/commit")
-    @RequiresPermissions(value = {"qff:recent:audit","qff:temperature:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"recent:audit","temperature:audit"},logical = Logical.OR)
     public FebsResponse commitProcess(Recent recent) throws FebsException {
         try {
             User user = getCurrentUser();
@@ -199,7 +199,7 @@ public class RecentController extends BaseController {
      */
     @Qff("同意近效期QFF任务")
     @PostMapping("/agree")
-    @RequiresPermissions(value = {"qff:recent:audit","qff:temperature:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"recent:audit","temperature:audit"},logical = Logical.OR)
     public FebsResponse agreeCurrentProcess(Recent recent) throws FebsException {
         try {
             User user = getCurrentUser();
@@ -222,7 +222,7 @@ public class RecentController extends BaseController {
      * @param response
      */
     @GetMapping("excel")
-    @RequiresPermissions(value = {"qff:recent:down","qff:temperature:down"},logical = Logical.OR)
+    @RequiresPermissions(value = {"recent:down","temperature:down"},logical = Logical.OR)
     public void download(Recent recent, HttpServletResponse response) throws FebsException {
         try {
             List<Recent> recentList = recentService.getRecentExcelImportPage(recent,getCurrentUser());

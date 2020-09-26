@@ -202,26 +202,26 @@
 </script>
 <script type="text/html" id="wrapper-option">
 
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="wrapper-detail" shiro:hasPermission="qff:wrapper:view">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="wrapper-detail" shiro:hasPermission="wrapper:view">查看</a>
     {{#  if(d.status != '3'&& d.isAllow == '1'){}}
     {{#  if(d.repTime == ''||d.repTime == null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="wrapper-edit"  shiro:hasPermission="qff:wrapper:audit">审核</a>
+    <a class="layui-btn layui-btn-xs" lay-event="wrapper-edit"  shiro:hasPermission="wrapper:audit">审核</a>
     {{# }else if(d.repTime != ''&&d.repTime != null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="wrapper-edit"  shiro:hasPermission="qff:wrapper:audit">确认</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="wrapper-alter"  shiro:hasPermission="qff:wrapper:alter ">修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="wrapper-edit"  shiro:hasPermission="wrapper:audit">确认</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="wrapper-alter"  shiro:hasPermission="wrapper:alter ">修改</a>
     {{#}}}
     {{#}}}
     {{#  if(d.status != '3'){}}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="wrapper-del" shiro:hasPermission="qff:wrapper:del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="wrapper-del" shiro:hasPermission="wrapper:del">删除</a>
     {{#}}}
 
 </script>
 <script type="text/html" id="wrapper-toolbarCheck">
     <div class="layui-btn-container">
-        <button  class="layui-btn layui-btn-sm layui-btn-success"  lay-event="wrapper-add"  shiro:hasPermission="qff:wrapper:add">
+        <button  class="layui-btn layui-btn-sm layui-btn-success"  lay-event="wrapper-add"  shiro:hasPermission="wrapper:add">
             <i class="layui-icon">&#xe654;</i> 新增其他手工QFF
         </button>
-        <button  class="layui-btn layui-btn-sm" lay-event="wrapper-download" shiro:hasPermission="qff:wrapper:down">
+        <button  class="layui-btn layui-btn-sm" lay-event="wrapper-download" shiro:hasPermission="wrapper:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
         </button>
     </div>

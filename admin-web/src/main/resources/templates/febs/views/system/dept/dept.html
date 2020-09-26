@@ -23,7 +23,7 @@
                                     <i class="layui-icon">&#xe79b;</i>
                                 </div>
                                 <div class="layui-btn layui-btn-sm layui-btn-primary table-action action-more"
-                                     shiro:hasAnyPermissions="qff:dept:add,qff:dept:delete,qff:dept:export">
+                                     shiro:hasAnyPermissions="dept:add,dept:delete,dept:export">
                                     <i class="layui-icon">&#xe875;</i>
                                 </div>
                             </div>
@@ -154,15 +154,15 @@
             options: [{
                 name: 'add',
                 title: '新增部门',
-                perms: 'qff:dept:add'
+                perms: 'dept:add'
             }, {
                 name: 'delete',
                 title: '删除部门',
-                perms: 'qff:dept:delete'
+                perms: 'dept:delete'
             }, {
                 name: 'export',
                 title: '导出Excel',
-                perms: 'qff:dept:export'
+                perms: 'dept:export'
             }]
         });
 

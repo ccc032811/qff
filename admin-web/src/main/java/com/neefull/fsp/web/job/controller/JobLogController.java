@@ -35,14 +35,14 @@ public class JobLogController extends BaseController {
     private IJobLogService jobLogService;
 
     @GetMapping
-    @RequiresPermissions("qff:job:log:view")
+    @RequiresPermissions("job:log:view")
     public FebsResponse jobLogList(QueryRequest request, JobLog log) {
         Map<String, Object> dataTable = getDataTable(this.jobLogService.findJobLogs(request, log));
         return new FebsResponse().success().data(dataTable);
     }
 
     @GetMapping("delete/{jobIds}")
-    @RequiresPermissions("qff:job:log:delete")
+    @RequiresPermissions("job:log:delete")
     public FebsResponse deleteJobLog(@NotBlank(message = "{required}") @PathVariable String jobIds) throws FebsException {
         try {
             String[] ids = jobIds.split(StringPool.COMMA);
@@ -56,7 +56,7 @@ public class JobLogController extends BaseController {
     }
 
     @GetMapping("excel")
-    @RequiresPermissions("qff:job:log:export")
+    @RequiresPermissions("job:log:export")
     public void export(QueryRequest request, JobLog jobLog, HttpServletResponse response) throws FebsException {
         try {
             List<JobLog> jobLogs = this.jobLogService.findJobLogs(request, jobLog).getRecords();

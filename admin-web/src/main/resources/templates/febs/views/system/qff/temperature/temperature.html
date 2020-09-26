@@ -88,26 +88,26 @@
 </script>
 <script type="text/html" id="temperature-option">
 
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="temperature-detail" shiro:hasPermission="qff:temperature:view">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="temperature-detail" shiro:hasPermission="temperature:view">查看</a>
     {{#  if(d.status != '3'&& d.isAllow == '1'){}}
     {{#  if(d.repDate == ''||d.repDate == null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="temperature-edit"  shiro:hasPermission="qff:temperature:audit">审核</a>
+    <a class="layui-btn layui-btn-xs" lay-event="temperature-edit"  shiro:hasPermission="temperature:audit">审核</a>
     {{# }else if(d.repDate != ''&&d.repDate != null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="temperature-edit"  shiro:hasPermission="qff:temperature:audit">确认</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="temperature-alter"  shiro:hasPermission="qff:temperature:alter ">修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="temperature-edit"  shiro:hasPermission="temperature:audit">确认</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="temperature-alter"  shiro:hasPermission="temperature:alter ">修改</a>
     {{#}}}
     {{#}}}
     {{#  if(d.status != '3'){}}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="temperature-del" shiro:hasPermission="qff:temperature:del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="temperature-del" shiro:hasPermission="temperature:del">删除</a>
     {{#}}}
 
 </script>
 <script type="text/html" id="temperature-toolbarCheck">
     <div class="layui-btn-container">
-        <button  class="layui-btn layui-btn-sm layui-btn-success" lay-event="temperature-add" shiro:hasPermission="qff:temperature:add">
+        <button  class="layui-btn layui-btn-sm layui-btn-success" lay-event="temperature-add" shiro:hasPermission="temperature:add">
             <i class="layui-icon">&#xe654;</i>  新增国际到货超温，无温度计
         </button>
-        <button class="layui-btn layui-btn-sm" lay-event="temperature-download" shiro:hasPermission="qff:temperature:down">
+        <button class="layui-btn layui-btn-sm" lay-event="temperature-download" shiro:hasPermission="temperature:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
         </button>
     </div>

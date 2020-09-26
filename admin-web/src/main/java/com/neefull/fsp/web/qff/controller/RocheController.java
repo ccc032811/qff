@@ -67,7 +67,7 @@ public class RocheController extends BaseController {
      */
     @Qff("更新罗氏内部发起QFF")
     @PostMapping("/edit")
-    @RequiresPermissions("qff:roche:audit")
+    @RequiresPermissions("roche:audit")
     public FebsResponse editRoche(Roche roche) throws FebsException {
         try {
             rocheService.editRoche(roche);
@@ -92,7 +92,7 @@ public class RocheController extends BaseController {
      * @return
      */
     @GetMapping("/list")
-    @RequiresPermissions("qff:roche:view")
+    @RequiresPermissions("roche:view")
     public FebsResponse getRochePage(Roche roche) throws FebsException {
         try {
             IPage<Roche> pageInfo = rocheService.getRochePage(roche,getCurrentUser());
@@ -112,7 +112,7 @@ public class RocheController extends BaseController {
      */
     @Qff("删除罗氏内部QFF")
     @GetMapping("/deleteRoche/{id}")
-    @RequiresPermissions("qff:roche:del")
+    @RequiresPermissions("roche:del")
     public FebsResponse updateRocheStatus(@PathVariable Integer id) throws FebsException {
         try {
             Roche roche = new Roche();
@@ -133,7 +133,7 @@ public class RocheController extends BaseController {
      * @throws FebsException
      */
     @GetMapping("/queryRoche")
-    @RequiresPermissions("qff:roche:view")
+    @RequiresPermissions("roche:view")
     public FebsResponse queryRocheById(Integer id) throws FebsException {
         try {
             Roche roche = rocheService.queryRocheById(id);
@@ -176,7 +176,7 @@ public class RocheController extends BaseController {
      */
     @Qff("提交罗氏内部QFF流程")
     @PostMapping("/commit")
-    @RequiresPermissions("qff:roche:audit")
+    @RequiresPermissions("roche:audit")
     public FebsResponse commitProcess(Roche roche) throws FebsException {
         try {
             User user = getCurrentUser();
@@ -196,7 +196,7 @@ public class RocheController extends BaseController {
      */
     @Qff("同意罗氏内部QFF任务")
     @PostMapping("/agree")
-    @RequiresPermissions("qff:roche:audit")
+    @RequiresPermissions("roche:audit")
     public FebsResponse agreeCurrentProcess(Roche roche) throws FebsException {
         try {
             User user = getCurrentUser();
@@ -220,7 +220,7 @@ public class RocheController extends BaseController {
      * @param response
      */
     @GetMapping("excel")
-    @RequiresPermissions("qff:roche:down")
+    @RequiresPermissions("roche:down")
     public void download(Roche roche, HttpServletResponse response) throws FebsException {
         try {
             List<Roche> rocheList = rocheService.getRocheExcelPage(roche,getCurrentUser());

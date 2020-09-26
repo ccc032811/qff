@@ -23,7 +23,7 @@
                                     <i class="layui-icon">&#xe79b;</i>
                                 </div>
                                 <div class="layui-btn layui-btn-sm layui-btn-primary table-action action-more"
-                                     shiro:hasAnyPermissions="qff:role:add,qff:user:delete,qff:role:export">
+                                     shiro:hasAnyPermissions="role:add,user:delete,role:export">
                                     <i class="layui-icon">&#xe875;</i>
                                 </div>
                             </div>
@@ -76,12 +76,12 @@
     </div>
 </div>
 <script type="text/html" id="role-option">
-    <span shiro:lacksPermission="qff:role:update,qff:role:delete">
+    <span shiro:lacksPermission="role:update,role:delete">
         <span class="layui-badge-dot febs-bg-orange"></span> 无权限
     </span>
-    <a lay-event="edit" shiro:hasPermission="qff:role:update"><i
+    <a lay-event="edit" shiro:hasPermission="role:update"><i
             class="layui-icon febs-edit-area febs-blue">&#xe7a4;</i></a>
-    <a lay-event="del" shiro:hasPermission="qff:role:delete"><i class="layui-icon febs-edit-area febs-red">&#xe7f9;</i></a>
+    <a lay-event="del" shiro:hasPermission="role:delete"><i class="layui-icon febs-edit-area febs-red">&#xe7f9;</i></a>
 </script>
 <script data-th-inline="none" type="text/javascript">
     layui.use(['dropdown', 'jquery', 'laydate', 'febs', 'form', 'eleTree', 'table', 'validate'], function () {
@@ -167,15 +167,15 @@
             options: [{
                 name: 'add',
                 title: '新增角色',
-                perms: 'qff:role:add'
+                perms: 'role:add'
             }, {
                 name: 'delete',
                 title: '删除角色',
-                perms: 'qff:role:delete'
+                perms: 'role:delete'
             }, {
                 name: 'export',
                 title: '导出Excel',
-                perms: 'qff:role:export'
+                perms: 'role:export'
             }]
         });
 

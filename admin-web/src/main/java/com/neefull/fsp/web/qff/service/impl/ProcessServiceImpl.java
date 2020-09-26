@@ -10,12 +10,9 @@ import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
 import org.activiti.engine.HistoryService;
-import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
@@ -23,7 +20,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -31,9 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import javax.validation.constraints.NotBlank;
 import java.io.File;
-import java.sql.Ref;
 import java.util.*;
 
 /**
@@ -68,8 +62,6 @@ public class ProcessServiceImpl implements IProcessService {
     private SendMailProperties mailProperties;
     @Autowired
     private TemplateEngine templateEngine;
-    @Autowired
-    private RepositoryService repositoryService;
 
 
 

@@ -235,23 +235,23 @@
 </script>
 <script type="text/html" id="delivery-option">
 
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delivery-detail" shiro:hasPermission="qff:delivery:view">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="delivery-detail" shiro:hasPermission="delivery:view">查看</a>
     {{#  if(d.status != '3'&& d.isAllow == '1'){}}
     {{#  if(d.repTime == ''||d.repTime == null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="delivery-edit"  shiro:hasPermission="qff:delivery:audit">审核</a>
+    <a class="layui-btn layui-btn-xs" lay-event="delivery-edit"  shiro:hasPermission="delivery:audit">审核</a>
     {{# }else if(d.repTime != ''&&d.repTime != null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="delivery-edit"  shiro:hasPermission="qff:delivery:audit">确认</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delivery-alter"  shiro:hasPermission="qff:delivery:alter ">修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="delivery-edit"  shiro:hasPermission="delivery:audit">确认</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delivery-alter"  shiro:hasPermission="delivery:alter ">修改</a>
     {{#}}}
     {{#}}}
     {{#  if(d.status != '3'){}}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delivery-del" shiro:hasPermission="qff:delivery:del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delivery-del" shiro:hasPermission="delivery:del">删除</a>
     {{#}}}
 
 </script>
 <script type="text/html" id="delivery-toolbarCheck">
     <div class="layui-btn-container">
-        <button  class="layui-btn layui-btn-sm" lay-event="delivery-download" shiro:hasPermission="qff:delivery:down">
+        <button  class="layui-btn layui-btn-sm" lay-event="delivery-download" shiro:hasPermission="delivery:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
         </button>
     </div>

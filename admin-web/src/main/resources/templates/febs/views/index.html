@@ -126,26 +126,26 @@
                     </div>
                 </div>
             </div>
-            <div class="label  label-left" shiro:hasPermission="wrapper:add">
-                <div class="label-image">
-                    <img data-th-src="@{febs/images/start.png}" class="label-image-style">
-                </div>
-                <div class="qff-start">
-                    <div class="site-demo-button  qff-start-text">
-                        <button  onclick="addQff()" class="qff-start-button"><a style="color: #00A1DD"><h2>手工新增QFF</h2></a></button>
-                    </div>
-                </div>
-            </div>
-            <div class="label  label-left" >
-                <div class="label-image">
+            <!--<div class="label  label-left" shiro:hasPermission="wrapper:add">-->
+                <!--<div class="label-image">-->
+                    <!--<img data-th-src="@{febs/images/start.png}" class="label-image-style">-->
+                <!--</div>-->
+                <!--<div class="qff-start">-->
+                    <!--<div class="site-demo-button  qff-start-text">-->
+                        <!--<button  onclick="addQff()" class="qff-start-button"><a style="color: #00A1DD"><h2>手工新增QFF</h2></a></button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="label  label-left" >-->
+                <!--<div class="label-image">-->
 
-                </div>
-                <div class="qff-start">
-                    <div class="site-demo-button  qff-start-text">
-                        <button  onclick="textDemo()" class="qff-start-button"><a style="color: #00A1DD"><h2>创建测试使用</h2></a></button>
-                    </div>
-                </div>
-            </div>
+                <!--</div>-->
+                <!--<div class="qff-start">-->
+                    <!--<div class="site-demo-button  qff-start-text">-->
+                        <!--<button  onclick="textDemo()" class="qff-start-button"><a style="color: #00A1DD"><h2>创建测试使用</h2></a></button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
     </div>
     <div class="layui-col-md6 layui-col-sm6 layui-col-xs6 febs-hide"  style="margin-left: 15px;margin-top: 15px"  id="opes-show">
@@ -303,18 +303,18 @@
             });
         };
 
-        window.addQff = function () {
-            febs.modal.open('新增手工QFF', 'system/qff/commodity/addQff',{
-                area: [$(window).width() <= 750 ? '90%' : '70%',$(window).height() <= 750 ? '90%' : '60%']
-            });
-        };
-
-
-        window.textDemo = function () {
-            febs.modal.open('测试', 'system/qff/commodity/textDemo',{
-                area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '50%']
-            });
-        }
+        // window.addQff = function () {
+        //     febs.modal.open('新增手工QFF', 'system/qff/commodity/addQff',{
+        //         area: [$(window).width() <= 750 ? '90%' : '70%',$(window).height() <= 750 ? '90%' : '60%']
+        //     });
+        // };
+        //
+        //
+        // window.textDemo = function () {
+        //     febs.modal.open('测试', 'system/qff/commodity/textDemo',{
+        //         area: [$(window).width() <= 750 ? '90%' : '60%',$(window).width() <= 750 ? '90%' : '50%']
+        //     });
+        // }
 
 
     });

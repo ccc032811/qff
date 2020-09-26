@@ -32,25 +32,25 @@ public class ViewController {
     private IRedisService redisService;
 
     @GetMapping("online")
-    @RequiresPermissions("qff:online:view")
+    @RequiresPermissions("online:view")
     public String online() {
         return FebsUtil.view("monitor/online");
     }
 
     @GetMapping("log")
-    @RequiresPermissions("qff:log:view")
+    @RequiresPermissions("log:view")
     public String log() {
         return FebsUtil.view("monitor/log");
     }
 
     @GetMapping("loginlog")
-    @RequiresPermissions("qff:loginlog:view")
+    @RequiresPermissions("loginlog:view")
     public String loginLog() {
         return FebsUtil.view("monitor/loginLog");
     }
 
     @GetMapping("redis/info")
-    @RequiresPermissions("qff:redis:view")
+    @RequiresPermissions("redis:view")
     public String getRedisInfo(Model model) throws RedisConnectException {
         List<RedisInfo> infoList = this.redisService.getRedisInfo();
         model.addAttribute("infoList", infoList);
@@ -58,7 +58,7 @@ public class ViewController {
     }
 
     @GetMapping("redis/terminal")
-    @RequiresPermissions("qff:redis:terminal:view")
+    @RequiresPermissions("redis:terminal:view")
     public String redisTerminal(Model model) {
         String osName = System.getProperty("os.name");
         model.addAttribute("osName", osName);
@@ -66,13 +66,13 @@ public class ViewController {
     }
 
     @GetMapping("httptrace")
-    @RequiresPermissions("qff:httptrace:view")
+    @RequiresPermissions("httptrace:view")
     public String httptrace() {
         return FebsUtil.view("monitor/httpTrace");
     }
 
     @GetMapping("jvm")
-    @RequiresPermissions("qff:jvm:view")
+    @RequiresPermissions("jvm:view")
     public String jvmInfo(Model model) {
         List<FebsMetricsEndpoint.FebsMetricResponse> jvm = actuatorHelper.getMetricResponseByType("jvm");
         JvmInfo jvmInfo = actuatorHelper.getJvmInfoFromMetricData(jvm);
@@ -81,7 +81,7 @@ public class ViewController {
     }
 
     @GetMapping("tomcat")
-    @RequiresPermissions("qff:tomcat:view")
+    @RequiresPermissions("tomcat:view")
     public String tomcatInfo(Model model) {
         List<FebsMetricsEndpoint.FebsMetricResponse> tomcat = actuatorHelper.getMetricResponseByType("tomcat");
         TomcatInfo tomcatInfo = actuatorHelper.getTomcatInfoFromMetricData(tomcat);
@@ -90,7 +90,7 @@ public class ViewController {
     }
 
     @GetMapping("server")
-    @RequiresPermissions("qff:server:view")
+    @RequiresPermissions("server:view")
     public String serverInfo(Model model) {
         List<FebsMetricsEndpoint.FebsMetricResponse> jdbcInfo = actuatorHelper.getMetricResponseByType("jdbc");
         List<FebsMetricsEndpoint.FebsMetricResponse> systemInfo = actuatorHelper.getMetricResponseByType("system");

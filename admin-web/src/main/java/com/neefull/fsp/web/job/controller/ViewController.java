@@ -25,19 +25,19 @@ public class ViewController {
     private IJobService jobService;
 
     @GetMapping("job")
-    @RequiresPermissions("qff:job:view")
+    @RequiresPermissions("job:view")
     public String online() {
         return FebsUtil.view("job/job");
     }
 
     @GetMapping("job/add")
-    @RequiresPermissions("qff:job:add")
+    @RequiresPermissions("job:add")
     public String jobAdd() {
         return FebsUtil.view("job/jobAdd");
     }
 
     @GetMapping("job/update/{jobId}")
-    @RequiresPermissions("qff:job:update")
+    @RequiresPermissions("job:update")
     public String jobUpdate(@NotBlank(message = "{required}") @PathVariable Long jobId, Model model) {
         Job job = jobService.findJob(jobId);
         model.addAttribute("job", job);
@@ -45,7 +45,7 @@ public class ViewController {
     }
 
     @GetMapping("job/updateProcess/{jobId}")
-    @RequiresPermissions("qff:job:update")
+    @RequiresPermissions("job:update")
     public String updateProcess(@NotBlank(message = "{required}") @PathVariable Long jobId, Model model) {
         Job job = jobService.findJob(jobId);
         model.addAttribute("job", job);
@@ -53,7 +53,7 @@ public class ViewController {
     }
 
     @GetMapping("log")
-    @RequiresPermissions("qff:job:log:view")
+    @RequiresPermissions("job:log:view")
     public String log() {
         return FebsUtil.view("job/jobLog");
     }

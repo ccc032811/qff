@@ -176,22 +176,22 @@
 </script>
 <script type="text/html" id="roche-option">
 
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="qff:roche:view">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="roche-detail" shiro:hasPermission="roche:view">查看</a>
     {{#  if(d.isAllow == '1'&&d.status != '3'){}}
-    <a class="layui-btn layui-btn-xs" lay-event="roche-edit"  shiro:hasPermission="qff:roche:audit">确认</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-alter"  shiro:hasPermission="qff:roche:alter" >修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="roche-edit"  shiro:hasPermission="roche:audit">确认</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-alter"  shiro:hasPermission="roche:alter" >修改</a>
     {{#}}}
     {{#  if(d.status != '3'){}}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-del" shiro:hasPermission="qff:roche:del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roche-del" shiro:hasPermission="roche:del">删除</a>
     {{#}}}
 
 </script>
 <script type="text/html" id="roche-toolbarCheck">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm layui-btn-success" lay-event="roche-add" shiro:hasPermission="qff:roche:add">
+        <button class="layui-btn layui-btn-sm layui-btn-success" lay-event="roche-add" shiro:hasPermission="roche:add">
             <i class="layui-icon">&#xe654;</i> 新增罗氏内部发起QFF
         </button>
-        <button class="layui-btn layui-btn-sm" lay-event="download" shiro:hasPermission="qff:roche:down">
+        <button class="layui-btn layui-btn-sm" lay-event="download" shiro:hasPermission="roche:down">
             <i class="layui-icon">&#xe7a8;</i> 导出Excel
         </button>
     </div>

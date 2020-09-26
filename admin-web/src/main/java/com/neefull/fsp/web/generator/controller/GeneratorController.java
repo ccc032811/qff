@@ -43,14 +43,14 @@ public class GeneratorController extends BaseController {
     private GeneratorHelper generatorHelper;
 
     @GetMapping("tables/info")
-    @RequiresPermissions("qff:generator:view")
+    @RequiresPermissions("generator:view")
     public FebsResponse tablesInfo(String tableName, QueryRequest request) {
         Map<String, Object> dataTable = getDataTable(generatorService.getTables(tableName, request, GeneratorConstant.DATABASE_TYPE, GeneratorConstant.DATABASE_NAME));
         return new FebsResponse().success().data(dataTable);
     }
 
     @GetMapping
-    @RequiresPermissions("qff:generator:generate")
+    @RequiresPermissions("generator:generate")
     public void generate(@NotBlank(message = "{required}") String name, String remark, HttpServletResponse response) throws FileDownloadException {
         try {
             GeneratorConfig generatorConfig = generatorConfigService.findGeneratorConfig();

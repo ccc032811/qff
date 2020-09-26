@@ -35,7 +35,7 @@
                                     <i class="layui-icon">&#xe79b;</i>
                                 </div>
                                 <div class="layui-btn layui-btn-sm layui-btn-primary table-action action-more"
-                                     shiro:hasAnyPermissions="qff:log:delete,qff:log:export">
+                                     shiro:hasAnyPermissions="log:delete,log:export">
                                     <i class="layui-icon">&#xe875;</i>
                                 </div>
                             </div>
@@ -61,10 +61,10 @@
     </div>
 </script>
 <script type="text/html" id="log-option">
-    <span shiro:lacksPermission="qff:log:delete">
+    <span shiro:lacksPermission="log:delete">
         <span class="layui-badge-dot febs-bg-orange"></span> 无权限
     </span>
-    <a lay-event="del" shiro:hasPermission="qff:log:delete"><i class="layui-icon febs-edit-area febs-red">&#xe7f9;</i></a>
+    <a lay-event="del" shiro:hasPermission="log:delete"><i class="layui-icon febs-edit-area febs-red">&#xe7f9;</i></a>
 </script>
 <script data-th-inline="none" type="text/javascript">
     layui.use(['jquery', 'laydate', 'form', 'table', 'febs', 'dropdown'], function () {
