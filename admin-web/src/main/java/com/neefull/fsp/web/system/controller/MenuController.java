@@ -55,7 +55,7 @@ public class MenuController extends BaseController {
 
     @Log("新增菜单/按钮")
     @PostMapping
-    @RequiresPermissions("menu:add")
+    @RequiresPermissions("qf:menu:add")
     public FebsResponse addMenu(@Valid Menu menu) throws FebsException {
         try {
             this.menuService.createMenu(menu);
@@ -69,7 +69,7 @@ public class MenuController extends BaseController {
 
     @Log("删除菜单/按钮")
     @GetMapping("delete/{menuIds}")
-    @RequiresPermissions("menu:delete")
+    @RequiresPermissions("qf:menu:delete")
     public FebsResponse deleteMenus(@NotBlank(message = "{required}") @PathVariable String menuIds) throws FebsException {
         try {
             this.menuService.deleteMeuns(menuIds);
@@ -83,7 +83,7 @@ public class MenuController extends BaseController {
 
     @Log("修改菜单/按钮")
     @PostMapping("update")
-    @RequiresPermissions("menu:update")
+    @RequiresPermissions("qf:menu:update")
     public FebsResponse updateMenu(@Valid Menu menu) throws FebsException {
         try {
             this.menuService.updateMenu(menu);
@@ -96,7 +96,7 @@ public class MenuController extends BaseController {
     }
 
     @GetMapping("excel")
-    @RequiresPermissions("menu:export")
+    @RequiresPermissions("qf:menu:export")
     public void export(Menu menu, HttpServletResponse response) throws FebsException {
         try {
             List<Menu> menus = this.menuService.findMenuList(menu);

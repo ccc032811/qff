@@ -94,80 +94,51 @@ public class ViewController extends BaseController {
         return FebsUtil.view("system/user/profileUpdate");
     }
 
-    @GetMapping(FebsConstant.VIEW_PREFIX + "system/user")
-    @RequiresPermissions("user:view")
-    public String systemUser() {
-        return FebsUtil.view("system/user/user");
-    }
-
-    @GetMapping(FebsConstant.VIEW_PREFIX + "system/user/add")
-    @RequiresPermissions("user:add")
-    public String systemUserAdd() {
-        return FebsUtil.view("system/user/userAdd");
-    }
-
-    @GetMapping(FebsConstant.VIEW_PREFIX + "system/user/detail/{username}")
-    @RequiresPermissions("user:view")
-    public String systemUserDetail(@PathVariable String username, Model model) {
-        resolveUserModel(username, model, true);
-        return FebsUtil.view("system/user/userDetail");
-    }
-
-    @GetMapping(FebsConstant.VIEW_PREFIX + "system/user/update/{username}")
-    @RequiresPermissions("user:update")
-    public String systemUserUpdate(@PathVariable String username, Model model) {
-        resolveUserModel(username, model, false);
-        return FebsUtil.view("system/user/userUpdate");
-    }
-
-    @GetMapping(FebsConstant.VIEW_PREFIX + "system/sendMessage")
-    @RequiresPermissions("message:send")
-    public String sendMessage() {
-        return FebsUtil.view("system/message/sendMessage");
-    }
 
     //**************************************用户管理模块 start *********************************************
+
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/sysUser")
-    @RequiresPermissions("sysuser:view")
+    @RequiresPermissions("qf:sysuser:view")
     public String sysUser() {
         return FebsUtil.view("system/user/sysuser");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/sysUser/add")
-    @RequiresPermissions("sysuser:add")
+    @RequiresPermissions("qf:sysuser:add")
     public String sysUserAdd() {
         return FebsUtil.view("system/user/sysuserAdd");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/sysUser/detail/{username}")
-    @RequiresPermissions("sysuser:view")
+    @RequiresPermissions("qf:sysuser:view")
     public String sysUserDetail(@PathVariable String username, Model model) {
         resolveSysUserModel(username, model, true);
         return FebsUtil.view("system/user/sysuserDetail");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/sysUser/update/{username}")
-    @RequiresPermissions("sysuser:update")
+    @RequiresPermissions("qf:sysuser:update")
     public String sysUserUpdate(@PathVariable String username, Model model) {
         resolveSysUserModel(username, model, false);
         return FebsUtil.view("system/user/sysuserUpdate");
     }
+
     //**************************************用户管理模块 end *********************************************
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/role")
-    @RequiresPermissions("role:view")
+    @RequiresPermissions("qf:role:view")
     public String systemRole() {
         return FebsUtil.view("system/role/role");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/menu")
-    @RequiresPermissions("menu:view")
+    @RequiresPermissions("qf:menu:view")
     public String systemMenu() {
         return FebsUtil.view("system/menu/menu");
     }
 
     @GetMapping(FebsConstant.VIEW_PREFIX + "system/dept")
-    @RequiresPermissions("dept:view")
+    @RequiresPermissions("qf:dept:view")
     public String systemDept() {
         return FebsUtil.view("system/dept/dept");
     }
@@ -190,19 +161,6 @@ public class ViewController extends BaseController {
     @GetMapping(FebsConstant.VIEW_PREFIX + "500")
     public String error500() {
         return FebsUtil.view("error/500");
-    }
-
-    private void resolveUserModel(String username, Model model, Boolean transform) {
-        User user = userService.findByName(username);
-        model.addAttribute("user", user);
-        if (transform) {
-            String ssex = user.getSex();
-            if (User.SEX_MALE.equals(ssex)) user.setSex("男");
-            else if (User.SEX_FEMALE.equals(ssex)) user.setSex("女");
-            else user.setSex("保密");
-        }
-        if (user.getLastLoginTime() != null)
-            model.addAttribute("lastLoginTime", DateUtil.getDateFormat(user.getLastLoginTime(), DateUtil.FULL_TIME_SPLIT_PATTERN));
     }
 
     private void resolveSysUserModel(String username, Model model, Boolean transform) {

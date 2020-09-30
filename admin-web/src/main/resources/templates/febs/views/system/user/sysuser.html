@@ -82,14 +82,14 @@
     <span>{{ sex.title }}</span>
 </script>
 <script type="text/html" id="user-option">
-    <span shiro:lacksPermission="user:view,user:update,user:delete">
+    <span shiro:lacksPermission="qf:user:view,qf:user:update,qf:user:delete">
         <span class="layui-badge-dot febs-bg-orange"></span> 无权限
     </span>
-    <a lay-event="detail" shiro:hasPermission="sysuser:view"><i
+    <a lay-event="detail" shiro:hasPermission="qf:sysuser:view"><i
             class="layui-icon febs-edit-area febs-green">&#xe7a5;</i></a>
-    <a lay-event="edit" shiro:hasPermission="sysuser:update"><i
+    <a lay-event="edit" shiro:hasPermission="qf:sysuser:update"><i
             class="layui-icon febs-edit-area febs-blue">&#xe7a4;</i></a>
-    <a lay-event="del" shiro:hasPermission="sysuser:delete"><i
+    <a lay-event="del" shiro:hasPermission="qf:sysuser:delete"><i
             class="layui-icon febs-edit-area febs-red">&#xe7f9;</i></a>
 </script>
 <!--头部工具栏-->
@@ -260,7 +260,7 @@
                 febs.alert.warn('所选用户包含当前登录用户，无法删除');
                 return;
             }
-            febs.get(ctx + 'user/delete/' + userIds, null, function () {
+            febs.get(ctx + 'sysUser/delete/' + userIds, null, function () {
                 febs.alert.success('删除用户成功');
                 $query.click();
             });

@@ -39,7 +39,7 @@
                                     <i class="layui-icon">&#xe79b;</i>
                                 </div>
                                 <div class="layui-btn layui-btn-sm layui-btn-primary table-action action-more"
-                                     shiro:hasAnyPermissions="job:add,job:delete,job:pause,job:resume,job:run,job:export">
+                                     shiro:hasAnyPermissions="qf:job:add,qf:job:delete,qf:job:pause,qf:job:resume,qf:job:run,qf:job:export">
                                     <i class="layui-icon">&#xe875;</i>
                                 </div>
                             </div>
@@ -61,11 +61,11 @@
     <span class="layui-badge febs-tag-{{status.color}}">{{ status.title }}</span>
 </script>
 <script type="text/html" id="job-option">
-    <span shiro:lacksPermission="job:update,job:delete">
+    <span shiro:lacksPermission="qf:job:update,qf:job:delete">
         <span class="layui-badge-dot febs-bg-orange"></span> 无权限
     </span>
-    <a lay-event="edit" shiro:hasPermission="job:update"><i class="layui-icon febs-edit-area febs-blue">&#xe7a4;</i></a>
-    <a lay-event="del" shiro:hasPermission="job:delete"><i class="layui-icon febs-edit-area febs-red">&#xe7f9;</i></a>
+    <a lay-event="edit" shiro:hasPermission="qf:job:update"><i class="layui-icon febs-edit-area febs-blue">&#xe7a4;</i></a>
+    <a lay-event="del" shiro:hasPermission="qf:job:delete"><i class="layui-icon febs-edit-area febs-red">&#xe7f9;</i></a>
 </script>
 <script data-th-inline="none" type="text/javascript">
     layui.use(['dropdown', 'jquery', 'laydate', 'form', 'table', 'febs'], function () {
@@ -186,27 +186,27 @@
             options: [{
                 name: 'add',
                 title: '新增任务',
-                perms: 'job:add'
+                perms: 'qf:job:add'
             }, {
                 name: 'delete',
                 title: '删除任务',
-                perms: 'job:delete'
+                perms: 'qf:job:delete'
             }, {
                 name: 'pause',
                 title: '暂停任务',
-                perms: 'job:pause'
+                perms: 'qf:job:pause'
             }, {
                 name: 'resume',
                 title: '恢复任务',
-                perms: 'job:resume'
+                perms: 'qf:job:resume'
             }, {
                 name: 'run',
                 title: '执行任务',
-                perms: 'job:run'
+                perms: 'qf:job:run'
             }, {
                 name: 'export',
                 title: '导出Excel',
-                perms: 'job:export'
+                perms: 'qf:job:export'
             }]
         });
 

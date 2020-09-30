@@ -135,11 +135,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Transactional
     public void deleteUsers(String[] userIds) {
         List<String> list = Arrays.asList(userIds);
+        processService.deleteProcessCommit(userIds);
         // 删除用户
         this.removeByIds(list);
         // 删除关联角色
         this.userRoleService.deleteUserRolesByUserId(list);
-        processService.deleteProcessCommit(userIds);
+
+
     }
 
     @Override

@@ -209,27 +209,13 @@
                     '                    <td class="skip-td"><a lay-href="/refund/view">点击跳转</a></td>\n' +
                     '                </tr>')
             }
-            if(counts(num,"conserve")!==0){
+            if(counts(num,"conserve")!==0) {
                 $("#opes").append('<tr class="skip-tr">\n' +
                     '                    <td class="skip-td">储存 · 分包 · 出库</td>\n' +
-                    '                    <td class="skip-td">'+counts(num,"conserve")+'</td>\n' +
+                    '                    <td class="skip-td">' + counts(num, "conserve") + '</td>\n' +
                     '                    <td class="skip-td"><a lay-href="/conserve/view">点击跳转</a></td>\n' +
                     '                </tr>')
             }
-            // if(counts(num,"package")!==0){
-            //     $("#opes").append('<tr class="skip-tr">\n' +
-            //         '                    <td class="skip-td">分包</td>\n' +
-            //         '                    <td class="skip-td">'+counts(num,"package")+'</td>\n' +
-            //         '                    <td class="skip-td"><a lay-href="/package/view">点击跳转</a></td>\n' +
-            //         '                </tr>')
-            // }
-            // if(counts(num,"export")!==0){
-            //     $("#opes").append('<tr class="skip-tr">\n' +
-            //         '                    <td class="skip-td">出库</td>\n' +
-            //         '                    <td class="skip-td">'+counts(num,"export")+'</td>\n' +
-            //         '                    <td class="skip-td"><a lay-href="/export/view">点击跳转</a></td>\n' +
-            //         '                </tr>')
-            // }
             if(counts(num,"wrapper")!==0){
                 $("#opes").append('<tr class="skip-tr">\n' +
                     '                    <td class="skip-td">其他手工QFF</td>\n' +
@@ -265,36 +251,6 @@
 
 
         });
-
-
-        //
-        // $('#os-show').on('click',function () {
-        //     if(num.length!==0) {
-        //         if (isShow === 1) {
-        //             $('#os').removeClass("febs-hide");
-        //             isShow = 2;
-        //         } else {
-        //             $('#os').addClass("febs-hide");
-        //             isShow = 1;
-        //         }
-        //     }
-        // });
-        //
-        // $(document).on('click',function(e){
-        //     var e = e || window.event;
-        //     var elem = e.target || e.srcElement;
-        //     while (elem) {
-        //         if (elem.id && elem.id==='os-show'  ) {
-        //             return;
-        //         }else if(elem.id && elem.id==='opes'  ) {
-        //             return;
-        //         }
-        //         elem = elem.parentNode;
-        //     }
-        //     $("#os").addClass("febs-hide");
-        //     isShow = 1;
-        // });
-        //
 
 
         window.btnOn = function () {

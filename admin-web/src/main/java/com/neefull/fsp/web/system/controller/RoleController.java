@@ -37,7 +37,7 @@ public class RoleController extends BaseController {
     }
 
     @GetMapping("list")
-    @RequiresPermissions("role:view")
+    @RequiresPermissions("qf:role:view")
     public FebsResponse roleList(Role role, QueryRequest request) {
         Map<String, Object> dataTable = getDataTable(this.roleService.findRoles(role, request));
         return new FebsResponse().success().data(dataTable);
@@ -45,7 +45,7 @@ public class RoleController extends BaseController {
 
     @Log("新增角色")
     @PostMapping
-    @RequiresPermissions("role:add")
+    @RequiresPermissions("qf:role:add")
     public FebsResponse addRole(@Valid Role role) throws FebsException {
         try {
             this.roleService.createRole(role);
@@ -59,7 +59,7 @@ public class RoleController extends BaseController {
 
     @Log("删除角色")
     @GetMapping("delete/{roleIds}")
-    @RequiresPermissions("role:delete")
+    @RequiresPermissions("qf:role:delete")
     public FebsResponse deleteRoles(@NotBlank(message = "{required}") @PathVariable String roleIds) throws FebsException {
         try {
             this.roleService.deleteRoles(roleIds);
@@ -73,7 +73,7 @@ public class RoleController extends BaseController {
 
     @Log("修改角色")
     @PostMapping("update")
-    @RequiresPermissions("role:update")
+    @RequiresPermissions("qf:role:update")
     public FebsResponse updateRole(Role role) throws FebsException {
         try {
             this.roleService.updateRole(role);
@@ -86,7 +86,7 @@ public class RoleController extends BaseController {
     }
 
     @GetMapping("excel")
-    @RequiresPermissions("role:export")
+    @RequiresPermissions("qf:role:export")
     public void export(QueryRequest queryRequest, Role role, HttpServletResponse response) throws FebsException {
         try {
             List<Role> roles = this.roleService.findRoles(role, queryRequest).getRecords();
