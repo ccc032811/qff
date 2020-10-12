@@ -451,14 +451,14 @@ public class ProcessServiceImpl implements IProcessService {
                 taskService.deleteCandidateUser(task.getId(),user.getUsername());
             }
         }
-        return list;
+        return taskService.createTaskQuery().list();
     }
 
 
     @Override
     @Transactional
     public void addProcessCommit(User user) {
-        List<Task> list = taskService.createTaskQuery().list();
+        List<Task> list = deleteProcessUser(user);
         String roleId = user.getRoleId();
         if(roleId.contains("87")){
             if(CollectionUtils.isNotEmpty(list)){
