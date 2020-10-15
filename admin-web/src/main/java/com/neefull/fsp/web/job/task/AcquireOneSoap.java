@@ -33,7 +33,7 @@ public class AcquireOneSoap {
         if(split.length ==4){
             number = split[3];
         }
-        startSoap.getMessage(seacheDate,fromTime,toTime,number);
+        startSoap.getMessage(seacheDate,fromTime,toTime,number,"one");
 
     }
 }

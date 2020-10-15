@@ -70,10 +70,10 @@ public class AcquireSoapMessage extends BaseController {
             if(StringUtils.isNotEmpty(lastDate)&&lastDate.startsWith(date)){
                 startTime = lastDate.split(" ")[1];
             }
-            startSoap.getMessage(date,startTime,END_TIME,"");
+            startSoap.getMessage(date,startTime,END_TIME,"",null);
 
         }else {
-            startSoap.getMessage(seacheDate.split(" ")[0],fromTime,toTime,"");
+            startSoap.getMessage(seacheDate.split(" ")[0],fromTime,toTime,"",null);
         }
     }
 

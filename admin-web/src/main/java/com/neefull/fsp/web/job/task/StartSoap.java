@@ -44,7 +44,7 @@ public class StartSoap {
 
 
     @Transactional
-    public void getMessage(String seacheDate,String fromTime,String toTime,String number){
+    public void getMessage(String seacheDate,String fromTime,String toTime,String number,String oneSoap){
 
         log.info("*****************Execute query from SAP server.******************");
         long startTime = System.currentTimeMillis();
@@ -67,8 +67,8 @@ public class StartSoap {
 
         //对返回数据结果进行截取
         try {
+
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date parse = simpleDateFormat.parse(seacheDate+" "+toTime);
             String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
 
             String qffMessage = XmlUtils.getTagContent(messageBuffer.toString(), "<ET_QFF>", "</ET_QFF>");
@@ -127,7 +127,14 @@ public class StartSoap {
 //                    }
                     commodity.setStatus(ProcessConstant.NEW_BUILD);
                     commodity.setAccessory(0);
-                    commodity.setCreateTime(parse);
+                    if(StringUtils.isEmpty(oneSoap)){
+                        Date parse = simpleDateFormat.parse(seacheDate+" "+toTime);
+                        commodity.setCreateTime(parse);
+                    }else {
+                        String lastDate = commodityService.selectLastTime();
+                        Date parse = simpleDateFormat.parse(lastDate);
+                        commodity.setCreateTime(parse);
+                    }
 
 
                     Commodity isCommodity = commodityService.queryCommodityByNumber(commodity.getNumber());
@@ -176,7 +183,6 @@ public class StartSoap {
                         if(!commodity.getSource().equals(isCommodity.getSource())){
                             alteration.append("采购来源:" +date+ " 由 "+isCommodity.getSource()+" 变更为 "+commodity.getSource()+" 。");
                         }
-
 
 
                         Boolean isExist = processService.queryProcessByKey(isCommodity);

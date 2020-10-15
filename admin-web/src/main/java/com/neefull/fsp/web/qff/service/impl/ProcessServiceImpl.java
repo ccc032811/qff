@@ -506,9 +506,6 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
 
-
-
-
     @Override
     public List<Commodity> queryCommodityTaskByName(List<Commodity> commodityList, User user) {
         List<Task> tasks = queryTaskByUserName(user.getUsername());

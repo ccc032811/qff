@@ -220,6 +220,7 @@ public class Commodity implements Serializable {
     /**
      *  创建日期
      */
+    @ExcelField(value = "创建时间",dateFormat = "yyyy年MM月dd日")
     @TableField("create_time")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
