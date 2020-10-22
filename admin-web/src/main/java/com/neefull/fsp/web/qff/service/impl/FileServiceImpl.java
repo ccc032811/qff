@@ -1,42 +1,24 @@
 package com.neefull.fsp.web.qff.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.neefull.fsp.web.common.exception.FebsException;
 import com.neefull.fsp.web.qff.config.ProcessInstanceProperties;
 import com.neefull.fsp.web.qff.config.SendMailProperties;
-import com.neefull.fsp.web.qff.entity.Attachment;
-import com.neefull.fsp.web.qff.entity.Recent;
-import com.neefull.fsp.web.qff.entity.RecentResolver;
-import com.neefull.fsp.web.qff.service.IAttachmentService;
 import com.neefull.fsp.web.qff.service.IFileService;
 import com.neefull.fsp.web.qff.service.IProcessService;
-import com.neefull.fsp.web.qff.utils.ProcessConstant;
-import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
-import com.sun.mail.util.MailSSLSocketFactory;
-import com.wuwenze.poi.ExcelKit;
-import com.wuwenze.poi.handler.ExcelReadHandler;
-import com.wuwenze.poi.pojo.ExcelErrorField;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
-import javax.imageio.ImageIO;
-import javax.mail.MessagingException;
-import java.awt.image.BufferedImage;
+
 import java.io.File;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.*;
+
 
 /**
  * @Author: chengchengchu
@@ -64,7 +46,7 @@ public class FileServiceImpl implements IFileService {
     @Transactional
     public String uploadImage(MultipartFile file,String number) {
 
-        String originalFilename = file.getOriginalFilename().replace(" ","");
+        String originalFilename = file.getOriginalFilename().replace(String.valueOf((char)160),"_").replaceAll("\\s+","_");
 
         int unixp = originalFilename.lastIndexOf("/");
         int winp = originalFilename.lastIndexOf("\\");

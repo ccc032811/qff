@@ -24,7 +24,6 @@ import java.util.Date;
  */
 
 @TableName(value = "qff_roche")
-@Excel("罗氏内部发起QFF")
 public class Roche implements Serializable {
     private static final long serialVersionUID = 4462069592504890849L;
 
@@ -37,91 +36,76 @@ public class Roche implements Serializable {
      *  NO编号
      */
     @TableField("number")
-    @ExcelField(value = "NO编号")
     private String number;
     /**
      *  Initiator  发起人
      */
     @TableField("sponsor")
-    @ExcelField(value = "Initiator发起人")
     private String sponsor;
     /**
      *  Request Date 申请日期
      */
     @TableField("req_date")
-    @ExcelField(value = "申请日期")
     private String reqDate;
     /**
      *  Reason 原因
      */
     @TableField("reason")
-    @ExcelField(value = "Reason原因")
     private String reason;
     /**
      *  Product/Material Name 产品/物料名称
      */
     @TableField("mater_name")
-    @ExcelField(value = "产品/物料名称")
     private String materName;
     /**
      *  Product/Material Code 产品/物料编号
      */
     @TableField("mater_code")
-    @ExcelField(value = "产品/物料编号")
     private String materCode;
     /**
      *  Batch NO. / serial NO.  批号/序列号
      */
     @TableField("batch")
-    @ExcelField(value = "批号/序列号")
     private String batch;
     /**
      *  Quantity Inpacted 受影响数量
      */
     @TableField("quantity")
-    @ExcelField(value = "受影响数量")
     private String quantity;
     /**
      * unit  单位
      */
     @TableField("unit")
-    @ExcelField(value = "单位")
     private String unit;
     /**
      *  Actions  行动
      */
     @TableField("actions")
-    @ExcelField(value = "Actions行动")
     private String actions;
     /**
      *  Excepted Date 期望完成日期
      */
     @TableField("except_date")
-    @ExcelField(value = "期望完成日期")
     private String exceptDate;
     /**
      *  Actual Complete date 实际完成日期
      */
     @TableField("complete_date")
-    @ExcelField(value = "实际完成日期")
     private String completeDate;
     /**
      *  备注
      */
     @TableField("remark")
-    @ExcelField(value = "备注")
     private String remark;
     /**
      *  Follow_up Actions 后续行动
      */
     @TableField("follow")
-    @ExcelField(value = "后续行动")
     private String follow;
     /**
      *  变更记录
      */
     @TableField("alteration")
-    @ExcelField(value = "变更记录")
     private String alteration;
 
     /**

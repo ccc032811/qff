@@ -6,21 +6,26 @@ import com.neefull.fsp.web.common.entity.FebsResponse;
 import com.neefull.fsp.web.common.exception.FebsException;
 import com.neefull.fsp.web.qff.aspect.Qff;
 import com.neefull.fsp.web.qff.entity.ProcessHistory;
+import com.neefull.fsp.web.qff.entity.Recent;
 import com.neefull.fsp.web.qff.entity.Roche;
 import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.qff.service.IRocheService;
+import com.neefull.fsp.web.qff.utils.ExcelUtil;
 import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -225,7 +230,35 @@ public class RocheController extends BaseController {
         try {
             List<Roche> rocheList = rocheService.getRocheExcelPage(roche,getCurrentUser());
 
-            ExcelKit.$Export(Roche.class, response).downXlsx(rocheList, false);
+            SXSSFWorkbook workbook = new SXSSFWorkbook();
+            SXSSFSheet sheet = workbook.createSheet(ProcessConstant.ROCHE_NAME);
+            String[] nameList = new String[]{"NO编号", "发起人","申请日期","原因","物料名称"
+                    ,"物料编号","批号/序列号","受影响数量","单位","行动","期望完成日期","实际完成日期"
+                    ,"后续行动","备注","变更记录"};
+            List<Object[]> dataList = new ArrayList<Object[]>();
+            Object[] objs = null;
+            for (int i = 0; i < rocheList.size(); i++) {
+                Roche roc = rocheList.get(i);
+                objs = new Object[nameList.length];
+                objs[0] = roc.getNumber();
+                objs[1] = roc.getSponsor();
+                objs[2] = roc.getReqDate();
+                objs[3] = roc.getReason();
+                objs[4] = roc.getMaterName();
+                objs[5] = roc.getMaterCode();
+                objs[6] = roc.getBatch();
+                objs[7] = roc.getQuantity();
+                objs[8] = roc.getUnit();
+                objs[9] = roc.getActions();
+                objs[10] = roc.getExceptDate();
+                objs[11] = roc.getCompleteDate();
+                objs[12] = roc.getFollow();
+                objs[13] = roc.getRemark();
+                objs[14] = roc.getAlteration();
+                dataList.add(objs);
+            }
+            ExcelUtil ex = new ExcelUtil(nameList, dataList);
+            ex.exportExcel(workbook,sheet,response);
         } catch (Exception e) {
             String message = "导出罗氏内部QFFexcel失败";
             log.error(message,e);

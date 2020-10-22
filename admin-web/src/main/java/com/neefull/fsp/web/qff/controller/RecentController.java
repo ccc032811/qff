@@ -9,12 +9,16 @@ import com.neefull.fsp.web.qff.aspect.Qff;
 import com.neefull.fsp.web.qff.entity.*;
 import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.qff.service.IRecentService;
+import com.neefull.fsp.web.qff.utils.ExcelUtil;
 import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.BeanUtils;
@@ -227,7 +231,35 @@ public class RecentController extends BaseController {
         try {
             List<Recent> recentList = recentService.getRecentExcelImportPage(recent,getCurrentUser());
             if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
-                ExcelKit.$Export(Recent.class, response).downXlsx(recentList, false);
+                SXSSFWorkbook workbook = new SXSSFWorkbook();
+                SXSSFSheet sheet = workbook.createSheet(recent.getStage());
+                String[] nameList = new String[]{"开始时间", "工厂","产品信息","总数量"
+                        ,"罗氏QA处理意见","回复日期","变更记录"};
+                List<Object[]> dataList = new ArrayList<Object[]>();
+                Object[] objs = null;
+                for (int i = 0; i < recentList.size(); i++) {
+                    Recent rec = recentList.get(i);
+                    objs = new Object[nameList.length];
+                    if(StringUtils.isNotEmpty(rec.getStartDate())){
+                        objs[0] = rec.getStartDate().split(" ")[0];
+                    }else {
+                        objs[0] = rec.getStartDate();
+                    }
+                    objs[1] = rec.getFactory();
+                    objs[2] = rec.getMessage();
+                    objs[3] = rec.getCount();
+                    objs[4] = rec.getrConf();
+                    if(StringUtils.isNotEmpty(rec.getRepDate())) {
+                        objs[5] = rec.getRepDate().split(" ")[0];
+                    }else {
+                        objs[5] = rec.getRepDate();
+                    }
+                    objs[6] = rec.getAlteration();
+                    dataList.add(objs);
+                }
+                ExcelUtil ex = new ExcelUtil(nameList, dataList);
+                ex.exportExcel(workbook,sheet,response);
+
             }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
                 List<Temperature> temperatures = new ArrayList<>();
                 for (Recent rec : recentList) {
@@ -235,7 +267,35 @@ public class RecentController extends BaseController {
                     BeanUtils.copyProperties(rec,temperature);
                     temperatures.add(temperature);
                 }
-                ExcelKit.$Export(Temperature.class, response).downXlsx(temperatures, false);
+                SXSSFWorkbook workbook = new SXSSFWorkbook();
+                SXSSFSheet sheet = workbook.createSheet(recent.getStage());
+                String[] nameList = new String[]{"QFF编号", "事件描述", "开始时间" ,"产品信息","总数量"
+                        ,"罗氏QA处理意见","回复日期","变更记录"};
+                List<Object[]> dataList = new ArrayList<Object[]>();
+                Object[] objs = null;
+                for (int i = 0; i < temperatures.size(); i++) {
+                    Temperature tem = temperatures.get(i);
+                    objs = new Object[nameList.length];
+                    objs[0] = tem.getNumber();
+                    objs[1] = tem.getRemark();
+                    if(StringUtils.isNotEmpty(tem.getStartDate())){
+                        objs[2] = tem.getStartDate().split(" ")[0];
+                    }else {
+                        objs[2] = tem.getStartDate();
+                    }
+                    objs[3] = tem.getMessage();
+                    objs[4] = tem.getCount();
+                    objs[5] = tem.getrConf();
+                    if(StringUtils.isNotEmpty(tem.getRepDate())) {
+                        objs[6] = tem.getRepDate().split(" ")[0];
+                    }else {
+                        objs[6] = tem.getRepDate();
+                    }
+                    objs[7] = tem.getAlteration();
+                    dataList.add(objs);
+                }
+                ExcelUtil ex = new ExcelUtil(nameList, dataList);
+                ex.exportExcel(workbook,sheet,response);
             }
         } catch (Exception e) {
             String message = "导出近效期QFFexcel失败";

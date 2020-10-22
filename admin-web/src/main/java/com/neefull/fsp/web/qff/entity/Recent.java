@@ -24,7 +24,6 @@ import java.util.Date;
  */
 
 @TableName(value = "qff_recent")
-@Excel("近效期QFF")
 public class Recent implements Serializable {
     private static final long serialVersionUID = -6883719899970874252L;
 
@@ -47,37 +46,31 @@ public class Recent implements Serializable {
      *  开始时间
      */
     @TableField("start_date")
-    @ExcelField(value = "开始时间")
     private String startDate;
     /**
      *  工厂
      */
     @TableField("factory")
-    @ExcelField(value = "工厂")
     private String factory;
     /**
      *  产品信息
      */
     @TableField("message")
-    @ExcelField(value = "产品信息")
     private String message;
     /**
      *  数量
      */
     @TableField("count")
-    @ExcelField(value = "总数量")
     private String count;
     /**
      *  罗氏QA处理意见
      */
     @TableField("r_conf")
-    @ExcelField(value = "罗氏QA处理意见")
     private String rConf;
     /**
      *  回复日期
      */
     @TableField("rep_date")
-    @ExcelField(value = "回复日期")
     private String repDate;
     /**
      *  类型
@@ -88,7 +81,6 @@ public class Recent implements Serializable {
      *  变更记录
      */
     @TableField("alteration")
-    @ExcelField(value = "变更记录")
     private String alteration;
     /**
      *  图片

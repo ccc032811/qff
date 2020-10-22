@@ -4,7 +4,7 @@ import com.neefull.fsp.web.qff.config.SendMailProperties;
 import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
 import com.sun.mail.util.MailSSLSocketFactory;
-import org.apache.commons.collections4.CollectionUtils;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;

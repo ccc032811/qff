@@ -24,7 +24,6 @@ import java.util.Map;
  */
 
 @TableName(value = "qff_commodity")
-@Excel("Sheet")
 public class Commodity implements Serializable {
 
 
@@ -39,73 +38,61 @@ public class Commodity implements Serializable {
      *  运输单号
      */
     @TableField("transport")
-    @ExcelField(value = "运输单号")
     private String transport;
     /**
      *  QFF编号
      */
     @TableField("number")
-    @ExcelField(value = "QFF编号")
     private String number;
     /**
      *  Plant工厂
      */
     @TableField("plant")
-    @ExcelField(value = "Plant工厂")
     private String plant;
     /**
      *  KDL Material 物料
      */
     @TableField("k_mater")
-    @ExcelField(value = "KDLMaterial物料")
     private String kMater;
     /**
      *  KDL SAP Batch 康德乐SAP批次
      */
     @TableField("k_batch")
-    @ExcelField(value = "康德乐SAP批次")
     private String kBatch;
     /**
      *  RD Material 罗氏物料号
      */
     @TableField("r_mater")
-    @ExcelField(value = "罗氏物料号")
     private String rMater;
     /**
      *  是否是危险品   01危险
      */
     @TableField("is_danger")
-    @ExcelField(value = "是否是危险品")
     private String isDanger;
     /**
      *  Principal Material 药厂物料号
      */
     @TableField("p_mater")
-    @ExcelField(value = "物料描述")
     private String pMater;
     /**
      *  RD Batch 罗氏批号
      */
     @TableField("r_batch")
-    @ExcelField(value = "罗氏批号")
     private String rBatch;
     /**
      *  Date of Manufacturing 生产日期
      */
     @TableField("manu_date")
-    @ExcelField(value = "生产日期")
     private String manuDate;
     /**
      *  Expiry Date 有效期
      */
     @TableField("expiry_date")
-    @ExcelField(value = "有效期")
     private String expiryDate;
     /**
      *  Quarantine 异常总数
      */
     @TableField("quarantine")
-    @ExcelField(value = "异常总数")
     private String quarantine;
     /**
      * unit  康德乐单位
@@ -116,85 +103,71 @@ public class Commodity implements Serializable {
      * unit  罗氏单位
      */
     @TableField("r_unit")
-    @ExcelField(value = "单位")
     private String rUnit;
     /**
      *  BA
      */
     @TableField("ba")
-    @ExcelField(value = "BA")
     private String ba;
     /**
      *  QFF 上报阶段
      */
     @TableField("stage")
-    @ExcelField(value = "上报阶段")
     private String stage;
     /**
      *  采购来源
      */
     @TableField("source")
-    @ExcelField(value = "采购来源")
     private String source;
     /**
      *  注册证号
      */
     @TableField("register")
-    @ExcelField(value = "注册证号")
     private String register;
     /**
      *  产品分类
      */
     @TableField("classify")
-    @ExcelField(value = "产品分类")
     private String classify;
     /**
      *  Remark箱号/备注
      */
     @TableField("get_remark")
-    @ExcelField(value = "Remark箱号/备注")
     private String getRemark;
     /**
      *  QFF 发起日期
      */
     @TableField("init_date")
-    @ExcelField(value = "发起日期")
     private String initDate;
     /**
      *  Time of repley 回复日期
      */
     @TableField("rep_time")
-    @ExcelField(value = "回复日期")
     private String repTime;
     /**
      *  投诉编号
      */
     @TableField("comp_number")
-    @ExcelField(value = "投诉编号")
     private String compNumber;
     /**
      *  QFF 退货原因
      */
     @TableField("reason")
-    @ExcelField(value = "QFF原因")
     private String reason;
     /**
      *  RD QA confirmation 罗氏QA处理意见
      */
     @TableField("r_conf")
-    @ExcelField(value = "罗氏QA处理意见")
     private String rConf;
     /**
      *  仪器工程师检查结果
      */
     @TableField("check_result")
-    @ExcelField(value = "仪器工程师检查结果")
     private String checkResult;
     /**
      *  备注
      */
     @TableField("remark")
-    @ExcelField(value = "备注")
     private String remark;
     /**
      *  系统接收的类型
@@ -205,7 +178,6 @@ public class Commodity implements Serializable {
      *  变更记录
      */
     @TableField("alteration")
-    @ExcelField(value = "变更记录")
     private String alteration;
     /**
      *  状态码  1新建  2 审核中 3 完结  4异常
@@ -220,7 +192,6 @@ public class Commodity implements Serializable {
     /**
      *  创建日期
      */
-    @ExcelField(value = "创建时间",dateFormat = "yyyy年MM月dd日")
     @TableField("create_time")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")

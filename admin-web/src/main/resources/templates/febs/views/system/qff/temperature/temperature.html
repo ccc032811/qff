@@ -268,7 +268,8 @@
                 startTime: createTimeFrom,
                 endTime: createTimeTo,
                 message: $searchForm.find('input[name="message"]').val().trim(),
-                message: $searchForm.find('input[name="number"]').val().trim(),
+                number: $searchForm.find('input[name="number"]').val().trim(),
+                status: $searchForm.find("select[name='status']").val(),
                 att: $searchForm.find("select[name='att']").val(),
                 stage: stage,
                 invalidate_ie_cache: new Date()

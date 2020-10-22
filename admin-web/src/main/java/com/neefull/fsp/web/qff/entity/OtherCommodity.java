@@ -11,7 +11,6 @@ import java.io.Serializable;
  * @Date: 2020/9/11  17:02
  */
 
-@Excel("Sheet")
 public class OtherCommodity implements Serializable {
 
     private static final long serialVersionUID = 5803403681193307578L;
@@ -19,103 +18,82 @@ public class OtherCommodity implements Serializable {
     /**
      *  QFF编号
      */
-    @ExcelField(value = "QFF编号")
     private String number;
     /**
      *  Plant工厂
      */
-    @ExcelField(value = "Plant工厂")
     private String plant;
     /**
      *  KDL Material 物料
      */
-    @ExcelField(value = "KDLMaterial物料")
     private String kMater;
     /**
      *  KDL SAP Batch 康德乐SAP批次
      */
-    @ExcelField(value = "康德乐SAP批次")
     private String kBatch;
     /**
      *  RD Material 罗氏物料号
      */
-    @ExcelField(value = "罗氏物料号")
     private String rMater;
     /**
      *  RD Batch 罗氏批号
      */
-    @ExcelField(value = "罗氏批号")
     private String rBatch;
     /**
      *  Date of Manufacturing 生产日期
      */
-    @ExcelField(value = "生产日期")
     private String manuDate;
     /**
      *  Expiry Date 有效期
      */
-    @ExcelField(value = "有效期")
     private String expiryDate;
     /**
      *  Quarantine 异常总数
      */
-    @ExcelField(value = "异常总数")
     private String quarantine;
     /**
      *  Remark箱号/备注
      */
-    @ExcelField(value = "Remark箱号/备注")
     private String getRemark;
     /**
      *  QFF 上报阶段
      */
-    @ExcelField(value = "上报阶段")
     private String type;
     /**
      *  采购来源
      */
-    @ExcelField(value = "采购来源")
     private String source;
     /**
      *  产品分类
      */
-    @ExcelField(value = "产品分类")
     private String classify;
     /**
      *  变更记录
      */
-    @ExcelField(value = "变更记录")
     private String alteration;
     /**
      *  备注
      */
-    @TableField("remark")
-    @ExcelField(value = "备注")
     private String remark;
     /**
      *  Time of repley 回复日期
      */
-    @ExcelField(value = "回复日期")
     private String repTime;
     /**
      *  投诉编号
      */
-    @ExcelField(value = "投诉编号")
     private String compNumber;
     /**
      *  QFF 退货原因
      */
-    @ExcelField(value = "QFF原因")
     private String reason;
     /**
      *  RD QA confirmation 罗氏QA处理意见
      */
-    @ExcelField(value = "罗氏QA处理意见")
     private String rConf;
     /**
      *  仪器工程师检查结果
      */
-    @ExcelField(value = "仪器工程师检查结果")
     private String checkResult;
 
 

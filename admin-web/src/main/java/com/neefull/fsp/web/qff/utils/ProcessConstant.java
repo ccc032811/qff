@@ -47,10 +47,6 @@ public class ProcessConstant {
 
     public static final String STORE_PACKAGE_EXPORT = "储存 · 分包 · 出库";
 
-//    public static final String PACKAGE_NAME = "分包";
-//
-//    public static final String EXPORT_NAME = "出库";
-
     public static final String REFUND_NAME = "退货";
 
     public static final String WRAPPER_NAME = "其他手工QFF";

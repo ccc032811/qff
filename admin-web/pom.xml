@@ -132,11 +132,21 @@
             <artifactId>ExcelKit</artifactId>
             <version>2.0.71</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.17</version>
+        </dependency>
 
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
             <version>2.2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.stupdit1t</groupId>
+            <artifactId>poi-excel</artifactId>
+            <version>1.7</version>
         </dependency>
 
         <!-- lombok -->
