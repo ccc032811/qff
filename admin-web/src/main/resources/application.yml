@@ -8,7 +8,7 @@ spring:
     multipart:
       max-file-size: 10MB # 限制文件上传的大小
   profiles:
-    active: test
+    active: dev
 
   thymeleaf:
     cache: false
@@ -26,10 +26,10 @@ spring:
     charset: UTF-8    #文件编码码方式
     port: 25   #   25      smtp的端口号  ×××@163.com 非 SSL 连接的端口一般默认为 25, 可以不添加, 如果开启了 SSL 连接, 需要改为对应邮箱的 SMTP 服务器的端口
     ssl: true   #是否为ssl连接
-    host: smtp.163.com    #smtp服务器地址    smtp.exmail.qq.com
+    host: smtp.exmail.qq.com    #smtp服务器地址    smtp.exmail.qq.com
     timeout: 25000   #连接超时
-    username: ccc032811@163.com    #  sph-kdl-qff@shaphar.com    ccc032811@163.com
-    password: ccc032811           #  spQff123+    ccc032811
+    username:  sph-kdl-qff@shaphar.com     #  sph-kdl-qff@shaphar.com    ccc032811@163.com
+    password:  spQff123+        #  spQff123+    ccc032811
   mvc:
     favicon:
       enabled: true

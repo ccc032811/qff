@@ -83,6 +83,12 @@ public class Recent implements Serializable {
     @TableField("alteration")
     private String alteration;
     /**
+     *  备注
+     */
+    @TableField("comment")
+    private String comment;
+
+    /**
      *  图片
      */
     @TableField(exist = false)
@@ -303,5 +309,13 @@ public class Recent implements Serializable {
 
     public void setAtt(Integer att) {
         this.att = att;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

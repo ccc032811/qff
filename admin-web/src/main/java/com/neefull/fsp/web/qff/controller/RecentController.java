@@ -234,7 +234,7 @@ public class RecentController extends BaseController {
                 SXSSFWorkbook workbook = new SXSSFWorkbook();
                 SXSSFSheet sheet = workbook.createSheet(recent.getStage());
                 String[] nameList = new String[]{"开始时间", "工厂","产品信息","总数量"
-                        ,"罗氏QA处理意见","回复日期","变更记录"};
+                        ,"罗氏QA处理意见","回复日期","备注","变更记录"};
                 List<Object[]> dataList = new ArrayList<Object[]>();
                 Object[] objs = null;
                 for (int i = 0; i < recentList.size(); i++) {
@@ -254,7 +254,8 @@ public class RecentController extends BaseController {
                     }else {
                         objs[5] = rec.getRepDate();
                     }
-                    objs[6] = rec.getAlteration();
+                    objs[6] = rec.getComment();
+                    objs[7] = rec.getAlteration();
                     dataList.add(objs);
                 }
                 ExcelUtil ex = new ExcelUtil(nameList, dataList);
@@ -270,7 +271,7 @@ public class RecentController extends BaseController {
                 SXSSFWorkbook workbook = new SXSSFWorkbook();
                 SXSSFSheet sheet = workbook.createSheet(recent.getStage());
                 String[] nameList = new String[]{"QFF编号", "事件描述", "开始时间" ,"产品信息","总数量"
-                        ,"罗氏QA处理意见","回复日期","变更记录"};
+                        ,"罗氏QA处理意见","回复日期","备注","变更记录"};
                 List<Object[]> dataList = new ArrayList<Object[]>();
                 Object[] objs = null;
                 for (int i = 0; i < temperatures.size(); i++) {
@@ -291,7 +292,8 @@ public class RecentController extends BaseController {
                     }else {
                         objs[6] = tem.getRepDate();
                     }
-                    objs[7] = tem.getAlteration();
+                    objs[7] = tem.getComment();
+                    objs[8] = tem.getAlteration();
                     dataList.add(objs);
                 }
                 ExcelUtil ex = new ExcelUtil(nameList, dataList);

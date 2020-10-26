@@ -89,6 +89,15 @@
         </div>
         <div class="layui-form-item layui-form-item-rigth remark textarea-class">
             <div class="layui-inline layui-col-sm12 remark textarea-class">
+                <label class="layui-form-label"><div style="margin-top: 20px">备注</div></label>
+                <div class="layui-input-block">
+                    <textarea readonly  name="comment"  maxlength="2000"
+                              class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth remark textarea-class">
+            <div class="layui-inline layui-col-sm12 remark textarea-class">
                 <label class="layui-form-label" style="height: 80px;"><div style="margin-top: 20px">变更记录</div></label>
                 <div class="layui-input-block">
                     <textarea name="alteration" readonly class="layui-textarea"></textarea>
@@ -182,6 +191,7 @@
                 "count": recent.count,
                 "rConf": recent.rConf,
                 "repDate": recent.repDate,
+                "comment": recent.comment,
                 "alteration":recent.alteration
             });
         }

@@ -120,7 +120,7 @@
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">异常总数</label>
                 <div class="layui-input-block">
-                    <input type="text" name="quarantine"  maxlength="5" autocomplete="off"
+                    <input type="text" name="quarantine"  maxlength="50" autocomplete="off"
                            class="layui-input " lay-verify="required"  placeholder="请输入">
                 </div>
             </div>
@@ -235,8 +235,9 @@
                 var num =  $("#number").val();
 
                 obj.preview(function (index,file,result) {
+                    var imageName = file.name.replace(/\s+/g,"_");
                     for (var i =images.length-1 ; i>=0 ;i--){
-                        if(images[i]===file.name){
+                        if(images[i]===imageName){
                             flag = false;
                         }
                     }

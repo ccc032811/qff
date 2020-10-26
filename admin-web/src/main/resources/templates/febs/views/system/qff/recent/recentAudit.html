@@ -81,6 +81,15 @@
         </div>
         <div class="layui-form-item layui-form-item-rigth remark">
             <div class="layui-inline layui-col-sm12 remark">
+                <label class="layui-form-label"><div style="margin-top: 20px">备注</div></label>
+                <div class="layui-input-block">
+                    <textarea id = "comment-recent"  name="comment" placeholder="请输入" maxlength="2000"
+                              class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-rigth remark">
+            <div class="layui-inline layui-col-sm12 remark">
                 <label class="layui-form-label" style="height: 80px;"><div style="margin-top: 20px">变更记录</div></label>
                 <div class="layui-input-block">
                     <textarea name="alteration" readonly class="layui-textarea"></textarea>
@@ -204,6 +213,7 @@
         });
 
         function pubShow(){
+            $('#comment-recent').attr("readonly","readonly");
             $('#recent-rConf').html('');
             $('#recent-rConf').append('<input type="text" name="rConf" maxlength="50" autocomplete="off"\n' +
                 '                           class="layui-input " readonly="readonly">');
@@ -224,6 +234,7 @@
                 "rConf": recent.rConf,
                 "repDate": recent.repDate,
                 "stage": recent.stage,
+                "comment": recent.comment,
                 "alteration":recent.alteration
             });
         }

@@ -673,6 +673,9 @@ public class ProcessServiceImpl implements IProcessService {
         }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
             alteration.append("罗氏处理意见:" +date+ " 由 "+oldRecent.getrConf()+" 修改为 "+recent.getrConf()+"  。 ");
         }
+        if(!recent.getComment().equals(oldRecent.getComment())){
+            alteration.append("备注:" +date+ " 由 "+oldRecent.getComment()+" 修改为 "+recent.getComment()+"  。 ");
+        }
         if(StringUtils.isNotEmpty(oldRecent.getAlteration())) {
             recent.setAlteration(oldRecent.getAlteration() + "  " + alteration.toString());
         }else {

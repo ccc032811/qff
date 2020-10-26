@@ -58,6 +58,12 @@ public class Temperature implements Serializable {
      */
     @TableField("alteration")
     private String alteration;
+    /**
+     *  备注
+     */
+    @TableField("comment")
+    private String comment;
+
 
 
     public String getNumber() {
@@ -130,5 +136,13 @@ public class Temperature implements Serializable {
 
     public void setAlteration(String alteration) {
         this.alteration = alteration;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
