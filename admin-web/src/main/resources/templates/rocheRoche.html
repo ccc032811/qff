@@ -10,6 +10,7 @@
     <span>以下QFF状态已完结，请知悉，谢谢。</span><br>
     <table  style="width: 100%; border-collapse: collapse; border-top:1px solid #eee; font-size:14px; table-layout: fixed;">
         <tr style=" background: #fafafa; color: #333; border: 1px solid #eee;">
+            <td style="border-right:1px solid #eee;text-align: center">QFF类型</td>
             <td style="border-right:1px solid #eee;text-align: center">NO编号</td>
             <td style="border-right:1px solid #eee;text-align: center">Initiator发起人</td>
             <td style="border-right:1px solid #eee;text-align: center">申请日期</td>
@@ -25,6 +26,7 @@
         </tr>
         <p th:each="roche:${list}">
             <tr style=" background: #fafafa; color: #333; border-bottom: 1px solid #eee;">
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center">罗氏内部发起QFF</td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.number}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.sponsor}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${roche.reqDate}"></td>
@@ -41,7 +43,7 @@
         </p>
     </table>
     <br>
-    <span>更多详细信息可登录系统查看，统一供应链门户：<a href="https://qff-stg.shaphar.com">https://qff-stg.shaphar.com</a> </span>
+    <span>更多详细信息可登录系统查看，统一供应链门户：<a href="https://qff.shaphar.com">https://qff.shaphar.com</a> </span>
 
 
 </body>

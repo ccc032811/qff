@@ -10,9 +10,19 @@ import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
 import org.activiti.engine.HistoryService;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.persistence.entity.TaskEntity;
+import org.activiti.engine.impl.pvm.PvmTransition;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
+import org.activiti.engine.impl.pvm.process.TransitionImpl;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
@@ -28,6 +38,8 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -49,6 +61,8 @@ public class ProcessServiceImpl implements IProcessService {
     @Autowired
     private IRocheService rocheService;
     @Autowired
+    private RepositoryService repositoryService;
+    @Autowired
     private RuntimeService runtimeService;
     @Autowired
     private TaskService taskService;
@@ -68,14 +82,23 @@ public class ProcessServiceImpl implements IProcessService {
     @Override
     @Transactional
     public void commitProcess(Object object, User user) {
-
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<Attachment> attachments = new ArrayList<>();
 
         if(object instanceof Commodity){
+
             Commodity commodity = (Commodity) object;
             String businessKey = getBusinessKey(commodity);
 
             if(commodity.getId()==null){
+                String lastDate = commodityService.selectLastTime();
+                Date parse = null;
+                try {
+                    parse = simpleDateFormat.parse(lastDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                commodity.setCreateTime(parse);
                 commodityService.addCommodity(commodity);
 
                 startProcess(commodity);
@@ -119,6 +142,7 @@ public class ProcessServiceImpl implements IProcessService {
 
             if(recent.getId()==null){
                 recent.setStartDate(DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
+
                 recentService.addRecent(recent);
 
                 if(StringUtils.isNotEmpty(recent.getImages())){
@@ -374,13 +398,7 @@ public class ProcessServiceImpl implements IProcessService {
                             names.add("delivery");
                         }else if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
                             names.add("conserve");
-                        }
-//                        else if(commodity.getStage().equals(ProcessConstant.PACKAGE_NAME)){
-//                            names.add("package");
-//                        }else if(commodity.getStage().equals(ProcessConstant.EXPORT_NAME)){
-//                            names.add("export");
-//                        }
-                        else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
+                        }else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
                             names.add("wrapper");
                         }else if(commodity.getStage().equals(ProcessConstant.REFUND_NAME)){
                             names.add("refund");
@@ -640,20 +658,33 @@ public class ProcessServiceImpl implements IProcessService {
             addOrEditFiles(commodity,currentUser);
         }
 
+        List<Task> taskList = queryTask(getBusinessKey(commodity));
 
-        String[] mails = getEmails(87);
+        if(taskList.size()==1){
 
-        List<Commodity> list =new ArrayList<>();
-        commodity.setAlteration(alteration.toString());
-        list.add(commodity);
-        Map<String,String> files = new HashMap<>();
+            String[] activityIds = new String[]{"_3","_4","_12"};
+            rollbackPrcoess("_3",getBusinessKey(commodity),currentUser.getUsername(),taskList.get(0),activityIds);
 
-        Context context = new Context();
-        context.setVariable("list",list);
-        String text = templateEngine.process("kdlCommodity", context);
+        }else {
+            String[] mails = getEmails(87);
 
-        //发送带附件的邮件
-        MailUtils.sendMail(text,mailProperties,mails,files);
+            List<Commodity> list =new ArrayList<>();
+            list.add(commodity);
+            Map<String,String> files = new HashMap<>();
+
+            Context context = new Context();
+            context.setVariable("list",list);
+            String text = "";
+            if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
+                text= templateEngine.process("kdlOtherCommodity", context);
+            }else {
+                text= templateEngine.process("kdlCommodity", context);
+            }
+
+
+            //发送带附件的邮件
+            MailUtils.sendMail(text,mailProperties,mails,files);
+        }
     }
 
 
@@ -681,7 +712,9 @@ public class ProcessServiceImpl implements IProcessService {
         }else {
             recent.setAlteration(alteration.toString());
         }
+
         recentService.editRecent(recent);
+
         if(StringUtils.isNotEmpty(recent.getImages())){
             attachments = addOrEditFiles(recent, currentUser);
             for (Attachment attachment : attachments) {
@@ -689,24 +722,144 @@ public class ProcessServiceImpl implements IProcessService {
                         properties.getImagePath() + attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
             }
         }
-        String[] mails = getEmails(87);
 
-        List<Recent> list =new ArrayList<>();
-        recent.setAlteration(alteration.toString());
-        list.add(recent);
 
-        Context context = new Context();
-        context.setVariable("list",list);
-        String text = "";
-        if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
-            text = templateEngine.process("kdlRecent", context);
+        List<Task> taskList = queryTask(getBusinessKey(recent));
+        if(taskList.size()==1){
 
-        }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
-            text = templateEngine.process("kdlTemperature", context);
+            String[] activityIds = new String[]{"_3","_4","_8"};
+            rollbackPrcoess("_3",getBusinessKey(recent),currentUser.getUsername(),taskList.get(0),activityIds);
+
+        }else {
+
+            String[] mails = getEmails(87);
+            List<Recent> list =new ArrayList<>();
+            list.add(recent);
+
+            Context context = new Context();
+            context.setVariable("list",list);
+            String text = "";
+            if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
+                text = templateEngine.process("kdlRecent", context);
+
+            }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
+                text = templateEngine.process("kdlTemperature", context);
+            }
+
+            //发送带附件的邮件
+            MailUtils.sendMail(text,mailProperties,mails,files);
+
         }
+    }
 
-        //发送带附件的邮件
-        MailUtils.sendMail(text,mailProperties,mails,files);
+
+    private void rollbackPrcoess(String destTaskKey,String businessKey,String userName,Task task,String[] activityIds){
+
+        ProcessInstance processInstance = queryProcessInstance(businessKey);
+
+        try {
+            List<HistoricActivityInstance> userTask = historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstance.getProcessInstanceId()).activityType("userTask").list();
+            for (HistoricActivityInstance historicActivityInstance : userTask) {
+                for (String activityId : activityIds) {
+                    if(historicActivityInstance.getActivityId().equals(activityId)){
+                        historyService.deleteHistoricTaskInstance(historicActivityInstance.getTaskId());
+                    }
+                }
+            }
+            ActivityImpl activitiImpl =  findActivitiImpl(task.getId(),null);
+            List<PvmTransition> oriPvmTransitionList = clearTransition(activitiImpl);
+
+            TransitionImpl newTransition = activitiImpl.createOutgoingTransition();
+
+            ActivityImpl pointActivity = findActivitiImpl(task.getId(), destTaskKey);
+
+            newTransition.setDestination(pointActivity);
+
+            taskService.complete(task.getId());
+
+            pointActivity.getIncomingTransitions().remove(newTransition);
+            restoreTransition(activitiImpl,oriPvmTransitionList);
+
+            List<Execution> list = runtimeService.createExecutionQuery().parentId(processInstance.getProcessInstanceId()).list();
+            for (Execution execution : list) {
+                if(execution.getActivityId().equals("_11")||execution.getActivityId().equals("_12")||execution.getActivityId().equals("_13")){
+                    runtimeService.deleteProcessInstance(execution.getId(),"");
+                }
+            }
+
+            Task newTask = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
+            taskService.setAssignee(newTask.getId(),userName);
+            taskService.complete(newTask.getId());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private ActivityImpl findActivitiImpl(String taskId, String activityId) throws Exception {
+        ProcessDefinitionEntity processDefinition = findProcessDefinitionEntityByTaskId(taskId);
+
+        if (StringUtils.isEmpty(activityId)) {
+            activityId = findTaskById(taskId).getTaskDefinitionKey();
+        }
+        if (activityId.toUpperCase().equals("END")) {
+            for (ActivityImpl activityImpl : processDefinition.getActivities()) {
+                List<PvmTransition> pvmTransitionList = activityImpl
+                        .getOutgoingTransitions();
+                if (pvmTransitionList.isEmpty()) {
+                    return activityImpl;
+                }
+            }
+        }
+        return ((ProcessDefinitionImpl) processDefinition).findActivity(activityId);
+
+    }
+
+
+    private List<PvmTransition> clearTransition(ActivityImpl activityImpl) {
+        List<PvmTransition> oriPvmTransitionList = new ArrayList<PvmTransition>();
+        List<PvmTransition> pvmTransitionList = activityImpl
+                .getOutgoingTransitions();
+        for (PvmTransition pvmTransition : pvmTransitionList) {
+            oriPvmTransitionList.add(pvmTransition);
+        }
+        pvmTransitionList.clear();
+        return oriPvmTransitionList;
+    }
+
+    private void restoreTransition(ActivityImpl activityImpl, List<PvmTransition> oriPvmTransitionList) {
+        List<PvmTransition> pvmTransitionList = activityImpl.getOutgoingTransitions();
+        pvmTransitionList.clear();
+        for (PvmTransition pvmTransition : oriPvmTransitionList) {
+            pvmTransitionList.add(pvmTransition);
+        }
+    }
+
+
+    private ProcessDefinitionEntity findProcessDefinitionEntityByTaskId(String taskId) throws Exception {
+        return (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService)
+                .getDeployedProcessDefinition(findTaskById(taskId)
+                        .getProcessDefinitionId());
+    }
+
+    private TaskEntity findTaskById(String taskId)  {
+        return (TaskEntity) taskService.createTaskQuery().taskId(
+                taskId).singleResult();
+    }
+
+
+    private ProcessInstance getProcessInstanceById(String processInstanceId){
+        return  runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    }
+
+    private ProcessInstance queryProcessInstance(String businessKey){
+        return runtimeService.createProcessInstanceQuery().processInstanceBusinessKey(businessKey).singleResult();
+
+    }
+
+    private List<Task> queryTask(String businessKey){
+        return taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
 
     }
 
@@ -742,30 +895,29 @@ public class ProcessServiceImpl implements IProcessService {
         if(StringUtils.isNotEmpty(roche.getImages())){
             addOrEditFiles(roche,currentUser);
         }
-        String[] mails = getEmails(87);
 
-        List<Roche> list =new ArrayList<>();
-        roche.setAlteration(alteration.toString());
-        list.add(roche);
-        Map<String,String> files = new HashMap<>();
+        List<Task> taskList = queryTask(getBusinessKey(roche));
 
-        Context context = new Context();
-        context.setVariable("list",list);
-        String text = templateEngine.process("kdlRoche", context);
+        if(taskList.size()==1){
 
-        MailUtils.sendMail(text,mailProperties,mails,files);
+            String[] activityIds = new String[]{"_3","_5","_6"};
+            rollbackPrcoess("_5",getBusinessKey(roche),currentUser.getUsername(),taskList.get(0),activityIds);
 
+        }else {
+            String[] mails = getEmails(87);
+
+            List<Roche> list =new ArrayList<>();
+            list.add(roche);
+            Map<String,String> files = new HashMap<>();
+
+            Context context = new Context();
+            context.setVariable("list",list);
+            String text = templateEngine.process("kdlRoche", context);
+
+            MailUtils.sendMail(text,mailProperties,mails,files);
+        }
     }
 
-
-    private ProcessInstance getProcessInstanceById(String processInstanceId){
-        return  runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-    }
-
-    private ProcessInstance queryProcessInstance(String businessKey){
-        return runtimeService.createProcessInstanceQuery().processInstanceBusinessKey(businessKey).singleResult();
-
-    }
 
     @Transactional
     protected void delete(ProcessInstance processInstance){

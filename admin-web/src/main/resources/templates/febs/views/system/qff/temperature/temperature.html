@@ -93,11 +93,14 @@
     {{#  if(d.repDate == ''||d.repDate == null){}}
     <a class="layui-btn layui-btn-xs" lay-event="temperature-edit"  shiro:hasPermission="temperature:audit">审核</a>
     {{# }else if(d.repDate != ''&&d.repDate != null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="temperature-edit"  shiro:hasPermission="temperature:audit">确认</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="temperature-alter"  shiro:hasPermission="temperature:alter ">修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="temperature-edit"  shiro:hasPermission="temperature:verify">确认</a>
+    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="temperature-alter"  shiro:hasPermission="temperature:alter ">修改</a>-->
     {{#}}}
     {{#}}}
     {{#  if(d.status != '3'){}}
+    {{#  if(d.repDate != ''&&d.repDate != null){}}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="temperature-alter"  shiro:hasPermission="temperature:alter ">修改</a>
+    {{#}}}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="temperature-del" shiro:hasPermission="temperature:del">删除</a>
     {{#}}}
 

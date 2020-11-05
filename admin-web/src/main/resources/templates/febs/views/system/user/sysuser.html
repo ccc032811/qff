@@ -212,6 +212,13 @@
             tableIns.reload({where: params, page: {curr: 1}});
         });
 
+
+        $reset.on('click', function () {
+            $searchForm[0].reset();
+            tableIns.reload({where: getQueryParams(), page: {curr: 1}});
+        });
+
+
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),

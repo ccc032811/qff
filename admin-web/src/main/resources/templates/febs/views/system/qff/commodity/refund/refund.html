@@ -228,11 +228,14 @@
     {{#  if(d.repTime == ''||d.repTime == null){}}
     <a class="layui-btn layui-btn-xs" lay-event="refund-edit"  shiro:hasPermission="refund:audit">审核</a>
     {{# }else if(d.repTime != ''&&d.repTime != null){}}
-    <a class="layui-btn layui-btn-xs" lay-event="refund-edit"  shiro:hasPermission="refund:audit">确认</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-alter"  shiro:hasPermission="refund:alter ">修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="refund-edit"  shiro:hasPermission="refund:verify">确认</a>
+    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-alter"  shiro:hasPermission="refund:alter ">修改</a>-->
     {{#}}}
     {{#}}}
     {{#  if(d.status != '3'){}}
+    {{#  if(d.repTime != ''&&d.repTime != null){}}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-alter"  shiro:hasPermission="refund:alter ">修改</a>
+    {{#}}}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund-del" shiro:hasPermission="refund:del">删除</a>
     {{#}}}
 
