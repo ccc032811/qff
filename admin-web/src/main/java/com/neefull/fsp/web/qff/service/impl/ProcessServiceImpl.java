@@ -296,6 +296,7 @@ public class ProcessServiceImpl implements IProcessService {
         }
     }
 
+
     private Boolean editTime(String businessKey){
         ProcessInstance processInstance = queryProcessInstance(businessKey);
         String activityId = processInstance.getActivityId();
@@ -339,7 +340,6 @@ public class ProcessServiceImpl implements IProcessService {
                     list.add(identityLink.getUserId());
                 }
             }
-
         }
         return list;
     }
@@ -481,7 +481,6 @@ public class ProcessServiceImpl implements IProcessService {
         if(roleId.contains("87")){
             if(CollectionUtils.isNotEmpty(list)){
                 for (Task task : list) {
-
                     ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
                     String processDefinitionKey = processInstance.getProcessDefinitionKey();
 
@@ -615,9 +614,7 @@ public class ProcessServiceImpl implements IProcessService {
         if(stringList.contains("refund")){
             menuName.add(ProcessConstant.REFUND_NAME);
         }
-
         return menuName;
-
     }
 
     @Override
@@ -658,14 +655,14 @@ public class ProcessServiceImpl implements IProcessService {
             addOrEditFiles(commodity,currentUser);
         }
 
-        List<Task> taskList = queryTask(getBusinessKey(commodity));
-
-        if(taskList.size()==1){
-
-            String[] activityIds = new String[]{"_3","_4","_12"};
-            rollbackPrcoess("_3",getBusinessKey(commodity),currentUser.getUsername(),taskList.get(0),activityIds);
-
-        }else {
+//        List<Task> taskList = queryTask(getBusinessKey(commodity));
+//
+//        if(taskList.size()==1){
+//
+//            String[] activityIds = new String[]{"_3","_4","_12"};
+//            rollbackPrcoess("_3",getBusinessKey(commodity),currentUser.getUsername(),taskList.get(0),activityIds);
+//
+//        }else {
             String[] mails = getEmails(87);
 
             List<Commodity> list =new ArrayList<>();
@@ -681,10 +678,9 @@ public class ProcessServiceImpl implements IProcessService {
                 text= templateEngine.process("kdlCommodity", context);
             }
 
-
             //发送带附件的邮件
             MailUtils.sendMail(text,mailProperties,mails,files);
-        }
+//        }
     }
 
 
@@ -723,15 +719,13 @@ public class ProcessServiceImpl implements IProcessService {
             }
         }
 
-
-        List<Task> taskList = queryTask(getBusinessKey(recent));
-        if(taskList.size()==1){
-
-            String[] activityIds = new String[]{"_3","_4","_8"};
-            rollbackPrcoess("_3",getBusinessKey(recent),currentUser.getUsername(),taskList.get(0),activityIds);
-
-        }else {
-
+//        List<Task> taskList = queryTask(getBusinessKey(recent));
+//        if(taskList.size()==1){
+//
+//            String[] activityIds = new String[]{"_3","_4","_8"};
+//            rollbackPrcoess("_3",getBusinessKey(recent),currentUser.getUsername(),taskList.get(0),activityIds);
+//
+//        }else {
             String[] mails = getEmails(87);
             List<Recent> list =new ArrayList<>();
             list.add(recent);
@@ -749,7 +743,7 @@ public class ProcessServiceImpl implements IProcessService {
             //发送带附件的邮件
             MailUtils.sendMail(text,mailProperties,mails,files);
 
-        }
+//        }
     }
 
 
@@ -813,7 +807,6 @@ public class ProcessServiceImpl implements IProcessService {
             }
         }
         return ((ProcessDefinitionImpl) processDefinition).findActivity(activityId);
-
     }
 
 
@@ -896,14 +889,14 @@ public class ProcessServiceImpl implements IProcessService {
             addOrEditFiles(roche,currentUser);
         }
 
-        List<Task> taskList = queryTask(getBusinessKey(roche));
-
-        if(taskList.size()==1){
-
-            String[] activityIds = new String[]{"_3","_5","_6"};
-            rollbackPrcoess("_5",getBusinessKey(roche),currentUser.getUsername(),taskList.get(0),activityIds);
-
-        }else {
+//        List<Task> taskList = queryTask(getBusinessKey(roche));
+//
+//        if(taskList.size()==1){
+//
+//            String[] activityIds = new String[]{"_3","_5","_6"};
+//            rollbackPrcoess("_5",getBusinessKey(roche),currentUser.getUsername(),taskList.get(0),activityIds);
+//
+//        }else {
             String[] mails = getEmails(87);
 
             List<Roche> list =new ArrayList<>();
@@ -915,7 +908,7 @@ public class ProcessServiceImpl implements IProcessService {
             String text = templateEngine.process("kdlRoche", context);
 
             MailUtils.sendMail(text,mailProperties,mails,files);
-        }
+//        }
     }
 
 
