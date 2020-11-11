@@ -2,12 +2,14 @@ package com.neefull.fsp.web.qff.service.impl;
 
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.neefull.fsp.web.qff.config.ProcessInstanceProperties;
 import com.neefull.fsp.web.qff.config.SendMailProperties;
 import com.neefull.fsp.web.qff.service.IFileService;
 import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.system.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,6 +20,7 @@ import org.thymeleaf.TemplateEngine;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 
 /**
@@ -54,9 +57,9 @@ public class FileServiceImpl implements IFileService {
         if (posp != -1) {
             originalFilename = originalFilename.substring(posp + 1);
         }
-//        String fileName = number+"-"+originalFilename;
-        File filePath = new File(properties.getImagePath(), originalFilename);
+        String fileName = DateFormatUtils.format(new Date(),"yyyyMMddHHmmss")+"_"+originalFilename;
 
+        File filePath = new File(properties.getImagePath(), fileName);
         String[] paths = properties.getImagePath().split(StringPool.SLASH);
         String dir = paths[0];
         for (int i = 0; i < paths.length - 1; i++) {
@@ -77,7 +80,7 @@ public class FileServiceImpl implements IFileService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return properties.getImageUrl()+originalFilename;
+        return properties.getImageUrl()+fileName;
 
     }
 

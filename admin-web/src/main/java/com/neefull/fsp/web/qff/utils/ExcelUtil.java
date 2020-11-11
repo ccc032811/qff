@@ -45,12 +45,11 @@ public class ExcelUtil {
             CellStyle style = this.getStyle(workbook);
             CellStyle dateStyle = this.getDateStyle(workbook);
 
-            int columnNum = name.length;
             SXSSFRow rowRowName = sheet.createRow(0);
 
             rowRowName.setHeight((short) (25 * 25));
 
-            for(int n=0;n<columnNum;n++){
+            for(int n=0;n<name.length;n++){
                 SXSSFCell cellRowName = rowRowName.createCell(n);
                 cellRowName.setCellValue(name[n]);
                 cellRowName.setCellStyle(columnTopStyle);
@@ -156,14 +155,6 @@ public class ExcelUtil {
 
     public static boolean matchYear(String str){
         String regex = "((19|20)[0-9]{2})/(0[1-9]|1[012])/(0[1-9]|[12][0-9]|3[01])";
-        if(StringUtils.isEmpty(str)){
-            return false;
-        }
-        return Pattern.compile(regex).matcher(str).matches();
-    }
-
-    public static boolean matchDate(String str){
-        String regex = "^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\\s((([0-1][0-9])|(2?[0-3]))\\:([0-5]?[0-9])((\\s)|(\\:([0-5]?[0-9])))))?$";
         if(StringUtils.isEmpty(str)){
             return false;
         }

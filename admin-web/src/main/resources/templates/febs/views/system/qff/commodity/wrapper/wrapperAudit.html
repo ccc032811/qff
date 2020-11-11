@@ -48,7 +48,7 @@
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label">QFF编号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="number" autocomplete="off" class="layui-input" readonly="readonly">
+                    <input type="text" name="number" id="number" autocomplete="off" class="layui-input" readonly="readonly">
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
@@ -365,29 +365,33 @@
             ,url: ctx+ 'file/uploadImage'
             ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
             ,multiple: true
-            ,auto: false
+            ,auto: true
             ,data:{number:commodity.number}
             ,size: 1024*10
             ,before: function(obj){
                 layer.load();
             }
-            ,choose: function(obj){
-                var flag = true;
-
-                obj.preview(function (index,file,result) {
-                    var imageName = file.name.replace(/\s+/g,"_");
-                    for (var i =images.length-1 ; i>=0 ;i--){
-                        if(images[i]===imageName){
-                            flag = false;
-                        }
-                    }
-                    if(flag){
-                        obj.upload(index, file);
-                    }else {
-                        febs.alert.error("不能重复上传");
-                    }
-                });
-            }
+            // ,choose: function(obj){
+            //     var flag = true;
+            //     var num =  $("#number").val();
+            //     if(num===''){
+            //         febs.alert.error("请先输入QFF编号");
+            //         return;
+            //     }
+            //     obj.preview(function (index,file,result) {
+            //         var imageName = $("#number").val()+"_"+file.name.replace(/\s+/g,"_");
+            //         for (var i =images.length-1 ; i>=0 ;i--){
+            //             if(images[i]===imageName){
+            //                 flag = false;
+            //             }
+            //         }
+            //         if(flag){
+            //             obj.upload(index, file);
+            //         }else {
+            //             febs.alert.error("不能重复上传");
+            //         }
+            //     });
+            // }
             ,done: function(res,index){
                 layer.closeAll('loading');
                 if(res.code === 200){ //上传成功

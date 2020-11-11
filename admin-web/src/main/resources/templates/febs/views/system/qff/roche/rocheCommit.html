@@ -34,14 +34,14 @@
                 <label class="layui-form-label ">NO编号</label>
                 <div class="layui-input-block">
                     <input type="text" name="number" id="number" maxlength="50" autocomplete="off"
-                           class="layui-input" >
+                           class="layui-input" placeholder="请输入" >
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">发起人</label>
                 <div class="layui-input-block">
                     <input type="text" name="sponsor"  maxlength="50" autocomplete="off"
-                           class="layui-input" >
+                           class="layui-input" placeholder="请输入" >
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4 ">
@@ -211,7 +211,7 @@
         form.render();
 
 
-        upload.render({
+        var uploadInst = upload.render({
             elem: '#roche-chose-com'
             ,url: ctx+ 'file/uploadImage'
             ,exts: 'jpg|png|gif|pdf|xls|xlsx|doc|docx|txt'
@@ -226,6 +226,27 @@
             ,before: function(obj){
                 layer.load();
             }
+            // ,choose: function (obj) {
+            //     var flag = true;
+            //     var num  =  $("#number").val();
+            //     if( num ===''||num === null){
+            //         febs.alert.error("请先输入NO编号");
+            //         return;
+            //     }
+            //     obj.preview(function(index, file, result) {
+            //         var imageName = $("#number").val()+"_"+file.name.replace(/\s+/g,"_");
+            //         for (var i =images.length-1 ; i>=0 ;i--){
+            //             if(images[i]===imageName){
+            //                 flag = false;
+            //             }
+            //         }
+            //         if(flag){
+            //             obj.upload(index, file);
+            //         }else {
+            //             febs.alert.error("不能重复上传");
+            //         }
+            //     });
+            // }
             ,done: function(res,index){
                 layer.closeAll('loading');
                 if(res.code === 200){ //上传成功
