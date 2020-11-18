@@ -63,8 +63,7 @@ public class FileController extends BaseController {
     @GetMapping("/findTask")
     public FebsResponse findTask() throws FebsException {
         try {
-            User user = getCurrentUser();
-            List<String> list = processService.findTask(user.getUsername());
+            List<String> list = processService.findTask(getCurrentUser());
             return new FebsResponse().success().data(list);
         } catch (Exception e) {
             String message = "查询需要完成的任务数失败";
@@ -220,30 +219,6 @@ public class FileController extends BaseController {
             }
         }
     }
-
-
-
-//    /**
-//     * 下载 Excel导入模板
-//     */
-//    @GetMapping("template")
-//    @RequiresPermissions("recent:template")
-//    public void generateImportTemplate(HttpServletResponse response) {
-//        try {
-//            ClassPathResource pathResource = new ClassPathResource("/templates/excel/近效期产品清单模板.xlsx");
-//            InputStream inputStream = pathResource.getInputStream();
-//            Workbook wb = WorkbookFactory.create(inputStream);
-//            response.reset();
-//            response.setContentType("multipart/form-data");
-//            response.setHeader("Content-Disposition", "attachment; filename=" + new String("近效期产品清单模板".getBytes("UTF-8"), "iso8859-1") + ".xlsx");
-//            wb.write(response.getOutputStream());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (InvalidFormatException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
 
 
 }

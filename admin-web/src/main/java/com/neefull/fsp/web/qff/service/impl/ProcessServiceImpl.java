@@ -6,9 +6,12 @@ import com.neefull.fsp.web.qff.config.SendMailProperties;
 import com.neefull.fsp.web.qff.entity.*;
 import com.neefull.fsp.web.qff.service.*;
 import com.neefull.fsp.web.qff.utils.MailUtils;
+import com.neefull.fsp.web.qff.utils.PageUtils;
 import com.neefull.fsp.web.qff.utils.ProcessConstant;
+import com.neefull.fsp.web.system.entity.Role;
 import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
+import com.neefull.fsp.web.system.service.impl.RoleServiceImpl;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -37,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import javax.validation.constraints.NotBlank;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -76,6 +80,8 @@ public class ProcessServiceImpl implements IProcessService {
     private SendMailProperties mailProperties;
     @Autowired
     private TemplateEngine templateEngine;
+    @Autowired
+    private RoleServiceImpl roleService;
 
 
 
@@ -374,8 +380,9 @@ public class ProcessServiceImpl implements IProcessService {
 
 
     @Override
-    public List<String> findTask(String name) {
-        List<Task> list = queryTaskByUserName(name);
+    public List<String> findTask(User user) {
+        String roleId = roleService.findUserRoleIds(user.getUsername());
+        List<Task> list = queryTaskByUserName(user.getUsername());
         List<String> names = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(list)){
             for (Task task : list) {
@@ -383,33 +390,169 @@ public class ProcessServiceImpl implements IProcessService {
                 if(processInstance.getBusinessKey().startsWith("Recent")){
                     String id = processInstance.getBusinessKey().split("\\:")[1];
                     Recent recent = recentService.queryRecentById(Integer.parseInt(id));
-                    if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
-                        names.add("recent");
-                    }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
-                        names.add("temperature");
+                    if(roleId.contains("87")){
+                        if(StringUtils.isNotEmpty(recent.getRepDate())) {
+                            names.add(choseProcessType(recent));
+                        }
+                    }else {
+                        if(roleId.contains("98")&&StringUtils.isNotEmpty(recent.getRepDate())){
+                            names.add(choseProcessType(recent));
+                        }else if(!roleId.contains("98")&&StringUtils.isEmpty(recent.getRepDate())){
+                            names.add(choseProcessType(recent));
+                        }
                     }
                 }else if(processInstance.getBusinessKey().startsWith("Roche")) {
-                    names.add("roche");
+                    if(roleId.contains("98")){
+                        names.add("roche");
+                    }
                 }else {
                     String id = processInstance.getBusinessKey().split("\\:")[1];
                     Commodity commodity = commodityService.queryCommodityById(Integer.parseInt(id));
-                    if(commodity!=null){
-                        if(commodity.getStage().equals(ProcessConstant.DELIVERY_NAME)){
-                            names.add("delivery");
-                        }else if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
-                            names.add("conserve");
-                        }else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
-                            names.add("wrapper");
-                        }else if(commodity.getStage().equals(ProcessConstant.REFUND_NAME)){
-                            names.add("refund");
+                    if(roleId.contains("87")){
+                        if(StringUtils.isNotEmpty(commodity.getRepTime())) {
+                            names.add(choseProcessType(commodity));
+                        }
+                    }else {
+                        if(roleId.contains("98")&&StringUtils.isNotEmpty(commodity.getRepTime())){
+                            names.add(choseProcessType(commodity));
+                        }else if(!roleId.contains("98")&&StringUtils.isEmpty(commodity.getRepTime())){
+                            names.add(choseProcessType(commodity));
                         }
                     }
                 }
             }
         }
-
         return names;
     }
+
+
+    @Override
+    public List<Commodity> queryCommodityTaskByName(List<Commodity> commodityList, User user) {
+        String roleId = roleService.findUserRoleIds(user.getUsername());
+        List<Task> tasks = queryTaskByUserName(user.getUsername());
+        for (Task task : tasks) {
+            ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+            String id = splitKey(processInstance.getBusinessKey(), Commodity.class.getSimpleName());
+            if(StringUtils.isNotEmpty(id)){
+                for (Commodity commodity : commodityList) {
+                    if(commodity.getId()==Integer.parseInt(id)&&commodity.getStatus()==2) {
+                        if(StringUtils.isEmpty(commodity.getRepTime())){
+                            if(!roleId.contains("98")){
+                                commodity.setIsAllow(1);
+                            }
+                        }else {
+                            if(roleId.contains("98")){
+                                commodity.setIsAllow(1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return commodityList;
+    }
+
+
+    @Override
+    public List<Recent> queryRecentTaskByName(List<Recent> recentList, User user) {
+        String roleId = roleService.findUserRoleIds(user.getUsername());
+        List<Task> tasks = queryTaskByUserName(user.getUsername());
+        for (Task task : tasks) {
+            ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+            String id = splitKey(processInstance.getBusinessKey(), Recent.class.getSimpleName());
+            if(StringUtils.isNotEmpty(id)){
+                for (Recent recent : recentList) {
+                    if(recent.getId()==Integer.parseInt(id)){
+                        if(StringUtils.isEmpty(recent.getRepDate())){
+                            if(!roleId.contains("98")){
+                                recent.setIsAllow(1);
+                            }
+                        }else {
+                            if(roleId.contains("98")) {
+                                recent.setIsAllow(1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return recentList;
+    }
+
+    @Override
+    public List<Roche> queryRocheTaskByName(List<Roche> rocheList, User user) {
+        String roleId = user.getRoleId();
+        List<Task> tasks = queryTaskByUserName(user.getUsername());
+        for (Task task : tasks) {
+            ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+            String id = splitKey(processInstance.getBusinessKey(), Roche.class.getSimpleName());
+            if(StringUtils.isNotEmpty(id)){
+                for (Roche roche : rocheList) {
+                    if(roche.getId()==Integer.parseInt(id)){
+                        if(roleId.contains("98")){
+                            roche.setIsAllow(1);
+                        }
+                    }
+                }
+            }
+        }
+        return rocheList;
+    }
+
+
+    private String choseProcessType(Object object){
+        String type = "";
+        if(object instanceof Commodity){
+            Commodity commodity = (Commodity) object;
+            if(commodity.getStage().equals(ProcessConstant.DELIVERY_NAME)){
+                type = "delivery";
+            }else if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
+                type = "conserve";
+            }else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
+                type = "wrapper";
+            }else if(commodity.getStage().equals(ProcessConstant.REFUND_NAME)){
+                type = "refund";
+            }
+        }else if(object instanceof Recent){
+            Recent recent = (Recent) object;
+            if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
+                type = "recent";
+            }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
+                type = "temperature";
+            }
+        }
+        return type;
+    }
+
+
+    @Override
+    public List<String> findPrcessName(User user) {
+        List<String> stringList = findTask(user);
+        List<String> menuName = new ArrayList<>();
+        if(stringList.contains("recent")){
+            menuName.add(ProcessConstant.RECENT_NAME);
+        }
+        if(stringList.contains("temperature")){
+            menuName.add(ProcessConstant.TEMPERATURE_NAME);
+        }
+        if(stringList.contains("roche")){
+            menuName.add(ProcessConstant.ROCHE_NAME);
+        }
+        if(stringList.contains("delivery")){
+            menuName.add(ProcessConstant.DELIVERY_NAME);
+        }
+        if(stringList.contains("conserve")){
+            menuName.add(ProcessConstant.STORE_PACKAGE_EXPORT);
+        }
+        if(stringList.contains("wrapper")){
+            menuName.add(ProcessConstant.WRAPPER_NAME);
+        }
+        if(stringList.contains("refund")){
+            menuName.add(ProcessConstant.REFUND_NAME);
+        }
+        return menuName;
+    }
+
 
     private List<Task> queryTaskByUserName(String name){
         return taskService.createTaskQuery().taskCandidateUser(name).list();
@@ -483,7 +626,6 @@ public class ProcessServiceImpl implements IProcessService {
                 for (Task task : list) {
                     ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
                     String processDefinitionKey = processInstance.getProcessDefinitionKey();
-
                     if(processDefinitionKey.equals(properties.getCommodityProcess())
                             &&task.getTaskDefinitionKey().equals(ProcessConstant.FOUR_STEP)){
                         taskService.addCandidateUser(task.getId(), user.getUsername());
@@ -502,7 +644,6 @@ public class ProcessServiceImpl implements IProcessService {
                 for (Task task : list) {
                     ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
                     String processDefinitionKey = processInstance.getProcessDefinitionKey();
-
                     if(processDefinitionKey.equals(properties.getCommodityProcess())) {
                         if (task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)
                                 ||task.getTaskDefinitionKey().equals(ProcessConstant.TWELVE_STEP)){
@@ -523,60 +664,7 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
 
-    @Override
-    public List<Commodity> queryCommodityTaskByName(List<Commodity> commodityList, User user) {
-        List<Task> tasks = queryTaskByUserName(user.getUsername());
-        for (Task task : tasks) {
-            ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-            String businessKey = processInstance.getBusinessKey();
-            String id = splitKey(businessKey, Commodity.class.getSimpleName());
-            if(StringUtils.isNotEmpty(id)){
-                for (Commodity commodity : commodityList) {
-                    if(commodity.getId()==Integer.parseInt(id)&&commodity.getStatus()==2){
-                        commodity.setIsAllow(1);
-                    }
-                }
-            }
-        }
-        return commodityList;
-    }
 
-
-    @Override
-    public List<Recent> queryRecentTaskByName(List<Recent> recentList, User user) {
-        List<Task> tasks = queryTaskByUserName(user.getUsername());
-        for (Task task : tasks) {
-            ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-            String businessKey = processInstance.getBusinessKey();
-            String id = splitKey(businessKey, Recent.class.getSimpleName());
-            if(StringUtils.isNotEmpty(id)){
-                for (Recent recent : recentList) {
-                    if(recent.getId()==Integer.parseInt(id)){
-                        recent.setIsAllow(1);
-                    }
-                }
-            }
-        }
-        return recentList;
-    }
-
-    @Override
-    public List<Roche> queryRocheTaskByName(List<Roche> rocheList, User user) {
-        List<Task> tasks = queryTaskByUserName(user.getUsername());
-        for (Task task : tasks) {
-            ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-            String businessKey = processInstance.getBusinessKey();
-            String id = splitKey(businessKey, Roche.class.getSimpleName());
-            if(StringUtils.isNotEmpty(id)){
-                for (Roche roche : rocheList) {
-                    if(roche.getId()==Integer.parseInt(id)){
-                        roche.setIsAllow(1);
-                    }
-                }
-            }
-        }
-        return rocheList;
-    }
 
     @Override
     @Transactional
@@ -589,33 +677,6 @@ public class ProcessServiceImpl implements IProcessService {
         }
     }
 
-    @Override
-    public List<String> findPrcessName(String username) {
-        List<String> stringList = findTask(username);
-        List<String> menuName = new ArrayList<>();
-        if(stringList.contains("recent")){
-            menuName.add(ProcessConstant.RECENT_NAME);
-        }
-        if(stringList.contains("temperature")){
-            menuName.add(ProcessConstant.TEMPERATURE_NAME);
-        }
-        if(stringList.contains("roche")){
-            menuName.add(ProcessConstant.ROCHE_NAME);
-        }
-        if(stringList.contains("delivery")){
-            menuName.add(ProcessConstant.DELIVERY_NAME);
-        }
-        if(stringList.contains("conserve")){
-            menuName.add(ProcessConstant.STORE_PACKAGE_EXPORT);
-        }
-        if(stringList.contains("wrapper")){
-            menuName.add(ProcessConstant.WRAPPER_NAME);
-        }
-        if(stringList.contains("refund")){
-            menuName.add(ProcessConstant.REFUND_NAME);
-        }
-        return menuName;
-    }
 
     @Override
     @Transactional
@@ -655,14 +716,12 @@ public class ProcessServiceImpl implements IProcessService {
             addOrEditFiles(commodity,currentUser);
         }
 
-//        List<Task> taskList = queryTask(getBusinessKey(commodity));
-//
-//        if(taskList.size()==1){
-//
-//            String[] activityIds = new String[]{"_3","_4","_12"};
-//            rollbackPrcoess("_3",getBusinessKey(commodity),currentUser.getUsername(),taskList.get(0),activityIds);
-//
-//        }else {
+        List<Task> taskList = queryTask(getBusinessKey(commodity));
+
+        if(taskList.size()==1){
+            String[] activityIds = new String[]{"_3","_4","_12"};
+            rollbackPrcoess("_3",getBusinessKey(commodity),currentUser.getUsername(),taskList.get(0),activityIds);
+        }else {
             String[] mails = getEmails(87);
 
             List<Commodity> list =new ArrayList<>();
@@ -677,10 +736,8 @@ public class ProcessServiceImpl implements IProcessService {
             }else {
                 text= templateEngine.process("kdlCommodity", context);
             }
-
-            //发送带附件的邮件
             MailUtils.sendMail(text,mailProperties,mails,files);
-//        }
+        }
     }
 
 
@@ -719,13 +776,11 @@ public class ProcessServiceImpl implements IProcessService {
             }
         }
 
-//        List<Task> taskList = queryTask(getBusinessKey(recent));
-//        if(taskList.size()==1){
-//
-//            String[] activityIds = new String[]{"_3","_4","_8"};
-//            rollbackPrcoess("_3",getBusinessKey(recent),currentUser.getUsername(),taskList.get(0),activityIds);
-//
-//        }else {
+        List<Task> taskList = queryTask(getBusinessKey(recent));
+        if(taskList.size()==1){
+            String[] activityIds = new String[]{"_3","_4","_8"};
+            rollbackPrcoess("_3",getBusinessKey(recent),currentUser.getUsername(),taskList.get(0),activityIds);
+        }else {
             String[] mails = getEmails(87);
             List<Recent> list =new ArrayList<>();
             list.add(recent);
@@ -739,11 +794,62 @@ public class ProcessServiceImpl implements IProcessService {
             }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
                 text = templateEngine.process("kdlTemperature", context);
             }
-
-            //发送带附件的邮件
             MailUtils.sendMail(text,mailProperties,mails,files);
 
-//        }
+        }
+    }
+
+
+    @Override
+    @Transactional
+    public void alterRoche(Roche roche, User currentUser) {
+        StringBuffer alteration = new StringBuffer();
+        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
+        roche.setCreateTime(new Date());
+        Roche oldRoche = rocheService.queryRocheById(roche.getId());
+        if(!roche.getReason().equals(oldRoche.getReason())){
+            alteration.append("原因:" +date+ " 由 "+oldRoche.getReason()+" 修改为 "+roche.getReason()+"  。 ");
+        }
+        if(!roche.getActions().equals(oldRoche.getActions())){
+            alteration.append("行动:" +date+ " 由 "+oldRoche.getActions()+" 修改为 "+roche.getActions()+"  。 ");
+        }
+        if(!roche.getCompleteDate().equals(oldRoche.getCompleteDate())){
+            alteration.append("实际日期:" +date+ " 由 "+oldRoche.getCompleteDate()+" 修改为 "+roche.getCompleteDate()+"  。 ");
+        }
+        if(!roche.getFollow().equals(oldRoche.getFollow())){
+            alteration.append("后续行动:" +date+ " 由 "+oldRoche.getFollow()+" 修改为 "+roche.getFollow()+"  。 ");
+        }
+        if(!roche.getRemark().equals(oldRoche.getRemark())){
+            alteration.append("备注:" +date+ " 由 "+oldRoche.getRemark()+" 修改为 "+roche.getRemark()+"  。 ");
+        }
+        if(StringUtils.isNotEmpty(oldRoche.getAlteration())){
+            roche.setAlteration(oldRoche.getAlteration() +"  "+alteration.toString());
+        }else {
+            roche.setAlteration(alteration.toString());
+        }
+
+        rocheService.editRoche(roche);
+        if(StringUtils.isNotEmpty(roche.getImages())){
+            addOrEditFiles(roche,currentUser);
+        }
+
+        List<Task> taskList = queryTask(getBusinessKey(roche));
+
+        if(taskList.size()==1){
+            String[] activityIds = new String[]{"_3","_5","_6"};
+            rollbackPrcoess("_5",getBusinessKey(roche),currentUser.getUsername(),taskList.get(0),activityIds);
+        }else {
+            String[] mails = getEmails(87);
+
+            List<Roche> list =new ArrayList<>();
+            list.add(roche);
+            Map<String,String> files = new HashMap<>();
+
+            Context context = new Context();
+            context.setVariable("list",list);
+            String text = templateEngine.process("kdlRoche", context);
+            MailUtils.sendMail(text,mailProperties,mails,files);
+        }
     }
 
 
@@ -854,61 +960,6 @@ public class ProcessServiceImpl implements IProcessService {
     private List<Task> queryTask(String businessKey){
         return taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
 
-    }
-
-    @Override
-    @Transactional
-    public void alterRoche(Roche roche, User currentUser) {
-        StringBuffer alteration = new StringBuffer();
-        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
-        roche.setCreateTime(new Date());
-        Roche oldRoche = rocheService.queryRocheById(roche.getId());
-        if(!roche.getReason().equals(oldRoche.getReason())){
-            alteration.append("原因:" +date+ " 由 "+oldRoche.getReason()+" 修改为 "+roche.getReason()+"  。 ");
-        }
-        if(!roche.getActions().equals(oldRoche.getActions())){
-            alteration.append("行动:" +date+ " 由 "+oldRoche.getActions()+" 修改为 "+roche.getActions()+"  。 ");
-        }
-        if(!roche.getCompleteDate().equals(oldRoche.getCompleteDate())){
-            alteration.append("实际日期:" +date+ " 由 "+oldRoche.getCompleteDate()+" 修改为 "+roche.getCompleteDate()+"  。 ");
-        }
-        if(!roche.getFollow().equals(oldRoche.getFollow())){
-            alteration.append("后续行动:" +date+ " 由 "+oldRoche.getFollow()+" 修改为 "+roche.getFollow()+"  。 ");
-        }
-        if(!roche.getRemark().equals(oldRoche.getRemark())){
-            alteration.append("备注:" +date+ " 由 "+oldRoche.getRemark()+" 修改为 "+roche.getRemark()+"  。 ");
-        }
-        if(StringUtils.isNotEmpty(oldRoche.getAlteration())){
-            roche.setAlteration(oldRoche.getAlteration() +"  "+alteration.toString());
-        }else {
-            roche.setAlteration(alteration.toString());
-        }
-
-        rocheService.editRoche(roche);
-        if(StringUtils.isNotEmpty(roche.getImages())){
-            addOrEditFiles(roche,currentUser);
-        }
-
-//        List<Task> taskList = queryTask(getBusinessKey(roche));
-//
-//        if(taskList.size()==1){
-//
-//            String[] activityIds = new String[]{"_3","_5","_6"};
-//            rollbackPrcoess("_5",getBusinessKey(roche),currentUser.getUsername(),taskList.get(0),activityIds);
-//
-//        }else {
-            String[] mails = getEmails(87);
-
-            List<Roche> list =new ArrayList<>();
-            list.add(roche);
-            Map<String,String> files = new HashMap<>();
-
-            Context context = new Context();
-            context.setVariable("list",list);
-            String text = templateEngine.process("kdlRoche", context);
-
-            MailUtils.sendMail(text,mailProperties,mails,files);
-//        }
     }
 
 

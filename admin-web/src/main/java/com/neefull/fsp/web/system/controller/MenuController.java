@@ -37,14 +37,15 @@ public class MenuController extends BaseController {
         User currentUser = getCurrentUser();
         if (!StringUtils.equalsIgnoreCase(username, currentUser.getUsername()))
             throw new FebsException("您无权获取别人的菜单");
-        MenuTree<Menu> userMenus = this.menuService.findUserMenus(username);
+        MenuTree<Menu> userMenus = this.menuService.findUserMenus(currentUser);
         return new FebsResponse().data(userMenus);
     }
 
     @GetMapping("tree")
     public FebsResponse getMenuTree(Menu menu) throws FebsException {
+        User currentUser = getCurrentUser();
         try {
-            MenuTree<Menu> menus = this.menuService.findMenus(menu);
+            MenuTree<Menu> menus = this.menuService.findMenus(menu,currentUser);
             return new FebsResponse().success().data(menus.getChilds());
         } catch (Exception e) {
             String message = "获取菜单树失败";

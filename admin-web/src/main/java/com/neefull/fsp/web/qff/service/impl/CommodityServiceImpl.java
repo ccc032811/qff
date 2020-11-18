@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -68,13 +70,13 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
             pageInfo.setTotal(commodities.size());
 
         }else {
-
             pageInfo = commodityMapper.getConservePage(new Page<>(commodity.getPageNum(),commodity.getPageSize()),commodity);
             List<Commodity> newCommodity = processService.queryCommodityTaskByName(pageInfo.getRecords(),user);
             pageInfo.setRecords(newCommodity);
         }
 
         return pageInfo;
+
     }
 
 

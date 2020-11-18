@@ -569,4 +569,6 @@ public class Commodity implements Serializable {
     public void setAtt(Integer att) {
         this.att = att;
     }
+
+
 }

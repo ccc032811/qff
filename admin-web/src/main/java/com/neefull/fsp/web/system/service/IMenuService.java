@@ -3,6 +3,7 @@ package com.neefull.fsp.web.system.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.neefull.fsp.web.common.entity.MenuTree;
 import com.neefull.fsp.web.system.entity.Menu;
+import com.neefull.fsp.web.system.entity.User;
 
 import java.util.List;
 
@@ -25,14 +26,14 @@ public interface IMenuService extends IService<Menu> {
      * @param username 用户名
      * @return 用户菜单集合
      */
-    MenuTree<Menu> findUserMenus(String username);
+    MenuTree<Menu> findUserMenus(User user);
 
     /**
      * 查找所有的菜单/按钮 （树形结构）
      *
      * @return MenuTree<Menu>
      */
-    MenuTree<Menu> findMenus(Menu menu);
+    MenuTree<Menu> findMenus(Menu menu,User user);
 
     /**
      * 查找所有的菜单/按钮

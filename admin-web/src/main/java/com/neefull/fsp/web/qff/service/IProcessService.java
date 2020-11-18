@@ -44,7 +44,7 @@ public interface IProcessService  {
      * @param name
      * @return
      */
-    List<String> findTask(String name);
+    List<String> findTask(User user);
 
     /**删除流程
      * @param object
@@ -74,7 +74,7 @@ public interface IProcessService  {
      */
     void deleteProcessCommit(String[] userIds);
 
-    List<String> findPrcessName(String username);
+    List<String> findPrcessName(User user);
 
     void alterCommodity(Commodity commodity, User currentUser);
 

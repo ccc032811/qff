@@ -11,6 +11,7 @@ import com.neefull.fsp.web.common.utils.TreeUtil;
 import com.neefull.fsp.web.qff.service.IProcessService;
 import com.neefull.fsp.web.qff.utils.ProcessConstant;
 import com.neefull.fsp.web.system.entity.Menu;
+import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.mapper.MenuMapper;
 import com.neefull.fsp.web.system.mapper.RoleMenuMapper;
 import com.neefull.fsp.web.system.service.IMenuService;
@@ -49,21 +50,21 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    public MenuTree<Menu> findUserMenus(String username) {
-        List<Menu> menus = this.baseMapper.findUserMenus(username);
-        List<MenuTree<Menu>> trees = this.convertMenus(menus,username);
+    public MenuTree<Menu> findUserMenus(User user) {
+        List<Menu> menus = this.baseMapper.findUserMenus(user.getUsername());
+        List<MenuTree<Menu>> trees = this.convertMenus(menus,user);
         return TreeUtil.buildMenuTree(trees);
     }
 
     @Override
-    public MenuTree<Menu> findMenus(Menu menu) {
+    public MenuTree<Menu> findMenus(Menu menu,User user) {
         QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(menu.getMenuName())) {
             queryWrapper.lambda().like(Menu::getMenuName, menu.getMenuName());
         }
         queryWrapper.lambda().orderByAsc(Menu::getOrderNum);
         List<Menu> menus = this.baseMapper.selectList(queryWrapper);
-        List<MenuTree<Menu>> trees = this.convertMenus(menus,"");
+        List<MenuTree<Menu>> trees = this.convertMenus(menus,user);
 
         return TreeUtil.buildMenuTree(trees);
     }
@@ -117,8 +118,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         return this.baseMapper.findUserPermissionList(userName);
     }
 
-    private List<MenuTree<Menu>> convertMenus(List<Menu> menus,String username) {
-        List<String> list = processService.findPrcessName(username);
+    private List<MenuTree<Menu>> convertMenus(List<Menu> menus,User user) {
+        List<String> list = processService.findPrcessName(user);
         List<MenuTree<Menu>> trees = new ArrayList<>();
         for (Menu menu : menus) {
             MenuTree<Menu> tree = new MenuTree<>();
