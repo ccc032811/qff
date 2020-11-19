@@ -387,17 +387,18 @@ public class ProcessServiceImpl implements IProcessService {
         if(CollectionUtils.isNotEmpty(list)){
             for (Task task : list) {
                 ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+                String activityId = processInstance.getActivityId();
                 if(processInstance.getBusinessKey().startsWith("Recent")){
                     String id = processInstance.getBusinessKey().split("\\:")[1];
                     Recent recent = recentService.queryRecentById(Integer.parseInt(id));
                     if(roleId.contains("87")){
-                        if(StringUtils.isNotEmpty(recent.getRepDate())) {
+                        if(!activityId.equals(ProcessConstant.THREE_STEP)) {
                             names.add(choseProcessType(recent));
                         }
                     }else {
-                        if(roleId.contains("98")&&StringUtils.isNotEmpty(recent.getRepDate())){
+                        if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
                             names.add(choseProcessType(recent));
-                        }else if(!roleId.contains("98")&&StringUtils.isEmpty(recent.getRepDate())){
+                        }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
                             names.add(choseProcessType(recent));
                         }
                     }
@@ -409,13 +410,13 @@ public class ProcessServiceImpl implements IProcessService {
                     String id = processInstance.getBusinessKey().split("\\:")[1];
                     Commodity commodity = commodityService.queryCommodityById(Integer.parseInt(id));
                     if(roleId.contains("87")){
-                        if(StringUtils.isNotEmpty(commodity.getRepTime())) {
+                        if(!activityId.equals(ProcessConstant.THREE_STEP)) {
                             names.add(choseProcessType(commodity));
                         }
                     }else {
-                        if(roleId.contains("98")&&StringUtils.isNotEmpty(commodity.getRepTime())){
+                        if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
                             names.add(choseProcessType(commodity));
-                        }else if(!roleId.contains("98")&&StringUtils.isEmpty(commodity.getRepTime())){
+                        }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
                             names.add(choseProcessType(commodity));
                         }
                     }
@@ -432,11 +433,12 @@ public class ProcessServiceImpl implements IProcessService {
         List<Task> tasks = queryTaskByUserName(user.getUsername());
         for (Task task : tasks) {
             ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+            String activityId = processInstance.getActivityId();
             String id = splitKey(processInstance.getBusinessKey(), Commodity.class.getSimpleName());
             if(StringUtils.isNotEmpty(id)){
                 for (Commodity commodity : commodityList) {
                     if(commodity.getId()==Integer.parseInt(id)&&commodity.getStatus()==2) {
-                        if(StringUtils.isEmpty(commodity.getRepTime())){
+                        if(activityId.equals(ProcessConstant.THREE_STEP)){
                             if(!roleId.contains("98")){
                                 commodity.setIsAllow(1);
                             }
@@ -459,11 +461,12 @@ public class ProcessServiceImpl implements IProcessService {
         List<Task> tasks = queryTaskByUserName(user.getUsername());
         for (Task task : tasks) {
             ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+            String activityId = processInstance.getActivityId();
             String id = splitKey(processInstance.getBusinessKey(), Recent.class.getSimpleName());
             if(StringUtils.isNotEmpty(id)){
                 for (Recent recent : recentList) {
                     if(recent.getId()==Integer.parseInt(id)){
-                        if(StringUtils.isEmpty(recent.getRepDate())){
+                        if(activityId.equals(ProcessConstant.THREE_STEP)){
                             if(!roleId.contains("98")){
                                 recent.setIsAllow(1);
                             }
