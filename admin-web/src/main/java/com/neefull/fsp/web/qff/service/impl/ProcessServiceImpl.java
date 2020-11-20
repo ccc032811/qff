@@ -92,7 +92,6 @@ public class ProcessServiceImpl implements IProcessService {
         List<Attachment> attachments = new ArrayList<>();
 
         if(object instanceof Commodity){
-
             Commodity commodity = (Commodity) object;
             String businessKey = getBusinessKey(commodity);
 
@@ -122,8 +121,6 @@ public class ProcessServiceImpl implements IProcessService {
                     Context context = new Context();
                     context.setVariable("list", commodityList);
                     String text = templateEngine.process("rocheOtherCommodity", context);
-
-                    //发送带附件的邮件
                     MailUtils.sendMail(text, mailProperties, rocheMails, files);
                 }
 
@@ -238,16 +235,13 @@ public class ProcessServiceImpl implements IProcessService {
                     Context context = new Context();
                     context.setVariable("list",rocheList);
                     String text = templateEngine.process("rocheRoche", context);
-
-                    //发送带附件的邮件
                     MailUtils.sendMail(text,mailProperties,mails,files);
 
                 }
             }
-
-
         }
     }
+
 
     @Transactional
     @Override
@@ -308,6 +302,7 @@ public class ProcessServiceImpl implements IProcessService {
         String activityId = processInstance.getActivityId();
         return activityId.equals(ProcessConstant.THREE_STEP);
     }
+
 
     private Set getTaskCandidate(String taskId){
         Set<String> user = new HashSet<String>();
@@ -372,6 +367,7 @@ public class ProcessServiceImpl implements IProcessService {
         }
         return map;
     }
+
 
     private List<HistoricTaskInstance> queryHistoryList(String businessKey){
         return historyService.createHistoricTaskInstanceQuery().processInstanceBusinessKey(businessKey)
@@ -482,9 +478,10 @@ public class ProcessServiceImpl implements IProcessService {
         return recentList;
     }
 
+
     @Override
     public List<Roche> queryRocheTaskByName(List<Roche> rocheList, User user) {
-        String roleId = user.getRoleId();
+        String roleId = roleService.findUserRoleIds(user.getUsername());
         List<Task> tasks = queryTaskByUserName(user.getUsername());
         for (Task task : tasks) {
             ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());

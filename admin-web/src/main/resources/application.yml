@@ -8,7 +8,7 @@ spring:
     multipart:
       max-file-size: 10MB # 限制文件上传的大小
   profiles:
-    active: dev
+    active: prod
 
   thymeleaf:
     cache: false
@@ -29,7 +29,7 @@ spring:
     host: smtp.exmail.qq.com    #smtp服务器地址    smtp.exmail.qq.com
     timeout: 25000   #连接超时
     username:  sph-kdl-qff@shaphar.com     #  sph-kdl-qff@shaphar.com    ccc032811@163.com
-    password:  spQff123+        #  spQff123+    ccc032811
+    password:  spQff123+                   #  spQff123+    ccc032811
   mvc:
     favicon:
       enabled: true
@@ -50,9 +50,9 @@ qff:
     sftppath:  /UploadOutbound/          # sftp文件地址
     movepath:  /UploadArchive/           #移动的目标文件
     localpath: /usr/local/files/         #文件下载到当前地址   /usr/local/files/       D:\JavaSoft\nginx-1.12.2\html\
-    host: 10.1.151.25                        #10.1.151.25       10.1.158.100
-    username:  QFFTest                  #QFFTest            QFFProd
-    password:  1qaz2wsx                   #1qaz2wsx       KDL@seeburger
+    host: 10.1.158.100                         #10.1.151.25       10.1.158.100
+    username:  QFFProd                         #QFFTest            QFFProd
+    password:  KDL@seeburger                   #1qaz2wsx       KDL@seeburger
   send:
     conserveTemplatePath:   #到货养护包装QFF pdf模板地址
     conserveDownLoadPath:   #到货养护包装QFF 生成的模板地址
@@ -69,5 +69,5 @@ qff:
     imagePath: /usr/local/files/                     #/usr/local/files/  图片存储的地址     D:\JavaSoft\nginx-1.12.2\html\
     imageUrl:  /usr/local/files/                     #  图片展示路径   /usr/local/files/      http://127.0.0.1:10086/
   soap:
-    soapUrl: http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl        #http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl    http://10.1.16.55/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl
+    soapUrl:  http://10.1.16.55/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl        #http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl    http://10.1.16.55/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl
 
