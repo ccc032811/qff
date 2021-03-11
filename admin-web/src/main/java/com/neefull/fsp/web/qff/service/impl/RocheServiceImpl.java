@@ -1,6 +1,7 @@
 package com.neefull.fsp.web.qff.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -42,12 +43,13 @@ public class RocheServiceImpl extends ServiceImpl<RocheMapper, Roche> implements
         rocheMapper.insert(roche);
     }
 
+
     @Override
     @Transactional
     public void editRoche(Roche roche) {
         rocheMapper.update(roche, new UpdateWrapper<Roche>().eq("number",roche.getNumber()));
-
     }
+
 
     @Override
     public IPage<Roche> getRochePage(Roche roche, User user) {
@@ -119,6 +121,13 @@ public class RocheServiceImpl extends ServiceImpl<RocheMapper, Roche> implements
             }
         }
         return rocheList;
+    }
+
+    @Override
+    public Integer queryByNumber(String number) {
+        QueryWrapper<Roche> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("number",number);
+        return this.baseMapper.selectCount(queryWrapper);
     }
 
 }

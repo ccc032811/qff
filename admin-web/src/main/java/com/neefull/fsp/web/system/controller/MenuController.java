@@ -43,9 +43,8 @@ public class MenuController extends BaseController {
 
     @GetMapping("tree")
     public FebsResponse getMenuTree(Menu menu) throws FebsException {
-        User currentUser = getCurrentUser();
         try {
-            MenuTree<Menu> menus = this.menuService.findMenus(menu,currentUser);
+            MenuTree<Menu> menus = this.menuService.findMenus(menu);
             return new FebsResponse().success().data(menus.getChilds());
         } catch (Exception e) {
             String message = "获取菜单树失败";

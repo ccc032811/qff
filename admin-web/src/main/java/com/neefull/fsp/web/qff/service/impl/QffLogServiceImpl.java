@@ -43,7 +43,6 @@ public class QffLogServiceImpl extends ServiceImpl<QffLogMapper, QffLog> impleme
         } catch (Exception e) {
             qffLog.setRequest("");
         }
-
         save(qffLog);
     }
 

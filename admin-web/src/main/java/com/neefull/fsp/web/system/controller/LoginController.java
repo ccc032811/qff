@@ -49,6 +49,7 @@ public class LoginController extends BaseController {
         if (!CaptchaUtil.verify(verifyCode, request)) {
             throw new FebsException("验证码错误！");
         }
+
         password = EncryptUtil.encrypt(password, FebsConstant.AES_KEY);
         UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
         try {

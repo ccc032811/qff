@@ -38,6 +38,8 @@ public class ExcelUtil {
     public void exportExcel(SXSSFWorkbook workbook, SXSSFSheet sheet, HttpServletResponse response) throws Exception{
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+
+
         try{
             sheet.setDefaultColumnWidth((short) 30);
 
@@ -148,7 +150,6 @@ public class ExcelUtil {
         style.setFont(font);
         style.setWrapText(false);
         style.setDataFormat(format.getFormat("yyyy/MM/dd"));
-
         return style;
     }
 

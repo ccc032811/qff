@@ -84,6 +84,8 @@ public class RocheController extends BaseController {
         }
     }
 
+
+
     @Qff("修改罗氏发起QFF")
     @PostMapping("/alter")
     public FebsResponse alterRoche(Roche roche){
@@ -183,14 +185,20 @@ public class RocheController extends BaseController {
     @PostMapping("/commit")
     @RequiresPermissions("roche:audit")
     public FebsResponse commitProcess(Roche roche) throws FebsException {
-        try {
-            User user = getCurrentUser();
-            processService.commitProcess(roche,user);
-            return new FebsResponse().success();
-        } catch (Exception e) {
-            String message = "提交罗氏内部QFF流程失败";
-            log.error(message,e);
+        Integer count = rocheService.queryByNumber(roche.getNumber());
+        if(count>0){
+            String message = "该编号已存在，不可重复";
             throw new FebsException(message);
+        }else {
+            try {
+                User user = getCurrentUser();
+                processService.commitProcess(roche,user);
+                return new FebsResponse().success();
+            } catch (Exception e) {
+                String message = "提交罗氏内部QFF流程失败";
+                log.error(message,e);
+                throw new FebsException(message);
+            }
         }
     }
 

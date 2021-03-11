@@ -81,7 +81,6 @@ public class RochedListener implements JavaDelegate {
             }
         }
         Roche roche = rocheService.queryRocheById(Integer.parseInt(starId));
-//        List<Attachment> attachments = (List<Attachment>) execution.getVariable("list");
 
         Map<String,String> files = new HashMap<>();
 

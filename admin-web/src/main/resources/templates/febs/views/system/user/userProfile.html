@@ -151,7 +151,7 @@
 
         $view.find('#user-img img').attr('src', ctx + "febs/images/avatar/" + currentUser.avatar);
         $view.on('click', '#update-user-info', function () {
-            febs.modal.view('个人信息修改', 'user/profile/update', {
+            febs.modal.view('个人信息修改', 'sysUser/profile/update', {
                 area: $(window).width() <= 750 ? '90%' : '50%',
                 btn: ['确定'],
                 yes: function () {
@@ -161,7 +161,7 @@
         });
 
         $view.on('click', '#user-profile img', function () {
-            febs.modal.view('点击更换', 'user/avatar', {
+            febs.modal.view('点击更换', 'sysUser/avatar', {
                 area: $(window).width() <= 750 ? '90%' : '650px',
                 offset: '100px'
             });
@@ -190,7 +190,7 @@
                 febs.alert.warn('数据未作任何修改');
                 return false;
             }
-            febs.post(ctx + 'user/theme/update', data.field, function () {
+            febs.post(ctx + 'sysUser/theme/update', data.field, function () {
                 _currentData = data.field;
                 febs.modal.confirm('修改成功', '是否马上刷新页面生效？', function () {
                     window.location.reload();

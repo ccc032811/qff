@@ -56,6 +56,9 @@ import java.util.*;
 public class ProcessServiceImpl implements IProcessService {
 
 
+    private final static String PROSTYPE = "processType";
+
+
     @Autowired
     private ICommodityService commodityService;
     @Autowired
@@ -109,10 +112,14 @@ public class ProcessServiceImpl implements IProcessService {
                 startProcess(commodity);
 
                 if(StringUtils.isNotEmpty(commodity.getImages())){
-                    addOrEditFiles(commodity, user);
+                    attachments = addOrEditFiles(commodity, user);
                 }
                 if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
                     Map<String, String> files = new HashMap<>();
+                    for (Attachment attachment : attachments) {
+                        files.put(attachment.getRemark()+ StringPool.DOT + attachment.getAttachType(),
+                                properties.getImagePath() + attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
+                    }
                     String[] rocheMails = getEmails(86);
 
                     List<Commodity> commodityList = new ArrayList<>();
@@ -157,7 +164,8 @@ public class ProcessServiceImpl implements IProcessService {
                 }
 
                 businessKey = getBusinessKey(recent);
-                startProcess(properties.getRecentProcess(),businessKey);
+
+                startProcess(properties.getRecentProcess(),businessKey,recent.getStage());
 
                 Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
                 taskService.setAssignee(task.getId(),"康德乐发起申请");
@@ -200,10 +208,10 @@ public class ProcessServiceImpl implements IProcessService {
                 rocheService.addRoche(roche);
 
                 if(StringUtils.isNotEmpty(roche.getImages())){
-                    attachments = addOrEditFiles(roche, user);
+                    addOrEditFiles(roche, user);
                 }
                 businessKey = getBusinessKey(roche);
-                startProcess(properties.getRocheProcess(),businessKey);
+                startProcess(properties.getRocheProcess(),businessKey,"roche");
 
                 Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
                 taskService.setAssignee(task.getId(),"罗氏发起申请");
@@ -211,6 +219,7 @@ public class ProcessServiceImpl implements IProcessService {
 
                 rocheService.updateRocheStatus(roche.getId(), ProcessConstant.UNDER_REVIEW);
             }else {
+
                 rocheService.editRoche(roche);
 
                 if(StringUtils.isNotEmpty(roche.getImages())){
@@ -247,7 +256,7 @@ public class ProcessServiceImpl implements IProcessService {
     @Override
     public void startProcess(Commodity commodity){
         String businessKey = getBusinessKey(commodity);
-        startProcess(properties.getCommodityProcess(),businessKey);
+        startProcess(properties.getCommodityProcess(),businessKey,commodity.getStage());
 
         Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
         taskService.setAssignee(task.getId(),"康德乐发起申请");
@@ -319,8 +328,25 @@ public class ProcessServiceImpl implements IProcessService {
 
 
     @Transactional
-    protected void startProcess(String definitionKey,String businessKey){
-        runtimeService.startProcessInstanceByKey(definitionKey,businessKey);
+    protected void startProcess(String definitionKey,String businessKey,String type){
+        Map<String,Object> map = new HashMap<>();
+        if(type.equals(ProcessConstant.DELIVERY_NAME)){
+            map.put(PROSTYPE,"delivery");
+        }else if(type.equals(ProcessConstant.CONSERVE_NAME)){
+            map.put(PROSTYPE,"conserve");
+        }else if(type.equals(ProcessConstant.WRAPPER_NAME)){
+            map.put(PROSTYPE,"wrapper");
+        }else if(type.equals(ProcessConstant.REFUND_NAME)){
+            map.put(PROSTYPE,"refund");
+        } else if(type.equals(ProcessConstant.RECENT_NAME)){
+            map.put(PROSTYPE,"recent");
+        } else if(type.equals(ProcessConstant.TEMPERATURE_NAME)){
+            map.put(PROSTYPE,"temperature");
+        } else {
+            map.put(PROSTYPE,type);
+        }
+        runtimeService.startProcessInstanceByKey(definitionKey,businessKey,map);
+
     }
 
 
@@ -379,46 +405,124 @@ public class ProcessServiceImpl implements IProcessService {
     public List<String> findTask(User user) {
         String roleId = roleService.findUserRoleIds(user.getUsername());
         List<Task> list = queryTaskByUserName(user.getUsername());
+
         List<String> names = new ArrayList<>();
+
         if(CollectionUtils.isNotEmpty(list)){
             for (Task task : list) {
                 ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+                String type = (String) runtimeService.getVariable(processInstance.getProcessInstanceId(), "processType");
+
                 String activityId = processInstance.getActivityId();
-                if(processInstance.getBusinessKey().startsWith("Recent")){
-                    String id = processInstance.getBusinessKey().split("\\:")[1];
-                    Recent recent = recentService.queryRecentById(Integer.parseInt(id));
-                    if(roleId.contains("87")){
-                        if(!activityId.equals(ProcessConstant.THREE_STEP)) {
-                            names.add(choseProcessType(recent));
+                if(StringUtils.isNotEmpty(type)){
+                    if(("delivery").equals(type)||("conserve").equals(type)||("wrapper").equals(type)||("refund").equals(type)){
+                        if(roleId.contains("87")){
+                            if(!activityId.equals(ProcessConstant.THREE_STEP)) {
+                                names.add(type);
+                            }
+                        }else {
+                            if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
+                                names.add(type);
+                            }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
+                                names.add(type);
+                            }
                         }
-                    }else {
-                        if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
-                            names.add(choseProcessType(recent));
-                        }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
-                            names.add(choseProcessType(recent));
+                    }else if(("recent").equals(type)||("temperature").equals(type)){
+                        if(roleId.contains("87")){
+                            if(!activityId.equals(ProcessConstant.THREE_STEP)) {
+                                names.add(type);
+                            }
+                        }else {
+                            if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
+                                names.add(type);
+                            }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
+                                names.add(type);
+                            }
                         }
-                    }
-                }else if(processInstance.getBusinessKey().startsWith("Roche")) {
-                    if(roleId.contains("98")){
-                        names.add("roche");
+                    }else if(("roche").equals(type)){
+                        if(roleId.contains("98")){
+                            names.add("roche");
+                        }
                     }
                 }else {
-                    String id = processInstance.getBusinessKey().split("\\:")[1];
-                    Commodity commodity = commodityService.queryCommodityById(Integer.parseInt(id));
-                    if(roleId.contains("87")){
-                        if(!activityId.equals(ProcessConstant.THREE_STEP)) {
-                            names.add(choseProcessType(commodity));
+                    if(processInstance.getBusinessKey().startsWith("Recent")){
+                        String id = processInstance.getBusinessKey().split("\\:")[1];
+                        Recent recent = recentService.queryRecentById(Integer.parseInt(id));
+                        if(roleId.contains("87")){
+                            if(!activityId.equals(ProcessConstant.THREE_STEP)) {
+                                names.add(choseProcessType(recent));
+                            }
+                        }else {
+                            if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
+                                names.add(choseProcessType(recent));
+                            }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
+                                names.add(choseProcessType(recent));
+                            }
+                        }
+                    }else if(processInstance.getBusinessKey().startsWith("Roche")) {
+                        if(roleId.contains("98")){
+                            names.add("roche");
                         }
                     }else {
-                        if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
-                            names.add(choseProcessType(commodity));
-                        }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
-                            names.add(choseProcessType(commodity));
+                        String id = processInstance.getBusinessKey().split("\\:")[1];
+                        Commodity commodity = commodityService.queryCommodityById(Integer.parseInt(id));
+                        if(roleId.contains("87")){
+                            if(!activityId.equals(ProcessConstant.THREE_STEP)) {
+                                names.add(choseProcessType(commodity));
+                            }
+                        }else {
+                            if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
+                                names.add(choseProcessType(commodity));
+                            }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
+                                names.add(choseProcessType(commodity));
+                            }
                         }
                     }
                 }
             }
         }
+
+
+//        if(CollectionUtils.isNotEmpty(list)){
+//            for (Task task : list) {
+//
+//                ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+//                String activityId = processInstance.getActivityId();
+//                if(processInstance.getBusinessKey().startsWith("Recent")){
+//                    String id = processInstance.getBusinessKey().split("\\:")[1];
+//                    Recent recent = recentService.queryRecentById(Integer.parseInt(id));
+//                    if(roleId.contains("87")){
+//                        if(!activityId.equals(ProcessConstant.THREE_STEP)) {
+//                            names.add(choseProcessType(recent));
+//                        }
+//                    }else {
+//                        if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
+//                            names.add(choseProcessType(recent));
+//                        }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
+//                            names.add(choseProcessType(recent));
+//                        }
+//                    }
+//                }else if(processInstance.getBusinessKey().startsWith("Roche")) {
+//                    if(roleId.contains("98")){
+//                        names.add("roche");
+//                    }
+//                }else {
+//                    String id = processInstance.getBusinessKey().split("\\:")[1];
+//                    Commodity commodity = commodityService.queryCommodityById(Integer.parseInt(id));
+//                    if(roleId.contains("87")){
+//                        if(!activityId.equals(ProcessConstant.THREE_STEP)) {
+//                            names.add(choseProcessType(commodity));
+//                        }
+//                    }else {
+//                        if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
+//                            names.add(choseProcessType(commodity));
+//                        }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
+//                            names.add(choseProcessType(commodity));
+//                        }
+//                    }
+//                }
+//            }
+//        }
         return names;
     }
 

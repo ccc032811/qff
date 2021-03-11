@@ -198,14 +198,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         this.userRoleService.save(ur);
     }
 
-    @Override
-    @Transactional
-    public void updatePassword(String username, String password) {
-        User user = new User();
-        user.setPassword(EncryptUtil.encrypt(password,FebsConstant.AES_KEY));
-        user.setModifyTime(new Date());
-        this.baseMapper.update(user, new LambdaQueryWrapper<User>().eq(User::getUsername, username));
-    }
+
 
     @Override
     @Transactional

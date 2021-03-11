@@ -57,14 +57,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    public MenuTree<Menu> findMenus(Menu menu,User user) {
+    public MenuTree<Menu> findMenus(Menu menu) {
         QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(menu.getMenuName())) {
             queryWrapper.lambda().like(Menu::getMenuName, menu.getMenuName());
         }
         queryWrapper.lambda().orderByAsc(Menu::getOrderNum);
         List<Menu> menus = this.baseMapper.selectList(queryWrapper);
-        List<MenuTree<Menu>> trees = this.convertMenus(menus,user);
+        List<MenuTree<Menu>> trees = this.convertMenus(menus);
 
         return TreeUtil.buildMenuTree(trees);
     }
@@ -114,9 +114,25 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     @Override
     @DS("typt")
     public List<Menu> findUserPermissionList(String userName) {
-
         return this.baseMapper.findUserPermissionList(userName);
     }
+
+
+    private List<MenuTree<Menu>> convertMenus(List<Menu> menus) {
+        List<MenuTree<Menu>> trees = new ArrayList<>();
+        for (Menu menu : menus) {
+            MenuTree<Menu> tree = new MenuTree<>();
+            tree.setId(String.valueOf(menu.getMenuId()));
+            tree.setParentId(String.valueOf(menu.getParentId()));
+            tree.setTitle(menu.getMenuName());
+            tree.setIcon(menu.getIcon());
+            tree.setHref(menu.getUrl());
+            tree.setData(menu);
+            trees.add(tree);
+        }
+        return trees;
+    }
+
 
     private List<MenuTree<Menu>> convertMenus(List<Menu> menus,User user) {
         List<String> list = processService.findPrcessName(user);

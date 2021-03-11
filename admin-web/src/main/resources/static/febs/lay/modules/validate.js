@@ -6,7 +6,7 @@ layui.define(['jquery'], function (exports) {
             if (!isEmpty(value)) {
                 var result = '';
                 $.ajax({
-                    url: ctx + 'user/check/' + value,
+                    url: ctx + 'sysUser/check/' + value,
                     data: {
                         "userId": item.getAttribute('id')
                     },

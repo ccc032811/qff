@@ -105,13 +105,6 @@ public interface IUserService extends IService<User> {
      */
     void regist(String username, String password);
 
-    /**
-     * 修改密码
-     *
-     * @param username 用户名
-     * @param password 新密码
-     */
-    void updatePassword(String username, String password);
 
     /**
      * 更新用户头像

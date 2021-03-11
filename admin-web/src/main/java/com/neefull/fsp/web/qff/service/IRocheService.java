@@ -47,4 +47,7 @@ public interface IRocheService extends IService<Roche> {
     Roche queryRocheById(Integer id);
 
     List<Roche> getRocheExcelPage(Roche roche, User currentUser);
+
+    Integer queryByNumber(String number);
+
 }

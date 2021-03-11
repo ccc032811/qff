@@ -33,7 +33,7 @@ public interface IMenuService extends IService<Menu> {
      *
      * @return MenuTree<Menu>
      */
-    MenuTree<Menu> findMenus(Menu menu,User user);
+    MenuTree<Menu> findMenus(Menu menu);
 
     /**
      * 查找所有的菜单/按钮

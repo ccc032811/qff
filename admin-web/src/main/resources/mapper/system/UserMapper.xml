@@ -179,7 +179,6 @@
             u.accept,
             u.create_time createTime,
             u.ssex sex,
-            u.dept_id deptId,
             u.last_login_time lastLoginTime,
             u.modify_time modifyTime,
             u.description,

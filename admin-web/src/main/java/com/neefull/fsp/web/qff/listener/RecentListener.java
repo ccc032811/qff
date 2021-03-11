@@ -85,13 +85,10 @@ public class RecentListener implements JavaDelegate {
         Map<String,String> files = new HashMap<>();
         if(CollectionUtils.isNotEmpty(attachments)){
             for (Attachment attachment : attachments) {
-                files.put(attachment.getRemark()+ StringPool.DOT + attachment.getAttachType(),properties.getImagePath()+attachment.getRemark()+ StringPool.DOT+attachment.getAttachType());
+                files.put(attachment.getRemark()+ StringPool.DOT + attachment.getAttachType(),
+                        properties.getImagePath()+attachment.getRemark()+ StringPool.DOT+attachment.getAttachType());
             }
         }
-//        Map<String,String> map = new HashMap<>();
-//        String url = templateProperties.getConserveDownLoadPath()+ recent.getNumber()+".pdf";
-//        template.createPdf(map,templateProperties.getConserveTemplatePath(),templateProperties.getConserveDownLoadPath(),url);
-
 
         List<Recent> list = new ArrayList<>();
         list.add(recent);

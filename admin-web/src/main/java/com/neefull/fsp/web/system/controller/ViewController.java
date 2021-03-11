@@ -177,4 +177,16 @@ public class ViewController extends BaseController {
     }
 
 
+    @GetMapping(FebsConstant.VIEW_PREFIX + "/others/febs/icon")
+    @RequiresPermissions("febs:icons:view")
+    public String getFebsIcon() {
+        return FebsUtil.view("system/menu/icon");
+    }
+    @GetMapping( "/others/febs/icon")
+    @RequiresPermissions("febs:icons:view")
+    public String febsIcon() {
+        return FebsUtil.view("system/menu/icon");
+    }
+
+
 }

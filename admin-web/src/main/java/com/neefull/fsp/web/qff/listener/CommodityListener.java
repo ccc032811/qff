@@ -47,15 +47,9 @@ public class CommodityListener extends BaseController implements JavaDelegate{
     @Autowired
     private SendMailProperties mailProperties;
     @Autowired
-    private TemplateProperties templateProperties;
-    @Autowired
     private ICommodityService conserveService;
     @Autowired
-    private FilePdfTemplate template;
-    @Autowired
     private IUserService userService;
-    @Autowired
-    private IAttachmentService attachmentService;
     @Autowired
     private ProcessInstanceProperties properties;
     @Autowired
@@ -86,19 +80,17 @@ public class CommodityListener extends BaseController implements JavaDelegate{
         //查询
         Commodity commodity = conserveService.queryCommodityById(Integer.parseInt(starId));
 
-//        List<Attachment> attachments = (List<Attachment>) execution.getVariable("list");
-//
         Map<String,String> files = new HashMap<>();
-//        if(CollectionUtils.isNotEmpty(attachments)){
-//            for (Attachment attachment : attachments) {
-//                files.put(attachment.getRemark(),properties.getImagePath()+attachment.getRemark()+ StringPool.DOT+attachment.getAttachType());
-//            }
-//        }
 
-//        Map<String,String> map = new HashMap<>();
-//        String url = templateProperties.getConserveDownLoadPath()+ commodity.getNumber()+".pdf";
-//        template.createPdf(map,templateProperties.getConserveTemplatePath(),templateProperties.getConserveDownLoadPath(),url);
+        if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
 
+            List<Attachment> attachments = (List<Attachment>) execution.getVariable("list");
+            if(CollectionUtils.isNotEmpty(attachments)){
+                for (Attachment attachment : attachments) {
+                    files.put(attachment.getRemark(),properties.getImagePath()+attachment.getRemark()+ StringPool.DOT+attachment.getAttachType());
+                }
+            }
+        }
 
         List<Commodity> list =new ArrayList<>();
         list.add(commodity);

@@ -174,15 +174,15 @@
             febs.navigate("/index");
         });
 
-        $view.on('click', '#password-update', function () {
-            febs.modal.view('密码修改', 'password/update', {
-                area: $(window).width() <= 750 ? '90%' : '500px',
-                btn: ['确定'],
-                yes: function () {
-                    $('#user-password-update').find('#submit').trigger('click');
-                }
-            });
-        });
+        // $view.on('click', '#password-update', function () {
+        //     febs.modal.view('密码修改', 'password/update', {
+        //         area: $(window).width() <= 750 ? '90%' : '500px',
+        //         btn: ['确定'],
+        //         yes: function () {
+        //             $('#user-password-update').find('#submit').trigger('click');
+        //         }
+        //     });
+        // });
 
         $view.on('click', '#user-profile', function () {
             febs.navigate("/user/profile");

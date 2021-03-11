@@ -42,7 +42,7 @@ public class SysUserController extends BaseController {
     }
 
     @GetMapping("check/{username}")
-    public boolean checkUserName(@NotBlank(message = "{required}") @PathVariable String username, String userId) {
+    public boolean checkUserName(@NotBlank(message = "{required}") @PathVariable String username , String userId) {
         return this.userService.findByName(username) == null || StringUtils.isNotBlank(userId);
     }
 
@@ -98,37 +98,9 @@ public class SysUserController extends BaseController {
         }
     }
 
-    @PostMapping("password/reset/{usernames}")
-    @RequiresPermissions("qf:sysuser:password:reset")
-    public FebsResponse resetPassword(@NotBlank(message = "{required}") @PathVariable String usernames) throws FebsException {
-        try {
-            String[] usernameArr = usernames.split(StringPool.COMMA);
-            this.userService.resetPassword(usernameArr);
-            return new FebsResponse().success();
-        } catch (Exception e) {
-            String message = "重置用户密码失败";
-            log.error(message, e);
-            throw new FebsException(message);
-        }
-    }
 
-    @PostMapping("password/update")
-    public FebsResponse updatePassword(
-            @NotBlank(message = "{required}") String oldPassword,
-            @NotBlank(message = "{required}") String newPassword) throws FebsException {
-        try {
-            User user = getCurrentUser();
-            if (!StringUtils.equals(user.getPassword(), EncryptUtil.encrypt(oldPassword, FebsConstant.AES_KEY))) {
-                throw new FebsException("原密码不正确");
-            }
-            userService.updatePassword(user.getUsername(), newPassword);
-            return new FebsResponse().success();
-        } catch (Exception e) {
-            String message = "修改密码失败，" + e.getMessage();
-            log.error(message, e);
-            throw new FebsException(message);
-        }
-    }
+
+
 
     @GetMapping("avatar/{image}")
     public FebsResponse updateAvatar(@NotBlank(message = "{required}") @PathVariable String image) throws FebsException {
