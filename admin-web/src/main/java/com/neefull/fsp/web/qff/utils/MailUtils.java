@@ -43,6 +43,7 @@ public class MailUtils {
         Properties prop = new Properties();
         prop.setProperty("mail.smtp.auth", mailProperties.getAuth());
         prop.setProperty("mail.smtp.timeout", mailProperties.getTimeout());
+        //开启SSL连接
 //        try {
 //            MailSSLSocketFactory sf = new MailSSLSocketFactory();
 //            sf.setTrustAllHosts(true);

@@ -149,7 +149,7 @@ public class ProcessServiceImpl implements IProcessService {
                 //同意当前流程
                 agreeProcess(businessKey,user,attachments);
                 if(queryProcessInstance(businessKey)==null){
-                    //判断流程中是否有这条数据，没有就将这条QFF状态修改为已提交
+                    //判断流程中是否有这条数据，没有就将这条QFF状态修改为审核完成
                     commodityService.updateCommodityStatus(commodity.getId(),ProcessConstant.HAS_FINISHED);
                 }
             }
@@ -265,7 +265,7 @@ public class ProcessServiceImpl implements IProcessService {
         }
     }
 
-
+    //启动流程
     @Transactional
     @Override
     public void startProcess(Commodity commodity){
@@ -280,7 +280,7 @@ public class ProcessServiceImpl implements IProcessService {
         commodityService.updateCommodityStatus(commodity.getId(), ProcessConstant.UNDER_REVIEW);
     }
 
-
+    //审批流程
     @Transactional
     protected void agreeProcess(String businessKey,User user,List<Attachment> attachments){
         //同意流程
@@ -847,7 +847,7 @@ public class ProcessServiceImpl implements IProcessService {
             commodity.setAlteration(alteration.toString());
         }
         commodityService.editCommodity(commodity);
-
+        //有附件就添加
         if(StringUtils.isNotEmpty(commodity.getImages())){
             addOrEditFiles(commodity,currentUser);
         }

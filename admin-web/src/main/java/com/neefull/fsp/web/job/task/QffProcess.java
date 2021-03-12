@@ -75,6 +75,7 @@ public class QffProcess extends BaseController {
                         //获取附件
                         SftpUtils sftp = null;
                         try {
+                            //进行通道连接
                             sftp = new SftpUtils(properties.getHost(), properties.getUsername(), properties.getPassword());
                             sftp.connect();
 
@@ -137,7 +138,7 @@ public class QffProcess extends BaseController {
             }
             String[] mails = userMails.toArray(new String[0]);
 
-
+            //发送邮件
             MailUtils.sendMail(text, mailProperties, mails, files);
         }
 
