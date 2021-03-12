@@ -25,6 +25,7 @@ public class AcquireOneSoap {
 
     @Transactional
     public void startOneSap(String params){
+        //这个是将手动获取的时间进行截取
         String[] split = params.split(",");
         String seacheDate = split[0];
         String fromTime = split[1];
@@ -33,6 +34,7 @@ public class AcquireOneSoap {
         if(split.length ==4){
             number = split[3];
         }
+        //调用esb接口
         startSoap.getMessage(seacheDate,fromTime,toTime,number,"one");
 
     }

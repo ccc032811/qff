@@ -49,7 +49,7 @@ public class StartSoap {
         log.info("*****************Execute query from SAP server.******************");
         long startTime = System.currentTimeMillis();
 
-
+        // 拼接请求报文
         String soapMessage = SapWsUtils.getSoapMessage(seacheDate,fromTime,toTime,number);
 
         log.info("请求报文为："+soapMessage);
@@ -112,6 +112,7 @@ public class StartSoap {
 
                     String stage = XmlUtils.getTagContent(s, "<HERKUNFT>", "</HERKUNFT>");
                     commodity.setType(stage);
+                    //区分具体的QFF类型
 //                    commodity.setStage(XmlUtils.getTagContent(s,"<HERKUNFT>","</HERKUNFT>"));
                     if(stage.equals("01")){
                         commodity.setStage(ProcessConstant.DELIVERY_NAME);
@@ -126,22 +127,27 @@ public class StartSoap {
 //                        commodity.setStage(ProcessConstant.EXPORT_NAME);
 //                    }
                     commodity.setStatus(ProcessConstant.NEW_BUILD);
+                    //暂时设置附件数量为0
                     commodity.setAccessory(0);
+
                     if(StringUtils.isEmpty(oneSoap)){
+
                         Date parse = simpleDateFormat.parse(seacheDate+" "+toTime);
                         commodity.setCreateTime(parse);
                     }else {
+                        //查询数据库数据的最新时间
                         String lastDate = commodityService.selectLastTime();
                         Date parse = simpleDateFormat.parse(lastDate);
                         commodity.setCreateTime(parse);
                     }
 
-
+                    //获取数据库记录
                     Commodity isCommodity = commodityService.queryCommodityByNumber(commodity.getNumber());
                     if(isCommodity ==null){
-
+                        //如果没有直接入库
                         commodityList.add(commodity);
                     }else {
+                        //如果有，那就对比字段，将变更记录存入数据库
                         StringBuilder alteration = new StringBuilder();
 
                         if(!commodity.getPlant().equals(isCommodity.getPlant())){
@@ -184,14 +190,16 @@ public class StartSoap {
                             alteration.append("采购来源:" +date+ " 由 "+isCommodity.getSource()+" 变更为 "+commodity.getSource()+" 。");
                         }
 
-
+                        //查询流程中是否有这条数据
                         Boolean isExist = processService.queryProcessByKey(isCommodity);
                         if(isExist){
+                            //有就删除流程的这个数据
                             processService.deleteInstance(isCommodity);
                         }
                         //有变更，删除原来的数据
                         commodityService.deleteCommodityById(isCommodity.getId());
                         if(!isExist) {
+                            //删除附件
                             attachmentService.deleteByNumber(isCommodity.getNumber(), isCommodity.getStage());
                         }
                         if(StringUtils.isNotEmpty(isCommodity.getAlteration())){
@@ -243,11 +251,11 @@ public class StartSoap {
                     }
                 }
             }
-
+            //数据入库
             for (Commodity commodity : commodityList) {
                 commodityService.addCommodity(commodity);
             }
-
+            //附件入库
             if(attachmentMap.size()!=0){
                 Set<String> strings = attachmentMap.keySet();
                 for (String atr : strings) {

@@ -60,24 +60,29 @@ public class QffProcess extends BaseController {
 
         List<Commodity> commodityEmail = new ArrayList<>();
         Map<String, String> files = new HashMap<>();
-
+        //查询所有状态为1 的数据
         List<Commodity> commodityList = commodityService.selectAllCommodity();
         if (CollectionUtils.isNotEmpty(commodityList)) {
             for (Commodity commodity : commodityList) {
                 if (commodity.getAccessory() == 0) {
+                    //没有附件直接添加
                     commodityEmail.add(commodity);
                 } else if (commodity.getAccessory() != 0 ) {
+                    //有附件那就获取附件
                     int count =0;
                     List<Attachment> attachments = attachmentService.selectAttsByQffId(commodity.getNumber(), commodity.getStage());
                     if (CollectionUtils.isNotEmpty(attachments)) {
+                        //获取附件
                         SftpUtils sftp = null;
                         try {
                             sftp = new SftpUtils(properties.getHost(), properties.getUsername(), properties.getPassword());
                             sftp.connect();
 
                             for (Attachment attachment : attachments) {
+                                //判断是否下载成功
                                 boolean isDown = sftp.downloadFile(properties.getSftpPath(), attachment.getRemark() + StringPool.DOT + attachment.getAttachType(), properties.getLocalPath(), attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
                                 if (isDown) {
+                                    //更改状态
                                     count = count += 1;
                                     File file = new File(properties.getLocalPath() + attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
                                     if (file.exists() && file.isFile()) {
@@ -87,6 +92,7 @@ public class QffProcess extends BaseController {
                                     }
                                 }
                             }
+                            //如果都下载成功，那么将附件进行备份
                             if (count == commodity.getAccessory()) {
                                 commodityEmail.add(commodity);
                                 for (Attachment attachment : attachments) {
@@ -105,7 +111,7 @@ public class QffProcess extends BaseController {
             }
         }
 
-
+        //进行流程提交
         if (CollectionUtils.isNotEmpty(commodityEmail)) {
             for (Commodity commodity : commodityEmail) {
                 processService.startProcess(commodity);
@@ -114,7 +120,7 @@ public class QffProcess extends BaseController {
         }
 
 
-
+        //发送邮件
         if (CollectionUtils.isNotEmpty(commodityEmail)) {
             // 发送邮件
             Context context = new Context();

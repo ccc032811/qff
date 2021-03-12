@@ -49,6 +49,7 @@ public class AttachmentServiceImpl  extends ServiceImpl<AttachmentMapper, Attach
     @Override
     @Transactional
     public Boolean deleteImage(String url) {
+        //删除附件
         boolean delete = false;
         if(StringUtils.isNotEmpty(url)){
             File file = new File(properties.getImagePath()+url);

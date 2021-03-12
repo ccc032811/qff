@@ -75,6 +75,7 @@ public class RocheServiceImpl extends ServiceImpl<RocheMapper, Roche> implements
     }
 
     private List<Roche> getAttRoche(Roche roche,User user){
+        //查询可审核数据
         roche.setStatus(2);
         List<Roche> roches = rocheMapper.getPageConserve(roche);
         List<Roche> newRoche = processService.queryRocheTaskByName(roches, user);

@@ -87,7 +87,11 @@ public class ProcessServiceImpl implements IProcessService {
     private RoleServiceImpl roleService;
 
 
-
+    /**
+     * 进行流程提交
+     * @param object
+     * @param user
+     */
     @Override
     @Transactional
     public void commitProcess(Object object, User user) {
@@ -98,7 +102,9 @@ public class ProcessServiceImpl implements IProcessService {
             Commodity commodity = (Commodity) object;
             String businessKey = getBusinessKey(commodity);
 
+            //对于手工新入库的数据
             if(commodity.getId()==null){
+                //获取最新数据最新时间
                 String lastDate = commodityService.selectLastTime();
                 Date parse = null;
                 try {
@@ -107,13 +113,16 @@ public class ProcessServiceImpl implements IProcessService {
                     e.printStackTrace();
                 }
                 commodity.setCreateTime(parse);
+                //入库
                 commodityService.addCommodity(commodity);
-
+                //启动流程
                 startProcess(commodity);
 
                 if(StringUtils.isNotEmpty(commodity.getImages())){
+                    //添加附件
                     attachments = addOrEditFiles(commodity, user);
                 }
+                //其他手工QFF 的时候需要发邮件
                 if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
                     Map<String, String> files = new HashMap<>();
                     for (Attachment attachment : attachments) {
@@ -130,16 +139,17 @@ public class ProcessServiceImpl implements IProcessService {
                     String text = templateEngine.process("rocheOtherCommodity", context);
                     MailUtils.sendMail(text, mailProperties, rocheMails, files);
                 }
-
+            //对于sap过来的数据
             }else {
                 editCommodity(commodity);
 
                 if(StringUtils.isNotEmpty(commodity.getImages())){
                     attachments = addOrEditFiles(commodity, user);
                 }
-
+                //同意当前流程
                 agreeProcess(businessKey,user,attachments);
                 if(queryProcessInstance(businessKey)==null){
+                    //判断流程中是否有这条数据，没有就将这条QFF状态修改为已提交
                     commodityService.updateCommodityStatus(commodity.getId(),ProcessConstant.HAS_FINISHED);
                 }
             }
@@ -150,9 +160,10 @@ public class ProcessServiceImpl implements IProcessService {
             Map<String,String> files = new HashMap<>();
             String businessKey = getBusinessKey(recent);
 
+            //手动入库的数据
             if(recent.getId()==null){
                 recent.setStartDate(DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
-
+                //数据，附件信息入库
                 recentService.addRecent(recent);
 
                 if(StringUtils.isNotEmpty(recent.getImages())){
@@ -164,15 +175,15 @@ public class ProcessServiceImpl implements IProcessService {
                 }
 
                 businessKey = getBusinessKey(recent);
-
+                //启动流程
                 startProcess(properties.getRecentProcess(),businessKey,recent.getStage());
-
+                //第一步自动提交
                 Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
                 taskService.setAssignee(task.getId(),"康德乐发起申请");
                 taskService.complete(task.getId());
-
+                //更改状态
                 recentService.updateRecentStatus(recent.getId(), ProcessConstant.UNDER_REVIEW);
-
+                //发邮件
                 String[] rocheMails = getEmails(86);
                 List<Recent> recentList =new ArrayList<>();
                 recentList.add(recent);
@@ -189,6 +200,7 @@ public class ProcessServiceImpl implements IProcessService {
 
                 MailUtils.sendMail(text,mailProperties,rocheMails,files);
             }else {
+
                 editCommodity(recent);
 
                 if(StringUtils.isNotEmpty(recent.getImages())){
@@ -203,8 +215,9 @@ public class ProcessServiceImpl implements IProcessService {
         }else if(object instanceof Roche){
             Roche roche = (Roche) object;
             String businessKey = getBusinessKey(roche);
-
+            //手动入库的数据
             if(roche.getId()==null){
+                //数据，附件信息入库
                 rocheService.addRoche(roche);
 
                 if(StringUtils.isNotEmpty(roche.getImages())){
@@ -227,6 +240,7 @@ public class ProcessServiceImpl implements IProcessService {
                 }
 
                 agreeProcess(businessKey,user,attachments);
+                //对罗氏内部发起最终审核完成，发送邮件到两方
                 if(queryProcessInstance(businessKey)==null){
                     rocheService.updateRocheStatus(roche.getId(),ProcessConstant.HAS_FINISHED);
                     // 发送邮件
@@ -256,18 +270,20 @@ public class ProcessServiceImpl implements IProcessService {
     @Override
     public void startProcess(Commodity commodity){
         String businessKey = getBusinessKey(commodity);
+        //启动流程
         startProcess(properties.getCommodityProcess(),businessKey,commodity.getStage());
-
+        //第一次自动提交
         Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();
         taskService.setAssignee(task.getId(),"康德乐发起申请");
         taskService.complete(task.getId());
-
+        //更改状态
         commodityService.updateCommodityStatus(commodity.getId(), ProcessConstant.UNDER_REVIEW);
     }
 
 
     @Transactional
     protected void agreeProcess(String businessKey,User user,List<Attachment> attachments){
+        //同意流程
         Map<String,Object> map = new HashMap<>();
         map.put("list",attachments);
         List<Task> list = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
@@ -285,7 +301,7 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Transactional
     protected void editCommodity(Object object){
-
+        //这个是更改审核时间
         if(object instanceof Commodity) {
             Commodity commodity = (Commodity) object;
             String businessKey = getBusinessKey(commodity);
@@ -314,6 +330,7 @@ public class ProcessServiceImpl implements IProcessService {
 
 
     private Set getTaskCandidate(String taskId){
+
         Set<String> user = new HashSet<String>();
         List<IdentityLink> identityLinksForTask = taskService.getIdentityLinksForTask(taskId);
         if(CollectionUtils.isNotEmpty(identityLinksForTask)){
@@ -329,6 +346,7 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Transactional
     protected void startProcess(String definitionKey,String businessKey,String type){
+        //启动流程，并将QFF类型放入到流程中
         Map<String,Object> map = new HashMap<>();
         if(type.equals(ProcessConstant.DELIVERY_NAME)){
             map.put(PROSTYPE,"delivery");
@@ -352,6 +370,7 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Override
     public List<String> getGroupId(Object object) {
+        //这个是查询这条QFF 某个 节点可审核人的集合
         List<String> list = new ArrayList<>();
         List<Task> taskList = null;
         String businessKey = getBusinessKey(object);
@@ -374,6 +393,7 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Override
     public  Map<String,ProcessHistory> queryHistory(Object object) {
+        //查询流程的审批过程
         Map<String,ProcessHistory> map = new HashMap<>();
 
         String businessKey = getBusinessKey(object);
@@ -403,12 +423,15 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Override
     public List<String> findTask(User user) {
+        //查询用户的角色
         String roleId = roleService.findUserRoleIds(user.getUsername());
+        //查询当前人要审核的数据
         List<Task> list = queryTaskByUserName(user.getUsername());
 
         List<String> names = new ArrayList<>();
 
         if(CollectionUtils.isNotEmpty(list)){
+            //这个是查询具体的流程的种类，并放到集合中
             for (Task task : list) {
                 ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
                 String type = (String) runtimeService.getVariable(processInstance.getProcessInstanceId(), "processType");
@@ -529,6 +552,7 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Override
     public List<Commodity> queryCommodityTaskByName(List<Commodity> commodityList, User user) {
+        //查询这个用户可审核的数据
         String roleId = roleService.findUserRoleIds(user.getUsername());
         List<Task> tasks = queryTaskByUserName(user.getUsername());
         for (Task task : tasks) {
@@ -557,6 +581,7 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Override
     public List<Recent> queryRecentTaskByName(List<Recent> recentList, User user) {
+        //查询这个用户可审核的数据
         String roleId = roleService.findUserRoleIds(user.getUsername());
         List<Task> tasks = queryTaskByUserName(user.getUsername());
         for (Task task : tasks) {
@@ -585,6 +610,7 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Override
     public List<Roche> queryRocheTaskByName(List<Roche> rocheList, User user) {
+        //查询这个用户可审核的数据
         String roleId = roleService.findUserRoleIds(user.getUsername());
         List<Task> tasks = queryTaskByUserName(user.getUsername());
         for (Task task : tasks) {
@@ -631,6 +657,7 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Override
     public List<String> findPrcessName(User user) {
+        //查询具体可审核的类型数量
         List<String> stringList = findTask(user);
         List<String> menuName = new ArrayList<>();
         if(stringList.contains("recent")){
@@ -666,6 +693,7 @@ public class ProcessServiceImpl implements IProcessService {
     @Override
     @Transactional
     public void deleteInstance(Object object) {
+        //删除流程
         ProcessInstance processInstance = null;
         String businessKey = getBusinessKey(object);
         deleteAtt(object);
@@ -693,6 +721,7 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Override
     public Boolean queryProcessByKey(Object object) {
+        //查询流程
         ProcessInstance processInstance = null;
         String businessKey = "";
         if(object instanceof Commodity){
@@ -710,6 +739,7 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Transactional
     public List<Task> deleteProcessUser(User user){
+        //将流程中有这个审核的人的信息删除
         List<Task> list = taskService.createTaskQuery().taskCandidateUser(user.getUsername()).list();
         if(CollectionUtils.isNotEmpty(list)){
             for (Task task : list) {
@@ -723,6 +753,7 @@ public class ProcessServiceImpl implements IProcessService {
     @Override
     @Transactional
     public void addProcessCommit(User user) {
+        //将用户添加到相应的流程中
         List<Task> list = deleteProcessUser(user);
         String roleId = user.getRoleId();
         if(roleId.contains("87")){
@@ -785,6 +816,7 @@ public class ProcessServiceImpl implements IProcessService {
     @Override
     @Transactional
     public void alterCommodity(Commodity commodity, User currentUser) {
+        //变更信息
         StringBuffer alteration = new StringBuffer();
         String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
         commodity.setRepTime(date);
@@ -821,7 +853,7 @@ public class ProcessServiceImpl implements IProcessService {
         }
 
         List<Task> taskList = queryTask(getBusinessKey(commodity));
-
+        //发送邮件
         if(taskList.size()==1){
             String[] activityIds = new String[]{"_3","_4","_12"};
             rollbackPrcoess("_3",getBusinessKey(commodity),currentUser.getUsername(),taskList.get(0),activityIds);
@@ -1077,6 +1109,7 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Transactional
     public List<Attachment> addOrEditFiles (Object object ,User user) {
+        //新增附件
         List<Attachment> list = new ArrayList<>();
         if (object instanceof Commodity) {
             Commodity commodity = (Commodity) object;
@@ -1137,6 +1170,7 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
     private String getBusinessKey(Object object){
+        //获取id  拼接成key
         String businessKey = "";
         if(object instanceof Commodity){
             Commodity commodity = (Commodity) object;

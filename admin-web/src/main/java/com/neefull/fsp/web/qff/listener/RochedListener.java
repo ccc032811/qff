@@ -34,7 +34,7 @@ import javax.mail.MessagingException;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
-/**
+/**邮件监听器
  * @Author: chengchengchu
  * @Date: 2019/12/22  19:40
  */

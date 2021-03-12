@@ -31,6 +31,7 @@ public class QffLogServiceImpl extends ServiceImpl<QffLogMapper, QffLog> impleme
     @Override
     @Transactional
     public void addQffLog(ProceedingJoinPoint point,QffLog qffLog) {
+        //这是日志入库
         MethodSignature signature = (MethodSignature) point.getSignature();
         Method method = signature.getMethod();
         com.neefull.fsp.web.qff.aspect.Qff logAnnotation = method.getAnnotation(com.neefull.fsp.web.qff.aspect.Qff.class);

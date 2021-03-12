@@ -36,16 +36,18 @@ public class AcquireSoapMessage extends BaseController {
     public void startSapMessage() {
         //获取更新时间
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-
+        //系统当前时间
         String seacheDate =DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss");
         String lastDate = null;
         String fromTime = "";
         try {
+            //获取表里面的最新时间
             lastDate = commodityService.selectLastTime();
         } catch (Exception e) {
             log.info("当前数据库无数据，初始化起始时间");
             fromTime = ZORE_TIME;
         }
+        //截取最新时间的
         if(StringUtils.isNotEmpty(lastDate)){
             if (StringUtils.isNotEmpty(lastDate)&&lastDate.startsWith(seacheDate.split(" ")[0])) {
                 fromTime = lastDate.split(" ")[1];
@@ -63,6 +65,7 @@ public class AcquireSoapMessage extends BaseController {
         }
 
         if(fromTime.equals(ZORE_TIME)&&before){
+            //如果天数更改了  那么从00：00：00开始
             Calendar instance = Calendar.getInstance();
             instance.add(Calendar.DAY_OF_MONTH,-1);
             String date = DateFormatUtils.format(instance.getTime(), "yyyy-MM-dd");
@@ -73,6 +76,7 @@ public class AcquireSoapMessage extends BaseController {
             startSoap.getMessage(date,startTime,END_TIME,"",null);
 
         }else {
+            //没有就从最新时间开始
             startSoap.getMessage(seacheDate.split(" ")[0],fromTime,toTime,"",null);
         }
     }

@@ -72,6 +72,7 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
 
 
     private List<Recent> getAttRecent(Recent recent, User user){
+        //查询可审核数据
         recent.setStatus(2);
         List<Recent> recents = recentMapper.getPageConserve(recent);
         List<Recent> newRecent = processService.queryRecentTaskByName(recents, user);

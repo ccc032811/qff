@@ -40,7 +40,7 @@ public class FileServiceImpl implements IFileService {
     @Override
     @Transactional
     public String uploadImage(MultipartFile file,String number) {
-
+        //上传文件
         String originalFilename = file.getOriginalFilename().replace(String.valueOf((char)160),"_").replaceAll("\\s+","_");
 
         int unixp = originalFilename.lastIndexOf("/");

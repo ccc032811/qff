@@ -16,6 +16,7 @@ public class CardinalListener implements TaskListener {
 
     @Override
     public void notify(DelegateTask delegateTask) {
+        //将人员放入流程中
         IUserService userService = SpringBeanUtil.getObject(IUserService.class);
         List<User> users = userService.findUserByRoleId(87);
         for (User user : users) {

@@ -61,7 +61,7 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
 
         IPage<Commodity> pageInfo = new Page<>();
         if(commodity.getAtt()!=null&&commodity.getAtt()==1){
-
+            //查询可审核数据
             List<Commodity> commodities = getAttCommodity(commodity, user);
             List<Commodity> page = PageUtils.page(commodities, commodity.getPageSize(), commodity.getPageNum());
 
@@ -70,6 +70,7 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
             pageInfo.setTotal(commodities.size());
 
         }else {
+            //普通查询
             pageInfo = commodityMapper.getConservePage(new Page<>(commodity.getPageNum(),commodity.getPageSize()),commodity);
             List<Commodity> newCommodity = processService.queryCommodityTaskByName(pageInfo.getRecords(),user);
             pageInfo.setRecords(newCommodity);

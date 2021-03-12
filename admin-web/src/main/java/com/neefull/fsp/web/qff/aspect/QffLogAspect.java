@@ -41,6 +41,8 @@ public class QffLogAspect {
 
     @Around(value = "pointCut()")
     public Object aroundAdvice(ProceedingJoinPoint point) throws Throwable {
+
+        //利用aop 将日志记录
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         if (ra == null || sra == null) {
