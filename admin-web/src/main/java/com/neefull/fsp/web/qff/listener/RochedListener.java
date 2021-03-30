@@ -92,7 +92,7 @@ public class RochedListener implements JavaDelegate {
         String text = templateEngine.process("kdlRoche", context);
 
         //发送带附件的邮件
-        MailUtils.sendMail(text,mailProperties,mails,files);
+        MailUtils.sendMail(ProcessConstant.ROCHE_NAME,text,mailProperties,mails,files);
 
     }
 

@@ -116,7 +116,7 @@ public class SelfProcessCommit {
                             String text = templateEngine.process("rocheRoche", context);
 
                             //发送带附件的邮件
-                            MailUtils.sendMail(text,mailProperties,mails,files);
+                            MailUtils.sendMail(null,text,mailProperties,mails,files);
 
                         }
                     }

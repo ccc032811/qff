@@ -98,13 +98,15 @@ public class RecentListener implements JavaDelegate {
         String text = "";
         if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
             text = templateEngine.process("kdlRecent", context);
-
+            //发送带附件的邮件
+            MailUtils.sendMail(recent.getStage(),text,mailProperties,mails,files);
         }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
             text = templateEngine.process("kdlTemperature", context);
+            //发送带附件的邮件
+            MailUtils.sendMail(recent.getStage(),text,mailProperties,mails,files);
         }
 
-        //发送带附件的邮件
-        MailUtils.sendMail(text,mailProperties,mails,files);
+
 
 
     }

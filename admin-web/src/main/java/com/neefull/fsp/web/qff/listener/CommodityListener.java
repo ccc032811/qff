@@ -100,12 +100,15 @@ public class CommodityListener extends BaseController implements JavaDelegate{
         String text = "";
         if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
             text= templateEngine.process("kdlOtherCommodity", context);
+            //发送带附件的邮件
+            MailUtils.sendMail(commodity.getStage(),text,mailProperties,mails,files);
         }else {
             text= templateEngine.process("kdlCommodity", context);
+            //发送带附件的邮件
+            MailUtils.sendMail(commodity.getStage(),text,mailProperties,mails,files);
         }
 
-        //发送带附件的邮件
-        MailUtils.sendMail(text,mailProperties,mails,files);
+
 
     }
 

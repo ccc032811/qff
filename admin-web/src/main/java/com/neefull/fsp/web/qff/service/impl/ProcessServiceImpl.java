@@ -34,6 +34,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,7 +138,7 @@ public class ProcessServiceImpl implements IProcessService {
                     Context context = new Context();
                     context.setVariable("list", commodityList);
                     String text = templateEngine.process("rocheOtherCommodity", context);
-                    MailUtils.sendMail(text, mailProperties, rocheMails, files);
+                    MailUtils.sendMail(commodity.getStage(),text, mailProperties, rocheMails, files);
                 }
             //对于sap过来的数据
             }else {
@@ -198,7 +199,7 @@ public class ProcessServiceImpl implements IProcessService {
                     text = templateEngine.process("rocheTemperature", context);
                 }
 
-                MailUtils.sendMail(text,mailProperties,rocheMails,files);
+                MailUtils.sendMail(recent.getStage(),text,mailProperties,rocheMails,files);
             }else {
 
                 editCommodity(recent);
@@ -258,7 +259,7 @@ public class ProcessServiceImpl implements IProcessService {
                     Context context = new Context();
                     context.setVariable("list",rocheList);
                     String text = templateEngine.process("rocheRoche", context);
-                    MailUtils.sendMail(text,mailProperties,mails,files);
+                    MailUtils.sendMail(ProcessConstant.ROCHE_NAME,text,mailProperties,mails,files);
 
                 }
             }
@@ -505,47 +506,6 @@ public class ProcessServiceImpl implements IProcessService {
             }
         }
 
-
-//        if(CollectionUtils.isNotEmpty(list)){
-//            for (Task task : list) {
-//
-//                ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-//                String activityId = processInstance.getActivityId();
-//                if(processInstance.getBusinessKey().startsWith("Recent")){
-//                    String id = processInstance.getBusinessKey().split("\\:")[1];
-//                    Recent recent = recentService.queryRecentById(Integer.parseInt(id));
-//                    if(roleId.contains("87")){
-//                        if(!activityId.equals(ProcessConstant.THREE_STEP)) {
-//                            names.add(choseProcessType(recent));
-//                        }
-//                    }else {
-//                        if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
-//                            names.add(choseProcessType(recent));
-//                        }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
-//                            names.add(choseProcessType(recent));
-//                        }
-//                    }
-//                }else if(processInstance.getBusinessKey().startsWith("Roche")) {
-//                    if(roleId.contains("98")){
-//                        names.add("roche");
-//                    }
-//                }else {
-//                    String id = processInstance.getBusinessKey().split("\\:")[1];
-//                    Commodity commodity = commodityService.queryCommodityById(Integer.parseInt(id));
-//                    if(roleId.contains("87")){
-//                        if(!activityId.equals(ProcessConstant.THREE_STEP)) {
-//                            names.add(choseProcessType(commodity));
-//                        }
-//                    }else {
-//                        if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
-//                            names.add(choseProcessType(commodity));
-//                        }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
-//                            names.add(choseProcessType(commodity));
-//                        }
-//                    }
-//                }
-//            }
-//        }
         return names;
     }
 
@@ -869,10 +829,17 @@ public class ProcessServiceImpl implements IProcessService {
             String text = "";
             if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
                 text= templateEngine.process("kdlOtherCommodity", context);
+                MailUtils.sendMail(commodity.getStage(),text,mailProperties,mails,files);
             }else {
                 text= templateEngine.process("kdlCommodity", context);
+                if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
+                    MailUtils.sendMail(ProcessConstant.STORE_PACKAGE_EXPORT,text,mailProperties,mails,files);
+                }else {
+                    MailUtils.sendMail(commodity.getStage(),text,mailProperties,mails,files);
+                }
+
             }
-            MailUtils.sendMail(text,mailProperties,mails,files);
+
         }
     }
 
@@ -926,12 +893,12 @@ public class ProcessServiceImpl implements IProcessService {
             String text = "";
             if(recent.getStage().equals(ProcessConstant.RECENT_NAME)){
                 text = templateEngine.process("kdlRecent", context);
+                MailUtils.sendMail(recent.getStage(),text,mailProperties,mails,files);
 
             }else if(recent.getStage().equals(ProcessConstant.TEMPERATURE_NAME)){
                 text = templateEngine.process("kdlTemperature", context);
+                MailUtils.sendMail(recent.getStage(),text,mailProperties,mails,files);
             }
-            MailUtils.sendMail(text,mailProperties,mails,files);
-
         }
     }
 
@@ -984,7 +951,7 @@ public class ProcessServiceImpl implements IProcessService {
             Context context = new Context();
             context.setVariable("list",list);
             String text = templateEngine.process("kdlRoche", context);
-            MailUtils.sendMail(text,mailProperties,mails,files);
+            MailUtils.sendMail(ProcessConstant.ROCHE_NAME,text,mailProperties,mails,files);
         }
     }
 
@@ -1157,6 +1124,8 @@ public class ProcessServiceImpl implements IProcessService {
         }
         return userMails.toArray(new String[0]);
     }
+
+
 
 
     private String splitKey(String businessKey,String beanName){

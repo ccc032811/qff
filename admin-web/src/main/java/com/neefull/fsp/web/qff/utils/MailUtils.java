@@ -30,7 +30,7 @@ public class MailUtils {
 
 
 
-    public static void sendMail(String text, SendMailProperties mailProperties, String[] mails, Map<String,String> files ) {
+    public static void sendMail(String type,String text, SendMailProperties mailProperties, String[] mails, Map<String,String> files ) {
 
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(mailProperties.getHost());
@@ -61,8 +61,12 @@ public class MailUtils {
             mimeMessageHelper.setFrom(mailProperties.getUsername());
             mimeMessageHelper.setTo(mails);
 //            mimeMessageHelper.setTo("920685135@qq.com");//接收的邮箱地址
-//            mimeMessageHelper.setCc("");//抄送者的邮箱地址
-            mimeMessageHelper.setSubject("您当前需要处理的文件");
+//            mimeMessageHelper.setCc("");//抄送者的邮箱地址'
+            if (StringUtils.isEmpty(type)) {
+                mimeMessageHelper.setSubject("您当前有需要处理的类型");
+            } else{
+                mimeMessageHelper.setSubject("您当前有需要处理的" + type + "类型");
+            }
             mimeMessageHelper.setText(text,true);
             if(!files.isEmpty()){
                 Set<String> strings = files.keySet();

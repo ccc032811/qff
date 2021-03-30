@@ -116,10 +116,8 @@ public class QffProcess extends BaseController {
         if (CollectionUtils.isNotEmpty(commodityEmail)) {
             for (Commodity commodity : commodityEmail) {
                 processService.startProcess(commodity);
-                commodityService.updateCommodityStatus(commodity.getId(), ProcessConstant.UNDER_REVIEW);
             }
         }
-
 
         //发送邮件
         if (CollectionUtils.isNotEmpty(commodityEmail)) {
@@ -139,7 +137,7 @@ public class QffProcess extends BaseController {
             String[] mails = userMails.toArray(new String[0]);
 
             //发送邮件
-            MailUtils.sendMail(text, mailProperties, mails, files);
+            MailUtils.sendMail(null,text, mailProperties, mails, files);
         }
 
     }
