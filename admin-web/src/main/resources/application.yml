@@ -28,8 +28,8 @@ spring:
     ssl: true   #是否为ssl连接
     host: smtp.exmail.qq.com    #smtp服务器地址    smtp.exmail.qq.com
     timeout: 25000   #连接超时
-    username:  sph-kdl-qff@shaphar.com     #  sph-kdl-qff@shaphar.com    ccc032811@163.com
-    password:  spQff123+                   #  spQff123+    ccc032811
+    username:  sph-kdl-qff@shaphar.com     #  sph-kdl-qff@shaphar.com
+    password:  spQff123+                   #  spQff123+
   mvc:
     favicon:
       enabled: true
@@ -52,16 +52,7 @@ qff:
     localpath: /usr/local/files/          #文件下载到当前地址   /usr/local/files/       D:\JavaSoft\nginx-1.12.2\html\
     host: 10.1.158.100                         #10.1.151.25       10.1.158.100
     username:  QFFProd                         #QFFTest            QFFProd
-    password:  KDL@seeburger                   #1qaz2wsx       KDL@seeburger
-  send:
-    conserveTemplatePath:   #到货养护包装QFF pdf模板地址
-    conserveDownLoadPath:   #到货养护包装QFF 生成的模板地址
-    recentTemplatePath:     #近效期QFF pdf模板地址
-    recentDownLoadPath:     #近效期QFF生成的模板地址
-    refundTemplatePath:     #退货QFFpdf模板地址
-    refundDownLoadPath:     #退货QFF 生成的模板地址
-    rocheTemplatePath:      #罗氏内部发起QFF pdf模板地址
-    rocheDownLoadPath:      #罗氏内部发起QFF 生成的模板地址
+    password:  KDL@seeburger                      #1qaz2wsx       KDL@seeburger
   process:
     commodityProcess: 到货养护分包出库QFF
     recentProcess: 近效期QFF
@@ -69,5 +60,7 @@ qff:
     imagePath: /usr/local/files/                     #/usr/local/files/  图片存储的地址     D:\JavaSoft\nginx-1.12.2\html\
     imageUrl:  /usr/local/files/                   #  图片展示路径   /usr/local/files/      http://127.0.0.1:10086/
   soap:
-    soapUrl:  http://10.1.16.55/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl        #测试  http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl
-                                                                                         #  正式    http://10.1.16.55/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl
+    soapUrl:  http://10.1.16.55/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl
+
+    #测试     http://10.1.225.155/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl
+    #正式    http://10.1.16.55/SPH_KDL_SAP/ProxyServices/QFF/ZCHN_FM_QFF_PS?wsdl

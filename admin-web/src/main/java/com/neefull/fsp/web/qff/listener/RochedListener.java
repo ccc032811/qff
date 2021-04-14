@@ -3,7 +3,6 @@ package com.neefull.fsp.web.qff.listener;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.neefull.fsp.web.qff.config.ProcessInstanceProperties;
 import com.neefull.fsp.web.qff.config.SendMailProperties;
-import com.neefull.fsp.web.qff.config.TemplateProperties;
 import com.neefull.fsp.web.qff.entity.Attachment;
 import com.neefull.fsp.web.qff.entity.Commodity;
 import com.neefull.fsp.web.qff.entity.Recent;
@@ -43,8 +42,6 @@ import java.util.*;
 public class RochedListener implements JavaDelegate {
     @Autowired
     private SendMailProperties mailProperties;
-    @Autowired
-    private TemplateProperties templateProperties;
     @Autowired
     private IRocheService rocheService;
     @Autowired

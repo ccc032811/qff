@@ -209,7 +209,8 @@
 
         $query.on('click', function () {
             var params = $.extend(getQueryParams(), {field: sortObject.field, order: sortObject.type});
-            tableIns.reload({where: params, page: {curr: 1}});
+            console.log( $(".layui-laypage-skip").find(".layui-input").val())
+            tableIns.reload({where: params, page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
         });
 
 

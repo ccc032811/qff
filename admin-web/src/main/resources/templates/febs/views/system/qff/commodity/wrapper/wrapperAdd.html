@@ -129,9 +129,12 @@
             <div class="layui-inline layui-col-sm4">
                 <label class="layui-form-label ">上报阶段</label>
                 <div class="layui-input-block">
-                    <select name="type" id="stage-add" lay-verify="required" >
-                        <option value="">请选择</option>
-                    </select>
+                    <input type="text" name="type" maxlength="75" autocomplete="off"
+                           list="wrapper-type" class="layui-input" placeholder="请输入">
+                    <datalist id="wrapper-type"></datalist>
+                    <!--<select name="type" id="stage-add" lay-verify="required" >-->
+                        <!--<option value="">请选择</option>-->
+                    <!--</select>-->
                 </div>
             </div>
             <div class="layui-inline layui-col-sm4">
@@ -348,16 +351,24 @@
             form.render("select");
         });
 
+
         $.get(ctx +"opinion/getOpinion/"+stage,to,function(res){
-            var data=res.data;
-            var dom=$("#stage-add");
-            var html='<option value=""></option>';
+            var data = res.data;
             $.each(data,function(index,item){
-                html+='<option value="'+item.name+'">'+item.name+'</option>'
+                $("#wrapper-type").append('<option value="'+item.name+'"></option>')
             });
-            dom.html(html);
-            form.render("select");
         });
+
+        // $.get(ctx +"opinion/getOpinion/"+stage,to,function(res){
+        //     var data=res.data;
+        //     var dom=$("#stage-add");
+        //     var html='<option value=""></option>';
+        //     $.each(data,function(index,item){
+        //         html+='<option value="'+item.name+'">'+item.name+'</option>'
+        //     });
+        //     dom.html(html);
+        //     form.render("select");
+        // });
 
 
     });

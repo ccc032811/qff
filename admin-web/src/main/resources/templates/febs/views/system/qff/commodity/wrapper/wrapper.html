@@ -125,9 +125,12 @@
                                         <div class="layui-inline">
                                             <label class="layui-form-label "  style="border-right: 1px solid white;">上报阶段</label>
                                             <div class="layui-input-inline">
-                                                <select name="type" id="stage" lay-verify="required" >
-                                                    <option value="">请选择</option>
-                                                </select>
+                                                <!--<select name="type" id="stage" lay-verify="required" >-->
+                                                    <!--<option value="">请选择</option>-->
+                                                <!--</select>-->
+                                                <input type="text" name="type" maxlength="75" autocomplete="off"
+                                                       list="wrapper-type-sch" class="layui-input" placeholder="请输入">
+                                                <datalist id="wrapper-type-sch"></datalist>
                                             </div>
                                         </div>
                                         <div class="layui-inline ">
@@ -325,10 +328,10 @@
 
 
         $query.on('click', function () {
-            tableIns.reload({where: getQueryParams(), page: {curr: 1}});
+            tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
         });
         $queryBtn.on('click',function () {
-            tableIns.reload({where: getQueryParams(), page: {curr: 1}});
+            tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
         });
         $cleanBtn.on('click',function () {
             $searchForm[0].reset();
@@ -396,7 +399,7 @@
 
         table.on('sort(wrapperTable)', function (obj) {
             tableIns.reload({
-                where: $.extend(getQueryParams())
+                where: $.extend({where : getQueryParams() ,page: {curr: $(".layui-laypage-skip").find(".layui-input").val()}})
             });
         });
 
@@ -409,15 +412,23 @@
         });
 
 
+        // $.get(ctx +"opinion/getOpinion/"+type,to,function(res){
+        //     var data=res.data;
+        //     var dom=$("#stage");
+        //     var html='<option value=""></option>';
+        //     $.each(data,function(index,item){
+        //         html+='<option value="'+item.name+'">'+item.name+'</option>'
+        //     });
+        //     dom.html(html);
+        //     form.render("select");
+        // });
+
+
         $.get(ctx +"opinion/getOpinion/"+type,to,function(res){
-            var data=res.data;
-            var dom=$("#stage");
-            var html='<option value=""></option>';
+            var data = res.data;
             $.each(data,function(index,item){
-                html+='<option value="'+item.name+'">'+item.name+'</option>'
+                $("#wrapper-type-sch").append('<option value="'+item.name+'"></option>')
             });
-            dom.html(html);
-            form.render("select");
         });
 
 
@@ -474,6 +485,7 @@
                 status: $searchForm.find("select[name='status']").val(),
                 att: $searchForm.find("select[name='att']").val(),
                 stage: stage,
+                type: $searchForm.find("input[name='type']").val(),
                 invalidate_ie_cache: new Date()
             };
         }

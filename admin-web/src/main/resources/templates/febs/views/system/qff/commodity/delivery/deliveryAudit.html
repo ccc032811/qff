@@ -492,7 +492,6 @@
             $.each(data,function (index, item) {
                 var name = item.remark+"."+item.attachType;
                 images.push(name);
-
                 if(currentUser.username === item.vest){
                     $('#delivery-List').append('<tr id="delivery-file-'+ index + '" ><td style="width: 50%">' + item.remark + '</td>' +
                         '<td style="width: 15%">' + item.createTime + '</td><td style="width: 10%">' + item.attachType + '</td>' +

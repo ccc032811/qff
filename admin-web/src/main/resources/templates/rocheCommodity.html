@@ -11,6 +11,7 @@
     <span>统一供应链门户：<a href="https://qff.shaphar.com">https://qff.shaphar.com</a> </span>
     <table style="width: 100%; border-collapse: collapse; border-top:1px solid #eee; font-size:14px; table-layout: fixed;">
         <tr style=" background: #fafafa; color: #333; border: 1px solid #eee;">
+            <td style="text-align: center">QFF类型</td>
             <td style="border-right:1px solid #eee;text-align: center">运输单号</td>
             <td style="border-right:1px solid #eee;text-align: center">QFF编号</td>
             <td style="border-right:1px solid #eee;text-align: center">Plant工厂</td>
@@ -26,6 +27,7 @@
         </tr>
         <p th:each="commodity:${list}">
             <tr style=" background: #fafafa; color: #333; border-bottom: 1px solid #eee;">
+                <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.stage}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.transport}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.number}"></td>
                 <td style="word-wrap:break-word;border-left:1px solid #eee;text-align: center" th:text="${commodity.plant}"></td>

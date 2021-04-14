@@ -95,6 +95,9 @@ public class QffProcess extends BaseController {
                             }
                             //如果都下载成功，那么将附件进行备份
                             if (count == commodity.getAccessory()) {
+                                if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
+                                    commodity.setStage(ProcessConstant.STORE_PACKAGE_EXPORT);
+                                }
                                 commodityEmail.add(commodity);
                                 for (Attachment attachment : attachments) {
                                     String newName = attachment.getRemark() + DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss") + StringPool.DOT + attachment.getAttachType();

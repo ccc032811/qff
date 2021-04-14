@@ -79,6 +79,9 @@
             <if test="commodity.classify!=null and commodity.classify!=''">
                 and classify like concat('%',#{commodity.classify},'%')
             </if>
+            <if test="commodity.type!=null and commodity.type!=''">
+                and type like concat('%',#{commodity.type},'%')
+            </if>
             <if test="commodity.startTime!=null and commodity.startTime!='' and commodity.endTime!=null and commodity.endTime!=''" >
                 and date_format(create_time,'%Y-%m-%d')  between  #{commodity.startTime} and  #{commodity.endTime}
             </if>
@@ -173,6 +176,9 @@
         </if>
         <if test="classify!=null and classify!=''">
             and classify like concat('%',#{classify},'%')
+        </if>
+        <if test="type!=null and type!=''">
+            and type like concat('%',#{type},'%')
         </if>
         <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''" >
             and date_format(create_time,'%Y-%m-%d')  between  #{startTime} and  #{endTime}

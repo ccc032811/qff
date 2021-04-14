@@ -347,10 +347,10 @@
 
         //查询表单事件
         $query.on('click', function () {
-            tableIns.reload({where: getQueryParams(), page: {curr: 1}});
+            tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
         });
         $queryBtn.on('click',function () {
-            tableIns.reload({where: getQueryParams(), page: {curr: 1}});
+            tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
         });
         $cleanBtn.on('click',function () {
             $searchForm[0].reset();
@@ -415,7 +415,7 @@
 
         table.on('sort(refundTable)', function (obj) {
             tableIns.reload({
-                where: $.extend(getQueryParams())
+                where: $.extend({where : getQueryParams() ,page: {curr: $(".layui-laypage-skip").find(".layui-input").val()}})
             });
         });
 

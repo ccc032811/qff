@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.neefull.fsp.web.common.controller.BaseController;
 import com.neefull.fsp.web.qff.config.ProcessInstanceProperties;
 import com.neefull.fsp.web.qff.config.SendMailProperties;
-import com.neefull.fsp.web.qff.config.TemplateProperties;
 import com.neefull.fsp.web.qff.entity.Attachment;
 import com.neefull.fsp.web.qff.entity.Commodity;
 import com.neefull.fsp.web.qff.service.IAttachmentService;
@@ -105,7 +104,11 @@ public class CommodityListener extends BaseController implements JavaDelegate{
         }else {
             text= templateEngine.process("kdlCommodity", context);
             //发送带附件的邮件
-            MailUtils.sendMail(commodity.getStage(),text,mailProperties,mails,files);
+            if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
+                MailUtils.sendMail(ProcessConstant.STORE_PACKAGE_EXPORT,text,mailProperties,mails,files);
+            }else {
+                MailUtils.sendMail(commodity.getStage(), text, mailProperties, mails, files);
+            }
         }
 
 

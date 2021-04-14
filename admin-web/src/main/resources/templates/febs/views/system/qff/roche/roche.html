@@ -290,13 +290,13 @@
 
 
         $query.on('click', function () {
-            tableIns.reload({where: getQueryParams(), page: {curr: 1}});
+            tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
         });
 
 
         $reset.on('click', function () {
             $searchForm[0].reset();
-            tableIns.reload({where: getQueryParams(), page: {curr: 1}});
+            tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
         });
         $queryBtn.on('click',function () {
             tableIns.reload({where: getQueryParams(), page: {curr: 1}});
@@ -365,7 +365,7 @@
 
         table.on('sort(rocheTable)', function (obj) {
             tableIns.reload({
-                where: $.extend(getQueryParams())
+                where: $.extend({where : getQueryParams() ,page: {curr: $(".layui-laypage-skip").find(".layui-input").val()}})
             });
         });
 
