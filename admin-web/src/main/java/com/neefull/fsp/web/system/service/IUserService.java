@@ -129,8 +129,8 @@ public interface IUserService extends IService<User> {
      * @param user 个人信息
      */
     void updateProfile(User user);
-
-    void examineUsers(String[] ids);
+//
+//    void examineUsers(String[] ids);
 
     /**
      * 首页统计图-用户分布情况

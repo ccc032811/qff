@@ -30,13 +30,12 @@ import org.thymeleaf.context.Context;
 import java.io.File;
 import java.util.*;
 
-/**
+/**从sftp拉取文件，提交流程
  * @Author: chengchengchu
  * @Date: 2020/5/12  18:32
  */
 @Slf4j
 @Component
-@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class QffProcess extends BaseController {
 
     @Autowired
@@ -54,14 +53,14 @@ public class QffProcess extends BaseController {
     @Autowired
     private TemplateEngine templateEngine;
 
-
-    @Transactional
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
     public void getAttmentAndStart() {
 
         List<Commodity> commodityEmail = new ArrayList<>();
         Map<String, String> files = new HashMap<>();
         //查询所有状态为1 的数据
         List<Commodity> commodityList = commodityService.selectAllCommodity();
+
         if (CollectionUtils.isNotEmpty(commodityList)) {
             for (Commodity commodity : commodityList) {
                 if (commodity.getAccessory() == 0) {
@@ -80,16 +79,20 @@ public class QffProcess extends BaseController {
                             sftp.connect();
 
                             for (Attachment attachment : attachments) {
-                                //判断是否下载成功
-                                boolean isDown = sftp.downloadFile(properties.getSftpPath(), attachment.getRemark() + StringPool.DOT + attachment.getAttachType(), properties.getLocalPath(), attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
-                                if (isDown) {
-                                    //更改状态
+                                if(attachment.getEnable()!=null&&attachment.getEnable() ==1){
                                     count = count += 1;
-                                    File file = new File(properties.getLocalPath() + attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
-                                    if (file.exists() && file.isFile()) {
-                                        attachment.setEnable(1);
-                                        attachment.setAttachSize(file.length());
-                                        attachmentService.updateAttachment(attachment);
+                                }else {
+                                    //判断是否下载成功
+                                    boolean isDown = sftp.downloadFile(properties.getSftpPath(), attachment.getRemark() + StringPool.DOT + attachment.getAttachType(), properties.getLocalPath(), attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
+                                    if (isDown) {
+                                        //更改状态
+                                        count = count += 1;
+                                        File file = new File(properties.getLocalPath() + attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
+                                        if (file.exists() && file.isFile()) {
+                                            attachment.setEnable(1);
+                                            attachment.setAttachSize(file.length());
+                                            attachmentService.updateAttachment(attachment);
+                                        }
                                     }
                                 }
                             }
@@ -109,41 +112,39 @@ public class QffProcess extends BaseController {
                         } finally {
                             sftp.disconnect();
                         }
-
                     }
                 }
             }
-        }
-
-        //进行流程提交
-        if (CollectionUtils.isNotEmpty(commodityEmail)) {
-            for (Commodity commodity : commodityEmail) {
-                processService.startProcess(commodity);
-            }
-        }
-
-        //发送邮件
-        if (CollectionUtils.isNotEmpty(commodityEmail)) {
-            // 发送邮件
-            Context context = new Context();
-            context.setVariable("list", commodityEmail);
-            String text = templateEngine.process("rocheCommodity", context);
-
-            //查询收件人
-            List<User> userList = userService.findUserByRoleId(86);
-            List<String> userMails = new ArrayList<>();
-            for (User user : userList) {
-                if(StringUtils.isNotEmpty(user.getEmail())&&user.getAccept().equals("1")&&user.getStatus().equals("1")) {
-                    userMails.add(user.getEmail());
+            //进行流程提交
+            if (CollectionUtils.isNotEmpty(commodityEmail)) {
+                for (Commodity commodity : commodityEmail) {
+                    processService.startProcess(commodity);
                 }
             }
-            String[] mails = userMails.toArray(new String[0]);
 
             //发送邮件
-            MailUtils.sendMail(null,text, mailProperties, mails, files);
+            if (CollectionUtils.isNotEmpty(commodityEmail)) {
+                // 发送邮件
+                Context context = new Context();
+                context.setVariable("list", commodityEmail);
+                String text = templateEngine.process("rocheCommodity", context);
+
+                //查询收件人
+                List<User> userList = userService.findUserByRoleId(86);
+                List<String> userMails = new ArrayList<>();
+                for (User user : userList) {
+                    if(StringUtils.isNotEmpty(user.getEmail())
+                            &&user.getAccept().equals(String.valueOf(ProcessConstant.NEW_BUILD))
+                            &&user.getStatus().equals(String.valueOf(ProcessConstant.NEW_BUILD))
+                            &&!user.getRoleId().contains("98")) {
+                        userMails.add(user.getEmail());
+                    }
+                }
+                String[] mails = userMails.toArray(new String[0]);
+
+                //发送邮件
+                MailUtils.sendMail(null,text, mailProperties, mails, files);
+            }
         }
-
     }
-
-
 }

@@ -24,7 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
+/**发送报文拉取QFF解析数据入库
  * @Author: chengchengchu
  * @Date: 2020/5/22  14:52
  */
@@ -44,7 +44,7 @@ public class StartSoap {
 
 
     @Transactional
-    public void getMessage(String seacheDate,String fromTime,String toTime,String number,String oneSoap){
+    public void getMessage(String seacheDate,String fromTime,String toTime,String number, String oneSoap){
 
         log.info("*****************Execute query from SAP server.******************");
         long startTime = System.currentTimeMillis();
@@ -129,12 +129,13 @@ public class StartSoap {
                     commodity.setStatus(ProcessConstant.NEW_BUILD);
                     //暂时设置附件数量为0
                     commodity.setAccessory(0);
-
+                    //区分是否手动拉取
                     if(StringUtils.isEmpty(oneSoap)){
-
+                        //不是手动拉取
                         Date parse = simpleDateFormat.parse(seacheDate+" "+toTime);
                         commodity.setCreateTime(parse);
                     }else {
+                        //是手动拉取
                         //查询数据库数据的最新时间
                         String lastDate = commodityService.selectLastTime();
                         Date parse = simpleDateFormat.parse(lastDate);

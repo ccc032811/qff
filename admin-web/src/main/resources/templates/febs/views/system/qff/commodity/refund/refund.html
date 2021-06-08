@@ -10,7 +10,6 @@
 </style>
 
 
-
 <div class="layui-fluid layui-anim febs-anim" id="fbs-refund" lay-title="退货QFF">
     <div class="layui-row febs-container">
         <div class="layui-col-md12">
@@ -60,14 +59,15 @@
                                         </div>
                                     </div>
                                     <div id="refund-check" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%">
-                                        <!--<div id="refund-check" class="layui-form-item" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;">-->
-                                            <div class="layui-btn layui-btn-normal layui-btn-sm" id="refund-query" >
-                                                <i class="layui-icon">&#xe848;</i>
-                                            </div>
-                                            <div class="layui-btn layui-btn-danger layui-btn-sm" id="refund-reset" >
-                                                <i class="layui-icon">&#xe79b;</i>
-                                            </div>
-                                        <!--</div>-->
+                                        <div class="layui-btn layui-btn-normal layui-btn-sm" id="refund-query" >
+                                            <i class="layui-icon">&#xe848;</i>
+                                        </div>
+                                        <div class="layui-btn layui-btn-danger layui-btn-sm" id="refund-reset" >
+                                            <i class="layui-icon">&#xe79b;</i>
+                                        </div>
+                                        <div class="layui-btn layui-btn-danger layui-btn-sm febs-hide" id="refund-query-feb" >
+                                            <i class="layui-icon">&#xe79b;</i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -260,6 +260,7 @@
             $reset = $view.find('#refund-reset'),
             $queryBtn = $view.find('#refund-queryBtn'),
             $cleanBtn = $view.find('#refund-cleanBtn'),
+            $cleanBtnFeb = $view.find('#refund-query-feb'),
             $searchForm = $view.find('form'),
             tableIns;
         var stage = '退货';
@@ -315,7 +316,7 @@
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
-                height: 455,
+                // height: 455,
                 id: 'refundTable',
                 url: ctx + 'commodity/list',
                 where:{
@@ -345,12 +346,15 @@
         }
 
 
-        //查询表单事件
-        $query.on('click', function () {
+        //查询表单事件//
+        $cleanBtnFeb.on('click', function () {
             tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
         });
+        $query.on('click', function () {
+            tableIns.reload({where: getQueryParams(), page: {curr: 1}});
+        });
         $queryBtn.on('click',function () {
-            tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
+            tableIns.reload({where: getQueryParams(), page: {curr: 1}});
         });
         $cleanBtn.on('click',function () {
             $searchForm[0].reset();

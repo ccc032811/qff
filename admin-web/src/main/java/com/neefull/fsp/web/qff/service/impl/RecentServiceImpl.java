@@ -1,5 +1,6 @@
 package com.neefull.fsp.web.qff.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -92,8 +93,11 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
     @Override
     @Transactional
     public void updateRecentStatus(Integer id,Integer status) {
-         recentMapper.updateRecentStatus(id,status);
-
+        Recent recent = new Recent();
+        recent.setId(id);
+        recent.setStatus(status);
+//        recentMapper.updateRecentStatus(id,status);
+        recentMapper.updateById(recent);
     }
 
     @Override
@@ -119,6 +123,14 @@ public class RecentServiceImpl extends ServiceImpl<RecentMapper, Recent> impleme
             }
         }
         return recentList;
+    }
+
+
+    @Override
+    public List<Recent> queryProcessList(Integer status) {
+        QueryWrapper<Recent> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status",status);
+        return recentMapper.selectList(queryWrapper);
     }
 
 }

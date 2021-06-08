@@ -56,14 +56,16 @@
                                         </div>
                                     </div>
                                     <div id="recent-check" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%">
-                                        <!--<div id="recent-check" class="layui-form-item" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;">-->
-                                            <div class="layui-btn layui-btn-normal layui-btn-sm"  id="recent-query" >
-                                                <i class="layui-icon">&#xe848;</i>
-                                            </div>
-                                            <div class="layui-btn layui-btn-danger layui-btn-sm " id="recent-reset" >
-                                                <i class="layui-icon">&#xe79b;</i>
-                                            </div>
-                                        <!--</div>-->
+
+                                        <div class="layui-btn layui-btn-normal layui-btn-sm"  id="recent-query" >
+                                            <i class="layui-icon">&#xe848;</i>
+                                        </div>
+                                        <div class="layui-btn layui-btn-danger layui-btn-sm " id="recent-reset" >
+                                            <i class="layui-icon">&#xe79b;</i>
+                                        </div>
+                                        <div class="layui-btn layui-btn-danger layui-btn-sm febs-hide" id="recent-query-feb" >
+                                            <i class="layui-icon">&#xe79b;</i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -127,6 +129,7 @@
             $reset = $view.find('#recent-reset'),
             $queryBtn = $view.find('#recent-queryBtn'),
             $cleanBtn = $view.find('#recent-cleanBtn'),
+            $cleanBtnFeb = $view.find('#recent-query-feb'),
             $searchForm = $view.find('form'),
             tableIns;
 
@@ -146,7 +149,7 @@
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
-                height: 455,
+                // height: 455,
                 id: 'recentTable',
                 url: ctx + 'recent/list',
                 toolbar: '#recent-toolbarCheck',
@@ -199,11 +202,14 @@
 
 
 
-        $query.on('click', function () {
+        $cleanBtnFeb.on('click', function () {
             tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
         });
+        $query.on('click', function () {
+            tableIns.reload({where: getQueryParams(), page: {curr:  1}});
+        });
         $queryBtn.on('click',function () {
-            tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
+            tableIns.reload({where: getQueryParams(), page: {curr:  1}});
         });
         $cleanBtn.on('click',function () {
             $searchForm[0].reset();

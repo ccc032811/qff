@@ -58,14 +58,15 @@
                                         </div>
                                     </div>
                                     <div id="wrapper-check" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%">
-                                        <!--<div id="wrapper-check" class="layui-form-item" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;">-->
-                                            <div class="layui-btn layui-btn-normal layui-btn-sm" id="wrapper-query" >
-                                                <i class="layui-icon">&#xe848;</i>
-                                            </div>
-                                            <div class="layui-btn layui-btn-danger layui-btn-sm" id="wrapper-reset" >
-                                                <i class="layui-icon">&#xe79b;</i>
-                                            </div>
-                                        <!--</div>-->
+                                        <div class="layui-btn layui-btn-normal layui-btn-sm" id="wrapper-query" >
+                                            <i class="layui-icon">&#xe848;</i>
+                                        </div>
+                                        <div class="layui-btn layui-btn-danger layui-btn-sm" id="wrapper-reset" >
+                                            <i class="layui-icon">&#xe79b;</i>
+                                        </div>
+                                        <div class="layui-btn layui-btn-danger layui-btn-sm febs-hide" id="wrapper-query-feb" >
+                                            <i class="layui-icon">&#xe79b;</i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -245,6 +246,7 @@
             $reset = $view.find('#wrapper-reset'),
             $queryBtn = $view.find('#wrapper-queryBtn'),
             $cleanBtn = $view.find('#wrapper-cleanBtn'),
+            $cleanBtnFeb = $view.find('#wrapper-query-feb'),
             $searchForm = $view.find('form'),
             tableIns;
 
@@ -298,7 +300,7 @@
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
-                height: 455,
+                // height: 455,
                 id: 'wrapperTable',
                 url: ctx + 'commodity/list',
                 where:{
@@ -327,11 +329,14 @@
         }
 
 
-        $query.on('click', function () {
+        $cleanBtnFeb.on('click', function () {
             tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
         });
+        $query.on('click', function () {
+            tableIns.reload({where: getQueryParams(), page: {curr:  1}});
+        });
         $queryBtn.on('click',function () {
-            tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
+            tableIns.reload({where: getQueryParams(), page: {curr:  1}});
         });
         $cleanBtn.on('click',function () {
             $searchForm[0].reset();

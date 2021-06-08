@@ -56,14 +56,17 @@
                                         </div>
                                     </div>
                                     <div id="roche-check" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;float: right;margin-right: 3%">
-                                        <!--<div id="roche-check" class="layui-form-item" style="border-left: 1px solid white;border-top: 1px solid white;height: 40px;">-->
-                                            <div class="layui-btn layui-btn-normal layui-btn-sm"  id="query" >
-                                                <i class="layui-icon">&#xe848;</i>
-                                            </div>
-                                            <div class="layui-btn layui-btn-danger layui-btn-sm" id="reset" >
-                                                <i class="layui-icon">&#xe79b;</i>
-                                            </div>
-                                        <!--</div>-->
+
+                                        <div class="layui-btn layui-btn-normal layui-btn-sm"  id="query" >
+                                            <i class="layui-icon">&#xe848;</i>
+                                        </div>
+                                        <div class="layui-btn layui-btn-danger layui-btn-sm" id="reset" >
+                                            <i class="layui-icon">&#xe79b;</i>
+                                        </div>
+                                        <div class="layui-btn layui-btn-danger layui-btn-sm febs-hide" id="query-feb" >
+                                            <i class="layui-icon">&#xe79b;</i>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -210,6 +213,7 @@
             $reset = $view.find('#reset'),
             $queryBtn = $view.find('#queryBtn'),
             $cleanBtn = $view.find('#cleanBtn'),
+            $cleanBtnFeb = $view.find('#query-feb'),
             $searchForm = $view.find('form'),
             tableIns;
 
@@ -261,7 +265,7 @@
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
-                height: 455,
+                // height: 455,
                 id: 'rocheTable',
                 url: ctx + 'roche/list',
                 toolbar: '#roche-toolbarCheck',
@@ -290,13 +294,14 @@
 
 
         $query.on('click', function () {
+            tableIns.reload({where: getQueryParams(), page: {curr:  1}});
+        });
+        $cleanBtnFeb.on('click', function () {
             tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
         });
-
-
         $reset.on('click', function () {
             $searchForm[0].reset();
-            tableIns.reload({where: getQueryParams(), page: {curr:  $(".layui-laypage-skip").find(".layui-input").val()}});
+            tableIns.reload({where: getQueryParams(), page: {curr:  1}});
         });
         $queryBtn.on('click',function () {
             tableIns.reload({where: getQueryParams(), page: {curr: 1}});

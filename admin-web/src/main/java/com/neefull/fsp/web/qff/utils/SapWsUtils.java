@@ -90,7 +90,7 @@ public abstract class SapWsUtils {
      * @param toDate
      * @return
      */
-    public static String getSoapMessage(String seacheDate,String fromTime,String toTime,String qmunm){
+    public static String getSoapMessage(String seacheDate,String fromTime,String toTime,String number){
 
         StringBuffer message = new StringBuffer("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:soap=\"http://www.shaphar.com/SoapService\">\n" +
                 "   <soapenv:Header/>\n" +
@@ -105,7 +105,7 @@ public abstract class SapWsUtils {
                 "            <soap:PASSWORD>1</soap:PASSWORD>\n" +
                 "            <soap:COMMENTS>1</soap:COMMENTS>\n" +
                 "         </soap:commonHeader>\n" +
-                "         <soap:LIST><![CDATA[<urn:ZCHN_FM_QFF xmlns:urn=\"urn:sap-com:document:sap:rfc:functions:ZCHN_FM_QFF_BS\"><urn:IV_QMNUM/><urn:IV_UDATE>"+seacheDate+"</urn:IV_UDATE><urn:IV_UTIME_FROM>"+fromTime+"</urn:IV_UTIME_FROM><urn:IV_UTIME_TO>"+toTime+"</urn:IV_UTIME_TO></urn:ZCHN_FM_QFF>]]></soap:LIST>\n" +
+                "         <soap:LIST><![CDATA[<urn:ZCHN_FM_QFF xmlns:urn=\"urn:sap-com:document:sap:rfc:functions:ZCHN_FM_QFF_BS\"><urn:IV_QMNUM>"+number+"</urn:IV_QMNUM><urn:IV_UDATE>"+seacheDate+"</urn:IV_UDATE><urn:IV_UTIME_FROM>"+fromTime+"</urn:IV_UTIME_FROM><urn:IV_UTIME_TO>"+toTime+"</urn:IV_UTIME_TO></urn:ZCHN_FM_QFF>]]></soap:LIST>\n" +
                 "      </soap:REQUEST_DATA>\n" +
                 "   </soapenv:Body>\n" +
                 "</soapenv:Envelope>");

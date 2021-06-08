@@ -1,6 +1,7 @@
 package com.neefull.fsp.web.qff.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.neefull.fsp.web.common.exception.FebsException;
 import com.neefull.fsp.web.qff.config.ProcessInstanceProperties;
 import com.neefull.fsp.web.qff.config.SendMailProperties;
 import com.neefull.fsp.web.qff.entity.*;
@@ -33,7 +34,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -46,6 +49,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: chengchengchu
@@ -85,7 +89,7 @@ public class ProcessServiceImpl implements IProcessService {
     @Autowired
     private TemplateEngine templateEngine;
     @Autowired
-    private RoleServiceImpl roleService;
+    private RedisTemplate redisTemplate;
 
 
     /**
@@ -130,7 +134,7 @@ public class ProcessServiceImpl implements IProcessService {
                         files.put(attachment.getRemark()+ StringPool.DOT + attachment.getAttachType(),
                                 properties.getImagePath() + attachment.getRemark() + StringPool.DOT + attachment.getAttachType());
                     }
-                    String[] rocheMails = getEmails(86);
+                    String[] rocheMails = MailUtils.getEmails(86);
 
                     List<Commodity> commodityList = new ArrayList<>();
                     commodityList.add(commodity);
@@ -143,12 +147,12 @@ public class ProcessServiceImpl implements IProcessService {
             //对于sap过来的数据
             }else {
                 editCommodity(commodity);
-
                 if(StringUtils.isNotEmpty(commodity.getImages())){
                     attachments = addOrEditFiles(commodity, user);
                 }
                 //同意当前流程
-                agreeProcess(businessKey,user,attachments);
+                agreeProcess(businessKey, user, attachments);
+
                 if(queryProcessInstance(businessKey)==null){
                     //判断流程中是否有这条数据，没有就将这条QFF状态修改为审核完成
                     commodityService.updateCommodityStatus(commodity.getId(),ProcessConstant.HAS_FINISHED);
@@ -185,7 +189,7 @@ public class ProcessServiceImpl implements IProcessService {
                 //更改状态
                 recentService.updateRecentStatus(recent.getId(), ProcessConstant.UNDER_REVIEW);
                 //发邮件
-                String[] rocheMails = getEmails(86);
+                String[] rocheMails = MailUtils.getEmails(86);
                 List<Recent> recentList =new ArrayList<>();
                 recentList.add(recent);
 
@@ -201,13 +205,13 @@ public class ProcessServiceImpl implements IProcessService {
 
                 MailUtils.sendMail(recent.getStage(),text,mailProperties,rocheMails,files);
             }else {
-
                 editCommodity(recent);
 
                 if(StringUtils.isNotEmpty(recent.getImages())){
                     attachments = addOrEditFiles(recent, user);
                 }
-                agreeProcess(businessKey,user,attachments);
+                agreeProcess(businessKey, user, attachments);
+
                 if(queryProcessInstance(businessKey)==null){
                     recentService.updateRecentStatus(recent.getId(),ProcessConstant.HAS_FINISHED);
                 }
@@ -233,25 +237,24 @@ public class ProcessServiceImpl implements IProcessService {
 
                 rocheService.updateRocheStatus(roche.getId(), ProcessConstant.UNDER_REVIEW);
             }else {
+                boolean b = agreeProcess(businessKey, user, attachments);
+                if(b){
+                    rocheService.editRoche(roche);
 
-                rocheService.editRoche(roche);
-
-                if(StringUtils.isNotEmpty(roche.getImages())){
-                    attachments = addOrEditFiles(roche, user);
+                    if(StringUtils.isNotEmpty(roche.getImages())){
+                        attachments = addOrEditFiles(roche, user);
+                    }
                 }
-
-                agreeProcess(businessKey,user,attachments);
                 //对罗氏内部发起最终审核完成，发送邮件到两方
                 if(queryProcessInstance(businessKey)==null){
                     rocheService.updateRocheStatus(roche.getId(),ProcessConstant.HAS_FINISHED);
                     // 发送邮件
                     Map<String,String> files = new HashMap<>();
-                    String[] rocheMails = getEmails(86);
-                    String[] kdlMails = getEmails(87);
+                    String[] rocheMails = MailUtils.getEmails(86);
+                    String[] kdlMails = MailUtils.getEmails(87);
                     String[] mails = new String[rocheMails.length+kdlMails.length];
                     System.arraycopy(rocheMails,0,mails,0,rocheMails.length);
                     System.arraycopy(kdlMails,0,mails,rocheMails.length,kdlMails.length);
-
 
                     List<Roche> rocheList =new ArrayList<>();
                     rocheList.add(roche);
@@ -265,6 +268,8 @@ public class ProcessServiceImpl implements IProcessService {
             }
         }
     }
+
+
 
     //启动流程
     @Transactional
@@ -283,20 +288,27 @@ public class ProcessServiceImpl implements IProcessService {
 
     //审批流程
     @Transactional
-    protected void agreeProcess(String businessKey,User user,List<Attachment> attachments){
+    protected boolean agreeProcess(String businessKey,User user,List<Attachment> attachments){
         //同意流程
-        Map<String,Object> map = new HashMap<>();
-        map.put("list",attachments);
-        List<Task> list = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
-        if(CollectionUtils.isNotEmpty(list)){
-            for (Task task : list) {
-                Set taskCandidate = getTaskCandidate(task.getId());
-                if(taskCandidate.contains(user.getUsername())){
-                    taskService.claim(task.getId(),user.getUsername());
-                    taskService.complete(task.getId(),map);
+
+//        if(redisTemplate.hasKey(businessKey)){
+//            return false;
+//        }else {
+//            redisTemplate.opsForValue().set(businessKey,businessKey, 60,TimeUnit.SECONDS);
+            Map<String,Object> map = new HashMap<>();
+            map.put("list",attachments);
+            List<Task> list = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
+            if(CollectionUtils.isNotEmpty(list)){
+                for (Task task : list) {
+                    Set taskCandidate = getTaskCandidate(task.getId());
+                    if(taskCandidate.contains(user.getUsername())){
+                        taskService.claim(task.getId(),user.getUsername());
+                        taskService.complete(task.getId(),map);
+                    }
                 }
             }
-        }
+            return true;
+//        }
     }
 
 
@@ -361,6 +373,8 @@ public class ProcessServiceImpl implements IProcessService {
             map.put(PROSTYPE,"recent");
         } else if(type.equals(ProcessConstant.TEMPERATURE_NAME)){
             map.put(PROSTYPE,"temperature");
+        } else if(type.equals(ProcessConstant.STORE_PACKAGE_EXPORT)) {
+            map.put(PROSTYPE, "conserve");
         } else {
             map.put(PROSTYPE,type);
         }
@@ -373,18 +387,16 @@ public class ProcessServiceImpl implements IProcessService {
     public List<String> getGroupId(Object object) {
         //这个是查询这条QFF 某个 节点可审核人的集合
         List<String> list = new ArrayList<>();
-        List<Task> taskList = null;
         String businessKey = getBusinessKey(object);
 
         if(StringUtils.isNotEmpty(businessKey)){
-            taskList = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
-        }
-
-        if(CollectionUtils.isNotEmpty(taskList)){
-            for (Task task : taskList) {
-                List<IdentityLink> identityLinksForTask = taskService.getIdentityLinksForTask(task.getId());
-                for (IdentityLink identityLink : identityLinksForTask) {
-                    list.add(identityLink.getUserId());
+            List<Task> taskList = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
+            if(CollectionUtils.isNotEmpty(taskList)){
+                for (Task task : taskList) {
+                    List<IdentityLink> identityLinksForTask = taskService.getIdentityLinksForTask(task.getId());
+                    for (IdentityLink identityLink : identityLinksForTask) {
+                        list.add(identityLink.getUserId());
+                    }
                 }
             }
         }
@@ -424,112 +436,152 @@ public class ProcessServiceImpl implements IProcessService {
 
     @Override
     public List<String> findTask(User user) {
-        //查询用户的角色
-        String roleId = roleService.findUserRoleIds(user.getUsername());
         //查询当前人要审核的数据
         List<Task> list = queryTaskByUserName(user.getUsername());
-
+        List<Commodity> commodityList = commodityService.queryProcessList(ProcessConstant.UNDER_REVIEW);
+        List<Recent> recentList = recentService.queryProcessList(ProcessConstant.UNDER_REVIEW);
         List<String> names = new ArrayList<>();
-
-        if(CollectionUtils.isNotEmpty(list)){
-            //这个是查询具体的流程的种类，并放到集合中
+        if(CollectionUtils.isNotEmpty(list)) {
             for (Task task : list) {
+//                String type = (String) taskService.getVariable(task.getId(), "processType");
                 ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-                String type = (String) runtimeService.getVariable(processInstance.getProcessInstanceId(), "processType");
-
-                String activityId = processInstance.getActivityId();
-                if(StringUtils.isNotEmpty(type)){
-                    if(("delivery").equals(type)||("conserve").equals(type)||("wrapper").equals(type)||("refund").equals(type)){
-                        if(roleId.contains("87")){
-                            if(!activityId.equals(ProcessConstant.THREE_STEP)) {
-                                names.add(type);
-                            }
-                        }else {
-                            if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
-                                names.add(type);
-                            }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
-                                names.add(type);
-                            }
-                        }
-                    }else if(("recent").equals(type)||("temperature").equals(type)){
-                        if(roleId.contains("87")){
-                            if(!activityId.equals(ProcessConstant.THREE_STEP)) {
-                                names.add(type);
-                            }
-                        }else {
-                            if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
-                                names.add(type);
-                            }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
-                                names.add(type);
-                            }
-                        }
-                    }else if(("roche").equals(type)){
-                        if(roleId.contains("98")){
-                            names.add("roche");
-                        }
-                    }
+                String type = (String)  runtimeService.getVariable(processInstance.getProcessInstanceId(), "processType");
+                if(StringUtils.isNotEmpty(type)) {
+                    names.add(type);
                 }else {
-                    if(processInstance.getBusinessKey().startsWith("Recent")){
-                        String id = processInstance.getBusinessKey().split("\\:")[1];
-                        Recent recent = recentService.queryRecentById(Integer.parseInt(id));
-                        if(roleId.contains("87")){
-                            if(!activityId.equals(ProcessConstant.THREE_STEP)) {
-                                names.add(choseProcessType(recent));
-                            }
-                        }else {
-                            if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
-                                names.add(choseProcessType(recent));
-                            }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
-                                names.add(choseProcessType(recent));
-                            }
-                        }
-                    }else if(processInstance.getBusinessKey().startsWith("Roche")) {
-                        if(roleId.contains("98")){
-                            names.add("roche");
-                        }
-                    }else {
-                        String id = processInstance.getBusinessKey().split("\\:")[1];
-                        Commodity commodity = commodityService.queryCommodityById(Integer.parseInt(id));
-                        if(roleId.contains("87")){
-                            if(!activityId.equals(ProcessConstant.THREE_STEP)) {
-                                names.add(choseProcessType(commodity));
-                            }
-                        }else {
-                            if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
-                                names.add(choseProcessType(commodity));
-                            }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
+//                    ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+                    String businessKey = processInstance.getBusinessKey();
+                    if (businessKey.startsWith("Commodity")) {
+                        String id = splitKey(businessKey, "Commodity");
+                        for (Commodity commodity : commodityList) {
+                            if(commodity.getId() == Integer.parseInt(id)){
                                 names.add(choseProcessType(commodity));
                             }
                         }
+                    }else if(businessKey.startsWith("Recent")) {
+                        String id = splitKey(businessKey, "Recent");
+                        for (Recent recent : recentList) {
+                            if(recent.getId() == Integer.parseInt(id)){
+                                names.add(choseProcessType(recent));
+                            }
+                        }
+                    }else if(businessKey.startsWith("Roche")){
+                        names.add("roche");
                     }
                 }
             }
         }
+
+//        if(CollectionUtils.isNotEmpty(list)){
+//            //这个是查询具体的流程的种类，并放到集合中
+//            for (Task task : list) {
+//                ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+//                String type = (String) runtimeService.getVariable(processInstance.getProcessInstanceId(), "processType");
+//
+//                String activityId = processInstance.getActivityId();
+//                if(StringUtils.isNotEmpty(type)){
+//                    if(("delivery").equals(type)||("conserve").equals(type)||("wrapper").equals(type)||("refund").equals(type)){
+//                        if(roleId.contains("87")){
+//                            if(!activityId.equals(ProcessConstant.THREE_STEP)) {
+//                                names.add(type);
+//                            }
+//                        }else {
+//                            if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
+//                                names.add(type);
+//                            }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
+//                                names.add(type);
+//                            }
+//                        }
+//                    }else if(("recent").equals(type)||("temperature").equals(type)){
+//                        if(roleId.contains("87")){
+//                            if(!activityId.equals(ProcessConstant.THREE_STEP)) {
+//                                names.add(type);
+//                            }
+//                        }else {
+//                            if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
+//                                names.add(type);
+//                            }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
+//                                names.add(type);
+//                            }
+//                        }
+//                    }else if(("roche").equals(type)){
+//                        if(roleId.contains("98")){
+//                            names.add("roche");
+//                        }
+//                    }
+//                }else {
+//                    if(processInstance.getBusinessKey().startsWith("Recent")){
+//                        String id = processInstance.getBusinessKey().split("\\:")[1];
+//                        Recent recent = recentService.queryRecentById(Integer.parseInt(id));
+//                        if(roleId.contains("87")){
+//                            if(!activityId.equals(ProcessConstant.THREE_STEP)) {
+//                                names.add(choseProcessType(recent));
+//                            }
+//                        }else {
+//                            if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
+//                                names.add(choseProcessType(recent));
+//                            }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
+//                                names.add(choseProcessType(recent));
+//                            }
+//                        }
+//                    }else if(processInstance.getBusinessKey().startsWith("Roche")) {
+//                        if(roleId.contains("98")){
+//                            names.add("roche");
+//                        }
+//                    }else {
+//                        String id = processInstance.getBusinessKey().split("\\:")[1];
+//                        Commodity commodity = commodityService.queryCommodityById(Integer.parseInt(id));
+//                        if(roleId.contains("87")){
+//                            if(!activityId.equals(ProcessConstant.THREE_STEP)) {
+//                                names.add(choseProcessType(commodity));
+//                            }
+//                        }else {
+//                            if(roleId.contains("98")&&!activityId.equals(ProcessConstant.THREE_STEP)){
+//                                names.add(choseProcessType(commodity));
+//                            }else if(!roleId.contains("98")&&activityId.equals(ProcessConstant.THREE_STEP)){
+//                                names.add(choseProcessType(commodity));
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+
 
         return names;
     }
 
 
     @Override
-    public List<Commodity> queryCommodityTaskByName(List<Commodity> commodityList, User user) {
+    public List<Commodity> queryCommodityTaskByName(List<Commodity> commodityList, User user,Integer att) {
         //查询这个用户可审核的数据
-        String roleId = roleService.findUserRoleIds(user.getUsername());
         List<Task> tasks = queryTaskByUserName(user.getUsername());
-        for (Task task : tasks) {
-            ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-            String activityId = processInstance.getActivityId();
-            String id = splitKey(processInstance.getBusinessKey(), Commodity.class.getSimpleName());
-            if(StringUtils.isNotEmpty(id)){
-                for (Commodity commodity : commodityList) {
-                    if(commodity.getId()==Integer.parseInt(id)&&commodity.getStatus()==2) {
-                        if(activityId.equals(ProcessConstant.THREE_STEP)){
-                            if(!roleId.contains("98")){
+        List<String> roleIds = Arrays.asList(user.getRoleId().split(","));
+
+        if(att !=null&&roleIds.contains("98")&&att == 1){
+            for (Task task : tasks) {
+                ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+                List<Task> list = taskService.createTaskQuery().processInstanceId(processInstance.getProcessInstanceId()).list();
+                String id = splitKey(processInstance.getBusinessKey(), Commodity.class.getSimpleName());
+                if(StringUtils.isNotEmpty(id)){
+                    for (Commodity commodity : commodityList) {
+                        if(commodity.getId()==Integer.parseInt(id)&&commodity.getStatus()==2) {
+                            if(commodity.getStage().equals(ProcessConstant.REFUND_NAME)){
+                                commodity.setIsAllow(1);
+                            }else if(!commodity.getStage().equals(ProcessConstant.REFUND_NAME)&&list.size()==1){
                                 commodity.setIsAllow(1);
                             }
-                        }else {
-                            if(roleId.contains("98")){
-                                commodity.setIsAllow(1);
-                            }
+                        }
+                    }
+                }
+            }
+        }else {
+            for (Task task : tasks) {
+                ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+                String id = splitKey(processInstance.getBusinessKey(), Commodity.class.getSimpleName());
+                if(StringUtils.isNotEmpty(id)){
+                    for (Commodity commodity : commodityList) {
+                        if(commodity.getId()==Integer.parseInt(id)&&commodity.getStatus()==2) {
+                            commodity.setIsAllow(1);
                         }
                     }
                 }
@@ -542,24 +594,14 @@ public class ProcessServiceImpl implements IProcessService {
     @Override
     public List<Recent> queryRecentTaskByName(List<Recent> recentList, User user) {
         //查询这个用户可审核的数据
-        String roleId = roleService.findUserRoleIds(user.getUsername());
         List<Task> tasks = queryTaskByUserName(user.getUsername());
         for (Task task : tasks) {
             ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-            String activityId = processInstance.getActivityId();
             String id = splitKey(processInstance.getBusinessKey(), Recent.class.getSimpleName());
             if(StringUtils.isNotEmpty(id)){
                 for (Recent recent : recentList) {
                     if(recent.getId()==Integer.parseInt(id)){
-                        if(activityId.equals(ProcessConstant.THREE_STEP)){
-                            if(!roleId.contains("98")){
-                                recent.setIsAllow(1);
-                            }
-                        }else {
-                            if(roleId.contains("98")) {
-                                recent.setIsAllow(1);
-                            }
-                        }
+                        recent.setIsAllow(1);
                     }
                 }
             }
@@ -571,18 +613,13 @@ public class ProcessServiceImpl implements IProcessService {
     @Override
     public List<Roche> queryRocheTaskByName(List<Roche> rocheList, User user) {
         //查询这个用户可审核的数据
-        String roleId = roleService.findUserRoleIds(user.getUsername());
         List<Task> tasks = queryTaskByUserName(user.getUsername());
         for (Task task : tasks) {
             ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
             String id = splitKey(processInstance.getBusinessKey(), Roche.class.getSimpleName());
             if(StringUtils.isNotEmpty(id)){
                 for (Roche roche : rocheList) {
-                    if(roche.getId()==Integer.parseInt(id)){
-                        if(roleId.contains("98")){
-                            roche.setIsAllow(1);
-                        }
-                    }
+                    roche.setIsAllow(1);
                 }
             }
         }
@@ -597,6 +634,8 @@ public class ProcessServiceImpl implements IProcessService {
             if(commodity.getStage().equals(ProcessConstant.DELIVERY_NAME)){
                 type = "delivery";
             }else if(commodity.getStage().equals(ProcessConstant.CONSERVE_NAME)){
+                type = "conserve";
+            } else if(commodity.getStage().equals(ProcessConstant.STORE_PACKAGE_EXPORT)){
                 type = "conserve";
             }else if(commodity.getStage().equals(ProcessConstant.WRAPPER_NAME)){
                 type = "wrapper";
@@ -680,21 +719,16 @@ public class ProcessServiceImpl implements IProcessService {
 
 
     @Override
-    public Boolean queryProcessByKey(Object object) {
+    public Boolean queryProcessByKey(Commodity commodity) {
         //查询流程
         ProcessInstance processInstance = null;
-        String businessKey = "";
-        if(object instanceof Commodity){
-            Commodity commodity = (Commodity) object;
-            businessKey = Commodity.class.getSimpleName()+":"+commodity.getId();
-        }
-        if(StringUtils.isNotEmpty(businessKey)){
-            processInstance = queryProcessInstance(businessKey);
-        }
+        String businessKey =  Commodity.class.getSimpleName()+":"+commodity.getId();
+        processInstance = queryProcessInstance(businessKey);
         if(processInstance == null){
             return false;
         }
         return true;
+
     }
 
     @Transactional
@@ -710,52 +744,82 @@ public class ProcessServiceImpl implements IProcessService {
     }
 
 
+
     @Override
     @Transactional
     public void addProcessCommit(User user) {
         //将用户添加到相应的流程中
         List<Task> list = deleteProcessUser(user);
         String roleId = user.getRoleId();
-        if(roleId.contains("87")){
-            if(CollectionUtils.isNotEmpty(list)){
-                for (Task task : list) {
-                    ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-                    String processDefinitionKey = processInstance.getProcessDefinitionKey();
-                    if(processDefinitionKey.equals(properties.getCommodityProcess())
-                            &&task.getTaskDefinitionKey().equals(ProcessConstant.FOUR_STEP)){
+        if(CollectionUtils.isNotEmpty(list)){
+            for (Task task : list) {
+                ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+                String processDefinitionKey = processInstance.getProcessDefinitionKey();
+                if(processDefinitionKey.equals(properties.getCommodityProcess())){
+                    if(roleId.contains("87")&&task.getTaskDefinitionKey().equals(ProcessConstant.FOUR_STEP)){
                         taskService.addCandidateUser(task.getId(), user.getUsername());
+                    }else if(roleId.contains("86")&&task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)){
+                        taskService.addCandidateUser(task.getId(), user.getUsername());
+                    }else if(roleId.contains("98")&&task.getTaskDefinitionKey().equals(ProcessConstant.TWELVE_STEP)){
+                        taskService.addCandidateUser(task.getId(), user.getUsername());
+                    }
+                }else if(processDefinitionKey.equals(properties.getRecentProcess())){
+                    if(roleId.contains("87")&&task.getTaskDefinitionKey().equals(ProcessConstant.FOUR_STEP)){
+                        taskService.addCandidateUser(task.getId(), user.getUsername());
+                    }else if(roleId.contains("86")&&task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)){
+                        taskService.addCandidateUser(task.getId(), user.getUsername());
+                    }else if(roleId.contains("98")&&task.getTaskDefinitionKey().equals(ProcessConstant.EIGHT_STEP)){
+                        taskService.addCandidateUser(task.getId(), user.getUsername());
+                    }
+                }else if(processDefinitionKey.equals(properties.getRocheProcess())){
+                    if(roleId.contains("87")&&task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)){
+                        taskService.addCandidateUser(task.getId(), user.getUsername());
+                    }else if(roleId.contains("98")&&task.getTaskDefinitionKey().equals(ProcessConstant.SIX_STEP)){
+                        taskService.addCandidateUser(task.getId(), user.getUsername());
+                    }
+                }
+            }
 
-                    }else if(processDefinitionKey.equals(properties.getRecentProcess())
-                            &&task.getTaskDefinitionKey().equals(ProcessConstant.FOUR_STEP)){
-                        taskService.addCandidateUser(task.getId(),user.getUsername());
-                    }else if(processDefinitionKey.equals(properties.getRocheProcess())
-                            &&task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)){
-                        taskService.addCandidateUser(task.getId(),user.getUsername());
-                    }
-                }
-            }
-        }else if(roleId.contains("86")){
-            if(CollectionUtils.isNotEmpty(list)){
-                for (Task task : list) {
-                    ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
-                    String processDefinitionKey = processInstance.getProcessDefinitionKey();
-                    if(processDefinitionKey.equals(properties.getCommodityProcess())) {
-                        if (task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)
-                                ||task.getTaskDefinitionKey().equals(ProcessConstant.TWELVE_STEP)){
-                            taskService.addCandidateUser(task.getId(), user.getUsername());
-                        }
-                    }else if(processDefinitionKey.equals(properties.getRecentProcess())) {
-                        if(task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)
-                                ||task.getTaskDefinitionKey().equals(ProcessConstant.EIGHT_STEP)){
-                            taskService.addCandidateUser(task.getId(), user.getUsername());
-                        }
-                    }else if(task.getTaskDefinitionKey().equals(ProcessConstant.SIX_STEP)
-                            &&processDefinitionKey.equals(properties.getRocheProcess())){
-                        taskService.addCandidateUser(task.getId(),user.getUsername());
-                    }
-                }
-            }
+
+//            if(roleId.contains("87")){
+//                for (Task task : list) {
+//                    ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+//                    String processDefinitionKey = processInstance.getProcessDefinitionKey();
+//                    if(processDefinitionKey.equals(properties.getCommodityProcess())
+//                            &&task.getTaskDefinitionKey().equals(ProcessConstant.FOUR_STEP)){
+//                        taskService.addCandidateUser(task.getId(), user.getUsername());
+//
+//                    }else if(processDefinitionKey.equals(properties.getRecentProcess())
+//                            &&task.getTaskDefinitionKey().equals(ProcessConstant.FOUR_STEP)){
+//                        taskService.addCandidateUser(task.getId(),user.getUsername());
+//                    }else if(processDefinitionKey.equals(properties.getRocheProcess())
+//                            &&task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)){
+//                        taskService.addCandidateUser(task.getId(),user.getUsername());
+//                    }
+//                }
+//
+//            }else if(roleId.contains("86")){
+//                for (Task task : list) {
+//                    ProcessInstance processInstance = getProcessInstanceById(task.getProcessInstanceId());
+//                    String processDefinitionKey = processInstance.getProcessDefinitionKey();
+//                    if(processDefinitionKey.equals(properties.getCommodityProcess())) {
+//                        if (task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)
+//                                ||task.getTaskDefinitionKey().equals(ProcessConstant.TWELVE_STEP)){
+//                            taskService.addCandidateUser(task.getId(), user.getUsername());
+//                        }
+//                    }else if(processDefinitionKey.equals(properties.getRecentProcess())) {
+//                        if(task.getTaskDefinitionKey().equals(ProcessConstant.THREE_STEP)
+//                                ||task.getTaskDefinitionKey().equals(ProcessConstant.EIGHT_STEP)){
+//                            taskService.addCandidateUser(task.getId(), user.getUsername());
+//                        }
+//                    }else if(task.getTaskDefinitionKey().equals(ProcessConstant.SIX_STEP)
+//                            &&processDefinitionKey.equals(properties.getRocheProcess())){
+//                        taskService.addCandidateUser(task.getId(),user.getUsername());
+//                    }
+//                }
+//            }
         }
+
     }
 
 
@@ -818,7 +882,7 @@ public class ProcessServiceImpl implements IProcessService {
             String[] activityIds = new String[]{"_3","_4","_12"};
             rollbackPrcoess("_3",getBusinessKey(commodity),currentUser.getUsername(),taskList.get(0),activityIds);
         }else {
-            String[] mails = getEmails(87);
+            String[] mails = MailUtils.getEmails(87);
 
             List<Commodity> list =new ArrayList<>();
             list.add(commodity);
@@ -884,7 +948,7 @@ public class ProcessServiceImpl implements IProcessService {
             String[] activityIds = new String[]{"_3","_4","_8"};
             rollbackPrcoess("_3",getBusinessKey(recent),currentUser.getUsername(),taskList.get(0),activityIds);
         }else {
-            String[] mails = getEmails(87);
+            String[] mails = MailUtils.getEmails(87);
             List<Recent> list =new ArrayList<>();
             list.add(recent);
 
@@ -942,7 +1006,7 @@ public class ProcessServiceImpl implements IProcessService {
             String[] activityIds = new String[]{"_3","_5","_6"};
             rollbackPrcoess("_5",getBusinessKey(roche),currentUser.getUsername(),taskList.get(0),activityIds);
         }else {
-            String[] mails = getEmails(87);
+            String[] mails = MailUtils.getEmails(87);
 
             List<Roche> list =new ArrayList<>();
             list.add(roche);
@@ -1091,6 +1155,7 @@ public class ProcessServiceImpl implements IProcessService {
         return list;
     }
 
+
     @Transactional
     public List<Attachment> saveAttachment(String id ,String type ,String image, User user){
         String[] images = image.split(",");
@@ -1112,20 +1177,6 @@ public class ProcessServiceImpl implements IProcessService {
         }
         return list;
     }
-
-
-    private String[] getEmails(Integer id){
-        List<User> userList = userService.findUserByRoleId(id);
-        List<String> userMails = new ArrayList<>();
-        for (User user : userList) {
-            if(StringUtils.isNotEmpty(user.getEmail())&&user.getAccept().equals("1")&&user.getStatus().equals("1")) {
-                userMails.add(user.getEmail());
-            }
-        }
-        return userMails.toArray(new String[0]);
-    }
-
-
 
 
     private String splitKey(String businessKey,String beanName){

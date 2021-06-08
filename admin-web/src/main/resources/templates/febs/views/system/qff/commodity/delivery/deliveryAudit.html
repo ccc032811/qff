@@ -585,7 +585,7 @@
                 $('#delivery-submit-alter').attr("style","display:none;");
                 febs.post(ctx + 'commodity/alter', data.field , function (data) {
                     layer.closeAll();
-                    $('#fbs-delivery').find('#delivery-query').click();
+                    $('#fbs-delivery').find('#delivery-query-feb').click();
                     febs.alert.success('数据修改成功');
                 });
             }else {
@@ -593,14 +593,14 @@
                 if(commodity.status ===1){
                     febs.post(ctx + 'commodity/commit', data.field , function (data) {
                         layer.closeAll();
-                        $('#fbs-delivery').find('#delivery-query').click();
+                        $('#fbs-delivery').find('#delivery-query-feb').click();
                         febs.alert.success('数据修改成功');
                     });
                 }
                 if(commodity.status ===2){
                     febs.post(ctx + 'commodity/agree', data.field , function (data) {
                         layer.closeAll();
-                        $('#fbs-delivery').find('#delivery-query').click();
+                        $('#fbs-delivery').find('#delivery-query-feb').click();
                         febs.alert.success('数据修改成功');
                     });
                 }

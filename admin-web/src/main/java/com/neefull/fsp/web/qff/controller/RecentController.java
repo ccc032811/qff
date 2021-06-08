@@ -75,7 +75,7 @@ public class RecentController extends BaseController {
      */
     @Qff("更新近效期QFF")
     @PostMapping("/edit")
-    @RequiresPermissions(value = {"recent:audit","temperature:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"recent:audit","temperature:audit","recent:add","temperature:add","recent:verify","temperature:verify"},logical = Logical.OR)
     public FebsResponse editRecent(Recent recent) throws FebsException {
         try {
             recentService.editRecent(recent);
@@ -183,7 +183,7 @@ public class RecentController extends BaseController {
      */
     @Qff("提交近效期QFF流程")
     @PostMapping("/commit")
-    @RequiresPermissions(value = {"recent:audit","temperature:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"recent:audit","temperature:audit","recent:add","temperature:add","recent:verify","temperature:verify"},logical = Logical.OR)
     public FebsResponse commitProcess(Recent recent) throws FebsException {
         try {
             User user = getCurrentUser();
@@ -203,7 +203,7 @@ public class RecentController extends BaseController {
      */
     @Qff("同意近效期QFF任务")
     @PostMapping("/agree")
-    @RequiresPermissions(value = {"recent:audit","temperature:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"recent:audit","temperature:audit","recent:add","temperature:add","recent:verify","temperature:verify"},logical = Logical.OR)
     public FebsResponse agreeCurrentProcess(Recent recent) throws FebsException {
         try {
             User user = getCurrentUser();

@@ -183,9 +183,9 @@
             u.modify_time modifyTime,
             u.description,
             u.avatar,
-            d.dept_name deptName,
-            u.user_type userType,
-            u.auth_status authStatus
+--             d.dept_name deptName,
+--             u.user_type userType,
+--             u.auth_status authStatus
         FROM
             typt_user u
                 LEFT JOIN typt_dept d ON (u.dept_id = d.dept_id)

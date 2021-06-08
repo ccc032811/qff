@@ -60,8 +60,12 @@
                                             <div class="layui-btn layui-btn-normal layui-btn-sm" id="delivery-query" >
                                                 <i class="layui-icon">&#xe848;</i>
                                             </div>
+
                                             <div class="layui-btn layui-btn-danger layui-btn-sm" id="delivery-reset" >
                                                 <i class="layui-icon">&#xe79b;</i>
+                                            </div>
+                                            <div class="layui-btn layui-btn-normal layui-btn-sm febs-hide" id="delivery-query-feb" >
+                                                <i class="layui-icon">&#xe848;</i>
                                             </div>
                                         <!--</div>-->
                                     </div>
@@ -272,6 +276,7 @@
             $reset = $view.find('#delivery-reset'),
             $queryBtn = $view.find('#delivery-queryBtn'),
             $cleanBtn = $view.find('#delivery-cleanBtn'),
+            $cleanBtnFeb = $view.find('#delivery-query-feb'),
             $searchForm = $view.find('form'),
             tableIns;
         var stage = '到货';
@@ -328,7 +333,7 @@
         function initTable() {
             tableIns = febs.table.init({
                 elem: $view.find('table'),
-                height: 455,
+                // height: 455,
                 id: 'deliveryTable',
                 url: ctx + 'commodity/list',
                 where:{
@@ -358,12 +363,14 @@
             });
         }
 
-
-        $query.on('click', function () {
+        $cleanBtnFeb.on('click', function () {
             tableIns.reload({where: getQueryParams(), page: {curr: $(".layui-laypage-skip").find(".layui-input").val()}});
         });
+        $query.on('click', function () {
+            tableIns.reload({where: getQueryParams(), page: {curr: 1}});
+        });
         $queryBtn.on('click',function () {
-            tableIns.reload({where: getQueryParams(), page: {curr: $(".layui-laypage-skip").find(".layui-input").val()}});
+            tableIns.reload({where: getQueryParams(), page: {curr: 1}});
         });
         $cleanBtn.on('click',function () {
             $searchForm[0].reset();

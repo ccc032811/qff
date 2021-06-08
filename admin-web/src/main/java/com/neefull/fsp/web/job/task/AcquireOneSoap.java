@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
+/**手动拉取QFF数据
  * @Author: chengchengchu
  * @Date: 2020/5/22  14:51
  */

@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.neefull.fsp.web.common.entity.FebsConstant;
+import com.neefull.fsp.web.common.entity.QueryRequest;
+import com.neefull.fsp.web.common.utils.SortUtil;
 import com.neefull.fsp.web.qff.entity.Commodity;
 import com.neefull.fsp.web.qff.entity.OtherCommodity;
 import com.neefull.fsp.web.qff.mapper.CommodityMapper;
@@ -53,27 +56,29 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     @Transactional
     public void editCommodity(Commodity commodity) {
         commodityMapper.updateById(commodity);
-
     }
 
     @Override
-    public IPage<Commodity> getCommodityPage(Commodity commodity, User user) {
+    public IPage<Commodity> getCommodityPage(Commodity commodity, User user, QueryRequest request) {
 
         IPage<Commodity> pageInfo = new Page<>();
         if(commodity.getAtt()!=null&&commodity.getAtt()==1){
             //查询可审核数据
+
             List<Commodity> commodities = getAttCommodity(commodity, user);
             List<Commodity> page = PageUtils.page(commodities, commodity.getPageSize(), commodity.getPageNum());
 
             pageInfo.setRecords(page);
-            pageInfo.setCurrent(commodity.getPageNum());
+//            pageInfo.setCurrent(commodity.getPageNum());
             pageInfo.setTotal(commodities.size());
 
         }else {
             //普通查询
-            pageInfo = commodityMapper.getConservePage(new Page<>(commodity.getPageNum(),commodity.getPageSize()),commodity);
-            List<Commodity> newCommodity = processService.queryCommodityTaskByName(pageInfo.getRecords(),user);
+            Page<Commodity> page = new Page<>(commodity.getPageNum(), commodity.getPageSize());
+            pageInfo = commodityMapper.getConservePage(page,commodity);
+            List<Commodity> newCommodity = processService.queryCommodityTaskByName(pageInfo.getRecords(),user,null);
             pageInfo.setRecords(newCommodity);
+
         }
 
         return pageInfo;
@@ -84,7 +89,7 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     private List<Commodity> getAttCommodity(Commodity commodity,User user){
         commodity.setStatus(2);
         List<Commodity> commodityList = commodityMapper.getPageConserve(commodity);
-        List<Commodity> newCommodity = processService.queryCommodityTaskByName(commodityList,user);
+        List<Commodity> newCommodity = processService.queryCommodityTaskByName(commodityList,user,commodity.getAtt());
         List<Commodity> commodities = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(newCommodity)){
             for (Commodity commo : newCommodity) {
@@ -99,7 +104,11 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
     @Override
     @Transactional
     public void updateCommodityStatus(Integer id,Integer status) {
-        commodityMapper.updateConserveStatus(id,status);
+        Commodity commodity = new Commodity();
+        commodity.setId(id);
+        commodity.setStatus(status);
+        commodityMapper.updateById(commodity);
+//        commodityMapper.updateConserveStatus(id,status);
     }
 
     @Override
@@ -121,12 +130,12 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
         commodityMapper.deleteById(id);
     }
 
+
     @Override
     public List<Commodity> selectAllCommodity() {
         QueryWrapper<Commodity> wrapper = new QueryWrapper<>();
         wrapper.eq("status",ProcessConstant.NEW_BUILD);
         return commodityMapper.selectList(wrapper);
-
     }
 
     @Override
@@ -161,6 +170,13 @@ public class CommodityServiceImpl extends ServiceImpl<CommodityMapper, Commodity
         }
         return commodityList;
 
+    }
+
+    @Override
+    public List<Commodity> queryProcessList(Integer status) {
+        QueryWrapper<Commodity> wrapper = new QueryWrapper<>();
+        wrapper.eq("status",status);
+        return commodityMapper.selectList(wrapper);
     }
 
 

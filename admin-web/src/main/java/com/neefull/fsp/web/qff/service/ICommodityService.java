@@ -2,6 +2,7 @@ package com.neefull.fsp.web.qff.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.neefull.fsp.web.common.entity.QueryRequest;
 import com.neefull.fsp.web.qff.entity.Commodity;
 import com.neefull.fsp.web.system.entity.User;
 
@@ -32,7 +33,7 @@ public interface ICommodityService extends IService<Commodity> {
      * @param commodity
      * @return
      */
-    IPage<Commodity> getCommodityPage(Commodity commodity, User user);
+    IPage<Commodity> getCommodityPage(Commodity commodity, User user, QueryRequest request);
 
     /**删除养护QFF
      * @param id
@@ -76,5 +77,7 @@ public interface ICommodityService extends IService<Commodity> {
      * @return
      */
     List<Commodity> getPageConserve(Commodity commodity,User user);
+
+    List<Commodity> queryProcessList(Integer status);
 
 }

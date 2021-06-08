@@ -33,7 +33,7 @@ public interface IRecentService extends IService<Recent> {
      */
     IPage<Recent> getRecentPage(Recent recent, User user);
 
-    /**删除近效期QFF
+    /**更改近效期QFF状态
      * @param id
      * @return
      */
@@ -50,4 +50,7 @@ public interface IRecentService extends IService<Recent> {
      * @return
      */
     List<Recent> getRecentExcelImportPage(Recent recent,User user);
+
+    List<Recent> queryProcessList(Integer status);
+
 }

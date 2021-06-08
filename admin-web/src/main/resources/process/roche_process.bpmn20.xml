@@ -17,7 +17,7 @@
     <sequenceFlow id="_7" sourceRef="_2" targetRef="_5"/>
     <userTask activiti:async="false" activiti:exclusive="true" id="_6" name="罗氏">
       <extensionElements>
-        <activiti:taskListener class="com.neefull.fsp.web.qff.listener.RocheEntreListener" event="create"/>
+        <activiti:taskListener class="com.neefull.fsp.web.qff.listener.RocheQAListener" event="create"/>
       </extensionElements>
     </userTask>
     <parallelGateway gatewayDirection="Unspecified" id="_8" name="ParallelGateway"/>

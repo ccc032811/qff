@@ -36,7 +36,7 @@ public class User implements Serializable {
     // 默认头像
     public static final String DEFAULT_AVATAR = "default.jpg";
     // 默认密码
-    public static final String DEFAULT_PASSWORD = "nifu@123";
+    public static final String DEFAULT_PASSWORD = "kdl@123";
     // 性别男
     public static final String SEX_MALE = "0";
     // 性别女
@@ -51,18 +51,18 @@ public class User implements Serializable {
     public static final String TAB_OPEN = "1";
     // TAB关闭
     public static final String TAB_CLOSE = "0";
-    //用户类型：0-企业用户
-    public static final String USERTYPE_CORP = "0";
-    //用户类型：1-自由职业者
-    public static final String USERTYPE_FREELANCER = "1";
-    //用户类型：2-系统用户
-    public static final String USERTYPE_SYSTEM = "2";
-    //实名认证状态：2-认证成功
-    public static final String AUTH_STATUS_SUCCESS = "2";
-    //实名认证状态：0-未实名
-    public static final String AUTH_STATUS_DEFAULT = "0";
-    //是否绑定结算卡 0 未绑定
-    public static final String CARD_STATUS_DEFAULT = "0";
+//    //用户类型：0-企业用户
+//    public static final String USERTYPE_CORP = "0";
+//    //用户类型：1-自由职业者
+//    public static final String USERTYPE_FREELANCER = "1";
+//    //用户类型：2-系统用户
+//    public static final String USERTYPE_SYSTEM = "2";
+//    //实名认证状态：2-认证成功
+//    public static final String AUTH_STATUS_SUCCESS = "2";
+//    //实名认证状态：0-未实名
+//    public static final String AUTH_STATUS_DEFAULT = "0";
+//    //是否绑定结算卡 0 未绑定
+//    public static final String CARD_STATUS_DEFAULT = "0";
 
 
     /**
@@ -200,6 +200,9 @@ public class User implements Serializable {
      */
     @TableField(exist = false)
     private String roleName;
+
+
+
     @ExcelField(value = "用户类型"  , writeConverterExp = "0=企业用户,1=自由职业者")
     @TableField("USER_TYPE")
     private String userType;

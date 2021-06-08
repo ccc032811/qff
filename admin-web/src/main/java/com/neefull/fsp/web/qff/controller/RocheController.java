@@ -19,6 +19,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -72,7 +73,7 @@ public class RocheController extends BaseController {
      */
     @Qff("更新罗氏内部发起QFF")
     @PostMapping("/edit")
-    @RequiresPermissions("roche:audit")
+    @RequiresPermissions(value = {"roche:audit","roche:add","roche:verify"},logical = Logical.OR)
     public FebsResponse editRoche(Roche roche) throws FebsException {
         try {
             rocheService.editRoche(roche);
@@ -183,7 +184,7 @@ public class RocheController extends BaseController {
      */
     @Qff("提交罗氏内部QFF流程")
     @PostMapping("/commit")
-    @RequiresPermissions("roche:audit")
+    @RequiresPermissions(value = {"roche:audit","roche:add","roche:verify"},logical = Logical.OR)
     public FebsResponse commitProcess(Roche roche) throws FebsException {
         Integer count = rocheService.queryByNumber(roche.getNumber());
         if(count>0){
@@ -209,7 +210,7 @@ public class RocheController extends BaseController {
      */
     @Qff("同意罗氏内部QFF任务")
     @PostMapping("/agree")
-    @RequiresPermissions("roche:audit")
+    @RequiresPermissions(value = {"roche:audit","roche:add","roche:verify"},logical = Logical.OR)
     public FebsResponse agreeCurrentProcess(Roche roche) throws FebsException {
         try {
             User user = getCurrentUser();

@@ -124,7 +124,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         user.setTheme(User.THEME_BLACK);
         user.setIsTab(User.TAB_OPEN);
         user.setPassword(EncryptUtil.encrypt(User.DEFAULT_PASSWORD,FebsConstant.AES_KEY));
-        user.setUserType(User.USERTYPE_SYSTEM);
+//        user.setUserType(User.USERTYPE_SYSTEM);
         save(user);
         // 保存用户角色
         String[] roles = user.getRoleId().split(StringPool.COMMA);
@@ -228,22 +228,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         updateById(user);
     }
 
-    @Override
-    @Transactional
-    public void examineUsers(String[] ids) {
-        LambdaUpdateWrapper<User> lambdaQueryWrapper = new LambdaUpdateWrapper<>();
-        User currentUser = FebsUtil.getCurrentUser();
-        User user = new User();
-
-         for(String id:ids)
-         {
-             long lid = Long.valueOf(id);
-             this.baseMapper.updateUserAuthStatus(lid, User.AUTH_STATUS_SUCCESS);
-             //再去t_auth_freelancer表和t_auth_corp表更新实名状态
-             user = this.baseMapper.selectById(lid);
-
-         }
-    }
+//    @Override
+//    @Transactional
+//    public void examineUsers(String[] ids) {
+//        LambdaUpdateWrapper<User> lambdaQueryWrapper = new LambdaUpdateWrapper<>();
+//        User currentUser = FebsUtil.getCurrentUser();
+//        User user = new User();
+//
+//         for(String id:ids)
+//         {
+//             long lid = Long.valueOf(id);
+//             this.baseMapper.updateUserAuthStatus(lid, User.AUTH_STATUS_SUCCESS);
+//             //再去t_auth_freelancer表和t_auth_corp表更新实名状态
+//             user = this.baseMapper.selectById(lid);
+//
+//         }
+//    }
 
     /**
      * 首页统计图-用户分布情况
@@ -279,27 +279,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         userRoleService.saveBatch(userRoles);
     }
 
-    /**
-     * 创建用户信息并返回带主键的实体
-     * @return
-     */
-    private User createUserInfo(String userName, String email, String mobile, String userType){
-        User user = new User();
-        user.setUsername(userName);
-        user.setPassword(EncryptUtil.encrypt(User.DEFAULT_PASSWORD,FebsConstant.AES_KEY));
-        user.setDeptId(0L);
-        user.setEmail(email);
-        user.setMobile(mobile);
-        user.setStatus(User.STATUS_VALID);
-        user.setSex(User.SEX_UNKNOW);
-        user.setIsTab(User.TAB_OPEN);
-        user.setTheme(User.THEME_BLACK);
-        user.setAvatar(User.DEFAULT_AVATAR);
-        user.setUserType(userType);
-        user.setAuthStatus(User.AUTH_STATUS_DEFAULT);
-        user.setCardStatus(User.CARD_STATUS_DEFAULT);
-        //新增并返回id
-        this.baseMapper.saveReturnPrimaryKey(user);
-        return user;
-    }
+//    /**
+//     * 创建用户信息并返回带主键的实体
+//     * @return
+//     */
+//    private User createUserInfo(String userName, String email, String mobile, String userType){
+//        User user = new User();
+//        user.setUsername(userName);
+//        user.setPassword(EncryptUtil.encrypt(User.DEFAULT_PASSWORD,FebsConstant.AES_KEY));
+//        user.setDeptId(0L);
+//        user.setEmail(email);
+//        user.setMobile(mobile);
+//        user.setStatus(User.STATUS_VALID);
+//        user.setSex(User.SEX_UNKNOW);
+//        user.setIsTab(User.TAB_OPEN);
+//        user.setTheme(User.THEME_BLACK);
+//        user.setAvatar(User.DEFAULT_AVATAR);
+//        user.setUserType(userType);
+//        user.setAuthStatus(User.AUTH_STATUS_DEFAULT);
+//        user.setCardStatus(User.CARD_STATUS_DEFAULT);
+//        //新增并返回id
+//        this.baseMapper.saveReturnPrimaryKey(user);
+//        return user;
+//    }
+
+
 }

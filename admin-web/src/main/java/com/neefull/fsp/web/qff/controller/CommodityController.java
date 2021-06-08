@@ -4,6 +4,7 @@ package com.neefull.fsp.web.qff.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.neefull.fsp.web.common.controller.BaseController;
 import com.neefull.fsp.web.common.entity.FebsResponse;
+import com.neefull.fsp.web.common.entity.QueryRequest;
 import com.neefull.fsp.web.common.exception.FebsException;
 import com.neefull.fsp.web.qff.aspect.Qff;
 import com.neefull.fsp.web.qff.entity.Commodity;
@@ -82,7 +83,9 @@ public class CommodityController extends BaseController {
      */
     @Qff("更新QFF")
     @PostMapping("/edit")
-    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","wrapper:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit"
+            ,"conserve:audit","wrapper:audit","delivery:audit","recent:verify"
+            ,"refund:verify", "conserve:verify","wrapper:verify"},logical = Logical.OR)
     public FebsResponse editCommodity(Commodity commodity) throws FebsException {
         try {
             commodityService.editCommodity(commodity);
@@ -105,15 +108,16 @@ public class CommodityController extends BaseController {
         return new FebsResponse().success();
     }
 
+
     /**查询QFF
      * @param commodity
      * @return
      */
     @GetMapping("/list")
     @RequiresPermissions(value = {"delivery:view","recent:view","refund:view","conserve:view","wrapper:view"},logical = Logical.OR)
-    public FebsResponse getCommodityPage(Commodity commodity) throws FebsException {
+    public FebsResponse getCommodityPage(Commodity commodity, QueryRequest request) throws FebsException {
         try {
-            IPage<Commodity> pageInfo = commodityService.getCommodityPage(commodity,getCurrentUser());
+            IPage<Commodity> pageInfo = commodityService.getCommodityPage(commodity,getCurrentUser(),request);
             Map<String, Object> dataTable = getDataTable(pageInfo);
             return new FebsResponse().success().data(dataTable);
         } catch (Exception e) {
@@ -193,7 +197,9 @@ public class CommodityController extends BaseController {
      */
     @Qff("提交QFF流程")
     @PostMapping("/commit")
-    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","wrapper:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit"
+            ,"conserve:audit","wrapper:audit","delivery:audit","recent:verify"
+            ,"refund:verify", "conserve:verify","wrapper:verify"},logical = Logical.OR)
     public FebsResponse commitProcess(Commodity commodity) throws FebsException {
 
         try {
@@ -214,7 +220,9 @@ public class CommodityController extends BaseController {
      */
     @Qff("同意当前QFF任务")
     @PostMapping("/agree")
-    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit","conserve:audit","wrapper:audit"},logical = Logical.OR)
+    @RequiresPermissions(value = {"delivery:audit","recent:audit","refund:audit"
+            ,"conserve:audit","wrapper:audit","delivery:audit","recent:verify"
+            ,"refund:verify", "conserve:verify","wrapper:verify"},logical = Logical.OR)
     public FebsResponse agreeCurrentProcess(Commodity commodity) throws FebsException {
         try {
             User user = getCurrentUser();

@@ -24,8 +24,7 @@
     <parallelGateway gatewayDirection="Unspecified" id="_7" name="ParallelGateway"/>
     <userTask activiti:exclusive="true" id="_8" name="罗氏">
       <extensionElements>
-        <activiti:taskListener class="com.neefull.fsp.web.qff.listener.RocheEntreListener" event="create"/>
-        <activiti:executionListener delegateExpression="${recentListener}" event="start"/>
+        <activiti:taskListener class="com.neefull.fsp.web.qff.listener.RocheQAListener" event="create"/>
       </extensionElements>
     </userTask>
     <parallelGateway gatewayDirection="Unspecified" id="_11" name="ParallelGateway"/>

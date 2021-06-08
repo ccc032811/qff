@@ -14,7 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
+/**自动QFF数据
  * @Author: chengchengchu
  * @Date: 2020/3/11  15:34
  */

@@ -55,14 +55,14 @@ public interface IProcessService  {
      * @param object
      * @return
      */
-    Boolean queryProcessByKey(Object object);
+    Boolean queryProcessByKey(Commodity commodity);
 
     /**增加修改权限
      * @param user
      */
     void addProcessCommit(User user);
 
-    List<Commodity>  queryCommodityTaskByName(List<Commodity> records, User user);
+    List<Commodity>  queryCommodityTaskByName(List<Commodity> records, User user,Integer att);
 
     List<Recent> queryRecentTaskByName(List<Recent> records, User user);
 

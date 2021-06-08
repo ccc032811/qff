@@ -473,14 +473,14 @@
                 febs.post(ctx + 'roche/alter', data.field, function (data) {
                     layer.closeAll();
                     febs.alert.success('数据修改成功');
-                    $('#fbs-roche').find('#query').click();
+                    $('#fbs-roche').find('#query-feb').click();
                 });
             }else {
                 $('#roche-submit').attr("style", "display:none;");
                 febs.post(ctx + 'roche/agree', data.field, function (data) {
                     layer.closeAll();
                     febs.alert.success('数据修改成功');
-                    $('#fbs-roche').find('#query').click();
+                    $('#fbs-roche').find('#query-feb').click();
                 });
             }
             return false;

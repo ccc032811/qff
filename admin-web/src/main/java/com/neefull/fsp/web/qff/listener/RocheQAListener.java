@@ -9,19 +9,20 @@ import org.activiti.engine.delegate.TaskListener;
 
 import java.util.List;
 
-/**康德乐人员监听器
+/**罗氏QA人员监听器
  * @Author: chengchengchu
- * @Date: 2019/12/21  18:09
+ * @Date: 2019/12/21  18:01
  */
-public class CardinalListener implements TaskListener {
+public class RocheQAListener implements TaskListener {
+
 
     @Override
     public void notify(DelegateTask delegateTask) {
-        //将人员放入流程中
+
         IUserService userService = SpringBeanUtil.getObject(IUserService.class);
-        List<User> users = userService.findUserByRoleId(87);
+        List<User> users = userService.findUserByRoleId(86);
         for (User user : users) {
-            if(user.getStatus().equals(String.valueOf(ProcessConstant.NEW_BUILD))){
+            if(user.getStatus().equals(String.valueOf(ProcessConstant.NEW_BUILD))) {
                 delegateTask.addCandidateUser(user.getUsername());
             }
         }

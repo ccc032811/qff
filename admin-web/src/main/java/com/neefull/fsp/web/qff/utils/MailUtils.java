@@ -1,6 +1,7 @@
 package com.neefull.fsp.web.qff.utils;
 
 import com.neefull.fsp.web.qff.config.SendMailProperties;
+import com.neefull.fsp.web.qff.config.SpringBeanUtil;
 import com.neefull.fsp.web.system.entity.User;
 import com.neefull.fsp.web.system.service.IUserService;
 import com.sun.mail.util.MailSSLSocketFactory;
@@ -29,6 +30,19 @@ import java.util.*;
 public class MailUtils {
 
 
+    public static String[] getEmails(Integer id){
+        IUserService userService = SpringBeanUtil.getObject(IUserService.class);
+        List<User> userList = userService.findUserByRoleId(id);
+        List<String> userMails = new ArrayList<>();
+        for (User user : userList) {
+            if(StringUtils.isNotEmpty(user.getEmail())
+                    &&user.getAccept().equals(String.valueOf(ProcessConstant.NEW_BUILD))
+                    &&user.getStatus().equals(String.valueOf(ProcessConstant.NEW_BUILD))) {
+                userMails.add(user.getEmail());
+            }
+        }
+        return userMails.toArray(new String[0]);
+    }
 
     public static void sendMail(String type,String text, SendMailProperties mailProperties, String[] mails, Map<String,String> files ) {
 
@@ -57,29 +71,32 @@ public class MailUtils {
 
         MimeMessageHelper mimeMessageHelper = null;
         try {
-            mimeMessageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);
-            mimeMessageHelper.setFrom(mailProperties.getUsername());
-            mimeMessageHelper.setTo(mails);
-//            mimeMessageHelper.setTo("920685135@qq.com");//接收的邮箱地址
-//            mimeMessageHelper.setCc("");//抄送者的邮箱地址'
-            if (StringUtils.isEmpty(type)) {
-                mimeMessageHelper.setSubject("您当前有需要处理的类型");
-            } else{
-                mimeMessageHelper.setSubject("您当前有需要处理的" + type + "类型");
-            }
-            mimeMessageHelper.setText(text,true);
-            if(!files.isEmpty()){
-                Set<String> strings = files.keySet();
-                for (String string : strings) {
-                    FileSystemResource resource = new FileSystemResource(new File(files.get(string)));
-                    mimeMessageHelper.addAttachment(string , resource);
+            if(mails.length!=0){
+                mimeMessageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);
+                mimeMessageHelper.setFrom(mailProperties.getUsername());
+                mimeMessageHelper.setTo(mails);
+                if (StringUtils.isEmpty(type)) {
+                    mimeMessageHelper.setSubject("您当前有需要处理的类型");
+                } else{
+                    mimeMessageHelper.setSubject("您当前有需要处理的" + type + "类型");
                 }
+                mimeMessageHelper.setText(text,true);
+                if(!files.isEmpty()){
+                    Set<String> strings = files.keySet();
+                    for (String string : strings) {
+                        FileSystemResource resource = new FileSystemResource(new File(files.get(string)));
+                        mimeMessageHelper.addAttachment(string , resource);
+                    }
+                }
+                javaMailSender.send(mimeMessageHelper.getMimeMessage());
             }
+
         } catch (
                 MessagingException e) {
             e.printStackTrace();
         }
-        javaMailSender.send(mimeMessageHelper.getMimeMessage());
+
+
     }
 
 

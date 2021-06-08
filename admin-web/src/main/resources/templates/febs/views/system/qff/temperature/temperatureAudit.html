@@ -419,7 +419,7 @@
                 febs.post(ctx + 'recent/alter', data.field, function (data) {
                     layer.closeAll();
                     febs.alert.success('数据修改成功');
-                    $('#fbs-temperature').find('#temperature-query').click();
+                    $('#fbs-temperature').find('#temperature-query-feb').click();
                 });
             }else {
                 $('#temperature-submit').attr("style","display:none;");
@@ -427,14 +427,14 @@
                     febs.post(ctx + 'recent/commit', data.field, function (data) {
                         layer.closeAll();
                         febs.alert.success('数据修改成功');
-                        $('#fbs-temperature').find('#temperature-query').click();
+                        $('#fbs-temperature').find('#temperature-query-feb').click();
                     });
                 }
                 if(recent.status ===2){
                     febs.post(ctx + 'recent/agree', data.field, function (data) {
                         layer.closeAll();
                         febs.alert.success('数据修改成功');
-                        $('#fbs-temperature').find('#temperature-query').click();
+                        $('#fbs-temperature').find('#temperature-query-feb').click();
                     });
                 }
             }
