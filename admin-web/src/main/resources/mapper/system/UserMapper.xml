@@ -182,7 +182,7 @@
             u.last_login_time lastLoginTime,
             u.modify_time modifyTime,
             u.description,
-            u.avatar,
+            u.avatar
 --             d.dept_name deptName,
 --             u.user_type userType,
 --             u.auth_status authStatus

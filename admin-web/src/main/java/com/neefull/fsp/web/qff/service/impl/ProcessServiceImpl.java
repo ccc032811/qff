@@ -619,7 +619,9 @@ public class ProcessServiceImpl implements IProcessService {
             String id = splitKey(processInstance.getBusinessKey(), Roche.class.getSimpleName());
             if(StringUtils.isNotEmpty(id)){
                 for (Roche roche : rocheList) {
-                    roche.setIsAllow(1);
+                    if(roche.getId()==Integer.parseInt(id)){
+                        roche.setIsAllow(1);
+                    }
                 }
             }
         }

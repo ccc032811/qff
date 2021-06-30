@@ -1,10 +1,4 @@
 spring:
-  activiti:
-    check-process-definitions: false #自动检查、部署流程定义文件
-    database-schema-update: true #自动更新数据库结构
-    #流程定义文件存放目录
-    process-definition-location-prefix: classpath:/processes/
-    #process-definition-location-suffixes: #流程文件格式
   datasource:
     dynamic:
       # 是否开启 SQL日志输出，生产环境建议关闭，有性能损耗
